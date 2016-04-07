@@ -7,7 +7,7 @@ fcldir product_dir job
 #
 product         version
 larcoreobj	v1_00_00
-nusimdata	v1_00_00
+nusimdata	v1_01_00
 
 gcc		v4_9_3
 
