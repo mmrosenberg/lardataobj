@@ -1,9 +1,7 @@
-include_directories( ${CMAKE_CURRENT_SOURCE_DIR} )
 
-art_make(
-         
-         LIB_LIBRARIES
-        )
+cet_make( NO_DICTIONARY )
+
+art_dictionary( DICTIONARY_LIBRARIES lardataobj_OpticalDetectorData )
 
 install_headers()
 install_fhicl()

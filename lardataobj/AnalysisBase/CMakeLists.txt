@@ -1,14 +1,13 @@
 
-art_make( 
-          LIB_LIBRARIES ${ART_FRAMEWORK_CORE}
-			${ART_FRAMEWORK_PRINCIPAL}
-			${CANVAS_PERSISTENCY_PROVENANCE}
-			${CANVAS_UTILITIES}
-			${MF_MESSAGELOGGER}
-			${MF_UTILITIES}
-			${CETLIB}
-			${ROOT_BASIC_LIB_LIST}
-        )
+cet_make( LIBRARIES canvas_Persistency_Provenance
+		    canvas_Utilities
+		    MF_MessageLogger
+		    MF_Utilities
+		    cetlib
+		    ${ROOT_BASIC_LIB_LIST}
+                    NO_DICTIONARY )
+
+art_dictionary( DICTIONARY_LIBRARIES lardataobj_AnalysisBase )
 
 install_headers()
 install_fhicl()

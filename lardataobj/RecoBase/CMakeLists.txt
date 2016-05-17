@@ -1,19 +1,15 @@
 
-# for classes_def.xml!!
-include_directories( ${CMAKE_CURRENT_SOURCE_DIR} )
+cet_make( LIBRARIES lardataobj_RawData
+		    canvas_Persistency_Common
+		    canvas_Persistency_Provenance
+		    canvas_Utilities
+		    MF_MessageLogger
+		    MF_Utilities
+		    cetlib
+		    ${ROOT_BASIC_LIB_LIST}
+                    NO_DICTIONARY )
 
-art_make( 
-          LIB_LIBRARIES lardataobj_RawData
-			${ART_FRAMEWORK_PRINCIPAL}
-			${ART_FRAMEWORK_SERVICES_REGISTRY}
-			${CANVAS_PERSISTENCY_COMMON}
-			${CANVAS_PERSISTENCY_PROVENANCE}
-			${CANVAS_UTILITIES}
-			${MF_MESSAGELOGGER}
-			${MF_UTILITIES}
-			${CETLIB}
-			${ROOT_BASIC_LIB_LIST}
-        )
+art_dictionary( DICTIONARY_LIBRARIES lardataobj_RecoBase )
 
 
 install_headers()

@@ -72,7 +72,7 @@
     source="unsigned short fChannel" 
     targetClass="raw::RawDigit" 
     target="fChannel" 
-    include="RawDigit.h">
+    include="lardataobj/RawData/RawDigit.h">
     <![CDATA[fChannel = onfile.fChannel;]]>
 </ioread> 
 
@@ -82,7 +82,7 @@
     source="unsigned short fNchan" 
     targetClass="raw::DAQHeader" 
     target="fNchan" 
-    include="DAQHeader.h">
+    include="lardataobj/RawData/DAQHeader.h">
     <![CDATA[fNchan = onfile.fNchan;]]>
 </ioread> 
 

@@ -1,22 +1,18 @@
 
-# for classes_def.xml!!
-include_directories( ${CMAKE_CURRENT_SOURCE_DIR} )
 include_directories( $ENV{NUSIMDATA_INC} )
 
-art_make( 
-          LIB_LIBRARIES larcoreobj_SummaryData
-	                ${ART_FRAMEWORK_CORE}
-			${ART_FRAMEWORK_PRINCIPAL}
-			${CANVAS_PERSISTENCY_PROVENANCE}
-			${CANVAS_UTILITIES}
-			${MF_MESSAGELOGGER}
-			${MF_UTILITIES}
-			${CETLIB}
-                        ${Boost_SYSTEM_LIBRARY}
-			${ROOT_BASIC_LIB_LIST}
-                        ${ROOT_EG}
-        )
+cet_make( LIBRARIES larcoreobj_SummaryData
+		    canvas_Persistency_Provenance
+		    canvas_Utilities
+		    MF_MessageLogger
+		    MF_Utilities
+		    cetlib
+                    ${Boost_SYSTEM_LIBRARY}
+		    ${ROOT_BASIC_LIB_LIST}
+                    ${ROOT_EG}
+                    NO_DICTIONARY )
 
+art_dictionary( DICTIONARY_LIBRARIES lardataobj_RawData )
 
 install_headers()
 install_fhicl()
