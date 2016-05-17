@@ -1,19 +1,14 @@
 
-# for classes_def.xml!!
-include_directories( ${CMAKE_CURRENT_SOURCE_DIR} )
+cet_make( LIBRARIES nusimdata_SimulationBase
+                    canvas_Persistency_Provenance
+                    canvas_Utilities
+                    MF_MessageLogger
+                    MF_Utilities
+                    cetlib
+                    ${ROOT_BASIC_LIB_LIST}
+          NO_DICTIONARY )
 
-art_make( NO_PLUGINS
-          LIB_LIBRARIES nusimdata_SimulationBase
-			${ART_FRAMEWORK_CORE}
-                        ${ART_FRAMEWORK_PRINCIPAL}
-                        ${CANVAS_PERSISTENCY_PROVENANCE}
-                        ${CANVAS_UTILITIES}
-                        ${MF_MESSAGELOGGER}
-                        ${MF_UTILITIES}
-                        ${CETLIB}
-                        ${ROOT_BASIC_LIB_LIST}
-
-        )
+art_dictionary( DICTIONARY_LIBRARIES larsimobj_Simulation )
 
 install_headers()
 install_fhicl()

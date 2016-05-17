@@ -70,7 +70,7 @@
     source="unsigned short fChannel" 
     targetClass="sim::SimChannel" 
     target="fChannel" 
-    include="SimChannel.h">
+    include="larsimobj/Simulation/SimChannel.h">
     <![CDATA[fChannel = onfile.fChannel;]]>
 </ioread> 
 
