@@ -1,8 +1,8 @@
 # ======================================================================
-#  lardata main build file
+#  lardataobj main build file
 #
 #  cd .../path/to/build/directory
-#  source .../path/to/lardata/ups/setup_for_development <-d|-p>
+#  source .../path/to/lardataobj/ups/setup_for_development <-d|-p>
 #  cmake [-DCMAKE_INSTALL_PREFIX=/install/path]
 #        -DCMAKE_BUILD_TYPE=$CETPKG_TYPE
 #        $CETPKG_SOURCE
@@ -13,8 +13,8 @@
 # ======================================================================
 
 
-# use cmake 2.8 or later
-cmake_minimum_required (VERSION 2.8)
+# use cmake 3.3 or later
+cmake_minimum_required (VERSION 3.3)
 
 project(lardataobj)
 
@@ -46,13 +46,12 @@ find_ups_product( larcoreobj )
 find_ups_product( nusimdata )
 find_ups_boost( )
 find_ups_root( )
-
-#  Find all the libraries needed by our dependent CMakeList.txt files
+find_ups_product( cetbuildtools )
 
 # macros for artdaq_dictionary and simple_plugin
 include(ArtDictionary)
-include(ArtMake)
-include(BuildPlugins)
+include(CetMake)
+include(BasicPlugin)
 
 # source
 add_subdirectory(lardataobj)
