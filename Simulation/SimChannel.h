@@ -29,7 +29,13 @@ namespace sim {
     float energyFrac; ///< fraction of hit energy from the particle with this trackID
     float energy;     ///< energy from the particle with this trackID
     TrackIDE() {}
+    
+#ifndef __GCCXML__
+    
     TrackIDE(int id, float ef, float e) : trackID(id), energyFrac(ef), energy (e) {}
+    
+#endif
+    
   };
 
   class IDE{
@@ -37,16 +43,35 @@ namespace sim {
     
     IDE();
 
+#ifndef __GCCXML__
+    
     //constructor for IDEs applying G4 offset...
     IDE(IDE const&, int);
+    IDE(int   tid,
+        float nel,
+        float e,
+        float xpos,
+        float ypos,
+        float zpos)
+    : trackID     (tid)
+    , numElectrons(nel)
+    , energy      (e)
+    , x           (xpos)
+    , y           (ypos)
+    , z           (zpos)
+    {}
     
-    int    trackID;      ///< Geant4 supplied track ID
+#endif
+    
+    int   trackID;      ///< Geant4 supplied track ID
     float numElectrons; ///< total number of electrons for this track ID and time
     float energy;       ///< total energy deposited for this track ID and time
     float x;            ///< x position of ionization
     float y;            ///< y position of ionization
     float z;            ///< z position of ionization
   };
+  
+  typedef std::pair<unsigned short, std::vector<sim::IDE> > TDCIDE;
   
   class SimChannel
   {
@@ -57,8 +82,8 @@ namespace sim {
     
   private:
     
-    raw::ChannelID_t                                    fChannel; ///< electronics channel associated with these sim::Electrons
-    std::map< unsigned short, std::vector< sim::IDE > > fTDCIDEs; ///< vector of IDE structs for each TDC with signal
+    raw::ChannelID_t    fChannel; ///< electronics channel associated with these sim::Electrons
+    std::vector<TDCIDE> fTDCIDEs; ///< vector of IDE structs for each TDC with signal
 
 
 #ifndef __GCCXML__
@@ -68,10 +93,10 @@ namespace sim {
 
     // method to add ionization electrons and energy to this channel
     void AddIonizationElectrons(int trackID,
-				unsigned int tdc,
-				double numberElectrons,
-				double *xyz,
-				double energy); 
+                                unsigned int tdc,
+                                double numberElectrons,
+                                double *xyz,
+                                double energy); 
 
     
     
@@ -80,9 +105,9 @@ namespace sim {
     // method to return a collection of IDE structs for all geant4
     // track ids represented between startTDC and endTDC
     std::vector<sim::IDE> TrackIDsAndEnergies(unsigned int startTDC,
-					      unsigned int endTDC) const;
+                                              unsigned int endTDC) const;
 
-    const std::map<unsigned short, std::vector<sim::IDE> >& TDCIDEMap() const;
+    std::vector<TDCIDE> const& TDCIDEMap() const;
 
     // The number of ionization electrons associated with this channel for the 
     // specified TDC.
@@ -91,7 +116,7 @@ namespace sim {
 
     // A vector of TrackIDEs for a range of TDCs
     std::vector<sim::TrackIDE> TrackIDEs(unsigned int startTDC,
-					 unsigned int endTDC) const;
+                                         unsigned int endTDC) const;
     
     bool operator<  (const SimChannel& other)     const;
     bool operator== (const SimChannel& other)     const;
@@ -121,10 +146,10 @@ namespace sim {
 
 #ifndef __GCCXML__
 
-inline bool sim::SimChannel::operator<  (const sim::SimChannel& other)                       const { return fChannel < other.Channel(); }
-inline bool sim::SimChannel::operator== (const sim::SimChannel& other)                       const { return fChannel == other.Channel(); }
-inline const std::map<unsigned short, std::vector<sim::IDE> >& sim::SimChannel::TDCIDEMap() const { return fTDCIDEs; }
-inline raw::ChannelID_t sim::SimChannel::Channel()                                          const { return fChannel; }
+inline bool                           sim::SimChannel::operator<  (const sim::SimChannel& other) const { return fChannel < other.Channel(); }
+inline bool                           sim::SimChannel::operator== (const sim::SimChannel& other) const { return fChannel == other.Channel(); }
+inline std::vector<sim::TDCIDE> const& sim::SimChannel::TDCIDEMap()                               const { return fTDCIDEs; }
+inline raw::ChannelID_t                sim::SimChannel::Channel()                                 const { return fChannel; }
 
 
 // -----------------------------------------------------------------------------
