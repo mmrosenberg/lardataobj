@@ -30,14 +30,11 @@ namespace sim{
   {}
 
   //-------------------------------------------------
-  IDE::IDE(sim::IDE const& ide,int offset)
-    : trackID     (ide.trackID+offset)
-    , numElectrons(ide.numElectrons)
-    , energy      (ide.energy)
-    , x           (ide.x)
-    , y           (ide.y)
-    , z           (ide.z)
-  {}
+  IDE::IDE(sim::IDE const& ide, int offset)
+    : IDE(ide)
+  {
+    trackID += offset;
+  }
 
   // Default constructor
   //-------------------------------------------------
@@ -58,15 +55,15 @@ namespace sim{
   }
   
   //-------------------------------------------------
-  void SimChannel::AddIonizationElectrons(int          trackID,
-                                          unsigned int tdc,
+  void SimChannel::AddIonizationElectrons(TrackID_t    trackID,
+                                          TDC_t        tdc,
                                           double       numberElectrons,
                                           double      *xyz,
                                           double       energy)
   {
-    // look at the map to see if the current TDC already
+    // look at the collection to see if the current TDC already
     // exists, if not, add it, if so, just add a new track id to the 
-    // vector
+    // vector, or update the information if track is already present
     
     // no electrons? no energy? no good!
     if ((numberElectrons < std::numeric_limits<double>::epsilon())
@@ -137,12 +134,11 @@ namespace sim{
       
     } // if new TDC ... else
     
-    return;
-  }
+  } // SimChannel::AddIonizationElectrons()
 
 
   //-------------------------------------------------
-  double SimChannel::Charge(unsigned int tdc) const
+  double SimChannel::Charge(TDC_t tdc) const
   {
     double charge = 0.;
 
@@ -167,7 +163,7 @@ namespace sim{
   }
 
     //-------------------------------------------------
-  double SimChannel::Energy(unsigned int tdc) const
+  double SimChannel::Energy(TDC_t tdc) const
   {
     double energy = 0.;
 
@@ -194,8 +190,8 @@ namespace sim{
   
   //-----------------------------------------------------------------------
   // the start and end tdc values are assumed to be inclusive
-  std::vector<sim::IDE> SimChannel::TrackIDsAndEnergies(unsigned int startTDC,
-                                                        unsigned int endTDC) const
+  std::vector<sim::IDE> SimChannel::TrackIDsAndEnergies(TDC_t startTDC,
+                                                        TDC_t endTDC) const
   {
     // make a map of track ID values to sim::IDE objects
     std::map<int, sim::IDE> idToIDE;
@@ -260,8 +256,8 @@ namespace sim{
 
   //-----------------------------------------------------------------------
   // the start and end tdc values are assumed to be inclusive
-  std::vector<sim::TrackIDE>  SimChannel::TrackIDEs(unsigned int startTDC,
-                                                    unsigned int endTDC) const
+  std::vector<sim::TrackIDE>  SimChannel::TrackIDEs(TDC_t startTDC,
+                                                    TDC_t endTDC) const
   {
 
     std::vector<sim::TrackIDE> trackIDEs;
@@ -294,14 +290,15 @@ namespace sim{
   //-----------------------------------------------------------------------
   // Merge the collection of IDEs from one sim channel to another.
   // Requires an agreed upon offset for G4 trackID
-  std::pair<int,int> SimChannel::MergeSimChannel(SimChannel const& channel,
-                                                 int               offset)
+  std::pair<SimChannel::TrackID_t,SimChannel::TrackID_t>
+  SimChannel::MergeSimChannel(SimChannel const& channel,
+                              int               offset)
   {
     if( this->Channel() != channel.Channel() )
       throw std::runtime_error("ERROR SimChannel Merge: Trying to merge different channels!");
 
-    std::pair<int,int> range_trackID(std::numeric_limits<int>::max(),
-				     std::numeric_limits<int>::min());
+    std::pair<TrackID_t,TrackID_t> range_trackID(std::numeric_limits<int>::max(),
+                                                 std::numeric_limits<int>::min());
     
     for(auto const& itr : channel.TDCIDEMap()){
       
