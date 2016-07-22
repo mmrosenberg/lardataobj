@@ -102,7 +102,7 @@ namespace sim{
                            xyz[1],
                            xyz[2],
                            energy);
-      fTDCIDEs.push_back( std::make_pair(tdc, std::move(idelist) ) );
+      fTDCIDEs.emplace(itr, tdc, std::move(idelist) );
     }
     else if(itr->first == tdc){
       
@@ -124,8 +124,8 @@ namespace sim{
         }
       }
       
-        // if we never found the track id, then this is the first instance of
-        // the track id for this tdc, so add ide to the vector
+      // if we never found the track id, then this is the first instance of
+      // the track id for this tdc, so add ide to the vector
       std::vector<sim::IDE> ides;
       ides.emplace_back(trackID,
                         numberElectrons,
@@ -136,9 +136,6 @@ namespace sim{
       
       fTDCIDEs.push_back( std::make_pair(tdc, std::move(ides) ) );
     }
-    
-      // be sure the vector of pairs is sorted since we added an entry
-    std::sort(fTDCIDEs.begin(), fTDCIDEs.end(), compare_tdc);
     
     return;
   }
@@ -198,7 +195,7 @@ namespace sim{
   //-----------------------------------------------------------------------
   // the start and end tdc values are assumed to be inclusive
   std::vector<sim::IDE> SimChannel::TrackIDsAndEnergies(unsigned int startTDC,
-							unsigned int endTDC) const
+                                                        unsigned int endTDC) const
   {
     // make a map of track ID values to sim::IDE objects
     std::map<int, sim::IDE> idToIDE;
@@ -220,13 +217,13 @@ namespace sim{
     
     while(itr != fTDCIDEs.end()){
       
-        // check the tdc value for the iterator, break the loop if we
-        // are outside the range
+      // check the tdc value for the iterator, break the loop if we
+      // are outside the range
       if(itr->first > endTDC) break;
       
-        // grab the vector of IDEs for this tdc
+      // grab the vector of IDEs for this tdc
       auto const& idelist = itr->second;
-        // now loop over them and add their content to the map
+      // now loop over them and add their content to the map
       for(auto ide : idelist){
         
         if( idToIDE.find(ide.trackID) != idToIDE.end() ){
@@ -245,8 +242,7 @@ namespace sim{
           idToIDE[ide.trackID].energy = energy;
         } // end if the track id for this one is found
         else{
-          sim::IDE temp(ide);
-          idToIDE[ide.trackID] = temp;
+          idToIDE[ide.trackID] = sim::IDE(ide);
         }
       } // end loop over vector
       
@@ -265,7 +261,7 @@ namespace sim{
   //-----------------------------------------------------------------------
   // the start and end tdc values are assumed to be inclusive
   std::vector<sim::TrackIDE>  SimChannel::TrackIDEs(unsigned int startTDC,
-						      unsigned int endTDC) const
+                                                    unsigned int endTDC) const
   {
 
     std::vector<sim::TrackIDE> trackIDEs;
@@ -298,7 +294,8 @@ namespace sim{
   //-----------------------------------------------------------------------
   // Merge the collection of IDEs from one sim channel to another.
   // Requires an agreed upon offset for G4 trackID
-  std::pair<int,int> SimChannel::MergeSimChannel(const SimChannel& channel, int offset)
+  std::pair<int,int> SimChannel::MergeSimChannel(SimChannel const& channel,
+                                                 int               offset)
   {
     if( this->Channel() != channel.Channel() )
       throw std::runtime_error("ERROR SimChannel Merge: Trying to merge different channels!");
@@ -311,7 +308,7 @@ namespace sim{
       auto tdc  = itr.first;
       auto ides = itr.second;
       
-        // find the entry from this SimChannel corresponding to the tdc from the other
+      // find the entry from this SimChannel corresponding to the tdc from the other
       auto itrthis = std::lower_bound(fTDCIDEs.begin(),
                                       fTDCIDEs.end(),
                                       std::make_pair(tdc, std::vector<sim::IDE>()),

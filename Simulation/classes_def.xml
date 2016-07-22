@@ -19,7 +19,8 @@
  <class name="sim::SimPhotons"               ClassVersion="12"              	 >
   <version ClassVersion="12" checksum="3876354274"/>
  </class>
- <class name="sim::SimChannel"               ClassVersion="14"              	 >
+ <class name="sim::SimChannel"               ClassVersion="15"              	 >
+  <version ClassVersion="15" checksum="2427478114"/>
   <version ClassVersion="14" checksum="2917495953"/>
  </class>
  <class name="sim::AuxDetSimChannel"         ClassVersion="12"                   >
