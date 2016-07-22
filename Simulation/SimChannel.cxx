@@ -98,17 +98,18 @@ namespace sim{
       std::vector<sim::IDE> idelist;
       idelist.emplace_back(trackID,
                            numberElectrons,
+                           energy,
                            xyz[0],
                            xyz[1],
-                           xyz[2],
-                           energy);
+                           xyz[2]
+                           );
       fTDCIDEs.emplace(itr, tdc, std::move(idelist) );
     }
     else if(itr->first == tdc){
       
       // loop over the IDE vector for this tdc and add the electrons
       // to the entry with the same track id
-      for(auto ide : itr->second){
+      for(auto& ide : itr->second){
         
         if( ide.trackID == trackID ){
           // make a weighted average for the location information
@@ -126,16 +127,15 @@ namespace sim{
       
       // if we never found the track id, then this is the first instance of
       // the track id for this tdc, so add ide to the vector
-      std::vector<sim::IDE> ides;
-      ides.emplace_back(trackID,
-                        numberElectrons,
-                        xyz[0],
-                        xyz[1],
-                        xyz[2],
-                        energy);
+      itr->second.emplace_back(trackID,
+                               numberElectrons,
+                               energy,
+                               xyz[0],
+                               xyz[1],
+                               xyz[2]
+                               );
       
-      fTDCIDEs.push_back( std::make_pair(tdc, std::move(ides) ) );
-    }
+    } // if new TDC ... else
     
     return;
   }
@@ -306,7 +306,7 @@ namespace sim{
     for(auto const& itr : channel.TDCIDEMap()){
       
       auto tdc  = itr.first;
-      auto ides = itr.second;
+      auto const& ides = itr.second;
       
       // find the entry from this SimChannel corresponding to the tdc from the other
       auto itrthis = std::lower_bound(fTDCIDEs.begin(),
@@ -314,17 +314,18 @@ namespace sim{
                                       std::make_pair(tdc, std::vector<sim::IDE>()),
                                       compare_tdc);
       
-      std::vector<sim::IDE> & curIDEVec = ides;
+      // pick which IDE list we have to fill: new one or existing one
+      std::vector<sim::IDE>* curIDEVec;
       if(itrthis        == fTDCIDEs.end() ||
          itrthis->first != tdc){
         fTDCIDEs.emplace_back(tdc, std::vector<sim::IDE>());
-        curIDEVec = fTDCIDEs.back().second;
+        curIDEVec = &(fTDCIDEs.back().second);
       }
-      else if(itrthis->first == tdc)
-        curIDEVec = itrthis->second;
+      else
+        curIDEVec = &(itrthis->second);
       
       for(auto const& ide : ides){
-        curIDEVec.emplace_back(ide, offset);
+        curIDEVec->emplace_back(ide, offset);
         if( ide.trackID+offset < range_trackID.first  )
           range_trackID.first = ide.trackID+offset;
         if( ide.trackID+offset > range_trackID.second )
