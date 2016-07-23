@@ -48,18 +48,11 @@ namespace sim{
   {}
 
   //-------------------------------------------------
-  bool compare_tdc(std::pair<unsigned int, std::vector<sim::IDE> > const& a,
-                   std::pair<unsigned int, std::vector<sim::IDE> > const& b)
-  {
-    return a.first < b.first;
-  }
-  
-  //-------------------------------------------------
-  void SimChannel::AddIonizationElectrons(TrackID_t    trackID,
-                                          TDC_t        tdc,
-                                          double       numberElectrons,
-                                          double      *xyz,
-                                          double       energy)
+  void SimChannel::AddIonizationElectrons(TrackID_t     trackID,
+                                          TDC_t         tdc,
+                                          double        numberElectrons,
+                                          double const* xyz,
+                                          double        energy)
   {
     // look at the collection to see if the current TDC already
     // exists, if not, add it, if so, just add a new track id to the 
@@ -82,10 +75,7 @@ namespace sim{
       return;
     } // if no energy or no electrons
     
-    auto itr = std::lower_bound(fTDCIDEs.begin(),
-                                fTDCIDEs.end(),
-                                std::make_pair(tdc, std::vector<sim::IDE>()),
-                                compare_tdc);
+    auto itr = findClosestTDCIDE(tdc);
     
     // check if this tdc value is in the vector, it is possible that
     // the lower bound is different from the given tdc, in which case
@@ -102,25 +92,25 @@ namespace sim{
                            );
       fTDCIDEs.emplace(itr, tdc, std::move(idelist) );
     }
-    else if(itr->first == tdc){
+    else { // we have that TDC already; itr points to it
       
       // loop over the IDE vector for this tdc and add the electrons
       // to the entry with the same track id
       for(auto& ide : itr->second){
         
-        if( ide.trackID == trackID ){
-          // make a weighted average for the location information
-          double weight    = ide.numElectrons + numberElectrons;
-          ide.x            = (ide.x * ide.numElectrons + xyz[0]*numberElectrons)/weight;
-          ide.y            = (ide.y * ide.numElectrons + xyz[1]*numberElectrons)/weight;
-          ide.z            = (ide.z * ide.numElectrons + xyz[2]*numberElectrons)/weight;
-          ide.numElectrons = weight;
-          ide.energy       = ide.energy + energy;
-          
-          // found the track id we wanted, so return;
-          return;
-        }
-      }
+        if (ide.trackID != trackID ) continue;
+        
+        // make a weighted average for the location information
+        double weight    = ide.numElectrons + numberElectrons;
+        ide.x            = (ide.x * ide.numElectrons + xyz[0]*numberElectrons)/weight;
+        ide.y            = (ide.y * ide.numElectrons + xyz[1]*numberElectrons)/weight;
+        ide.z            = (ide.z * ide.numElectrons + xyz[2]*numberElectrons)/weight;
+        ide.numElectrons = weight;
+        ide.energy       = ide.energy + energy;
+        
+        // found the track id we wanted, so return;
+        return;
+      } // for
       
       // if we never found the track id, then this is the first instance of
       // the track id for this tdc, so add ide to the vector
@@ -142,10 +132,7 @@ namespace sim{
   {
     double charge = 0.;
 
-    auto itr = std::lower_bound(fTDCIDEs.begin(),
-                                fTDCIDEs.end(),
-                                std::make_pair(tdc, std::vector<sim::IDE>()),
-                                compare_tdc);
+    auto itr = findClosestTDCIDE(tdc);
     
       // check to see if this tdc value is in the map
     if(itr        != fTDCIDEs.end() &&
@@ -167,10 +154,7 @@ namespace sim{
   {
     double energy = 0.;
 
-    auto itr = std::lower_bound(fTDCIDEs.begin(),
-                                fTDCIDEs.end(),
-                                std::make_pair(tdc, std::vector<sim::IDE>()),
-                                compare_tdc);
+    auto itr = findClosestTDCIDE(tdc);
     
       // check to see if this tdc value is in the map
     if(itr        != fTDCIDEs.end() &&
@@ -194,22 +178,18 @@ namespace sim{
                                                         TDC_t endTDC) const
   {
     // make a map of track ID values to sim::IDE objects
-    std::map<int, sim::IDE> idToIDE;
-
-    std::vector<sim::IDE> ides;
 
     if(startTDC > endTDC ){
       mf::LogWarning("SimChannel") << "requested tdc range is bogus: "
 				   << startTDC << " " << endTDC
 				   << " return empty vector";
-      return ides;
+      return {}; // returns an empty vector
     }
 
+    std::map<TrackID_t, sim::IDE> idToIDE;
+    
       //find the lower bound for this tdc and then iterate from there
-    auto itr = std::lower_bound(fTDCIDEs.begin(),
-                                fTDCIDEs.end(),
-                                std::make_pair(startTDC, std::vector<sim::IDE>()),
-                                compare_tdc);
+    auto itr = findClosestTDCIDE(startTDC);
     
     while(itr != fTDCIDEs.end()){
       
@@ -220,37 +200,41 @@ namespace sim{
       // grab the vector of IDEs for this tdc
       auto const& idelist = itr->second;
       // now loop over them and add their content to the map
-      for(auto ide : idelist){
-        
-        if( idToIDE.find(ide.trackID) != idToIDE.end() ){
-          double nel1   = idToIDE[ide.trackID].numElectrons;
-          double nel2   = ide.numElectrons;
-          double en1    = idToIDE[ide.trackID].energy;
-          double en2	  = ide.energy;
-          double energy = en1  + en2;
-          double weight = nel1 + nel2;
+      for(auto const& ide : idelist){
+        auto itTrkIDE = idToIDE.find(ide.trackID);
+        if( itTrkIDE != idToIDE.end() ){
+          // the IDE we are going to update:
+          sim::IDE& trackIDE = itTrkIDE->second;
+          
+          double const nel1   = trackIDE.numElectrons;
+          double const nel2   = ide.numElectrons;
+          double const en1    = trackIDE.energy;
+          double const en2    = ide.energy;
+          double const energy = en1  + en2;
+          double const weight = nel1 + nel2;
           
             // make a weighted average for the location information
-          idToIDE[ide.trackID].x            = (ide.x*nel2 + idToIDE[ide.trackID].x*nel1)/weight;
-          idToIDE[ide.trackID].y            = (ide.y*nel2 + idToIDE[ide.trackID].y*nel1)/weight;
-          idToIDE[ide.trackID].z            = (ide.z*nel2 + idToIDE[ide.trackID].z*nel1)/weight;
-          idToIDE[ide.trackID].numElectrons = weight;
-          idToIDE[ide.trackID].energy = energy;
+          trackIDE.x            = (ide.x*nel2 + trackIDE.x*nel1)/weight;
+          trackIDE.y            = (ide.y*nel2 + trackIDE.y*nel1)/weight;
+          trackIDE.z            = (ide.z*nel2 + trackIDE.z*nel1)/weight;
+          trackIDE.numElectrons = weight;
+          trackIDE.energy = energy;
         } // end if the track id for this one is found
         else{
           idToIDE[ide.trackID] = sim::IDE(ide);
         }
       } // end loop over vector
       
-      itr++;
+      ++itr;
     } // end loop over tdc values
     
       // now fill the vector with the ides from the map
-    for(auto itr : idToIDE){
+    std::vector<sim::IDE> ides;
+    ides.reserve(idToIDE.size());
+    for(auto const& itr : idToIDE){
       ides.push_back(itr.second);
     }
     
-
     return ides;
   }
 
@@ -270,7 +254,7 @@ namespace sim{
     }
 
     double totalE = 0.;
-    const std::vector<sim::IDE> ides = TrackIDsAndEnergies(startTDC, endTDC);
+    std::vector<sim::IDE> const ides = TrackIDsAndEnergies(startTDC, endTDC);
     for (auto const& ide : ides)
       totalE += ide.energy;
 
@@ -282,10 +266,10 @@ namespace sim{
       if(ide.trackID == sim::NoParticleId) continue;
       trackIDEs.emplace_back(ide.trackID, ide.energy/totalE, ide.energy);
     }
-
-
+    
     return trackIDEs;
   }
+  
 
   //-----------------------------------------------------------------------
   // Merge the collection of IDEs from one sim channel to another.
@@ -306,10 +290,7 @@ namespace sim{
       auto const& ides = itr.second;
       
       // find the entry from this SimChannel corresponding to the tdc from the other
-      auto itrthis = std::lower_bound(fTDCIDEs.begin(),
-                                      fTDCIDEs.end(),
-                                      std::make_pair(tdc, std::vector<sim::IDE>()),
-                                      compare_tdc);
+      auto itrthis = findClosestTDCIDE(tdc);
       
       // pick which IDE list we have to fill: new one or existing one
       std::vector<sim::IDE>* curIDEVec;
@@ -336,5 +317,39 @@ namespace sim{
     
   }
   
+  //-------------------------------------------------
+  struct SimChannel::CompareByTDC {
+    
+    bool operator()
+      (TDCIDE const& a, TDCIDE const& b) const
+      { return a.first < b.first; }
+    
+    bool operator()
+      (StoredTDC_t a_tdc, TDCIDE const& b) const
+      { return a_tdc < b.first; }
+    
+    bool operator()
+      (TDCIDE const& a, StoredTDC_t b_tdc) const
+      { return a.first < b_tdc; }
+    
+  }; // struct CompareByTDC
+  
 
+  SimChannel::TDCIDEs_t::iterator SimChannel::findClosestTDCIDE(StoredTDC_t tdc)
+  {
+    return std::lower_bound
+      (fTDCIDEs.begin(), fTDCIDEs.end(), tdc, CompareByTDC());
+  }
+  
+  SimChannel::TDCIDEs_t::const_iterator SimChannel::findClosestTDCIDE
+    (StoredTDC_t tdc) const
+  {
+    return std::lower_bound
+      (fTDCIDEs.begin(), fTDCIDEs.end(), tdc, CompareByTDC());
+  }
+  
+  
+  //-------------------------------------------------
+
+  
 }

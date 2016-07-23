@@ -159,7 +159,7 @@ namespace sim {
     void AddIonizationElectrons(TrackID_t trackID,
                                 TDC_t tdc,
                                 double numberElectrons,
-                                double *xyz,
+                                double const* xyz,
                                 double energy); 
     
     /// Returns the readout channel this object describes
@@ -275,13 +275,26 @@ namespace sim {
      * @param indent_first indentation for the first line (default: as indent)
      */
     template <typename Stream>
-    void Dump(Stream& out, std::string indent, std::string first_indent) const;
+    void Dump(Stream&& out, std::string indent, std::string first_indent) const;
     
     template <typename Stream>
-    void Dump(Stream& out, std::string indent = "") const
-      { Dump(out, indent, indent); }
+    void Dump(Stream&& out, std::string indent = "") const
+      { Dump(std::forward<Stream>(out), indent, indent); }
     //@}
     
+    
+  private:
+    /// Comparison functor, sorts by increasing TDCtick value
+    struct CompareByTDC;
+    
+    /// Return the iterator to the first TDCIDE not earlier than tdc
+    TDCIDEs_t::iterator findClosestTDCIDE(StoredTDC_t tdc);
+    
+    /// Return the (constant) iterator to the first TDCIDE not earlier than tdc
+    TDCIDEs_t::const_iterator findClosestTDCIDE
+      (StoredTDC_t tdc) const;
+    /// @}
+
 #endif
 
   };
@@ -301,7 +314,7 @@ inline raw::ChannelID_t                sim::SimChannel::Channel()               
 // ---
 template <class Stream>
 void sim::SimChannel::Dump
-  (Stream& out, std::string indent, std::string first_indent) const
+  (Stream&& out, std::string indent, std::string first_indent) const
 {
   out << first_indent << "channel #" << Channel() << " read " << fTDCIDEs.size()
     << " TDCs:\n";
