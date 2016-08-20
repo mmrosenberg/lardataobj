@@ -42,18 +42,48 @@ namespace sim {
   
   
   /**
-   * @brief Ionization measured from a Geant4 track in a point in space.
+   * @brief Ionization at a point of the TPC sensitive volume
    * 
-   * Ionization is stored as both energy and number of electrons.
-   * This amount typically includes inefficiencies and physics effects that
-   * reduce and spread the electrons. In the simulation, this yields to a
-   * fractional number of electrons.
+   * This class stores information about the ionization from the simulation
+   * of a small step of a track through the TPC active volume.
    * 
-   * Note that the only information stored about the pure ionization is where
-   * it happened, and by which track. As described above, the energy is instead
-   * the one that reaches the readout. Likewise, the time the ionization
-   * happened is not stored, and the TDC time refers instead to when the
-   * drifting ionized electrons reached the readout channel.
+   * Ionization information consists of both energy and number of electrons.
+   * It is of paramount importance to understand what each field stores:
+   * 
+   * - position: where the ionization occurred (from Geant4 simulation)
+   * - track ID: Geant4 track ID of the ionizing particle
+   * - energy: amount of energy released by ionization (from Geant4 simulation)
+   * - electrons: amount of electrons reaching the readout channel
+   *
+   * Note the different definition of the electrons respect to the rest:
+   * it describes the electrons at the anode _after_ the drifting occurred,
+   * while all the other quantities can be related to the moment the ionization
+   * happened.
+   * 
+   * The number of electrons typically includes inefficiencies and physics
+   * effects that reduce and spread the electrons. In the simulation,
+   * this yields a fractional number of electrons.
+   * 
+   * Each IDE is also typically associated with a time (TDC) count, that is
+   * the time at which the ionized electrons reached the readout channel, in
+   * electronic ticks, as opposed as the time when ionization occurred.
+   * The latter is not stored.
+   * 
+   * At the time of writing this documentation (LArSoft 6.4.0), IDEs are
+   * computed in larg4::LArVoxelReadout.
+   * The energy and track ID come directly from Geant4 simulation.
+   * The position is the mid point of the Geant4 step that produced ionization.
+   * The electrons are
+   * 
+   * 1. converted from that same energy (using a fundamental conversion factor
+   *    stored in `larcoreobj/SimpleTypesAndConstants/PhysicalConstants.h`)
+   * 2. applied recombination effect by larg4::IonizationAndScintillation::Reset()
+   * 3. applied attenuation and diffusion in
+   *    larg4::LArVoxelReadout::DriftIonizationElectrons()
+   * 
+   * The latter also assembles the sim::IDE objects to be stored into
+   * sim::SimChannel.
+   * 
    */
   struct IDE{
     
@@ -86,8 +116,8 @@ namespace sim {
 #endif
     
     TrackID_t trackID;  ///< Geant4 supplied track ID
-    float numElectrons; ///< total number of electrons for this track ID and time
-    float energy;       ///< total energy deposited for this track ID and time [MeV]
+    float numElectrons; ///< number of electrons at the readout for this track ID and time
+    float energy;       ///< energy deposited by ionization by this track ID and time [MeV]
     float x;            ///< x position of ionization [cm]
     float y;            ///< y position of ionization [cm]
     float z;            ///< z position of ionization [cm]
