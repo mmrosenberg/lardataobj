@@ -9,8 +9,8 @@
  */
 
 
-#ifndef LARSIMOBJ_SIMULATION_SIMCHANNEL_H
-#define LARSIMOBJ_SIMULATION_SIMCHANNEL_H
+#ifndef LARDATAOBJ_SIMULATION_SIMCHANNEL_H
+#define LARDATAOBJ_SIMULATION_SIMCHANNEL_H
 
 // LArSoftObj libraries
 #include "larcoreobj/SimpleTypesAndConstants/geo_types.h"
@@ -374,6 +374,6 @@ void sim::SimChannel::Dump
 
 #endif
 
-#endif // LARSIMOBJ_SIMULATION_SIMCHANNEL_H
+#endif // LARDATAOBJ_SIMULATION_SIMCHANNEL_H
 
 ////////////////////////////////////////////////////////////////////////

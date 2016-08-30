@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////
 ///
-/// \file  larsimobj/Simulation/AuxDetSimChannel.cxx
+/// \file  lardataobj/Simulation/AuxDetSimChannel.cxx
 ///
 /// \author  miceli@fnal.gov
 ///
@@ -8,7 +8,7 @@
 
 
 // our header
-#include "larsimobj/Simulation/AuxDetSimChannel.h"
+#include "lardataobj/Simulation/AuxDetSimChannel.h"
 
 // C/C++ standard library
 #include <limits> // std::numeric_limits<>
