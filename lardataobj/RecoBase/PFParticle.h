@@ -16,6 +16,32 @@
 
 namespace recob {
 
+  /**
+   * @brief Hierarchical representation of particle flow
+   *
+   * The "Particle Flow" Particle is an object connecting to others of the
+   * same type to define a hierarchy of a single parent generating multiple
+   * daughter particles.
+   * 
+   * This structure was originally proposed to accommodate the information
+   * produced by Pandora. The PFParticle is a small entity that is expected
+   * to be associated with `recob::Track`, `recob::Cluster`, `recob::Hit`,
+   * `recob::Vertex` and also `recob::Seed` to describe all the reconstructed
+   * quantities related to it.
+   *
+   * The parentage relationships are expressed by indices in the collection
+   * all the particles belong to. This requires additional care when creating
+   * that collection, since each relation is defined in the particles with
+   * indices pointing to a collection that does not yet exist when the particle
+   * is created.
+   * The relation is expressed as one parent and many daughters. For "primary"
+   * particles, which have no parent, the special parent value
+   * `recob::PFParticle::kPFParticlePrimary` must be used.
+   *
+   * Note that the parentage relation can not be expressed as simple _art_
+   * associations, which can't express relations between two objects of the
+   * same type.
+   */
   class PFParticle {
 
   public:
