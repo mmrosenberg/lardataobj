@@ -19,7 +19,6 @@
  <class name="lar::sparse_vector<float>::datarange_t"                     />
  <class name="std::vector< lar::sparse_vector<float>::datarange_t >"      />
    <!-- others -->
- <class name="std::vector< std::vector<double> >"                         />
  <class name="std::vector<TVector3>"                                      />
  <class name="std::vector<TMatrixT<double> >"                             />
    <!-- LArSoft structures -->
