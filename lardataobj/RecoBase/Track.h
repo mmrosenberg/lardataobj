@@ -71,8 +71,8 @@ namespace recob {
 			      double *dcosEnd)                 const;
     /*
      * The following methods have been moved into lardata/RecoBaseArt/TrackUtils.h:
-     * - ProjectedLength() has become lar::utils::TrackProjectedLength()
-     * - PitchInView() has become lar::utils::TrackPitchInView()
+     * - ProjectedLength() has become lar::util::TrackProjectedLength()
+     * - PitchInView() has become lar::util::TrackPitchInView()
      */
 //    double          ProjectedLength(geo::View_t view)          const;
 //    double          PitchInView(geo::View_t view,
