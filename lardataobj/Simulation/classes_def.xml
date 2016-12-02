@@ -40,6 +40,10 @@
   <version ClassVersion="11" checksum="1122283400"/>
   <version ClassVersion="10" checksum="2225942541"/>
  </class>
+ <class name="sim::OpDetBacktrackerRecord" ClassVersion="11">
+  <version ClassVersion="11" checksum="1336777815"/>
+  <version ClassVersion="10" checksum="2389124613"/>
+ </class>
  <enum name="sim::BeamType_t"                                      />
  <class name="std::vector<sim::OnePhoton>"                         />
  <class name="std::vector<sim::SimPhotonsLite>"                    />
@@ -49,13 +53,19 @@
  <class name="std::vector<sim::AuxDetIDE>"                         />
  <class name="std::vector<sim::IDE>"                               />
  <class name="std::vector<sim::BeamGateInfo>" 	    		    	     />
+ <class name="std::vector<sim::OpDetBacktrackerRecord>"                      />
  <class name="sim::TDCIDE"                                         />
  <class name="std::vector<sim::TDCIDE>"            	               />
+ <class name="sim::SDP" />
+ <class name="std::vector<sim::SDP>" />
+ <class name="std::pair< double, std::vector<sim::SDP> >"/>
+ <class name="std::vector< std::pair < double, std::vector<sim::SDP> > >" />
  <class name="art::Wrapper< std::vector<sim::SimPhotons>   >"		   />
  <class name="art::Wrapper< std::vector<sim::SimPhotonsLite>   >"  />
  <class name="art::Wrapper< std::vector<sim::SimChannel>   >"		   />
  <class name="art::Wrapper< std::vector<sim::BeamGateInfo> >"		   />
  <class name="art::Wrapper< std::vector<sim::AuxDetSimChannel>  >" />
+ <class name="art::Wrapper< std::vector<sim::OpDetBacktrackerRecord> >"      />
 <!---Remove the following lines once DUNE no longer uses files containing
      DUNE10ktPhotons.  11 September 2013 brebel-->
  <class name="sim::DUNE10ktPhotons"                                />
