@@ -1,154 +1,140 @@
-//////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // \version 
 //
-// \brief Definition of data products to hold MVA output values and metadata
+// \brief Data products to hold MVA output values and metadata, see MVAReader/MVAWriter wrappers for convenient usage.
 //
 // \author robert.sulej@cern.ch
 //
-//////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #ifndef ANAB_MVAOUTPUT_H
 #define ANAB_MVAOUTPUT_H
 
+#ifndef __GCCXML__
 #include "cetlib/exception.h"
 
-// Needed by the MVA wrapper class
-#include "art/Framework/Principal/Event.h"
-#include "art/Framework/Principal/Handle.h"
-#include "canvas/Utilities/InputTag.h"
-
-#include <vector>
 #include <iosfwd>
 #include <iostream>
 #include <iomanip>
+#endif
+
+#include <array>
+#include <vector>
 
 namespace anab {
 
+/// MVA resuts for a single object, or just a feature vector of size N. Values are saved as 32bit fp's,
+/// this is usually enough for classification purposes and the precision one can expect from MVA algorithms.
 template <size_t N>
 class MVAOutput {
 public:
-    
+
     MVAOutput() { }
 
     // MUST UPDATE WHEN CLASS IS CHANGED!
     static short Class_Version() { return 1; }
 
 private:
-    double fOutputs[N]; ///< Vector of MVA output values
+    float fOutputs[N]; ///< Vector of MVA output values
 
 #ifndef __GCCXML__
 public:
 
-    MVAOutput(double init) { for (size_t i = 0; i < N; ++i) { fOutputs[i] = init; } }
+    MVAOutput(float init) { for (size_t i = 0; i < N; ++i) { fOutputs[i] = init; } }
 
-    template <size_t M>
-    friend std::ostream& operator << (std::ostream &o, MVAOutput<M> const& a);
+    MVAOutput(std::array<float, N> const & values) { for (size_t i = 0; i < N; ++i) { fOutputs[i] = values[i]; } }
+
+    MVAOutput(std::array<double, N> const & values) { for (size_t i = 0; i < N; ++i) { fOutputs[i] = values[i]; } }
+
+    MVAOutput(std::vector<float> const & values)
+    {
+        if (values.size() == N) { for (size_t i = 0; i < N; ++i) { fOutputs[i] = values[i]; } }
+        else { throw cet::exception("MVAOutput") << "Expected length: " << N << ", provided: " << values.size(); }
+    }
+
+    MVAOutput(std::vector<double> const & values)
+    {
+        if (values.size() == N) { for (size_t i = 0; i < N; ++i) { fOutputs[i] = values[i]; } }
+        else { throw cet::exception("MVAOutput") << "Expected length: " << N << ", provided: " << values.size(); }
+    }
+
+    /// If you really have to use C arrays:
+    MVAOutput(float const * values) { for (size_t i = 0; i < N; ++i) { fOutputs[i] = values[i]; } }
+    MVAOutput(double const * values) { for (size_t i = 0; i < N; ++i) { fOutputs[i] = values[i]; } }
+
+    friend std::ostream& operator<< (std::ostream &o, MVAOutput const& a)
+    {
+        o << "MVAOutput values:";
+        for (size_t i = 0; i < N; ++i) { o << " " << a.fOutputs[i]; }
+        o << std::endl; 
+        return o;
+    }
 
     size_t size() const { return N; }
 
-    double at(size_t index) const
+    float at(size_t index) const
     {
         if (index < N) { return fOutputs[index]; }
-        else { throw cet::exception() << "Index out of range: " << index; }
+        else { throw cet::exception("MVAOutput") << "Index out of range: " << index; }
     }
 
-    double operator[] (size_t index) const { return fOutputs[index]; }
+    float operator[] (size_t index) const { return fOutputs[index]; }
 
 #endif
 
 }; // class MVAOutput
 
+/// MVA results metadata. The idea is to associate entire collection of objects to the collection
+/// of MVA results, and add metadata like meaning of columns in MVA results or recommended thresholds
+/// for various applications of the MVA values.
 template <size_t N>
 class MVADescription {
 public:
-    
-    MVADescription() : fNOutpurs(0) { }
+
+    MVADescription() { }
 
     // MUST UPDATE WHEN CLASS IS CHANGED!
     static short Class_Version() { return 1; }
 
 private:
-    art::InputTag fDataTag;           ///< Tag of the reco data products
-    std::string   fMVAOutputInstance; ///< Instance name of MVA output values
-    std::string   fOutputNames[N];    ///< MVA output names/meaning
+    std::string fDataTag;        ///< Tag of the reco data products (art::InputTag format)
+    std::string fOutputInstance; ///< Instance name of MVA output values
+    std::string fOutputNames[N]; ///< MVA output names/meaning
 
 #ifndef __GCCXML__
 public:
 
-    template <size_t M>
-    friend std::ostream& operator << (std::ostream &o, MVADescription<M> const& a);
+    MVADescription(std::string const & dataTag, std::string const & outputInstance,
+        std::vector< std::string > const & outputNames = std::vector< std::string >("")) :
+        fDataTag(dataTag),
+        fOutputInstance(outputInstance)
+    {
+        if (outputNames.size() <= N) { for (size_t i = 0; i < outputNames.size(); ++i) { fOutputNames[i] = outputNames[i]; } }
+        else { throw cet::exception("MVAOutput") << "Expected max length of outputNames: " << N << ", provided: " << outputNames.size(); }
+    }
 
-    const std::string & MVAOutputInstance() const { return fMVAOutputInstance; }
+    friend std::ostream& operator<< (std::ostream &o, MVADescription const& a)
+    {
+        o << "MVADescription: prepared for " << a.fDataTag << ", instance name " << a.fOutputInstance << ", " << N << " outputs:" << std::endl;
+        for (size_t i = 0; i < N; ++i) { o << " " << a.fOutputNames[i] << std::endl; }
+        return o;
+    }
+
+    const std::string & outputInstance() const { return fOutputInstance; }
 
     size_t size() const { return N; }
 
-    const art::InputTag & dataTag() const { return fDataTag; }
+    const std::string & dataTag() const { return fDataTag; }
 
     const std::string & outputName(size_t index) const
     {
         if (index < N) { return fOutputNames[index]; }
-        else { throw cet::exception() << "Index out of range: " << index; }
+        else { throw cet::exception("MVADescription") << "Index out of range: " << index; }
     }
 
 #endif
-};
-
-/// Wrapper for navigation through reconstructed objects of type T and associated
-/// N-outputs MVA results with their metadata (this class is not a data product).
-template <class T, size_t N>
-class MVAReader {
-public:
-
-    MVAReader(const art::Event & evt, const art::InputTag & tag);
-
-private:
-
-    const MVADescription<N> & fDescription;
-    const std::vector< art::Ptr<T> > & fDataProd;
-};
+}; // class MVADescription
 
 } // namespace anab
-
-#ifndef __GCCXML__
-//----------------------------------------------------------------------------
-// ostream operator for MVAOutput.
-//
-template <size_t M>
-std::ostream& operator<< (std::ostream & o, anab::MVAOutput<M> const& a)
-{
-    o << "MVAOutput values:";
-    for (size_t i = 0; i < M; ++i) { o << " " << a.fOutputs[i]; }
-    o << std::endl; 
-    return o;
-}
-
-//----------------------------------------------------------------------------
-// ostream operator for MVADescription.
-//
-template <size_t M>
-std::ostream& operator<< (std::ostream & o, anab::MVADescription<M> const& a)
-{
-    o << "MVADescription: prepared for " << fDataTag << ", instance name " << a.fMVAOutputInstance << ", " << M << " outputs:" << std::endl;
-    for (size_t i = 0; i < M; ++i) { o << " " << a.fOutputNames[i] << std::endl; }
-    return o;
-}
-
-//----------------------------------------------------------------------------
-// MVA functions.
-//
-template <class T, size_t N>
-anab::MVAReader::MVAReader(const art::Event & evt, const art::InputTag & tag)
-{
-    auto descriptionHandle = evt.getValidHandle< std::vector< anab::MVADescription<N> > >(tag);
-    if (descriptionHandle->empty())
-    {
-        throw cet::exception() << "MVA description not found.";
-    }
-    fDescription = *(descriptionHandle->front());
-
-    fDataProd = *(evt.getValidHandle< std::vector<T> >(fDescription.dataTag()));
-}
-
-#endif
 
 #endif //ANAB_MVAOUTPUT
 
