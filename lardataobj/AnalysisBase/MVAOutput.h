@@ -31,7 +31,7 @@ public:
     MVAOutput() { }
 
     // MUST UPDATE WHEN CLASS IS CHANGED!
-    static short Class_Version() { return 1; }
+    static short Class_Version() { return 2; }
 
 private:
     float fOutputs[N]; ///< Vector of MVA output values
@@ -93,7 +93,7 @@ public:
     MVADescription() { }
 
     // MUST UPDATE WHEN CLASS IS CHANGED!
-    static short Class_Version() { return 1; }
+    static short Class_Version() { return 2; }
 
 private:
     std::string fDataTag;        ///< Tag of the reco data products (art::InputTag format)
@@ -104,7 +104,7 @@ private:
 public:
 
     MVADescription(std::string const & dataTag, std::string const & outputInstance,
-        std::vector< std::string > const & outputNames = std::vector< std::string >("")) :
+        std::vector< std::string > const & outputNames = std::vector< std::string >(N, "")) :
         fDataTag(dataTag),
         fOutputInstance(outputInstance)
     {

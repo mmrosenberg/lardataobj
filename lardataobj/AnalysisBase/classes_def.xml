@@ -13,6 +13,57 @@
  <class name="std::map<std::basic_string<char>,double > " />
  <class name="std::vector<std::map<std::basic_string<char>,double > >" />
 
+ <class name="anab::MVAOutput<1>"                                     />
+ <class name="art::Wrapper< anab::MVAOutput<1> >"                     />
+ <class name="std::vector< anab::MVAOutput<1> >"                      />
+ <class name="art::Ptr< anab::MVAOutput<1> >"                         />
+ <class name="art::Wrapper< std::vector< anab::MVAOutput<1> > >"      />
+ <class name="anab::MVAOutput<2>"                                     />
+ <class name="art::Wrapper< anab::MVAOutput<2> >"                     />
+ <class name="std::vector< anab::MVAOutput<2> >"                      />
+ <class name="art::Ptr< anab::MVAOutput<2> >"                         />
+ <class name="art::Wrapper< std::vector< anab::MVAOutput<2> > >"      />
+ <class name="anab::MVAOutput<3>"                                     />
+ <class name="art::Wrapper< anab::MVAOutput<3> >"                     />
+ <class name="std::vector< anab::MVAOutput<3> >"                      />
+ <class name="art::Ptr< anab::MVAOutput<3> >"                         />
+ <class name="art::Wrapper< std::vector< anab::MVAOutput<3> > >"      />
+ <class name="anab::MVAOutput<4>"                                     />
+ <class name="art::Wrapper< anab::MVAOutput<4> >"                     />
+ <class name="std::vector< anab::MVAOutput<4> >"                      />
+ <class name="art::Ptr< anab::MVAOutput<4> >"                         />
+ <class name="art::Wrapper< std::vector< anab::MVAOutput<4> > >"      />
+ <class name="anab::MVAOutput<5>"                                     />
+ <class name="art::Wrapper< anab::MVAOutput<5> >"                     />
+ <class name="std::vector< anab::MVAOutput<5> >"                      />
+ <class name="art::Ptr< anab::MVAOutput<5> >"                         />
+ <class name="art::Wrapper< std::vector< anab::MVAOutput<5> > >"      />
+ <class name="anab::MVADescription<1>"                                />
+ <class name="art::Wrapper< anab::MVADescription<1> >"                />
+ <class name="std::vector< anab::MVADescription<1> >"                 />
+ <class name="art::Ptr< anab::MVADescription<1> >"                    />
+ <class name="art::Wrapper< std::vector< anab::MVADescription<1> > >" />
+ <class name="anab::MVADescription<2>"                                />
+ <class name="art::Wrapper< anab::MVADescription<2> >"                />
+ <class name="std::vector< anab::MVADescription<2> >"                 />
+ <class name="art::Ptr< anab::MVADescription<2> >"                    />
+ <class name="art::Wrapper< std::vector< anab::MVADescription<2> > >" />
+ <class name="anab::MVADescription<3>"                                />
+ <class name="art::Wrapper< anab::MVADescription<3> >"                />
+ <class name="std::vector< anab::MVADescription<3> >"                 />
+ <class name="art::Ptr< anab::MVADescription<3> >"                    />
+ <class name="art::Wrapper< std::vector< anab::MVADescription<3> > >" />
+ <class name="anab::MVADescription<4>"                                />
+ <class name="art::Wrapper< anab::MVADescription<4> >"                />
+ <class name="std::vector< anab::MVADescription<4> >"                 />
+ <class name="art::Ptr< anab::MVADescription<4> >"                    />
+ <class name="art::Wrapper< std::vector< anab::MVADescription<4> > >" />
+ <class name="anab::MVADescription<5>"                                />
+ <class name="art::Wrapper< anab::MVADescription<5> >"                />
+ <class name="std::vector< anab::MVADescription<5> >"                 />
+ <class name="art::Ptr< anab::MVADescription<5> >"                    />
+ <class name="art::Wrapper< std::vector< anab::MVADescription<5> > >" />
+
  <class name="anab::Calorimetry"           ClassVersion="16"                           >
   <version ClassVersion="16" checksum="2995599306"/>
   <version ClassVersion="15" checksum="2095251371"/>
