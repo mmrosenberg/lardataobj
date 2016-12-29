@@ -83,7 +83,7 @@ public:
 
 }; // class MVAOutput
 
-/// MVA results metadata. The idea is to associate entire collection of objects to the collection
+/// MVA results metadata. The idea is to link entire collection of objects to the collection
 /// of MVA results, and add metadata like meaning of columns in MVA results or recommended thresholds
 /// for various applications of the MVA values.
 template <size_t N>
