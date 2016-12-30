@@ -11,7 +11,6 @@
 
 #ifndef __GCCXML__
 #include "cetlib/exception.h"
-
 #include <iosfwd>
 #include <iostream>
 #include <iomanip>
@@ -39,27 +38,22 @@ private:
 #ifndef __GCCXML__
 public:
 
-    MVAOutput(float init) { for (size_t i = 0; i < N; ++i) { fOutputs[i] = init; } }
-
-    MVAOutput(std::array<float, N> const & values) { for (size_t i = 0; i < N; ++i) { fOutputs[i] = values[i]; } }
-
-    MVAOutput(std::array<double, N> const & values) { for (size_t i = 0; i < N; ++i) { fOutputs[i] = values[i]; } }
-
-    MVAOutput(std::vector<float> const & values)
-    {
-        if (values.size() == N) { for (size_t i = 0; i < N; ++i) { fOutputs[i] = values[i]; } }
-        else { throw cet::exception("MVAOutput") << "Expected length: " << N << ", provided: " << values.size(); }
-    }
-
-    MVAOutput(std::vector<double> const & values)
-    {
-        if (values.size() == N) { for (size_t i = 0; i < N; ++i) { fOutputs[i] = values[i]; } }
-        else { throw cet::exception("MVAOutput") << "Expected length: " << N << ", provided: " << values.size(); }
-    }
+    MVAOutput(float init) { set(init); }
+    MVAOutput(std::array<float, N> const & values) { set(values); }
+    MVAOutput(std::array<double, N> const & values) { set(values); }
+    MVAOutput(std::vector<float> const & values) { set(values); }
+    MVAOutput(std::vector<double> const & values) { set(values); }
 
     /// If you really have to use C arrays:
     MVAOutput(float const * values) { for (size_t i = 0; i < N; ++i) { fOutputs[i] = values[i]; } }
     MVAOutput(double const * values) { for (size_t i = 0; i < N; ++i) { fOutputs[i] = values[i]; } }
+
+    /// Assignment operators, from the same types as constructors.
+    MVAOutput& operator =(float init) { set(init); return *this; }
+    MVAOutput& operator =(std::array<float, N> const & values) { set(values); return *this; }
+    MVAOutput& operator =(std::array<double, N> const & values) { set(values); return *this; }
+    MVAOutput& operator =(std::vector<float> const & values) { set(values); return *this; }
+    MVAOutput& operator =(std::vector<double> const & values) { set(values); return *this; }
 
     friend std::ostream& operator<< (std::ostream &o, MVAOutput const& a)
     {
@@ -78,6 +72,22 @@ public:
     }
 
     float operator[] (size_t index) const { return fOutputs[index]; }
+
+private:
+
+    void set(float init) { for (size_t i = 0; i < N; ++i) { fOutputs[i] = init; } }
+    void set(std::array<float, N> const & values) { for (size_t i = 0; i < N; ++i) { fOutputs[i] = values[i]; } }
+    void set(std::array<double, N> const & values) { for (size_t i = 0; i < N; ++i) { fOutputs[i] = values[i]; } }
+    void set(std::vector<float> const & values)
+    {
+        if (values.size() == N) { for (size_t i = 0; i < N; ++i) { fOutputs[i] = values[i]; } }
+        else { throw cet::exception("MVAOutput") << "Expected length: " << N << ", provided: " << values.size(); }
+    }
+    void set(std::vector<double> const & values)
+    {
+        if (values.size() == N) { for (size_t i = 0; i < N; ++i) { fOutputs[i] = values[i]; } }
+        else { throw cet::exception("MVAOutput") << "Expected length: " << N << ", provided: " << values.size(); }
+    }
 
 #endif
 
