@@ -30,7 +30,7 @@ public:
     MVAOutput() { }
 
     // MUST UPDATE WHEN CLASS IS CHANGED!
-    static short Class_Version() { return 2; }
+    static short Class_Version() { return 10; }
 
 private:
     float fOutputs[N]; ///< Vector of MVA output values
@@ -103,7 +103,7 @@ public:
     MVADescription() { }
 
     // MUST UPDATE WHEN CLASS IS CHANGED!
-    static short Class_Version() { return 2; }
+    static short Class_Version() { return 10; }
 
 private:
     std::string fDataTag;        ///< Tag of the reco data products (art::InputTag format)
@@ -118,8 +118,15 @@ public:
         fDataTag(dataTag),
         fOutputInstance(outputInstance)
     {
-        if (outputNames.size() <= N) { for (size_t i = 0; i < outputNames.size(); ++i) { fOutputNames[i] = outputNames[i]; } }
-        else { throw cet::exception("MVAOutput") << "Expected max length of outputNames: " << N << ", provided: " << outputNames.size(); }
+        setOutputNames(outputNames);
+    }
+
+    MVADescription(std::string const & outputInstance,
+        std::vector< std::string > const & outputNames = std::vector< std::string >(N, "")) :
+        fDataTag(""), // initialize with empty data tag, so it should be assigned later
+        fOutputInstance(outputInstance)
+    {
+        setOutputNames(outputNames);
     }
 
     friend std::ostream& operator<< (std::ostream &o, MVADescription const& a)
@@ -134,11 +141,21 @@ public:
     size_t size() const { return N; }
 
     const std::string & dataTag() const { return fDataTag; }
+    void setDataTag(const std::string & tag)
+    {
+        if (fDataTag.empty()) { fDataTag = tag; }
+        else { throw cet::exception("MVADescription") << "Data tag already assigned: " << fDataTag; }
+    }
 
     const std::string & outputName(size_t index) const
     {
         if (index < N) { return fOutputNames[index]; }
         else { throw cet::exception("MVADescription") << "Index out of range: " << index; }
+    }
+    void setOutputNames(std::vector< std::string > const & outputNames)
+    {
+        if (outputNames.size() <= N) { for (size_t i = 0; i < outputNames.size(); ++i) { fOutputNames[i] = outputNames[i]; } }
+        else { throw cet::exception("MVAOutput") << "Expected max length of outputNames: " << N << ", provided: " << outputNames.size(); }
     }
 
 #endif

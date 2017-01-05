@@ -14,40 +14,40 @@
  <class name="std::vector<std::map<std::basic_string<char>,double > >" />
 
 <!-- MVA output vectors, length 1-5                                  -->
- <class name="anab::MVAOutput<1>" ClassVersion="2"                    >
-  <version ClassVersion="2" checksum="1467310183"/>
+ <class name="anab::MVAOutput<1>" ClassVersion="10"                   >
+  <version ClassVersion="10" checksum="1467310183"/>
  </class>
  <class name="art::Wrapper< anab::MVAOutput<1> >"                     />
  <class name="std::vector< anab::MVAOutput<1> >"                      />
  <class name="art::Ptr< anab::MVAOutput<1> >"                         />
  <class name="art::Wrapper< std::vector< anab::MVAOutput<1> > >"      />
 
- <class name="anab::MVAOutput<2>" ClassVersion="2"                    >
-  <version ClassVersion="2" checksum="1481659091"/>
+ <class name="anab::MVAOutput<2>" ClassVersion="10"                   >
+  <version ClassVersion="10" checksum="1481659091"/>
  </class>
  <class name="art::Wrapper< anab::MVAOutput<2> >"                     />
  <class name="std::vector< anab::MVAOutput<2> >"                      />
  <class name="art::Ptr< anab::MVAOutput<2> >"                         />
  <class name="art::Wrapper< std::vector< anab::MVAOutput<2> > >"      />
 
- <class name="anab::MVAOutput<3>" ClassVersion="2"                    >
-  <version ClassVersion="2" checksum="1496007999"/>
+ <class name="anab::MVAOutput<3>" ClassVersion="10"                   >
+  <version ClassVersion="10" checksum="1496007999"/>
  </class>
  <class name="art::Wrapper< anab::MVAOutput<3> >"                     />
  <class name="std::vector< anab::MVAOutput<3> >"                      />
  <class name="art::Ptr< anab::MVAOutput<3> >"                         />
  <class name="art::Wrapper< std::vector< anab::MVAOutput<3> > >"      />
 
- <class name="anab::MVAOutput<4>" ClassVersion="2"                    >
-  <version ClassVersion="2" checksum="1510356907"/>
+ <class name="anab::MVAOutput<4>" ClassVersion="10"                   >
+  <version ClassVersion="10" checksum="1510356907"/>
  </class>
  <class name="art::Wrapper< anab::MVAOutput<4> >"                     />
  <class name="std::vector< anab::MVAOutput<4> >"                      />
  <class name="art::Ptr< anab::MVAOutput<4> >"                         />
  <class name="art::Wrapper< std::vector< anab::MVAOutput<4> > >"      />
 
- <class name="anab::MVAOutput<5>" ClassVersion="2"                    >
-  <version ClassVersion="2" checksum="1524705815"/>
+ <class name="anab::MVAOutput<5>" ClassVersion="10"                   >
+  <version ClassVersion="10" checksum="1524705815"/>
  </class>
  <class name="art::Wrapper< anab::MVAOutput<5> >"                     />
  <class name="std::vector< anab::MVAOutput<5> >"                      />
@@ -55,40 +55,40 @@
  <class name="art::Wrapper< std::vector< anab::MVAOutput<5> > >"      />
  
  <!-- MVA output metadata, length 1-5                                -->
- <class name="anab::MVADescription<1>" ClassVersion="2"               >
-  <version ClassVersion="2" checksum="835494112"/>
+ <class name="anab::MVADescription<1>" ClassVersion="10"              >
+  <version ClassVersion="10" checksum="835494112"/>
  </class>
  <class name="art::Wrapper< anab::MVADescription<1> >"                />
  <class name="std::vector< anab::MVADescription<1> >"                 />
  <class name="art::Ptr< anab::MVADescription<1> >"                    />
  <class name="art::Wrapper< std::vector< anab::MVADescription<1> > >" />
 
- <class name="anab::MVADescription<2>" ClassVersion="2"               >
-  <version ClassVersion="2" checksum="934009004"/>
+ <class name="anab::MVADescription<2>" ClassVersion="10"              >
+  <version ClassVersion="10" checksum="934009004"/>
  </class>
  <class name="art::Wrapper< anab::MVADescription<2> >"                />
  <class name="std::vector< anab::MVADescription<2> >"                 />
  <class name="art::Ptr< anab::MVADescription<2> >"                    />
  <class name="art::Wrapper< std::vector< anab::MVADescription<2> > >" />
 
- <class name="anab::MVADescription<3>" ClassVersion="2"               >
-  <version ClassVersion="2" checksum="1032523896"/>
+ <class name="anab::MVADescription<3>" ClassVersion="10"              >
+  <version ClassVersion="10" checksum="1032523896"/>
  </class>
  <class name="art::Wrapper< anab::MVADescription<3> >"                />
  <class name="std::vector< anab::MVADescription<3> >"                 />
  <class name="art::Ptr< anab::MVADescription<3> >"                    />
  <class name="art::Wrapper< std::vector< anab::MVADescription<3> > >" />
 
- <class name="anab::MVADescription<4>" ClassVersion="2"               >
-  <version ClassVersion="2" checksum="1131038788"/>
+ <class name="anab::MVADescription<4>" ClassVersion="10"              >
+  <version ClassVersion="10" checksum="1131038788"/>
  </class>
  <class name="art::Wrapper< anab::MVADescription<4> >"                />
  <class name="std::vector< anab::MVADescription<4> >"                 />
  <class name="art::Ptr< anab::MVADescription<4> >"                    />
  <class name="art::Wrapper< std::vector< anab::MVADescription<4> > >" />
 
- <class name="anab::MVADescription<5>" ClassVersion="2"               >
-  <version ClassVersion="2" checksum="1229553680"/>
+ <class name="anab::MVADescription<5>" ClassVersion="10"              >
+  <version ClassVersion="10" checksum="1229553680"/>
  </class>
  <class name="art::Wrapper< anab::MVADescription<5> >"                />
  <class name="std::vector< anab::MVADescription<5> >"                 />
