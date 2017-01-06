@@ -15,6 +15,7 @@
 #include "lardataobj/RecoBase/Hit.h"
 #include "lardataobj/RecoBase/Shower.h"
 #include "lardataobj/RecoBase/Track.h"
+#include "lardataobj/RecoBase/Trajectory.h"
 #include "lardataobj/RecoBase/Seed.h"
 #include "lardataobj/RecoBase/EndPoint2D.h"
 #include "lardataobj/RecoBase/SpacePoint.h"
