@@ -1,13 +1,13 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // \version 
 //
-// \brief Data products to hold MVA output values and metadata, see MVAReader/MVAWriter wrappers for convenient usage.
+// \brief Data products to hold feature vectors and their metadata, see MVAReader/MVAWriter wrappers for convenient usage.
 //
 // \author robert.sulej@cern.ch
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#ifndef ANAB_MVAOUTPUT_H
-#define ANAB_MVAOUTPUT_H
+#ifndef ANAB_FEATUREVECTORS_H
+#define ANAB_FEATUREVECTORS_H
 
 #ifndef __GCCXML__
 #include "cetlib/exception.h"
@@ -21,8 +21,8 @@
 
 namespace anab {
 
-/// MVA resuts for a single object, or just a feature vector of size N. Values are saved as 32bit fp's,
-/// this is usually enough for classification purposes and the precision one can expect from MVA algorithms.
+/// Feature vector of size N. Values are saved as 32bit fp's, this is usually enough for the classification purposes
+/// and the precision one can expect from MVA algorithms.
 template <size_t N>
 class FeatureVector {
 public:
@@ -33,7 +33,7 @@ public:
     static short Class_Version() { return 10; }
 
 private:
-    float fData[N]; ///< Vector of MVA output values
+    float fData[N]; ///< Vector values
 
 #ifndef __GCCXML__
 public:
@@ -73,6 +73,10 @@ public:
 
     float operator[] (size_t index) const { return fData[index]; }
 
+    /// Access the contained array.
+    /// *** WOULD LIKE TO CHANGE TYPE OF DATA MEMBER TO std::array AND THEN ENABLE THIS FUNCTION ***
+    //const std::array<float, N> & data() const { return fData; }
+
 private:
 
     void set(float init) { for (size_t i = 0; i < N; ++i) { fData[i] = init; } }
@@ -93,9 +97,8 @@ private:
 
 }; // class FeatureVector
 
-/// MVA results metadata. The idea is to link entire collection of objects to the collection
-/// of MVA results, and add metadata like meaning of columns in MVA results or recommended thresholds
-/// for various applications of the MVA values.
+/// Metadata associated to feature vectors. The idea is to link entire collection of objects to the collection
+/// of vectors, and add metadata like the meaning of columns in vectors using a single object.
 template <size_t N>
 class MVADescription {
 public:
@@ -107,8 +110,8 @@ public:
 
 private:
     std::string fDataTag;        ///< Tag of the reco data products (art::InputTag format)
-    std::string fOutputInstance; ///< Instance name of MVA output values
-    std::string fOutputNames[N]; ///< MVA output names/meaning
+    std::string fOutputInstance; ///< Instance name of the feature vector collection
+    std::string fOutputNames[N]; ///< Feature vector entries names/meaning
 
 #ifndef __GCCXML__
 public:
@@ -163,5 +166,5 @@ public:
 
 } // namespace anab
 
-#endif //ANAB_MVAOUTPUT
+#endif //ANAB_FEATUREVECTORS
 
