@@ -22,6 +22,21 @@
 
 namespace recob {
   
+  namespace details {
+    
+    using FlagIndex_t = std::size_t;
+    using BitMask_t = unsigned long long;
+    
+    /// Creates a mask with no bits set
+    inline constexpr BitMask_t makeMaskImpl();
+    
+    /// Creates a mask with all and only the specified bits set
+    template <typename... OtherFlags>
+    constexpr BitMask_t makeMaskImpl(FlagIndex_t first, OtherFlags... others);
+    
+  } // namespace details
+  
+  
   /**
    * @brief Namespace for the trajectory point flags
    * 
@@ -55,7 +70,7 @@ namespace recob {
    */
   struct TrajectoryPointFlagTraits {
     
-    using FlagIndex_t = std::size_t; ///< Type for bit indices.
+    using FlagIndex_t = details::FlagIndex_t; ///< Type for bit indices.
     
     /// Number of flags allocated (may be unused and unassigned).
     static constexpr FlagIndex_t MaxFlags = 32;
@@ -245,9 +260,16 @@ namespace recob {
     
     using HitIndex_t = unsigned int; ///< Type for hit index.
     
-    /// Type holding the flags.
-    using Flags_t = std::bitset<flag::maxFlags()>;
-  
+    using Flags_t = std::bitset<flag::maxFlags()>; ///< Type holding the flags.
+    
+    ///< Type of a bit mask.
+    using Mask_t = decltype(std::declval<Flags_t>().to_ullong());
+    
+    /// Type to tag a constructor from bit mask
+    struct FromMaskTag_t {};
+    
+    /// Tag used to activate a constructor from a bit mask.
+    static const FromMaskTag_t fromMask;
     
     /// Value marking an invalid hit index.
     static constexpr HitIndex_t InvalidHitIndex
@@ -257,33 +279,39 @@ namespace recob {
     /// Default constructor.
     constexpr TrajectoryPointFlags() = default;
     
-    /// Constructor: copies all the flags.
-    constexpr TrajectoryPointFlags(HitIndex_t fromHit, unsigned long long flags)
+    /**
+     * @brief Constructor: copies all the flags.
+     * @param fromHit the original hit index (_default: `InvalidHitIndex`_)
+     * @param flags all the flags to set, as a bit mask
+     * 
+     * This constructor can be used in constexpr flag definitions:
+     * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+     * constexpr TrajectoryPointFlags flags
+     *   (TrajectoryPointFlags::fromMask, InvalidHitIndex, otherFlags.bits());
+     * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     */
+    constexpr TrajectoryPointFlags
+      (FromMaskTag_t, HitIndex_t fromHit, Mask_t flags)
       : fFromHit(fromHit)
       , fFlags(flags)
       {}
     
     /**
      * @brief Constructor: activates only the specified flags.
-     * @tparam Flags the flags to be set
+     * @tparam Flags the type of flags to be set
      * @param fromHit the original hit index (_default: `InvalidHitIndex`_)
+     * @param flags all the flags to set
      * 
-     * This constructor can be used in constexpr flag definitions.
+     * This constructor can be used in constexpr flag definitions:
+     * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+     * constexpr TrajectoryPointFlags flags
+     *   (InvalidHitIndex, NoPoint, Merged);
+     * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
      */
-    template <FlagIndex_t... Flags>
-    constexpr TrajectoryPointFlags(HitIndex_t fromHit = InvalidHitIndex);
-    
-    /**
-     * @brief Constructor: activates only the specified flags.
-     * @param flags the flags to be set
-     * @param fromHit the original hit index (_default: `InvalidHitIndex`_)
-     * 
-     * This constructor probably can not be used in constexpr flag definitions.
-     */
-    constexpr TrajectoryPointFlags(
-      std::initializer_list<HitIndex_t> flags,
-      HitIndex_t fromHit = InvalidHitIndex
-      );
+    template <typename... Flags>
+    constexpr TrajectoryPointFlags(HitIndex_t fromHit, Flags... flags)
+      : TrajectoryPointFlags(fromMask, fromHit, makeMask(flags...))
+      {}
     
     
     /// @{ 
@@ -301,6 +329,9 @@ namespace recob {
     /// (all of them are)
     bool isPresent(FlagIndex_t flag) const
       { return isFlag(flag); }
+    
+    /// Returns the entire set of bits as a bit mask
+    constexpr Mask_t bits() const { return fFlags.to_ullong(); }
     
     
     /**
@@ -416,6 +447,20 @@ namespace recob {
       { Dump(std::forward<Stream>(out), verbosity, indent, indent); }
     
     
+    /**
+     * @brief Returns a bit mask with only the specified bit set
+     * @tparam Flags the type of flags to be set
+     * @param flags all the flags to set
+     * 
+     * This method can be used in constexpr flag definitions:
+     * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+     * auto mask = TrajectoryPointFlags::makeMask(NoPoint, Merged);
+     * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     */
+    template <typename... Flags>
+    static constexpr Mask_t makeMask(Flags... flags)
+      { return details::makeMaskImpl(flags...); }
+    
       private:
     /// Flags used in the construction.
     static constexpr Flags_t DefaultFlags();
@@ -440,8 +485,18 @@ namespace recob {
 //------------------------------------------------------------------------------
 //--- template implementation
 
-// #include "TrajectoryPointFlags.tcc"
+inline constexpr recob::details::BitMask_t recob::details::makeMaskImpl()
+  { return 0; }
 
+template <typename... OtherFlags>
+constexpr recob::details::BitMask_t recob::details::makeMaskImpl
+  (std::size_t first, OtherFlags... others)
+{
+  return (sizeof...(OtherFlags) == 0)
+    ? (BitMask_t(1) << first): (makeMaskImpl(first) | makeMaskImpl(others...));
+} // recob::details::makeMaskImpl()
+
+//------------------------------------------------------------------------------
 template <typename FlagTraits>
 template <typename Stream>
 void recob::TrajectoryPointFlags<FlagTraits>::dump(
