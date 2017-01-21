@@ -59,6 +59,13 @@ struct Expected_t {
 
 }; // struct Expected_t
 
+template <typename T>
+void CheckValue(T v, T exp, T tol, std::string tag = "") {
+  if (!tag.empty()) BOOST_TEST_MESSAGE(tag);
+  if (std::abs(exp) < (tol / 100.)) BOOST_CHECK_SMALL(v, tol);
+  else                              BOOST_CHECK_CLOSE(v, exp, tol);
+} // CheckValue()
+
 template <typename VectA, typename VectB>
 void CheckVectorsEqual(VectA const& v, VectB const& exp) {
   BOOST_CHECK_EQUAL(v.X(), exp.X());
@@ -68,9 +75,9 @@ void CheckVectorsEqual(VectA const& v, VectB const& exp) {
 
 template <typename VectA, typename VectB>
 void CheckVectorsClose(VectA const& v, VectB const& exp, double tol = 0.01) {
-  BOOST_CHECK_CLOSE(v.X(), exp.X(), tol);
-  BOOST_CHECK_CLOSE(v.Y(), exp.Y(), tol);
-  BOOST_CHECK_CLOSE(v.Z(), exp.Z(), tol);
+  CheckValue(v.X(), exp.X(), tol, "  X()");
+  CheckValue(v.Y(), exp.Y(), tol, "  Y()");
+  CheckValue(v.Z(), exp.Z(), tol, "  Z()");
 } // CheckVectorsClose()
 
 
@@ -89,12 +96,10 @@ void TestTrajectory(
   
   //----------------------------------------------------------------------------
   const size_t NPoints = traj.NumberTrajectoryPoints();
+  const size_t NMomenta = expected.hasMomenta? NPoints: 0;
   BOOST_CHECK_EQUAL(NPoints, expected.positions.size());
   BOOST_CHECK_EQUAL(traj.NumberTrajectoryPoints(), expected.positions.size());
-  BOOST_CHECK_EQUAL(traj.NumberFitMomentum(), expected.momenta.size());
-  
-  // failure of this check alone indicates a buggy test input
-  BOOST_CHECK_EQUAL(traj.NumberFitMomentum(), NPoints);
+  BOOST_CHECK_EQUAL(traj.NumberFitMomentum(), NMomenta);
   
   for (size_t i = 0; i <= NPoints + 1; ++i) {
     BOOST_TEST_MESSAGE("HasPoint() position #" << i);
@@ -116,7 +121,7 @@ void TestTrajectory(
     BOOST_TEST_MESSAGE("TrajectoryAtPoint() position #" << i);
     CheckVectorsEqual(Tpos, expected.positions[i]);
     BOOST_TEST_MESSAGE("TrajectoryAtPoint() direction #" << i);
-    CheckVectorsEqual(Tdir, expected.momenta[i].Unit());
+    CheckVectorsClose(Tdir, expected.momenta[i].Unit());
     
   } // for
   
@@ -190,6 +195,7 @@ void TestTrajectory(
   
   
   //----------------------------------------------------------------------------
+
   BOOST_TEST_MESSAGE("VertexMomentumVector()");
   CheckVectorsClose(traj.VertexMomentumVector(), expected.momenta[0]);
   
@@ -246,19 +252,19 @@ void TestTrajectory(
   //----------------------------------------------------------------------------
   double AstartDir[3], AendDir[3];
   traj.Direction(AstartDir, AendDir);
-  BOOST_CHECK_EQUAL(AstartDir[0], expected.momenta[0].Unit().X());
-  BOOST_CHECK_EQUAL(AstartDir[1], expected.momenta[0].Unit().Y());
-  BOOST_CHECK_EQUAL(AstartDir[2], expected.momenta[0].Unit().Z());
-  BOOST_CHECK_EQUAL(AendDir[0], expected.momenta[NPoints - 1].Unit().X());
-  BOOST_CHECK_EQUAL(AendDir[1], expected.momenta[NPoints - 1].Unit().Y());
-  BOOST_CHECK_EQUAL(AendDir[2], expected.momenta[NPoints - 1].Unit().Z());
+  BOOST_CHECK_CLOSE(AstartDir[0], expected.momenta[0].Unit().X(), 0.01);
+  BOOST_CHECK_CLOSE(AstartDir[1], expected.momenta[0].Unit().Y(), 0.01);
+  BOOST_CHECK_CLOSE(AstartDir[2], expected.momenta[0].Unit().Z(), 0.01);
+  BOOST_CHECK_CLOSE(AendDir[0], expected.momenta[NPoints - 1].Unit().X(), 0.01);
+  BOOST_CHECK_CLOSE(AendDir[1], expected.momenta[NPoints - 1].Unit().Y(), 0.01);
+  BOOST_CHECK_CLOSE(AendDir[2], expected.momenta[NPoints - 1].Unit().Z(), 0.01);
   
   recob::Trajectory::Vector_t startDir, endDir;
   std::tie(startDir, endDir) = traj.Direction();
   BOOST_TEST_MESSAGE("Direction() start");
-  CheckVectorsEqual(startDir, expected.momenta[0].Unit());
+  CheckVectorsClose(startDir, expected.momenta[0].Unit());
   BOOST_TEST_MESSAGE("Direction() end");
-  CheckVectorsEqual(endDir, expected.momenta[NPoints - 1].Unit());
+  CheckVectorsClose(endDir, expected.momenta[NPoints - 1].Unit());
   
   
   //----------------------------------------------------------------------------
@@ -284,13 +290,13 @@ void TestTrajectory(
     auto const& dir = expected.momenta[i];
     recob::Trajectory::Vector_t localDir(0., 0., dir.R());
     
-    BOOST_TEST_MESSAGE("Test transformation to local at point #" << i);
+    BOOST_TEST_MESSAGE("Test legacy transformation to local at point #" << i);
     TMatrixD TtoLocal;
     traj.GlobalToLocalRotationAtPoint(i, TtoLocal);
     auto toLocal = makeRotationMatrix(TtoLocal);
     CheckVectorsClose(toLocal * dir, localDir);
     
-    BOOST_TEST_MESSAGE("Test transformation to global at point #" << i);
+    BOOST_TEST_MESSAGE("Test legacy transformation to global at point #" << i);
     TMatrixD TtoGlobal;
     traj.LocalToGlobalRotationAtPoint(i, TtoGlobal);
     auto toGlobal = makeRotationMatrix(TtoGlobal);
@@ -414,7 +420,7 @@ void TrajectoryTestMainConstructor() {
   //
   // Part II: complete constructor
   //
-  // step II.1: create a hit with the signal-copying constructor
+  // step II.1: create a track with momentum information
   auto positions = expected.positions;
   auto momenta = expected.momenta;
   recob::Trajectory traj(std::move(positions), std::move(momenta), true);
@@ -428,6 +434,30 @@ void TrajectoryTestMainConstructor() {
   
   // step II.2: verify that the values are as expected
   TestTrajectory(traj, expected);
+  
+  //
+  // Part III: complete constructor, no momentum
+  //
+  
+  // step III.1: amend the expectation for a momentumless track
+  std::transform(expected.momenta.begin(), expected.momenta.end(),
+    expected.momenta.begin(), [](auto const& v){ return v.unit(); });
+  expected.hasMomenta = false;
+  
+  // step III.2: create a track with no momentum information
+  positions = expected.positions; // copy again
+  recob::Trajectory::Momenta_t directions = expected.momenta;
+  recob::Trajectory mltraj(std::move(positions), std::move(directions), false);
+  
+  for (unsigned int v = 0; v <= recob::Trajectory::MaxDumpVerbosity; ++v) {
+    std::cout << "Momentumless trajectory dump with verbosity level "
+      << v << ":" << std::endl;
+    mltraj.Dump(std::cout, v, "    ", "  ");
+    std::cout << std::endl;
+  } // for
+  
+  // step III.3: verify that the values are as expected
+  TestTrajectory(mltraj, expected);
   
 } // TrajectoryTestMainConstructor()
 

@@ -20,13 +20,11 @@
 //------------------------------------------------------------------------------
 recob::TrackTrajectory::TrackTrajectory(
   Positions_t&& positions, Momenta_t&& momenta, Flags_t&& flags, bool hasMomenta
-  
   )
   : Trajectory_t(std::move(positions), std::move(momenta), hasMomenta)
   , fFlags(std::move(flags))
 {
   // additional invariant check
-  
   if (!AtLeastValidTrajectoryPoints(2U)) {
     throw std::runtime_error("recob::TrackTrajectory constructed with only "
       + std::to_string(CountValidPoints())

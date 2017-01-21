@@ -313,13 +313,14 @@ namespace recob {
     /**
      * @brief Returns the number of stored momenta.
      * 
-     * It's the same as trajectory points.
+     * It's the same as trajectory points, unless there is no momentum
+     * (then it's 0).
      * 
      * @deprecated Use NumberTrajectoryPoints() instead
      */
     [[deprecated("Use NumberTrajectoryPoints() instead")]]
     size_t NumberFitMomentum() const
-      { return NPoints(); }
+      { return HasMomentum()? NPoints(): 0U; }
     
     
     /// Returns the direction of the trajectory at the first point.
