@@ -523,10 +523,6 @@ namespace recob {
     
     using Trajectory_t::GlobalToLocalRotationAtPoint;
     
-    using Trajectory_t::GlobalToLocalRotationAtPoint;
-    
-    using Trajectory_t::LocalToGlobalRotationAtPoint;
-    
     using Trajectory_t::LocalToGlobalRotationAtPoint;
     
     
