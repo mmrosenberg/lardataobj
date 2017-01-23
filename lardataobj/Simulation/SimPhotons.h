@@ -70,15 +70,6 @@ namespace sim
       bool operator==(const SimPhotonsLite &other) const;
   };
 
-  /// \todo: Remove this class when DUNE makes the next round of production
-  ///        MC files - after 11 September 2013 brebel
-  class DUNE10ktPhotons
-  {
-    public:
-      DUNE10ktPhotons();
-      int   OpChannel;
-      std::map<int, int> DetectedPhotons;
-  };
 
   // Define a OpDet Hit as a list of OpDet photons which were
   // recorded in the OpDet volume.
