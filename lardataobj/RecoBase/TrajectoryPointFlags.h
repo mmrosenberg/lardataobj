@@ -277,7 +277,7 @@ namespace recob {
     
     
     /// Default constructor.
-    constexpr TrajectoryPointFlags() = default;
+    constexpr TrajectoryPointFlags();
     
     /**
      * @brief Constructor: copies all the flags.
@@ -444,7 +444,7 @@ namespace recob {
     void dump
       (Stream&& out, unsigned int verbosity = 1, std::string indent = {})
       const
-      { Dump(std::forward<Stream>(out), verbosity, indent, indent); }
+      { dump(std::forward<Stream>(out), verbosity, indent, indent); }
     
     
     /**
@@ -462,14 +462,16 @@ namespace recob {
       { return details::makeMaskImpl(flags...); }
     
       private:
+#ifndef __GCCXML__
     /// Flags used in the construction.
     static constexpr Flags_t DefaultFlags();
-    
+#endif // __GCCXML__
+
     HitIndex_t fFromHit = InvalidHitIndex; ///< Index of the original hit.
     
-    Flags_t fFlags = DefaultFlags(); ///< Set of flags
+    Flags_t fFlags; ///< Set of flags
     
-  }; // TrajectoryPointFlags
+  }; // TrajectoryPointFlags<>
   
   
   /// Dumps flags into a stream with default verbosity
@@ -484,54 +486,9 @@ namespace recob {
 
 //------------------------------------------------------------------------------
 //--- template implementation
-
-inline constexpr recob::details::BitMask_t recob::details::makeMaskImpl()
-  { return 0; }
-
-template <typename... OtherFlags>
-constexpr recob::details::BitMask_t recob::details::makeMaskImpl
-  (std::size_t first, OtherFlags... others)
-{
-  return (sizeof...(OtherFlags) == 0)
-    ? (BitMask_t(1) << first): (makeMaskImpl(first) | makeMaskImpl(others...));
-} // recob::details::makeMaskImpl()
-
-//------------------------------------------------------------------------------
-template <typename FlagTraits>
-template <typename Stream>
-void recob::TrajectoryPointFlags<FlagTraits>::dump(
-  Stream&& out,
-  unsigned int verbosity,
-  std::string indent, std::string indentFirst
-  ) const
-{
-  /*
-   * Information printed out (`verbosity` argument)
-   * -----------------------------------------------
-   * 
-   * * level `0`: number of the flags set, and index
-   * * level `1`: name of the flags set, and index
-   * 
-   */
+//---
   
-  out << indentFirst << "{ ";
-  unsigned int count = 0;
-  for (FlagIndex_t index = 0; index < flag::maxFlags(); ++index) {
-    if (!get(index)) continue;
-    if (count++) out << ", ";
-    switch (verbosity) {
-      case 0:
-        out << index;
-        break;
-      default:
-        out << flag::name(index);
-    } // switch
-  } // for
-  
-  out << "}, index: " << fromHit();
-  
-} // recob::TrajectoryPointFlags<FlagTraits>::dump()
-
+#include "TrajectoryPointFlags.tcc"
 
 //------------------------------------------------------------------------------
 

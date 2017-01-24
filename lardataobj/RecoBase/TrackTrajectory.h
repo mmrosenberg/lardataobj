@@ -169,7 +169,7 @@ namespace recob {
      */
     bool HasValidPoint(size_t i) const
       {
-        return Trajectory().HasPoint(i) && FlagsAtPoint(i).test(flag::NoPoint);
+        return Trajectory().HasPoint(i) && !FlagsAtPoint(i).test(flag::NoPoint);
       }
     
     /**
@@ -522,10 +522,6 @@ namespace recob {
     
     
     using Trajectory_t::GlobalToLocalRotationAtPoint;
-    
-    using Trajectory_t::GlobalToLocalRotationAtPoint;
-    
-    using Trajectory_t::LocalToGlobalRotationAtPoint;
     
     using Trajectory_t::LocalToGlobalRotationAtPoint;
     

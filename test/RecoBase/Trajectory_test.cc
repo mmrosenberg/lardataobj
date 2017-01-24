@@ -15,7 +15,7 @@
 
 // Boost libraries
 /*
- * Boost Ric: define the name of the module;
+ * Boost: define the name of the module;
  * and do that before the inclusion of Boost unit test headers
  * because it will change what they provide.
  * Among the those, there is a main() function and some wrapping catching
@@ -23,7 +23,7 @@
  * This also makes fairly complicate to receive parameters from the command line
  * (for example, a random seed).
  */
-#define BOOST_TEST_MODULE ( hit_test )
+#define BOOST_TEST_MODULE ( tracktrajectory_test )
 #include "cetlib/quiet_unit_test.hpp" // BOOST_AUTO_TEST_CASE()
 #include <boost/test/test_tools.hpp> // BOOST_CHECK()
 #include <boost/test/floating_point_comparison.hpp> // BOOST_CHECK_CLOSE()

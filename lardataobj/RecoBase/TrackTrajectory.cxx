@@ -16,7 +16,6 @@
 #include <string> // std::to_string()
 #include <stdexcept> // std::runtime_error
 
-
 //------------------------------------------------------------------------------
 recob::TrackTrajectory::TrackTrajectory(
   Positions_t&& positions, Momenta_t&& momenta, Flags_t&& flags, bool hasMomenta
@@ -25,6 +24,13 @@ recob::TrackTrajectory::TrackTrajectory(
   , fFlags(std::move(flags))
 {
   // additional invariant check
+  if (fFlags.size() != NPoints()) {
+    throw std::runtime_error("recob::TrackTrajectory constructed with "
+      + std::to_string(NPoints()) + " points "
+      + std::to_string(fFlags.size())
+      + " point flags! it requires the same number for both."
+      );
+  }
   if (!AtLeastValidTrajectoryPoints(2U)) {
     throw std::runtime_error("recob::TrackTrajectory constructed with only "
       + std::to_string(CountValidPoints())
@@ -80,7 +86,7 @@ double recob::TrackTrajectory::Length(size_t startAt /* = 0 */) const {
   size_t iLast = LastValidPoint();
   Point_t const* curr = &(LocationAtPoint(iCurr));
   Coord_t length = 0.0;
-  while (ToValidPoint<+1>(++iNext) <= iLast) {
+  while ((iNext = ToValidPoint<+1>(++iNext)) <= iLast) {
     Point_t const* next = &LocationAtPoint(iNext);
     length += (*next - *curr).R();
     curr = next;

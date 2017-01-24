@@ -105,17 +105,4 @@ recob::TrajectoryPointFlagTraits::initNames() {
 
 
 //------------------------------------------------------------------------------
-template <typename FlagTraits>
-constexpr typename recob::TrajectoryPointFlags<FlagTraits>::Flags_t
-recob::TrajectoryPointFlags<FlagTraits>::DefaultFlags()
-{
-  
-  // note: it take be some meta-programming to keep this function as constexpr
-  
-  return {};
-  
-} // recob::TrajectoryPointFlags::DefaultFlags()
-
-
-//------------------------------------------------------------------------------
 

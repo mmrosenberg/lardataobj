@@ -95,31 +95,34 @@ void recob::TrackTrajectory::Dump(
   unsigned int nPrintedPoints;
   switch (verbosity) {
     case 4:
-      nPrintedPoints =  9; break;
+      nPrintedPoints = 10; break;
     case 5:
-      nPrintedPoints = 19; break;
+      nPrintedPoints = 20; break;
     case 6:
     default:
-      nPrintedPoints = nPoints - 2; break;
+      nPrintedPoints = nPoints; break;
   } // switch
-  float delta = std::max(float(nPoints - 1) / (nPrintedPoints + 1), 1.0f);
+  float delta = std::max(float(nPoints) / nPrintedPoints, 1.0f);
   // number of trajectory points printed per line:
-  constexpr unsigned int pointsPerLine = 2;
+  constexpr unsigned int pointsPerLine = 1;
   unsigned int pointsInLine = 0;
   out << " through:";
   
-  for (unsigned int step = 1; step <= nPrintedPoints; ++step) {
-    size_t iPoint = delta * step;
-    if (iPoint >= LastPoint()) break;
+  for (unsigned int step = 0; step < nPrintedPoints; ++step) {
+    size_t iPoint = (size_t) std::llround(delta * step);
+    if (iPoint > LastPoint()) break;
     
     // new line every pointsPerLine points
     if (pointsInLine++ == 0) out << "\n" << indent;
     if (pointsInLine >= pointsPerLine) pointsInLine = 0;
     
-    out << "  [#" << iPoint << "] at "
-      << util::manip::vector3D(LocationAtPoint(iPoint)) << " cm, "
-      << util::manip::vector3D(MomentumVectorAtPoint(iPoint));
-    if (HasMomentum()) out << " GeV/c";
+    out << "  [#" << iPoint << "]";
+    if (HasValidPoint(iPoint)) {
+      out << " at "
+        << util::manip::vector3D(LocationAtPoint(iPoint)) << " cm, "
+        << util::manip::vector3D(MomentumVectorAtPoint(iPoint));
+      if (HasMomentum()) out << " GeV/c";
+    }
     out
       << " " << FlagsAtPoint(iPoint);
     if (iPoint == startIndex) out << " <START>";
@@ -165,13 +168,13 @@ size_t recob::TrackTrajectory::ToValidPoint(size_t index) const {
     "recob::Trajectory::ToValidPoint<Dir>() must have Dir either -1 or +1"
     );
   
-  ssize_t const sindex = static_cast<ssize_t>(index);
+  ssize_t sindex = static_cast<ssize_t>(index);
   ssize_t const last = (Dir > 0)? (ssize_t) LastPoint(): 0;
-  while (!HasValidPoint(index)) {
-    index += Dir;
+  while (!HasValidPoint(sindex)) {
+    sindex += Dir;
     if (Dir * sindex > Dir * last) return InvalidIndex;
   }
-  return static_cast<size_t>(index);
+  return static_cast<size_t>(sindex);
   
 } // recob::TrackTrajectory::ToValidPoint<+1>()
 
