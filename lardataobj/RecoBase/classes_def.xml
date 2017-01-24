@@ -76,7 +76,7 @@
   <version ClassVersion="10" checksum="3286658271"/>
  </class>
  <class name="recob::Track"            ClassVersion="15"                   >
-  <version ClassVersion="15" checksum="1320405615"/>
+  <version ClassVersion="15" checksum="2420564911"/>
   <version ClassVersion="14" checksum="2345363916"/>
  </class>
  <class name="recob::Seed"             ClassVersion="12"                   >

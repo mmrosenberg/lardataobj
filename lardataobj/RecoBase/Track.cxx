@@ -10,11 +10,12 @@
 #include "messagefacility/MessageLogger/MessageLogger.h"
 
 #include "lardataobj/RecoBase/Track.h"
+#include "lardataobj/RecoBase/TrackingPlane.h"
 
 #include <iomanip>
 #include <iostream>
 
-namespace recob{
+namespace recob {
 
   //----------------------------------------------------------------------
   Track::Track()
@@ -29,8 +30,8 @@ namespace recob{
 	       std::vector<double>                        fitMomentum,
 	       int                                        ID)
     : fPId(0), fChi2(0.), fNdof(0.)
-    , fdQdx (dQdx)
     , fID   (ID)
+    , fdQdx (dQdx)
   {
     if(xyz.size() != dxdydz.size() || xyz.size() < 1)
       throw cet::exception("Track Constructor") << "Position, direction vectors "
@@ -147,5 +148,45 @@ namespace recob{
     }
     return result;
   }
-  
+
+  Track::SVector6 Track::VertexParametersGlobal6D() const {
+    Track::SVector6 result;
+    result[0] = Vertex()[0];
+    result[1] = Vertex()[1];
+    result[2] = Vertex()[2];
+    result[3] = VertexDirection()[0];
+    result[4] = VertexDirection()[1];
+    result[5] = VertexDirection()[2];
+    return result;
+  }
+
+  Track::SVector6 Track::EndParametersGlobal6D() const {
+    Track::SVector6 result;
+    result[0] = End()[0];
+    result[1] = End()[1];
+    result[2] = End()[2];
+    result[3] = EndDirection()[0];
+    result[4] = EndDirection()[1];
+    result[5] = EndDirection()[2];
+    return result;
+  }
+
+  Track::SVector5 Track::VertexParametersLocal5D() const {
+    //return tracking::Plane::Global6DToLocal5DParameters(VertexParametersGlobal6D(), fTraj.Vertex(), fTraj.VertexDirection());
+    return Track::SVector5(0.,0.,0.,0.,(HasMomentum() ? 1./VertexMomentum() : 1. ));
+  }
+
+  Track::SVector5 Track::EndParametersLocal5D() const {
+    //return tracking::Plane::Global6DToLocal5DParameters(EndParametersGlobal6D(), fTraj.End(), fTraj.EndDirection());
+    return Track::SVector5(0.,0.,0.,0.,(HasMomentum() ? 1./EndMomentum() : 1. ));
+  }
+
+  Track::SMatrixSym66 Track::VertexCovarianceGlobal6D() const {
+    return ROOT::Math::Similarity(tracking::Plane::Local5DToGlobal6DJacobian(fTraj.VertexMomentumVector(),fTraj.VertexDirection()),fCovVertex);
+  }
+
+  Track::SMatrixSym66 Track::EndCovarianceGlobal6D() const {
+    return ROOT::Math::Similarity(tracking::Plane::Local5DToGlobal6DJacobian(fTraj.EndMomentumVector(),fTraj.EndDirection()),fCovEnd);
+  }
+
 }
