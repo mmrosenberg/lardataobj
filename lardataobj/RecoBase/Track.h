@@ -129,7 +129,7 @@ namespace recob {
 
     inline std::pair<Point_t, Point_t>           Extent()      const { return fTraj.Extent(); }
     inline std::pair<Vector_t, Vector_t>         Direction()   const { return fTraj.Direction(); }
-    inline std::pair<SMatrixSym55, SMatrixSym55> Covariances() const { return std::pair<SMatrixSym55, SMatrixSym55>(fCovVertex,fCovEnd); }
+    inline std::pair<SMatrixSym55, SMatrixSym55> Covariances() const { return std::pair<SMatrixSym55, SMatrixSym55>(fCovVertex,fCovEnd); }//fixme inline???
 
     inline bool            HasMomentum()                   const { return fTraj.HasMomentum(); }
     inline double          MomentumAtPoint(unsigned int p) const { return fTraj.MomentumAtPoint(p); }
@@ -142,15 +142,19 @@ namespace recob {
     inline Vector_t const& MomentumVectorAtPoint(size_t i) const { return fTraj.MomentumVectorAtPoint(i); }
 
     inline double  Length(size_t p=0) const { return fTraj.Length(p); }
+    inline float   Chi2()             const { return fChi2; }
+    inline float   Chi2PerNdof()      const { return fChi2/float(fNdof); }
+    inline int     Ndof()             const { return fNdof; }
+    inline int     PId()              const { return fPId; }
 
     inline double  Theta()                const { return fTraj.Theta(); }
     inline double  Theta(size_t p)        const { return fTraj.Theta(p); }
-    inline double  Phi()                  const { return fTraj.Phi();   }
-    inline double  Phi(size_t p)          const { return fTraj.Phi(p);   }
+    inline double  Phi()                  const { return fTraj.Phi(); }
+    inline double  Phi(size_t p)          const { return fTraj.Phi(p); }
     inline double  ZenithAngle()          const { return fTraj.ZenithAngle(); }
     inline double  ZenithAngle(size_t p)  const { return fTraj.ZenithAngle(p); }
-    inline double  AzimuthAngle()         const { return fTraj.AzimuthAngle();   }
-    inline double  AzimuthAngle(size_t p) const { return fTraj.AzimuthAngle(p);   }
+    inline double  AzimuthAngle()         const { return fTraj.AzimuthAngle(); }
+    inline double  AzimuthAngle(size_t p) const { return fTraj.AzimuthAngle(p); }
 
     // Calculate rotation matrices between global (x,y,z) and local (u,v,w)
     // coordinate systems based on track direction (fDir).
