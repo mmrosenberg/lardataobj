@@ -1,10 +1,10 @@
 /**
- * @file   TrajectoryPointFlags.tcc
- * @brief  Set of flags pertaining a point of the track.
- * @author Giuseppe Cerati (cerati@fnal.gov),
- *         Gianluca Petrillo (petrillo@fnal.gov)
- * @date   January 18, 2017
- * @see    TrajectoryPointFlags.h
+ * @file    TrajectoryPointFlags.tcc
+ * @brief   Set of flags pertaining a point of the track.
+ * @authors Giuseppe Cerati (cerati@fnal.gov),
+ *          Gianluca Petrillo (petrillo@fnal.gov)
+ * @date    January 18, 2017
+ * @see     TrajectoryPointFlags.h
  *
  */
 
@@ -17,41 +17,31 @@
 
 
 //------------------------------------------------------------------------------
-
-#ifndef __ROOTCLING__
-// ROOT 6.6.8 can't suffer DefaultFlags() implementation
-// (that is, the following functions), so we hide it
 inline constexpr recob::details::BitMask_t recob::details::makeMaskImpl()
   { return 0; }
 
-template <typename... OtherFlags>
-constexpr recob::details::BitMask_t recob::details::makeMaskImpl
-  (std::size_t first, OtherFlags... others);
+#ifdef __ROOTCLING__
+// genreflex ROOT 6.6.8 will emit a warning if this specialisation is not
+// present (JIRA ticket 8545)
+template <>
+inline constexpr recob::details::BitMask_t recob::details::makeMaskImpl<>
+  (FlagIndex_t first)
+  { return (BitMask_t(1) << first); }
+#endif // __ROOTCLING__
 
 template <typename... OtherFlags>
 constexpr recob::details::BitMask_t recob::details::makeMaskImpl
-  (std::size_t first, OtherFlags... others)
+  (FlagIndex_t first, OtherFlags... others)
 {
   return (sizeof...(OtherFlags) == 0)
     ? (BitMask_t(1) << first): (makeMaskImpl(first) | makeMaskImpl(others...));
 } // recob::details::makeMaskImpl()
 
-#endif // __ROOTCLING__
 
 
 //------------------------------------------------------------------------------
-#ifndef __ROOTCLING__
-// ROOT 6.6.8 can't suffer DefaultFlags() implementation, so we hide it
-template <typename FlagTraits>
-inline constexpr recob::TrajectoryPointFlags<FlagTraits>::TrajectoryPointFlags()
-  : fFlags(DefaultFlags())
-  {}
-#endif // __ROOTCLING__
-
-
-template <typename FlagTraits>
 template <typename Stream>
-void recob::TrajectoryPointFlags<FlagTraits>::dump(
+void recob::TrajectoryPointFlags::dump(
   Stream&& out,
   unsigned int verbosity,
   std::string indent, std::string indentFirst
@@ -89,19 +79,6 @@ void recob::TrajectoryPointFlags<FlagTraits>::dump(
 
 
 //------------------------------------------------------------------------------
-#ifndef __ROOTCLING__
-// ROOT 6.6.8 can't suffer DefaultFlags() implementation, so we hide it
-template <typename FlagTraits>
-constexpr typename recob::TrajectoryPointFlags<FlagTraits>::Flags_t
-recob::TrajectoryPointFlags<FlagTraits>::DefaultFlags()
-{
-  
-  // note: it take be some meta-programming to keep this function as constexpr
-  
-  return {};
-  
-} // recob::TrajectoryPointFlags::DefaultFlags()
-#endif // __ROOTCLING__
 
 
 #endif // LARDATAOBJ_RECOBASE_TRAJECTORYPOINTFLAGS_TCC
