@@ -227,7 +227,7 @@ namespace recob {
 	  std::vector< std::vector <double> > dQdx = std::vector< std::vector<double> >(0),
 	  std::vector<double>                 fitMomentum = std::vector<double>(2, util::kBogusD),
 	  int                                 ID = -1);
-    inline size_t   NumberCovariance()                                                 const { return 2; }
+    inline size_t   NumberCovariance()                                                 const { if (fCovVertex==SMatrixSym55() || fCovEnd==SMatrixSym55()) return 0; else return 2; } ///< Covariance matrices are either set or not
     inline TVector3 DirectionAtPoint (unsigned int p)                                  const { auto dir = fTraj.DirectionAtPoint(p); return TVector3(dir.X(),dir.Y(),dir.Z()); }
     inline TVector3 LocationAtPoint  (unsigned int p)                                  const { auto& loc = fTraj.LocationAtPoint(p); return TVector3(loc.X(),loc.Y(),loc.Z()); }
     inline TMatrixD CovarianceAtPoint(unsigned int p)                                  const { return (p==0 ? this->VertexCovariance() : this->EndCovariance()); }

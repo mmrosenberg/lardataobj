@@ -60,6 +60,8 @@ namespace recob {
    */
   class TrackTrajectory: private recob::Trajectory {
     using Trajectory_t = recob::Trajectory;
+
+    friend class trkf::BezierTrack;
     
       public:
     /// Type used for coordinates and values in general.
