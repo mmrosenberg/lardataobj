@@ -268,7 +268,7 @@ namespace recob {
     struct FromMaskTag_t {};
     
     /// Tag used to activate a constructor from a bit mask.
-    static const FromMaskTag_t fromMask;
+    static constexpr FromMaskTag_t fromMask = {};
     
     /// Value marking an invalid hit index.
     static constexpr HitIndex_t InvalidHitIndex
@@ -285,8 +285,15 @@ namespace recob {
      * 
      * This constructor can be used in constexpr flag definitions:
      * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
-     * constexpr TrajectoryPointFlags flags
-     *   (TrajectoryPointFlags::fromMask, InvalidHitIndex, otherFlags.bits());
+     * using trkflag = recob::TrajectoryPointFlags::flag;
+     * constexpr recob::TrajectoryPointFlags flags(
+     *   recob::TrajectoryPointFlags::fromMask,
+     *   12,
+     *   recob::TrajectoryPointFlags::makeMask(
+     *     trkflag::NoPoint,
+     *     trkflag::HitIgnored
+     *     )
+     *   );
      * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
      */
     constexpr TrajectoryPointFlags
@@ -303,8 +310,12 @@ namespace recob {
      * 
      * This constructor can be used in constexpr flag definitions:
      * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
-     * constexpr TrajectoryPointFlags flags
-     *   (InvalidHitIndex, NoPoint, Merged);
+     * using trkflag = recob::TrajectoryPointFlags::flag;
+     * constexpr recob::TrajectoryPointFlags flags(
+     *   recob::TrajectoryPointFlags::InvalidHitIndex,
+     *   trkflag::NoPoint,
+     *   trkflag::Merged
+     *   );
      * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
      */
     template <typename... Flags>
@@ -316,18 +327,25 @@ namespace recob {
     /// @{
     /// @name Access to flags
     
-    /// Returns the number of defined flags.
-    bool nFlags() const
-      { return flag::maxFlags(); }
+    /**
+     * @brief Returns whether there is room for a flag with the specified index.
+     * @return whether there is room for a flag with the specified index.
+     * @@see isFlag()
+     * 
+     * The flag may still be not present, in the sense that the allocated bit
+     * has no meaning associated to it and that flag is "unknown".
+     */
+    constexpr bool isAllocated(FlagIndex_t flag) const
+      { return isFlag(flag); }
     
-    /// Returns whether there is a flag with the specified index.
-    bool isFlag(FlagIndex_t flag) const
-      { return flag < flag::maxFlags(); }
+    /// Returns the number of defined flags.
+    constexpr FlagIndex_t nFlags() const
+      { return flag::maxFlags(); }
     
     /// Returns whether a flag with the specified index is known.
     /// (all of them are)
-    bool isPresent(FlagIndex_t flag) const
-      { return isFlag(flag); }
+    constexpr bool isFlag(FlagIndex_t flag) const
+      { return flag < flag::maxFlags(); }
     
     /// Returns the entire set of bits as a bit mask
     Mask_t bits() const { return fFlags.to_ullong(); }
@@ -365,7 +383,7 @@ namespace recob {
      * @see isUnset()
      */
     bool isSet(FlagIndex_t flag) const
-      { return isPresent(flag) && get(flag); }
+      { return isFlag(flag) && get(flag); }
     
     /**
      * @brief Returns true if the flag exists and is not set.
@@ -374,7 +392,7 @@ namespace recob {
      * @see isSet()
      */
     bool isUnset(FlagIndex_t flag) const
-      { return isPresent(flag) && !get(flag); }
+      { return isFlag(flag) && !get(flag); }
     
     
     
@@ -386,17 +404,21 @@ namespace recob {
     bool isPointValid() const
       { return !get(flag::NoPoint); }
     
+    /// @}
+    
+    /// @{
+    /// @name Access to hit index
     
     /// Returns whether the original hit index is valid.
     /// @see fromHit()
-    bool hasOriginalHitIndex() const
+    constexpr bool hasOriginalHitIndex() const
       { return fromHit() != InvalidHitIndex; }
     
     
     /// Returns the original index of the hit.
     /// @return the index of the original hit (`InvalidHitIndex` if not set)
     /// @see hasOriginalHitIndex()
-    HitIndex_t fromHit() const
+    constexpr HitIndex_t fromHit() const
       { return fFromHit; }
     
     /// @}
@@ -453,19 +475,24 @@ namespace recob {
      * 
      * This method can be used in constexpr flag definitions:
      * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
-     * auto mask = TrajectoryPointFlags::makeMask(NoPoint, Merged);
+     * using trkflag = recob::TrajectoryPointFlags::flag;
+     * constexpr auto mask = recob::TrajectoryPointFlags::makeMask
+     *   (trkflag::NoPoint, trkflag::Merged);
      * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
      */
     template <typename... Flags>
     static constexpr Mask_t makeMask(Flags... flags)
       { return details::makeMaskImpl(flags...); }
     
+    /// Flags used in default construction.
+    static constexpr Mask_t DefaultFlagsMask();
+    
       private:
-    /// Flags used in the construction.
-    static constexpr Flags_t DefaultFlags();
-
     HitIndex_t fFromHit = InvalidHitIndex; ///< Index of the original hit.
     
+    /// Flags used in default construction.
+    static constexpr Flags_t DefaultFlags() { return { DefaultFlagsMask() }; }
+
     Flags_t fFlags = DefaultFlags(); ///< Set of flags
     
   }; // TrajectoryPointFlags<>
@@ -483,14 +510,9 @@ namespace recob {
 //------------------------------------------------------------------------------
 //--- inline implementation
 //---
-inline constexpr typename recob::TrajectoryPointFlags::Flags_t
-recob::TrajectoryPointFlags::DefaultFlags()
-{
-  
-  // note: it take be some meta-programming to keep this function as constexpr
-  
-  return {};
-  
+inline constexpr typename recob::TrajectoryPointFlags::Mask_t
+recob::TrajectoryPointFlags::DefaultFlagsMask() {
+  return makeMask();
 } // recob::TrajectoryPointFlags::DefaultFlags()
 
 
