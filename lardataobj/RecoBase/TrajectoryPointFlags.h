@@ -14,9 +14,9 @@
 #include <bitset>
 #include <array>
 #include <string>
+#include <stdexcept> // std::out_of_range
 #include <limits> // std::numeric_limits<>
-#include <initializer_list>
-#include <utility> // std::forward()
+#include <utility> // std::forward(), std::declval()
 #include <cstddef> // std::size_t
 
 
@@ -198,7 +198,7 @@ namespace recob {
     static_assert(EndTrackFlags <= BeginExperimentReservedFlags,
       "Too many track flags");
     static_assert(EndExperimentReservedFlags <= BeginUserReservedFlags,
-      "Too many expriment-defined flags");
+      "Too many experiment-defined flags");
     static_assert(EndUserReservedFlags <= MaxFlags,
       "Too many user-defined flags");
     
@@ -248,7 +248,6 @@ namespace recob {
    * express how many flags should be stored, d
    * 
    */
-  template <typename FlagTraits>
   class TrajectoryPointFlags {
     
       public:
@@ -277,7 +276,7 @@ namespace recob {
     
     
     /// Default constructor.
-    constexpr TrajectoryPointFlags();
+    constexpr TrajectoryPointFlags() = default;
     
     /**
      * @brief Constructor: copies all the flags.
@@ -314,7 +313,7 @@ namespace recob {
       {}
     
     
-    /// @{ 
+    /// @{
     /// @name Access to flags
     
     /// Returns the number of defined flags.
@@ -331,7 +330,7 @@ namespace recob {
       { return isFlag(flag); }
     
     /// Returns the entire set of bits as a bit mask
-    constexpr Mask_t bits() const { return fFlags.to_ullong(); }
+    Mask_t bits() const { return fFlags.to_ullong(); }
     
     
     /**
@@ -462,26 +461,37 @@ namespace recob {
       { return details::makeMaskImpl(flags...); }
     
       private:
-#ifndef __GCCXML__
     /// Flags used in the construction.
     static constexpr Flags_t DefaultFlags();
-#endif // __GCCXML__
 
     HitIndex_t fFromHit = InvalidHitIndex; ///< Index of the original hit.
     
-    Flags_t fFlags; ///< Set of flags
+    Flags_t fFlags = DefaultFlags(); ///< Set of flags
     
   }; // TrajectoryPointFlags<>
   
   
   /// Dumps flags into a stream with default verbosity
-  template <typename Stream, typename FlagTraits>
-  Stream& operator<<
-    (Stream&& out, recob::TrajectoryPointFlags<FlagTraits> const& flags)
+  template <typename Stream>
+  Stream& operator<< (Stream&& out, recob::TrajectoryPointFlags const& flags)
     { flags.dump(std::forward<Stream>(out)); return out; }
   
   
 } // namespace recob
+
+
+//------------------------------------------------------------------------------
+//--- inline implementation
+//---
+inline constexpr typename recob::TrajectoryPointFlags::Flags_t
+recob::TrajectoryPointFlags::DefaultFlags()
+{
+  
+  // note: it take be some meta-programming to keep this function as constexpr
+  
+  return {};
+  
+} // recob::TrajectoryPointFlags::DefaultFlags()
 
 
 //------------------------------------------------------------------------------

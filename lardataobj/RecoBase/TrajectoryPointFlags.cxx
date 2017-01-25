@@ -13,6 +13,8 @@
 
 
 //------------------------------------------------------------------------------
+//---  recob::TrajectoryPointFlagTraits
+//---
 const recob::TrajectoryPointFlagTraits::NameMap_t
 recob::TrajectoryPointFlagTraits::names
   = recob::TrajectoryPointFlagTraits::initNames(); ///< Names of the flags
@@ -105,4 +107,3 @@ recob::TrajectoryPointFlagTraits::initNames() {
 
 
 //------------------------------------------------------------------------------
-

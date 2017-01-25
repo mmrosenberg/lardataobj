@@ -72,8 +72,7 @@ namespace recob {
     using Vector_t = Trajectory_t::Vector_t;
     
     /// Type for flags of a point/hit
-    using PointFlags_t
-      = recob::TrajectoryPointFlags<recob::TrajectoryPointFlagTraits>;
+    using PointFlags_t = recob::TrajectoryPointFlags;
     
     /// Flag traits (including the definition of flag mnemonics).
     using flag = PointFlags_t::flag;
