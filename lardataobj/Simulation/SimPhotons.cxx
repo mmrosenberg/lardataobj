@@ -58,12 +58,6 @@ namespace sim
   {
   }
 
-  /// \todo: Remove this constructor when DUNE makes the next round of production
-  ///        MC files - after 11 September 2013 brebel
-  //----------------------------------------------------------------------------
-  DUNE10ktPhotons::DUNE10ktPhotons()
-  {
-  }
 
   //----------------------------------------------------------------------------
   SimPhotons::SimPhotons()

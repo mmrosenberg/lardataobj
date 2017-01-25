@@ -13,6 +13,89 @@
  <class name="std::map<std::basic_string<char>,double > " />
  <class name="std::vector<std::map<std::basic_string<char>,double > >" />
 
+<!-- Feature vectors, length 1-5                                        -->
+ <class name="anab::FeatureVector<1>" ClassVersion="10"               >
+  <version ClassVersion="10" checksum="510677247"/>
+ </class>
+ <class name="art::Wrapper< anab::FeatureVector<1> >"                 />
+ <class name="std::vector< anab::FeatureVector<1> >"                  />
+ <class name="art::Ptr< anab::FeatureVector<1> >"                     />
+ <class name="art::Wrapper< std::vector< anab::FeatureVector<1> > >"  />
+
+ <class name="anab::FeatureVector<2>" ClassVersion="10"               >
+  <version ClassVersion="10" checksum="511208689"/>
+ </class>
+ <class name="art::Wrapper< anab::FeatureVector<2> >"                 />
+ <class name="std::vector< anab::FeatureVector<2> >"                  />
+ <class name="art::Ptr< anab::FeatureVector<2> >"                     />
+ <class name="art::Wrapper< std::vector< anab::FeatureVector<2> > >"  />
+
+ <class name="anab::FeatureVector<3>" ClassVersion="10"               >
+  <version ClassVersion="10" checksum="511740131"/>
+ </class>
+ <class name="art::Wrapper< anab::FeatureVector<3> >"                 />
+ <class name="std::vector< anab::FeatureVector<3> >"                  />
+ <class name="art::Ptr< anab::FeatureVector<3> >"                     />
+ <class name="art::Wrapper< std::vector< anab::FeatureVector<3> > >"  />
+
+ <class name="anab::FeatureVector<4>" ClassVersion="10"               >
+  <version ClassVersion="10" checksum="512271573"/>
+ </class>
+ <class name="art::Wrapper< anab::FeatureVector<4> >"                 />
+ <class name="std::vector< anab::FeatureVector<4> >"                  />
+ <class name="art::Ptr< anab::FeatureVector<4> >"                     />
+ <class name="art::Wrapper< std::vector< anab::FeatureVector<4> > >"  />
+
+ <class name="anab::FeatureVector<5>" ClassVersion="10"               >
+  <version ClassVersion="10" checksum="512803015"/>
+ </class>
+ <class name="art::Wrapper< anab::FeatureVector<5> >"                 />
+ <class name="std::vector< anab::FeatureVector<5> >"                  />
+ <class name="art::Ptr< anab::FeatureVector<5> >"                     />
+ <class name="art::Wrapper< std::vector< anab::FeatureVector<5> > >"  />
+ 
+ <!-- MVA output metadata, length 1-5                                -->
+ <class name="anab::MVADescription<1>" ClassVersion="10"              >
+  <version ClassVersion="10" checksum="835494112"/>
+ </class>
+ <class name="art::Wrapper< anab::MVADescription<1> >"                />
+ <class name="std::vector< anab::MVADescription<1> >"                 />
+ <class name="art::Ptr< anab::MVADescription<1> >"                    />
+ <class name="art::Wrapper< std::vector< anab::MVADescription<1> > >" />
+
+ <class name="anab::MVADescription<2>" ClassVersion="10"              >
+  <version ClassVersion="10" checksum="934009004"/>
+ </class>
+ <class name="art::Wrapper< anab::MVADescription<2> >"                />
+ <class name="std::vector< anab::MVADescription<2> >"                 />
+ <class name="art::Ptr< anab::MVADescription<2> >"                    />
+ <class name="art::Wrapper< std::vector< anab::MVADescription<2> > >" />
+
+ <class name="anab::MVADescription<3>" ClassVersion="10"              >
+  <version ClassVersion="10" checksum="1032523896"/>
+ </class>
+ <class name="art::Wrapper< anab::MVADescription<3> >"                />
+ <class name="std::vector< anab::MVADescription<3> >"                 />
+ <class name="art::Ptr< anab::MVADescription<3> >"                    />
+ <class name="art::Wrapper< std::vector< anab::MVADescription<3> > >" />
+
+ <class name="anab::MVADescription<4>" ClassVersion="10"              >
+  <version ClassVersion="10" checksum="1131038788"/>
+ </class>
+ <class name="art::Wrapper< anab::MVADescription<4> >"                />
+ <class name="std::vector< anab::MVADescription<4> >"                 />
+ <class name="art::Ptr< anab::MVADescription<4> >"                    />
+ <class name="art::Wrapper< std::vector< anab::MVADescription<4> > >" />
+
+ <class name="anab::MVADescription<5>" ClassVersion="10"              >
+  <version ClassVersion="10" checksum="1229553680"/>
+ </class>
+ <class name="art::Wrapper< anab::MVADescription<5> >"                />
+ <class name="std::vector< anab::MVADescription<5> >"                 />
+ <class name="art::Ptr< anab::MVADescription<5> >"                    />
+ <class name="art::Wrapper< std::vector< anab::MVADescription<5> > >" />
+
+
  <class name="anab::Calorimetry"           ClassVersion="16"                           >
   <version ClassVersion="16" checksum="2995599306"/>
   <version ClassVersion="15" checksum="2095251371"/>

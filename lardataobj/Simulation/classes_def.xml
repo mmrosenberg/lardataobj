@@ -66,11 +66,6 @@
  <class name="art::Wrapper< std::vector<sim::BeamGateInfo> >"		   />
  <class name="art::Wrapper< std::vector<sim::AuxDetSimChannel>  >" />
  <class name="art::Wrapper< std::vector<sim::OpDetBacktrackerRecord> >"      />
-<!---Remove the following lines once DUNE no longer uses files containing
-     DUNE10ktPhotons.  11 September 2013 brebel-->
- <class name="sim::DUNE10ktPhotons"                                />
- <class name="std::vector<sim::DUNE10ktPhotons>"                   />
- <class name="art::Wrapper< std::vector<sim::DUNE10ktPhotons>  >"  />
 
  <ioread 
     version="[-13]" 
