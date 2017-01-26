@@ -133,6 +133,42 @@ void TrajectoryPointFlagsTest_DefaultConstructor() {
     (flags.bits(), recob::TrajectoryPointFlags::DefaultFlagsMask());
   
   /*
+   * bool none(Mask_t bits) const
+   */
+  BOOST_CHECK(flags.none(recob::TrajectoryPointFlags::makeMask
+    (trkflag::NoPoint, trkflag::HitIgnored)
+    ));
+  
+  /*
+   * bool none(Flags...) const
+   */
+  BOOST_CHECK(flags.none(trkflag::NoPoint, trkflag::HitIgnored));
+  
+  /*
+   * bool any(Mask_t bits) const
+   */
+  BOOST_CHECK(!flags.any(recob::TrajectoryPointFlags::makeMask
+    (trkflag::NoPoint, trkflag::HitIgnored)
+    ));
+  
+  /*
+   * bool any(Flags...) const
+   */
+  BOOST_CHECK(!flags.any(trkflag::NoPoint, trkflag::HitIgnored));
+  
+  /*
+   * bool all(Mask_t bits) const
+   */
+  BOOST_CHECK(!flags.all(recob::TrajectoryPointFlags::makeMask
+    (trkflag::NoPoint, trkflag::HitIgnored)
+    ));
+  
+  /*
+   * bool all(Flags...) const
+   */
+  BOOST_CHECK(!flags.all(trkflag::NoPoint, trkflag::HitIgnored));
+  
+  /*
    * hasOriginalHitIndex() const
    */
   BOOST_CHECK(!flags.hasOriginalHitIndex());
@@ -249,6 +285,42 @@ void TrajectoryPointFlagsTest_FlagsConstructor() {
   BOOST_CHECK_EQUAL(flags.bits(), flagbitmask);
   
   /*
+   * bool none(Mask_t bits) const
+   */
+  BOOST_CHECK(!flags.none(recob::TrajectoryPointFlags::makeMask
+    (trkflag::NoPoint, trkflag::HitIgnored)
+    ));
+  
+  /*
+   * bool none(Flags...) const
+   */
+  BOOST_CHECK(!flags.none(trkflag::NoPoint, trkflag::HitIgnored));
+  
+  /*
+   * bool any(Mask_t bits) const
+   */
+  BOOST_CHECK(flags.any(recob::TrajectoryPointFlags::makeMask
+    (trkflag::NoPoint, trkflag::HitIgnored)
+    ));
+  
+  /*
+   * bool any(Flags...) const
+   */
+  BOOST_CHECK(flags.any(trkflag::NoPoint, trkflag::HitIgnored));
+  
+  /*
+   * bool all(Mask_t bits) const
+   */
+  BOOST_CHECK(flags.all(recob::TrajectoryPointFlags::makeMask
+    (trkflag::NoPoint, trkflag::HitIgnored)
+    ));
+  
+  /*
+   * bool all(Flags...) const
+   */
+  BOOST_CHECK(flags.all(trkflag::NoPoint, trkflag::HitIgnored));
+  
+  /*
    * hasOriginalHitIndex() const
    */
   BOOST_CHECK(!flags.hasOriginalHitIndex());
@@ -276,8 +348,7 @@ void TrajectoryPointFlagsTest_BitmaskConstructor() {
   /*
    * constexpr TrajectoryPointFlags(FromMaskTag_t, HitIndex_t, Mask_t)
    */
-  constexpr recob::TrajectoryPointFlags flags
-    (recob::TrajectoryPointFlags::fromMask, 12, flagbitmask);
+  constexpr recob::TrajectoryPointFlags flags(12, flagbitmask);
   
   
   /*
@@ -366,6 +437,42 @@ void TrajectoryPointFlagsTest_BitmaskConstructor() {
   BOOST_CHECK_EQUAL(flags.bits(), flagbitmask);
   
   /*
+   * bool none(Mask_t bits) const
+   */
+  BOOST_CHECK(!flags.none(recob::TrajectoryPointFlags::makeMask
+    (trkflag::NoPoint, trkflag::HitIgnored)
+    ));
+  
+  /*
+   * bool none(Flags...) const
+   */
+  BOOST_CHECK(!flags.none(trkflag::NoPoint, trkflag::HitIgnored));
+  
+  /*
+   * bool any(Mask_t bits) const
+   */
+  BOOST_CHECK(flags.any(recob::TrajectoryPointFlags::makeMask
+    (trkflag::NoPoint, trkflag::HitIgnored)
+    ));
+  
+  /*
+   * bool any(Flags...) const
+   */
+  BOOST_CHECK(flags.any(trkflag::NoPoint, trkflag::HitIgnored));
+  
+  /*
+   * bool all(Mask_t bits) const
+   */
+  BOOST_CHECK(!flags.all(recob::TrajectoryPointFlags::makeMask
+    (trkflag::NoPoint, trkflag::HitIgnored)
+    ));
+  
+  /*
+   * bool all(Flags...) const
+   */
+  BOOST_CHECK(!flags.all(trkflag::NoPoint, trkflag::HitIgnored));
+  
+  /*
    * hasOriginalHitIndex() const
    */
   BOOST_CHECK(flags.hasOriginalHitIndex());
@@ -388,7 +495,6 @@ void TrajectoryPointFlagsDocumentationTest_TrajectoryPointFlags_FromMaskTag_t()
    */
   using trkflag = recob::TrajectoryPointFlags::flag;
   constexpr recob::TrajectoryPointFlags flags [[gnu::unused]](
-    recob::TrajectoryPointFlags::fromMask,
     12,
     recob::TrajectoryPointFlags::makeMask(
       trkflag::NoPoint,
@@ -407,8 +513,8 @@ void TrajectoryPointFlagsDocumentationTest_TrajectoryPointFlags_HitIndex_t_Flags
   using trkflag = recob::TrajectoryPointFlags::flag;
   constexpr recob::TrajectoryPointFlags flags [[gnu::unused]](
     recob::TrajectoryPointFlags::InvalidHitIndex,
-    trkflag::NoPoint /*,
-    trkflag::Merged */ // TODO
+    trkflag::NoPoint,
+    trkflag::Merged
     );
   
 } // TrajectoryPointFlagsDocumentationTest_TrajectoryPointFlags_HitIndex_t_Flags
@@ -420,7 +526,7 @@ void TrajectoryPointFlagsDocumentationTest_makeMask() {
   
   using trkflag = recob::TrajectoryPointFlags::flag;
   constexpr auto mask [[gnu::unused]] = recob::TrajectoryPointFlags::makeMask
-    (trkflag::NoPoint /* , trkflag::Merged TODO */);
+    (trkflag::NoPoint, trkflag::Merged);
 } // TrajectoryPointFlagsDocumentationTest_makeMask()
 
 

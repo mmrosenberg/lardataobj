@@ -17,25 +17,11 @@
 
 
 //------------------------------------------------------------------------------
-inline constexpr recob::details::BitMask_t recob::details::makeMaskImpl()
-  { return 0; }
-
-#ifdef __ROOTCLING__
-// genreflex ROOT 6.6.8 will emit a warning if this specialisation is not
-// present (JIRA ticket 8545)
-template <>
-inline constexpr recob::details::BitMask_t recob::details::makeMaskImpl<>
-  (FlagIndex_t first)
-  { return (BitMask_t(1) << first); }
-#endif // __ROOTCLING__
-
-template <typename... OtherFlags>
-constexpr recob::details::BitMask_t recob::details::makeMaskImpl
-  (FlagIndex_t first, OtherFlags... others)
-{
-  return (sizeof...(OtherFlags) == 0)
-    ? (BitMask_t(1) << first): (makeMaskImpl(first) | makeMaskImpl(others...));
-} // recob::details::makeMaskImpl()
+template <typename Stream, typename T>
+void recob::details::printBinary(Stream&& out, T const& data, size_t bits) {
+  // TODO implement the real thing
+  out << data;
+} // recob::details::printBinary()
 
 
 
@@ -75,7 +61,7 @@ void recob::TrajectoryPointFlags::dump(
   if (hasOriginalHitIndex()) out << ", hit index: " << fromHit();
   else out << " (no hit index)";
   
-} // recob::TrajectoryPointFlags<FlagTraits>::dump()
+} // recob::TrajectoryPointFlags::dump()
 
 
 //------------------------------------------------------------------------------

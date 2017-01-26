@@ -76,14 +76,27 @@ void recob::TrajectoryPointFlagTraits::initDefaultFlagsNames
   
 } // recob::TrajectoryPointFlagTraits::initDefaultFlagsNames()
 
+
 //------------------------------------------------------------------------------
 void recob::TrajectoryPointFlagTraits::setFlagNames(NameMap_t& flagNames) {
   
   //
   // set the names of the new flags here
   //
-  flagNames[HitIgnored] = "HitIgnored";
-  flagNames[NoPoint] = "NoPoint";
+  
+  // trajectory flags
+  flagNames[HitIgnored]    = "HitIgnored"   ;
+  flagNames[NoPoint]       = "NoPoint"      ;
+  flagNames[Suspicious]    = "Suspicious"   ;
+  flagNames[Merged]        = "Merged"       ;
+  flagNames[DeltaRay]      = "DeltaRay"     ;
+  flagNames[DetectorIssue] = "DetectorIssue";
+  flagNames[Shared]        = "Shared"       ;
+  
+  // track flags
+  flagNames[ExcludedFromFit] = "ExcludedFromFit";
+  flagNames[Rejected]        = "Rejected"       ;
+  flagNames[Reinterpreted]   = "Reinterpreted"  ;
   
 } // recob::TrajectoryPointFlagTraits::initNames()
 
