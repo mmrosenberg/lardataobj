@@ -8,6 +8,7 @@
 
 
 #include "lardataobj/RecoBase/Trajectory.h"
+#include "lardataobj/RecoBase/TrackingPlane.h"
 
 // LArSoft libraries
 #include "larcoreobj/SimpleTypesAndConstants/PhysicalConstants.h" // util::pi()
@@ -170,20 +171,7 @@ void recob::Trajectory::Direction(double* start, double* end) const
 recob::Trajectory::Rotation_t recob::Trajectory::GlobalToLocalRotationAtPoint
   (size_t p) const
 {
-  auto dir = DirectionAtPoint(p);
-  double const diryz = std::sqrt(dir.Y()*dir.Y() + dir.Z()*dir.Z());
-  
-  double const sinth = dir.X();
-  double const costh = diryz;
-  double const sinphi = (diryz != 0.0)? -dir.Y() / diryz: 0.0;
-  double const cosphi = (diryz != 0.0)?  dir.Z() / diryz: 1.0;
-  
-  return {
-    costh          /* xx */,  sinth * sinphi /* xy */, -sinth * cosphi /* xz */,
-    0.0            /* yx */,  cosphi         /* yy */,  sinphi         /* yz */,
-    sinth          /* zx */, -costh * sinphi /* zy */,  costh * cosphi /* zz */
-    };
-  
+  return recob::tracking::Plane::Global3DToLocal3DRotation(DirectionAtPoint(p));
 } // recob::Trajectory::GlobalToLocalRotationAtPoint()
 
 
@@ -200,23 +188,7 @@ void recob::Trajectory::GlobalToLocalRotationAtPoint
 recob::Trajectory::Rotation_t recob::Trajectory::LocalToGlobalRotationAtPoint
   (size_t p) const
 {
-  recob::Trajectory::Rotation_t rot;
-  
-  // Calculate the global-to-local rotation matrix.
-  auto dir = DirectionAtPoint(p);
-  double const diryz = std::sqrt(dir.Y()*dir.Y() + dir.Z()*dir.Z());
-  
-  double const sinth = dir.X();
-  double const costh = diryz;
-  double const sinphi = (diryz != 0.0)? -dir.Y() / diryz: 0.0;
-  double const cosphi = (diryz != 0.0)?  dir.Z() / diryz: 1.0;
-
-  return {
-    costh          /* xx */, 0.              /* xy */,  sinth          /* xz */,
-    sinth * sinphi /* yx */, cosphi          /* yy */, -costh * sinphi /* yz */,
-   -sinth * cosphi /* zx */, sinphi          /* zy */,  costh * cosphi /* zz */
-    };
-  
+  return recob::tracking::Plane::Local3DToGlobal3DRotation(DirectionAtPoint(p));
 } // recob::Trajectory::GlobalToLocalRotationAtPoint()
 
 
