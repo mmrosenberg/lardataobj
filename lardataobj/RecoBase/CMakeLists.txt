@@ -13,6 +13,6 @@ cet_make( LIBRARIES lardataobj_RawData
 art_dictionary( DICTIONARY_LIBRARIES lardataobj_RecoBase )
 
 
-install_headers()
+install_headers(EXTRAS TrajectoryPointFlags.tcc TrackTrajectory.tcc Trajectory.tcc)
 install_fhicl()
 install_source()
