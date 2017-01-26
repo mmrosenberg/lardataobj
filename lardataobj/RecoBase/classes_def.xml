@@ -437,6 +437,9 @@
   <!--   dependencies -->
   <class name="recob::TrajectoryPointFlagTraits" />
   <class name="recob::TrajectoryPointFlags" />
+  <class name="std::vector<recob::TrajectoryPointFlags>" />
+  <class name="std::bitset<32>" />
+  <class name="std::_Base_bitset<1>" />
   
   <!--   class -->
   <class name="recob::TrackTrajectory" />
@@ -516,13 +519,114 @@
     <version ClassVersion="14" checksum="2345363916"/>
   </class>
   
+    <!-- schema evolution rules -->
+      <!-- version 15 -->
+        <!-- * trajectory -->
+  <ioread 
+    version="[-14]" 
+    sourceClass="recob::Track"
+    source="std::vector<TVector3> fXYZ; std::vector<TVector3> fDir; std::vector<double> fFitMomentum"
+    targetClass="recob::Track"
+    target="fTraj"
+    include="lardataobj/RecoBase/Track.h;TVector3.h;vector;stdexcept">
+    <![CDATA[
+      // also uses "larcoreobj/SimpleTypesAndConstants/PhysicalConstants.h" // util::kBogusD
+      
+      // trajectory 
+      if((onfile.fXYZ.size() != onfile.fDir.size()) || onfile.fXYZ.empty()) {
+        throw std::runtime_error(
+          "Direction and position vector size mismatch during import of Track v. <=14"
+          );
+      }
+      
+      // prepare vector of positions
+      recob::Track::Positions_t pos;
+      pos.reserve(onfile.fXYZ.size());
+      for (auto const& p: onfile.fXYZ)
+        pos.emplace_back(p.X(), p.Y(), p.Z());
+      
+      // prepare vector of directions
+      recob::Track::Momenta_t mom;
+      mom.reserve(onfile.fDir.size());
+      for (auto const& d: onfile.fDir)
+        mom.emplace_back(d.X(), d.Y(), d.Z());
+      
+      // upgrade to momentum if the input track has exactly two momenta,
+      // or if it has exactly the number of momenta required
+      auto const size = mom.size();
+      bool hasMom = false;
+      if ((onfile.fFitMomentum.size() == 2)
+        && (onfile.fFitMomentum[0] != util::kBogusD)
+        && (onfile.fFitMomentum[1]!=util::kBogusD)
+        )
+      {
+        hasMom = true;
+        for (unsigned int i = 0; i < (size - 1); ++i)
+          mom[i] *= onfile.fFitMomentum[0];
+        mom.back() *= onfile.fFitMomentum[1];
+      }
+      else if (onfile.fFitMomentum.size() == size) {
+        hasMom = true;
+        for (unsigned int i = 0; i < size; ++i)
+          mom[i] *= onfile.fFitMomentum[i];
+      }
+      
+      // reinitialise the trajectory data member
+      fTraj = recob::TrackTrajectory(
+        std::move(pos), std::move(mom),
+        recob::TrackTrajectory::Flags_t(size),
+        hasMom
+        );
+    ]]>
+  </ioread> 
+        <!-- * covariance at start -->
+  <ioread 
+    version="[-14]" 
+    sourceClass="recob::Track"
+    source="std::vector<TMatrixD> fCov"
+    targetClass="recob::Track"
+    target="fCovVertex"
+    include="lardataobj/RecoBase/Track.h;TMatrixD.h">
+    <![CDATA[
+      if (onfile.fCov.size() == 2) {
+        // we copy the upper triangle only
+        for (unsigned int i = 0; i < 5; ++i) {
+          for (unsigned int j = i; j < 5; ++j) {
+            fCovVertex(i,j) = onfile.fCov[0](i,j);
+          } // for j
+        } // for i
+      } // if
+    ]]>
+  </ioread> 
+        <!-- * covariance at end -->
+  <ioread 
+    version="[-14]" 
+    sourceClass="recob::Track"
+    source="std::vector<TMatrixD> fCov"
+    targetClass="recob::Track"
+    target="fCovEnd"
+    include="lardataobj/RecoBase/Track.h;TMatrixD.h">
+    <![CDATA[
+      if (onfile.fCov.size() == 2) {
+        // we copy the upper triangle only
+        for (unsigned int i = 0; i < 5; ++i) {
+          for (unsigned int j = i; j < 5; ++j) {
+            fCovEnd(i,j)    = onfile.fCov[1](i,j);
+          } // for j
+        } // for i
+      } // if
+    ]]>
+  </ioread> 
+  
+  
     <!-- art pointers and wrappers -->
   <class name="art::Ptr<recob::Track>" />
   <class name="std::vector<recob::Track>" />
   <class name="art::Wrapper<std::vector<recob::Track>>" />
   
-  <class name="art::PtrVector<recob::Track>" /> <!-- do we REALLY need this?! -->
-  <class name="std::vector<art::PtrVector<recob::Track>>" /> <!-- do we REALLY need this?! -->
+  <class name="art::PtrVector<recob::Track>" />
+  <class name="std::vector<art::PtrVector<recob::Track>>" />
+  <class name="art::Wrapper<std::vector<art::PtrVector<recob::Track>>>" />
   
     <!-- associations and wrappers -->
       <!-- hits -->
