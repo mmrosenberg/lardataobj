@@ -165,7 +165,7 @@ namespace recob {
     /// Access to various track properties
     inline double  Length(size_t p=0) const { return fTraj.Length(p); }
     inline float   Chi2()             const { return fChi2; }
-    inline float   Chi2PerNdof()      const { return fChi2/float(fNdof); }
+    inline float   Chi2PerNdof()      const { return fNdof>0 ? fChi2/float(fNdof) : util::kBogusF; }
     inline int     Ndof()             const { return fNdof; }
     inline int     ParticleId()       const { return fPId; }
     //@}
