@@ -14,7 +14,6 @@
 
 #include "TMatrixD.h"
 #include "TVector3.h"
-#include "Math/SMatrix.h"
 #include "lardataobj/RecoBase/TrackTrajectory.h"
 
 #ifndef __GCCXML__
@@ -44,37 +43,32 @@ namespace recob {
 
   public:
 
-    using TrajectoryPoint_t = TrackTrajectory::TrajectoryPoint_t;
-    using Point_t           = TrackTrajectory::Point_t;
-    using Vector_t          = TrackTrajectory::Vector_t;
-    using Positions_t       = TrackTrajectory::Positions_t;
-    using Momenta_t         = TrackTrajectory::Momenta_t;
-    using PointFlags_t      = TrackTrajectory::PointFlags_t;
-    using Flags_t           = TrackTrajectory::Flags_t;
-    using Rotation_t        = TrackTrajectory::Rotation_t;
+    using Point_t           = tracking::Point_t;
+    using Vector_t          = tracking::Vector_t;
+    using Positions_t       = tracking::Positions_t;
+    using Momenta_t         = tracking::Momenta_t;
+    using Rotation_t        = tracking::Rotation_t;
+    using TrajectoryPoint_t = tracking::TrajectoryPoint_t;
 
-    using SMatrixSym11 = ROOT::Math::SMatrix<double,1,1,ROOT::Math::MatRepSym<double,1> >;
-    using SMatrixSym55 = ROOT::Math::SMatrix<double,5,5,ROOT::Math::MatRepSym<double,5> >;
-    using SMatrixSym66 = ROOT::Math::SMatrix<double,6,6,ROOT::Math::MatRepSym<double,6> >;
-    using SMatrix65    = ROOT::Math::SMatrix<double,6,5>;
-    using SMatrix56    = ROOT::Math::SMatrix<double,5,6>;
-    using SMatrix55    = ROOT::Math::SMatrix<double,5,5>;
-    using SMatrix51    = ROOT::Math::SMatrix<double,5,1>;
-    using SVector6     = ROOT::Math::SVector<double,6>;
-    using SVector5     = ROOT::Math::SVector<double,5>;
+    using SMatrixSym55 = tracking::SMatrixSym55;
+    using SMatrixSym66 = tracking::SMatrixSym66;
+    using SMatrix65    = tracking::SMatrix65;
+    using SMatrix56    = tracking::SMatrix56;
+    using SVector6     = tracking::SVector6;
+    using SVector5     = tracking::SVector5;
 
-    //Default constructor
-    Track();
+    using PointFlags_t = TrackTrajectory::PointFlags_t;
+    using Flags_t      = TrackTrajectory::Flags_t;
 
   protected:
 
-    TrackTrajectory fTraj;   ///< Stored trajectory data member
-    int fPId;                ///< Particle ID hypothesis used in the fit (if any)
-    float fChi2;             ///< Fit chi2
-    int fNdof;               ///< Number of degrees of freedom of the fit
-    SMatrixSym55 fCovVertex; ///< Covariance matrix (local 5D representation) at start point (vertex)
-    SMatrixSym55 fCovEnd;    ///< Covariance matrix (local 5D representation) at end point
-    int              fID;    ///< track's ID
+    TrackTrajectory fTraj   = TrackTrajectory();   ///< Stored trajectory data member
+    int fPId                = 0;                   ///< Particle ID hypothesis used in the fit (if any)
+    float fChi2             = -1.;                 ///< Fit chi2
+    int fNdof               = 0.;                  ///< Number of degrees of freedom of the fit
+    SMatrixSym55 fCovVertex = SMatrixSym55();      ///< Covariance matrix (local 5D representation) at start point (vertex)
+    SMatrixSym55 fCovEnd    = SMatrixSym55();      ///< Covariance matrix (local 5D representation) at end point
+    int              fID    = -1;                  ///< track's ID
 
     //deprecated:
     std::vector< std::vector <double> > fdQdx;          ///< charge deposition per unit length at points
@@ -83,6 +77,9 @@ namespace recob {
 #ifndef __GCCXML__
 
   public:
+
+    //Default constructor
+    Track() = default;
 
     Track(TrackTrajectory const& Traj,
 	  int PId, float Chi2, int Ndof, SMatrixSym55 const& CovVertex, SMatrixSym55 const& CovEnd, int tkID)

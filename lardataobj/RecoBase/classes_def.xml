@@ -531,9 +531,22 @@
     include="lardataobj/RecoBase/Track.h;TVector3.h;vector;stdexcept">
     <![CDATA[
       // also uses "larcoreobj/SimpleTypesAndConstants/PhysicalConstants.h" // util::kBogusD
-      
+
       // trajectory 
-      if((onfile.fXYZ.size() != onfile.fDir.size()) || onfile.fXYZ.empty()) {
+      if((onfile.fXYZ.size() != onfile.fDir.size()) || onfile.fXYZ.size()<2) {
+         std::cerr
+	 << "\n *** * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * "
+	 << "\n **** * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * "
+	 << "\n *** "
+	 << "\n ***  ERROR!! ROOT I/O failure. "
+	 << "\n ***  Trying to read from file a recob::Track with only " << onfile.fXYZ.size() << " points. "
+	 << "\n ***  The data product containing this track is UNUSABLE. "
+	 << "\n ***  In case of questions contact cerati@fnal.gov and petrillo@fnal.gov. "
+	 << "\n ***  (printed from: lardataobj/RecoBase/classes_def.xml) "
+	 << "\n *** "
+	 << "\n **** * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * "
+	 << "\n *** * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * "
+	 << "\n" << std::endl;
         throw std::runtime_error(
           "Direction and position vector size mismatch during import of Track v. <=14"
           );

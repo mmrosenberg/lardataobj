@@ -18,18 +18,13 @@
 namespace recob {
 
   //----------------------------------------------------------------------
-  Track::Track()
-  {
-  }
-
-  //----------------------------------------------------------------------
   Track::Track(std::vector<TVector3>               const& xyz,
 	       std::vector<TVector3>               const& dxdydz,
 	       std::vector<TMatrixT<double> >      const& cov,
 	       std::vector< std::vector <double> >        dQdx,
 	       std::vector<double>                        fitMomentum,
 	       int                                        ID)
-    : fPId(0), fChi2(0.), fNdof(0.)
+    : fPId(0), fChi2(-1.), fNdof(0.)
     , fID   (ID)
     , fdQdx (dQdx)
   {

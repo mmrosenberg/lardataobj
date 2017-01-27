@@ -65,13 +65,13 @@ namespace recob {
     
       public:
     /// Type used for coordinates and values in general.
-    using Coord_t = Trajectory_t::Coord_t;
+    using Coord_t = tracking::Coord_t;
     
     /// Type for representation of position in physical 3D space.
-    using Point_t = Trajectory_t::Point_t;
+    using Point_t = tracking::Point_t;
     
     /// Type for representation of momenta in 3D space.
-    using Vector_t = Trajectory_t::Vector_t;
+    using Vector_t = tracking::Vector_t;
     
     /// Type for flags of a point/hit
     using PointFlags_t = recob::TrajectoryPointFlags;
@@ -80,10 +80,10 @@ namespace recob {
     using flag = PointFlags_t::flag;
     
     /// Type of trajectory point list.
-    using Positions_t = Trajectory_t::Positions_t;
+    using Positions_t = tracking::Positions_t;
     
     /// Type of momentum list.
-    using Momenta_t = Trajectory_t::Momenta_t;
+    using Momenta_t = tracking::Momenta_t;
     
     /// Type of point flag list.
     using Flags_t = std::vector<PointFlags_t>;
@@ -92,10 +92,10 @@ namespace recob {
     using Ends_t = Trajectory_t::Ends_t;
     
     /// A point in the trajectory, with position and momentum.
-    using TrajectoryPoint_t = Trajectory_t::TrajectoryPoint_t;
+    using TrajectoryPoint_t = tracking::TrajectoryPoint_t;
     
     /// Type for representation of space rotations.
-    using Rotation_t = Trajectory_t::Rotation_t;
+    using Rotation_t = tracking::Rotation_t;
     
     
     /// Default constructor; do not use it! it's needed by ROOT I/O.

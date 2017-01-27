@@ -22,23 +22,10 @@
 //! The discussion above refers to a detector with drift direction along the x axis; 
 //! this class will have to be extended for a detector with a different drift direction.
 
-#include "Math/GenVector/Cartesian3D.h"
-#include "Math/GenVector/PositionVector3D.h"
-#include "Math/GenVector/DisplacementVector3D.h"
-#include "Math/GenVector/Rotation3D.h"
-#include "Math/GenVector/AxisAngle.h"
-#include "Math/SMatrix.h"
+#include "lardataobj/RecoBase/TrackingTypes.h"
 
 namespace recob {
   namespace tracking {
-
-    using Point_t    = ROOT::Math::PositionVector3D<ROOT::Math::Cartesian3D<Coord_t>>;
-    using Vector_t   = ROOT::Math::DisplacementVector3D<ROOT::Math::Cartesian3D<Coord_t>>;
-    using Rotation_t = ROOT::Math::Rotation3D;
-    using SMatrix65  = ROOT::Math::SMatrix<double,6,5>;
-    using SMatrix56  = ROOT::Math::SMatrix<double,5,6>;
-    using SVector6   = ROOT::Math::SVector<double,6>;
-    using SVector5   = ROOT::Math::SVector<double,5>;
 
     class Plane {
 

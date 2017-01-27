@@ -15,13 +15,9 @@
 #ifndef LARDATAOBJ_RECOBASE_TRAJECTORY_H
 #define LARDATAOBJ_RECOBASE_TRAJECTORY_H
 
-// ROOT libraries
-#include "Math/GenVector/Cartesian3D.h"
-#include "Math/GenVector/PositionVector3D.h"
-#include "Math/GenVector/DisplacementVector3D.h"
-#include "Math/GenVector/Rotation3D.h"
-#include "Math/GenVector/AxisAngle.h"
 #include "TMatrixDfwd.h" // forward declarations for legacy interface
+
+#include "lardataobj/RecoBase/TrackingTypes.h"
 
 // C/C++ standard libraries
 #include <vector>
@@ -80,21 +76,19 @@ namespace recob {
     friend class trkf::BezierTrack;
       public:
     /// Type used for coordinates and values in general.
-    using Coord_t = double;
+    using Coord_t = tracking::Coord_t;
     
     /// Type for representation of position in physical 3D space.
-    using Point_t
-      = ROOT::Math::PositionVector3D<ROOT::Math::Cartesian3D<Coord_t>>;
+    using Point_t = tracking::Point_t;
     
     /// Type for representation of momenta in 3D space.
-    using Vector_t
-      = ROOT::Math::DisplacementVector3D<ROOT::Math::Cartesian3D<Coord_t>>;
+    using Vector_t = tracking::Vector_t;
     
     /// Type of trajectory point list.
-    using Positions_t = std::vector<Point_t>;
+    using Positions_t = tracking::Positions_t;
     
     /// Type of momentum list.
-    using Momenta_t = std::vector<Vector_t>;
+    using Momenta_t = tracking::Momenta_t;
     
     /// Mnemonics for the access to begin and end of trajectory.
     enum Ends_t {
@@ -106,26 +100,10 @@ namespace recob {
     
     
     /// A point in the trajectory, with position and momentum.
-    struct TrajectoryPoint_t {
-      
-      Point_t position; ///< position in the trajectory [cm].
-      Vector_t momentum; ///< momentum at the trajectory [GeV/c].
-      
-      /// Default constructor: sets at origin with no momentum.
-      TrajectoryPoint_t() = default;
-      
-      /// Constructor: assigns position and momentum.
-      TrajectoryPoint_t(Point_t pos, Vector_t mom)
-        : position(pos), momentum(mom) {}
-      
-      /// Returns the direction of the trajectory (unit vector of the momentum).
-      Vector_t direction() const
-        { return momentum.Unit(); }
-      
-    }; // TrajectoryPoint_t
+    using TrajectoryPoint_t = tracking::TrajectoryPoint_t;
     
     /// Type for representation of space rotations.
-    using Rotation_t = ROOT::Math::Rotation3D;
+    using Rotation_t = tracking::Rotation_t;
     
     
     /// Default constructor; do not use it! it's needed by ROOT I/O.
