@@ -41,9 +41,9 @@ namespace recob {
 
     Positions_t pos = Positions_t();
     for (auto p : xyz) pos.push_back(std::move(Point_t(p.X(),p.Y(),p.Z())));
+    auto size = pos.size();
     Momenta_t mom = Momenta_t();    
     for (auto m : dxdydz) mom.push_back(std::move(Vector_t(m.X(),m.Y(),m.Z())));
-    auto size = mom.size();
     bool hasMom = false;
     if ( fitMomentum.size()==2 ) {
       if (fitMomentum[0]!=util::kBogusD && fitMomentum[1]!=util::kBogusD) {
@@ -51,6 +51,9 @@ namespace recob {
 	for (unsigned int i=0;i<size-1;++i) mom[i]*=fitMomentum[0];
 	mom[size-1]*=fitMomentum[1];
       }
+    } else if (fitMomentum.size()==size) {
+      hasMom = true;
+      for (unsigned int i=0;i<size-1;++i) mom[i]*=fitMomentum[i];
     }
     fTraj = TrackTrajectory(std::move(pos),std::move(mom),Flags_t(size),hasMom);
     if (cov.size()==2) {
