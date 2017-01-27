@@ -15,6 +15,31 @@
 //------------------------------------------------------------------------------
 //---  recob::TrajectoryPointFlagTraits
 //---
+constexpr recob::TrajectoryPointFlagTraits::FlagIndex_t recob::TrajectoryPointFlagTraits::MaxFlags;
+constexpr recob::TrajectoryPointFlagTraits::FlagIndex_t recob::TrajectoryPointFlagTraits::BeginTrajectoryFlags;
+constexpr recob::TrajectoryPointFlagTraits::FlagIndex_t recob::TrajectoryPointFlagTraits::HitIgnored;
+constexpr recob::TrajectoryPointFlagTraits::FlagIndex_t recob::TrajectoryPointFlagTraits::NoPoint;
+constexpr recob::TrajectoryPointFlagTraits::FlagIndex_t recob::TrajectoryPointFlagTraits::Suspicious;
+constexpr recob::TrajectoryPointFlagTraits::FlagIndex_t recob::TrajectoryPointFlagTraits::Merged;
+constexpr recob::TrajectoryPointFlagTraits::FlagIndex_t recob::TrajectoryPointFlagTraits::DeltaRay;
+constexpr recob::TrajectoryPointFlagTraits::FlagIndex_t recob::TrajectoryPointFlagTraits::DetectorIssue;
+constexpr recob::TrajectoryPointFlagTraits::FlagIndex_t recob::TrajectoryPointFlagTraits::Shared;
+constexpr recob::TrajectoryPointFlagTraits::FlagIndex_t recob::TrajectoryPointFlagTraits::TrajReserved1;
+constexpr recob::TrajectoryPointFlagTraits::FlagIndex_t recob::TrajectoryPointFlagTraits::EndTrajectoryFlags;
+constexpr recob::TrajectoryPointFlagTraits::FlagIndex_t recob::TrajectoryPointFlagTraits::BeginTrackFlags;
+constexpr recob::TrajectoryPointFlagTraits::FlagIndex_t recob::TrajectoryPointFlagTraits::ExcludedFromFit;
+constexpr recob::TrajectoryPointFlagTraits::FlagIndex_t recob::TrajectoryPointFlagTraits::Rejected;
+constexpr recob::TrajectoryPointFlagTraits::FlagIndex_t recob::TrajectoryPointFlagTraits::Reinterpreted;
+constexpr recob::TrajectoryPointFlagTraits::FlagIndex_t recob::TrajectoryPointFlagTraits::TrackReserved5;
+constexpr recob::TrajectoryPointFlagTraits::FlagIndex_t recob::TrajectoryPointFlagTraits::TrackReserved4;
+constexpr recob::TrajectoryPointFlagTraits::FlagIndex_t recob::TrajectoryPointFlagTraits::TrackReserved3;
+constexpr recob::TrajectoryPointFlagTraits::FlagIndex_t recob::TrajectoryPointFlagTraits::TrackReserved2;
+constexpr recob::TrajectoryPointFlagTraits::FlagIndex_t recob::TrajectoryPointFlagTraits::TrackReserved1;
+constexpr recob::TrajectoryPointFlagTraits::FlagIndex_t recob::TrajectoryPointFlagTraits::EndTrackFlags;
+constexpr recob::TrajectoryPointFlagTraits::FlagIndex_t recob::TrajectoryPointFlagTraits::BeginExperimentReservedFlags;
+constexpr recob::TrajectoryPointFlagTraits::FlagIndex_t recob::TrajectoryPointFlagTraits::EndExperimentReservedFlags;
+constexpr recob::TrajectoryPointFlagTraits::FlagIndex_t recob::TrajectoryPointFlagTraits::BeginUserReservedFlags;
+constexpr recob::TrajectoryPointFlagTraits::FlagIndex_t recob::TrajectoryPointFlagTraits::EndUserReservedFlags;
 const recob::TrajectoryPointFlagTraits::NameMap_t
 recob::TrajectoryPointFlagTraits::names
   = recob::TrajectoryPointFlagTraits::initNames(); ///< Names of the flags
