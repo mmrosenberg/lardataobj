@@ -77,6 +77,11 @@ namespace recob {
       //! Calculate rotation matrices from local (u,v,w) to global (x,y,z) coordinates
       static Rotation_t Local3DToGlobal3DRotation(const Vector_t& planeDir);
       inline Rotation_t Local3DToGlobal3DRotation() const { return Local3DToGlobal3DRotation(fPlaneDir); }
+
+      double cosAlpha() const { return std::hypot(fPlaneDir.Y(), fPlaneDir.Z()); }
+      double sinAlpha() const { return fPlaneDir.X(); }
+      double cosBeta()  const { const double diryz = std::hypot(fPlaneDir.Y(), fPlaneDir.Z()); return (diryz != 0.0) ? -fPlaneDir.Y()/diryz : 0.0; }//fixme cache!
+      double sinBeta()  const { const double diryz = std::hypot(fPlaneDir.Y(), fPlaneDir.Z()); return (diryz != 0.0) ?  fPlaneDir.Z()/diryz : 0.0; }
       
     private:
       Point_t fPlanePos;
