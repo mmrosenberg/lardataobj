@@ -18,7 +18,7 @@ namespace recob {
     // par5d[3] = (par6d[4]*cosbeta + par6d[5]*sinbeta)/(par6d[3]*sinalpha - par6d[4]*cosalpha*sinbeta + par6d[5]*cosalpha*cosbeta);
     // par5d[4] = 1./sqrt(par6d[3]*par6d[3]+par6d[4]*par6d[4]+par6d[5]*par6d[5]);
 
-    SVector6 Plane::Local5DToGlobal6DParameters(const SVector5& par5d, const Point_t& planePos,const Vector_t& planeDir) {
+    SVector6 Plane::Local5DToGlobal6DParameters(const SVector5& par5d, const Point_t& planePos,const Vector_t& planeDir, bool trackAlongPlaneDir) {
       SVector6 par6d;
       //note: we assume planeDir is a unit vector!
       const double diryz    = std::hypot(planeDir.Y(), planeDir.Z());
@@ -33,12 +33,13 @@ namespace recob {
       // const double cosalpha = std::cos(alpha);
       // const double sinbeta = std::sin(beta);
       // const double cosbeta = std::cos(beta);
+      const double denom = (trackAlongPlaneDir ? par5d[4]*std::sqrt(1. + par5d[2]*par5d[2] + par5d[3]*par5d[3]) : -par5d[4]*std::sqrt(1. + par5d[2]*par5d[2] + par5d[3]*par5d[3]) );
       par6d[0] = planePos.X() + par5d[0]*cosalpha;
       par6d[1] = planePos.Y() + par5d[0]*sinalpha*sinbeta + par5d[1]*cosbeta;
       par6d[2] = planePos.Z() - par5d[0]*sinalpha*cosbeta + par5d[1]*sinbeta;
-      par6d[3] = (par5d[2]*cosalpha + 1.*sinalpha)/(par5d[4]*std::sqrt(1. + par5d[2]*par5d[2] + par5d[3]*par5d[3]));
-      par6d[4] = (par5d[2]*sinalpha*sinbeta + par5d[3]*cosbeta - cosalpha*sinbeta)/(par5d[4]*std::sqrt(1. + par5d[2]*par5d[2] + par5d[3]*par5d[3]));
-      par6d[5] = (-par5d[2]*sinalpha*cosbeta + par5d[3]*sinbeta + cosalpha*cosbeta)/(par5d[4]*std::sqrt(1. + par5d[2]*par5d[2] + par5d[3]*par5d[3]));
+      par6d[3] = (par5d[2]*cosalpha + 1.*sinalpha)/denom;
+      par6d[4] = (par5d[2]*sinalpha*sinbeta + par5d[3]*cosbeta - cosalpha*sinbeta)/denom;
+      par6d[5] = (-par5d[2]*sinalpha*cosbeta + par5d[3]*sinbeta + cosalpha*cosbeta)/denom;
       return par6d;
     }
 

@@ -48,34 +48,35 @@ namespace recob {
       //! Local coordinates are on the plane with origin at planePos and orthogonal to planeDir.
       //! It is responsibility of the user to make sure the global position lies on the plane
       static SVector5 Global6DToLocal5DParameters(const SVector6& par6d, const Point_t& planePos, const Vector_t& planeDir);
-      inline SVector5 Global6DToLocal5DParameters(const SVector6& par6d) { return Global6DToLocal5DParameters(par6d, fPlanePos, fPlaneDir); }
+      inline SVector5 Global6DToLocal5DParameters(const SVector6& par6d) const { return Global6DToLocal5DParameters(par6d, fPlanePos, fPlaneDir); }
 
       //! Function to convert parameters from local to global coordinates.
       //! Local coordinates are on the plane with origin at planePos and orthogonal to planeDir.
-      static SVector6 Local5DToGlobal6DParameters(const SVector5& par5d, const Point_t& planePos, const Vector_t& planeDir);
-      inline SVector6 Local5DToGlobal6DParameters(const SVector5& par5d) { return Local5DToGlobal6DParameters(par5d, fPlanePos, fPlaneDir); }
+      //! trackAlongPlaneDir is as given by trackDir.Dot(planeDir)>0
+      static SVector6 Local5DToGlobal6DParameters(const SVector5& par5d, const Point_t& planePos, const Vector_t& planeDir, bool trackAlongPlaneDir = true);
+      inline SVector6 Local5DToGlobal6DParameters(const SVector5& par5d, bool trackAlongPlaneDir = true) const { return Local5DToGlobal6DParameters(par5d, fPlanePos, fPlaneDir, trackAlongPlaneDir); }
 
       //! Compute the jacobian to translate track covariance from global to local coordinates.
       //! The track momentum is needed to compute the jacobian.
       //! Local coordinates are on the plane orthogonal to planeDir (in most cases this will be the same direction as the momentum, but the function is generic).
       static SMatrix65 Local5DToGlobal6DJacobian(const Vector_t& momentum, const Vector_t& planeDir);
-      inline SMatrix65 Local5DToGlobal6DJacobian(const Vector_t& momentum) { return Local5DToGlobal6DJacobian(momentum,fPlaneDir); }
+      inline SMatrix65 Local5DToGlobal6DJacobian(const Vector_t& momentum) const { return Local5DToGlobal6DJacobian(momentum,fPlaneDir); }
 
       //! Compute the jacobian to translate track covariance from local to global coordinates.
       //! The track momentum is needed to compute the jacobian.
       //! Local coordinates are on the plane orthogonal to planeDir (in most cases this will be the same direction as the momentum, but the function is generic).
       static SMatrix56 Global6DToLocal5DJacobian(const Vector_t& momentum, const Vector_t& planeDir);
-      inline SMatrix56 Global6DToLocal5DJacobian(const Vector_t& momentum) { return Global6DToLocal5DJacobian(momentum,fPlaneDir); }
+      inline SMatrix56 Global6DToLocal5DJacobian(const Vector_t& momentum) const { return Global6DToLocal5DJacobian(momentum,fPlaneDir); }
 
       //!
       //! Calculate rotation matrices from global (x,y,z) to local (u,v,w) coordinates
       static Rotation_t Global3DToLocal3DRotation(const Vector_t& planeDir);
-      inline Rotation_t Global3DToLocal3DRotation() { return Global3DToLocal3DRotation(fPlaneDir); }
+      inline Rotation_t Global3DToLocal3DRotation() const { return Global3DToLocal3DRotation(fPlaneDir); }
       
       //!
       //! Calculate rotation matrices from local (u,v,w) to global (x,y,z) coordinates
       static Rotation_t Local3DToGlobal3DRotation(const Vector_t& planeDir);
-      inline Rotation_t Local3DToGlobal3DRotation() { return Local3DToGlobal3DRotation(fPlaneDir); }
+      inline Rotation_t Local3DToGlobal3DRotation() const { return Local3DToGlobal3DRotation(fPlaneDir); }
       
     private:
       Point_t fPlanePos;
