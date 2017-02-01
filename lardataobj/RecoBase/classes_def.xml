@@ -438,8 +438,9 @@
   <class name="recob::TrajectoryPointFlagTraits" />
   <class name="recob::TrajectoryPointFlags" />
   <class name="std::vector<recob::TrajectoryPointFlags>" />
-  <class name="std::bitset<32>" />
-  <class name="std::_Base_bitset<1>" />
+  <class name="util::flags::Bits_t<unsigned int>" />
+  <class name="util::flags::BitMask<unsigned int>" />
+  <class name="util::flags::FlagSet<32U, unsigned int>" />
   
   <!--   class -->
   <class name="recob::TrackTrajectory" />

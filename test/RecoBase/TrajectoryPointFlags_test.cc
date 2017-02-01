@@ -50,6 +50,15 @@ void TrajectoryPointFlagsTest_DefaultConstructor() {
    */
   constexpr recob::TrajectoryPointFlags flags;
   
+  // we build our expectation based on the following mask:
+  constexpr auto expectedMask = recob::TrajectoryPointFlags::DefaultFlagsMask();
+  std::set<unsigned int> expectedDefined, expectedSet;
+  for (unsigned int i = 0; i < expectedMask.capacity(); ++i) {
+    if (expectedMask.isUndefined(i)) continue;
+    expectedDefined.insert(i);
+    if (expectedMask.isSet(i)) expectedSet.insert(i);
+  } // for
+  
   /*
    * void dump(...) const;
    */
@@ -70,6 +79,8 @@ void TrajectoryPointFlagsTest_DefaultConstructor() {
     ++i)
   {
     bool const allocated = (i < trkflag::maxFlags());
+    bool const defined = (expectedDefined.count(i) > 0);
+    bool const set = (expectedSet.count(i) > 0);
     
     BOOST_TEST_MESSAGE("Testing flag #" << i);
     
@@ -84,7 +95,8 @@ void TrajectoryPointFlagsTest_DefaultConstructor() {
       /*
        * bool test(FlagIndex_t flag) const
        */
-      BOOST_CHECK_THROW(flags.test(i), std::out_of_range);
+      BOOST_CHECK_THROW
+        (flags.test(i), recob::TrajectoryPointFlags::Flags_t::OutOfRangeError);
       
       continue;
     } // if not allocated
@@ -95,66 +107,78 @@ void TrajectoryPointFlagsTest_DefaultConstructor() {
     BOOST_CHECK_EQUAL(flags.isFlag(i), allocated);
     
     /*
+     * constexpr bool isDefined(FlagIndex_t flag) const
+     */
+    BOOST_CHECK_EQUAL(flags.isDefined(i), defined);
+    
+    /*
      * bool test(FlagIndex_t flag) const
      */
-    BOOST_CHECK(!flags.test(i)); // assuming nothing set by default; may change
+    if (!defined) {
+      BOOST_CHECK_THROW(
+        flags.test(i), recob::TrajectoryPointFlags::Flags_t::FlagNotDefinedError
+        );
+      continue;
+    }
+    BOOST_CHECK_EQUAL(flags.test(i), set);
     
     /*
      * get(FlagIndex_t flag) const
      */
-    BOOST_CHECK(!flags.get(i)); // assuming nothing set by default; may change
+    BOOST_CHECK_EQUAL(flags.get(i), set);
     
     /*
      * bool isSet(FlagIndex_t flag) const
      */
-    BOOST_CHECK(!flags.isSet(i)); // assuming nothing set by default; may change
+    BOOST_CHECK_EQUAL(flags.isSet(i), set);
     
     /*
      * bool isUnset(FlagIndex_t flag) const
      */
-    BOOST_CHECK(flags.isUnset(i)); // assuming nothing set by default; may change
-    
-    /*
-     * bool isHitIgnored() const
-     */
-    BOOST_CHECK(!flags.isHitIgnored());
-    
-    /*
-     * bool isPointValid() const
-     */
-    BOOST_CHECK(flags.isPointValid());
+    BOOST_CHECK_EQUAL(!flags.isUnset(i), !set);
     
   } // for
-    
+  
   /*
-   * Mask_t bits() const
+   * bool isHitIgnored() const
+   */
+  BOOST_CHECK(flags.isHitIgnored());
+  
+  /*
+   * bool isPointValid() const
+   */
+  BOOST_CHECK(flags.isPointValid());
+  
+  /*
+   * Mask_t mask() const
    */
   BOOST_CHECK_EQUAL
-    (flags.bits(), recob::TrajectoryPointFlags::DefaultFlagsMask());
+    (flags.mask(), recob::TrajectoryPointFlags::DefaultFlagsMask());
   
+  // assuming the default to be: trkflag::NoPoint
   /*
    * bool none(Mask_t bits) const
    */
-  BOOST_CHECK(flags.none(recob::TrajectoryPointFlags::makeMask
+  BOOST_CHECK(!flags.none(recob::TrajectoryPointFlags::makeMask
     (trkflag::NoPoint, trkflag::HitIgnored)
     ));
   
   /*
    * bool none(Flags...) const
    */
-  BOOST_CHECK(flags.none(trkflag::NoPoint, trkflag::HitIgnored));
+  BOOST_CHECK(!flags.none(trkflag::NoPoint, trkflag::HitIgnored));
   
   /*
    * bool any(Mask_t bits) const
    */
-  BOOST_CHECK(!flags.any(recob::TrajectoryPointFlags::makeMask
+  BOOST_CHECK(flags.any(recob::TrajectoryPointFlags::makeMask
     (trkflag::NoPoint, trkflag::HitIgnored)
     ));
   
   /*
    * bool any(Flags...) const
    */
-  BOOST_CHECK(!flags.any(trkflag::NoPoint, trkflag::HitIgnored));
+  BOOST_CHECK(flags.any(trkflag::NoPoint, trkflag::HitIgnored));
   
   /*
    * bool all(Mask_t bits) const
@@ -187,7 +211,7 @@ void TrajectoryPointFlagsTest_FlagsConstructor() {
   using trkflag = recob::TrajectoryPointFlags::flag;
   constexpr auto InvalidHitIndex = recob::TrajectoryPointFlags::InvalidHitIndex;
   
-  std::set<recob::TrajectoryPointFlags::FlagIndex_t> const expectedBits
+  std::set<recob::TrajectoryPointFlags::Flag_t> const expectedBits
     = { trkflag::NoPoint, trkflag::HitIgnored };
   
   constexpr auto flagbitmask = recob::TrajectoryPointFlags::makeMask
@@ -280,9 +304,9 @@ void TrajectoryPointFlagsTest_FlagsConstructor() {
   } // for
     
   /*
-   * Mask_t bits() const
+   * Mask_t mask() const
    */
-  BOOST_CHECK_EQUAL(flags.bits(), flagbitmask);
+  BOOST_CHECK_EQUAL(flags.mask(), flagbitmask);
   
   /*
    * bool none(Mask_t bits) const
@@ -339,17 +363,29 @@ void TrajectoryPointFlagsTest_BitmaskConstructor() {
   
   using trkflag = recob::TrajectoryPointFlags::flag;
   
-  std::set<recob::TrajectoryPointFlags::FlagIndex_t> const expectedBits
-    = { trkflag::NoPoint };
+  using Flag_t = recob::TrajectoryPointFlags::Flag_t;
+  std::set<Flag_t> const expectedValues
+    = { trkflag::NoPoint, trkflag::Rejected };
+  std::set<Flag_t> const expectedFlags
+    = { trkflag::NoPoint, trkflag::Rejected, trkflag::HitIgnored };
   
-  constexpr auto flagbitmask = recob::TrajectoryPointFlags::makeMask
-    (trkflag::NoPoint);
+  constexpr auto flagbitmask = recob::TrajectoryPointFlags::makeMask(
+    trkflag::NoPoint, trkflag::Rejected,
+    util::flags::Unset(trkflag::HitIgnored)
+    );
   
   /*
    * constexpr TrajectoryPointFlags(FromMaskTag_t, HitIndex_t, Mask_t)
    */
   constexpr recob::TrajectoryPointFlags flags(12, flagbitmask);
   
+  BOOST_CHECK_EQUAL(flags, recob::TrajectoryPointFlags(12, 
+    trkflag::NoPoint + trkflag::Rejected + -trkflag::HitIgnored));
+/*
+  static_assert(flags == recob::TrajectoryPointFlags(12, 
+    trkflag::NoPoint + trkflag::Rejected + -trkflag::HitIgnored),
+    "Constexpr declaration with mask failed.");
+  */
   
   /*
    * void dump(...) const;
@@ -390,87 +426,127 @@ void TrajectoryPointFlagsTest_BitmaskConstructor() {
       continue;
     } // if not allocated
     
-    bool const expected = (expectedBits.count(i) > 0);
+    Flag_t flag { i }; // flag with bit index i set
+    
+    bool const defined = (expectedFlags.count(flag) > 0);
+    bool const set = (expectedValues.count(flag) > 0);
     
     /*
-     * constexpr bool isFlag(FlagIndex_t flag) const
+     * constexpr bool isFlag(FlagIndex_t flagIndex) const
      */
     BOOST_CHECK_EQUAL(flags.isFlag(i), allocated);
     
     /*
-     * bool test(FlagIndex_t flag) const
+     * constexpr bool isFlag(Flag_t flag) const
      */
-    BOOST_CHECK_EQUAL(flags.test(i), expected);
+    BOOST_CHECK_EQUAL(flags.isFlag(flag), allocated);
     
     /*
-     * bool get(FlagIndex_t flag) const
+     * bool isDefined(Flag_t flag) const
      */
-    BOOST_CHECK_EQUAL(flags.get(i), expected);
+    BOOST_CHECK_EQUAL(flags.isDefined(i), defined);
+    BOOST_CHECK_EQUAL(flags.isDefined(flag), defined);
     
     /*
-     * bool isSet(FlagIndex_t flag) const
+     * bool test(Flag_t flag) const
      */
-    BOOST_CHECK_EQUAL(flags.isSet(i), expected);
+    if (defined) {
+      BOOST_CHECK_EQUAL(flags.test(i), set); // implicit conversion to Flag_t
+      BOOST_CHECK_EQUAL(flags.test(flag), set);
+    }
+    else {
+      BOOST_CHECK_THROW(flags.test(i), util::flags::errors::FlagNotDefined);
+      BOOST_CHECK_THROW(flags.test(flag), util::flags::errors::FlagNotDefined);
+      continue;
+    }
     
     /*
-     * bool isUnset(FlagIndex_t flag) const
+     * bool get(Flag_t flag) const
      */
-    BOOST_CHECK_EQUAL(flags.isUnset(i), !expected);
+    BOOST_CHECK_EQUAL(flags.get(i), set);
+    BOOST_CHECK_EQUAL(flags.get(flag), set);
     
     /*
-     * bool isHitIgnored() const
+     * bool isSet(Flag_t flag) const
      */
-    BOOST_CHECK_EQUAL
-      (flags.isHitIgnored(), (expectedBits.count(trkflag::HitIgnored) > 0));
+    BOOST_CHECK_EQUAL(flags.isSet(i), set);
+    BOOST_CHECK_EQUAL(flags.isSet(flag), set);
     
     /*
-     * bool isPointValid() const
+     * bool isUnset(Flag_t flag) const
      */
-    BOOST_CHECK_EQUAL
-      (flags.isPointValid(), (expectedBits.count(trkflag::NoPoint) == 0));
+    BOOST_CHECK_EQUAL(flags.isUnset(i), !set);
+    BOOST_CHECK_EQUAL(flags.isUnset(flag), !set);
     
   } // for
-    
+  
   /*
-   * Mask_t bits() const
+   * Mask_t mask() const
    */
-  BOOST_CHECK_EQUAL(flags.bits(), flagbitmask);
+  BOOST_CHECK_EQUAL(flags.mask(), flagbitmask);
+  
+  // The following tets is based on a definition of:
+  // trkflag::NoPoint + trkflag::Rejected - trkflag::HitIgnored
+  
+  /*
+   * bool all(Flags... flags) const;
+   * bool any(Flags... flags) const;
+   * bool none(Flags... flags) const;
+   */
+  BOOST_CHECK( flags.all(
+    trkflag::NoPoint, trkflag::Rejected, trkflag::HitIgnored
+    ));
+  BOOST_CHECK( flags.any(
+    trkflag::NoPoint, trkflag::Rejected, trkflag::HitIgnored
+    ));
+  BOOST_CHECK(!flags.none(
+    trkflag::NoPoint, trkflag::Rejected, trkflag::HitIgnored
+    ));
+  
+  BOOST_CHECK(!flags.none(trkflag::NoPoint, trkflag::HitIgnored));
+  BOOST_CHECK( flags.any (trkflag::NoPoint, trkflag::HitIgnored));
+  BOOST_CHECK(!flags.all (trkflag::NoPoint, trkflag::HitIgnored));
+  
+  BOOST_CHECK( flags.all (trkflag::NoPoint, trkflag::Rejected));
+  BOOST_CHECK( flags.any (trkflag::NoPoint, trkflag::Rejected));
+  BOOST_CHECK(!flags.none(trkflag::NoPoint, trkflag::Rejected));
+  
+  BOOST_CHECK(!flags.all(
+    trkflag::NoPoint, trkflag::Rejected, trkflag::DetectorIssue
+    ));
+  BOOST_CHECK( flags.any(
+    trkflag::NoPoint, trkflag::Rejected, trkflag::DetectorIssue
+    ));
+  BOOST_CHECK(!flags.none(
+    trkflag::NoPoint, trkflag::Rejected, trkflag::DetectorIssue
+    ));
   
   /*
    * bool none(Mask_t bits) const
+   * bool any(Mask_t bits) const
+   * bool all(Mask_t bits) const
    */
   BOOST_CHECK(!flags.none(recob::TrajectoryPointFlags::makeMask
     (trkflag::NoPoint, trkflag::HitIgnored)
     ));
-  
-  /*
-   * bool none(Flags...) const
-   */
-  BOOST_CHECK(!flags.none(trkflag::NoPoint, trkflag::HitIgnored));
-  
-  /*
-   * bool any(Mask_t bits) const
-   */
   BOOST_CHECK(flags.any(recob::TrajectoryPointFlags::makeMask
     (trkflag::NoPoint, trkflag::HitIgnored)
     ));
-  
-  /*
-   * bool any(Flags...) const
-   */
-  BOOST_CHECK(flags.any(trkflag::NoPoint, trkflag::HitIgnored));
-  
-  /*
-   * bool all(Mask_t bits) const
-   */
   BOOST_CHECK(!flags.all(recob::TrajectoryPointFlags::makeMask
     (trkflag::NoPoint, trkflag::HitIgnored)
     ));
   
   /*
-   * bool all(Flags...) const
+   * bool isHitIgnored() const
    */
-  BOOST_CHECK(!flags.all(trkflag::NoPoint, trkflag::HitIgnored));
+  BOOST_CHECK_EQUAL
+    (flags.isHitIgnored(), (expectedValues.count(trkflag::HitIgnored) > 0));
+  
+  /*
+   * bool isPointValid() const
+   */
+  BOOST_CHECK_EQUAL
+    (flags.isPointValid(), (expectedValues.count(trkflag::NoPoint) == 0));
   
   /*
    * hasOriginalHitIndex() const

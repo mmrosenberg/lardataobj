@@ -170,7 +170,8 @@ namespace recob {
      */
     bool HasValidPoint(size_t i) const
       {
-        return Trajectory().HasPoint(i) && !FlagsAtPoint(i).test(flag::NoPoint);
+        return Trajectory().HasPoint(i)
+		    && !FlagsAtPoint(i).isSet(flag::NoPoint);
       }
     
     /**

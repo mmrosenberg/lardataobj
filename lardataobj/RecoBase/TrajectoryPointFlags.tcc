@@ -17,15 +17,6 @@
 
 
 //------------------------------------------------------------------------------
-template <typename Stream, typename T>
-void recob::details::printBinary(Stream&& out, T const& data, size_t bits) {
-  // TODO implement the real thing
-  out << data;
-} // recob::details::printBinary()
-
-
-
-//------------------------------------------------------------------------------
 template <typename Stream>
 void recob::TrajectoryPointFlags::dump(
   Stream&& out,
@@ -37,27 +28,34 @@ void recob::TrajectoryPointFlags::dump(
    * Information printed out (`verbosity` argument)
    * -----------------------------------------------
    * 
-   * * level `0`: number of the flags set, and index
+   * * level `0`: mask of the flags, and index
    * * level `1`: name of the flags set, and index
    * 
    */
   
-  out << indentFirst << "{";
-  unsigned int count = 0;
-  for (FlagIndex_t index = 0; index < flag::maxFlags(); ++index) {
-    if (!get(index)) continue;
-    if (count++) out << ',';
-    out << ' ';
-    switch (verbosity) {
-      case 0:
-        out << index;
-        break;
-      default:
-        out << flag::name(index);
-    } // switch
-  } // for
-  
-  out << " }";
+  //----------------------------------------------------------------------------
+  out << indentFirst;
+  if (verbosity == 0) {
+    fFlags.dump(std::forward<Stream>(out));
+  }
+  else { // verbosity >= 1
+    out << "{";
+    unsigned int count = 0;
+    for (FlagIndex_t index = 0; index < flag::maxFlags(); ++index) {
+      if (!isDefined(index)) continue;
+      if (count++) out << ',';
+      out << ' ';
+      if (isUnset(index)) out << '!';
+      switch (verbosity) {
+        case 0:
+          out << index;
+          break;
+        default:
+          out << flag::name(index);
+      } // switch
+    } // for
+    out << " }";
+  }
   if (hasOriginalHitIndex()) out << ", hit index: " << fromHit();
   else out << " (no hit index)";
   

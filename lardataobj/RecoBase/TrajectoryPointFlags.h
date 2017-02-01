@@ -10,8 +10,11 @@
 #ifndef LARDATAOBJ_RECOBASE_TRAJECTORYPOINTFLAGS_H
 #define LARDATAOBJ_RECOBASE_TRAJECTORYPOINTFLAGS_H
 
+// LArSoft libraries
+#include "lardataobj/Utilities/FlagSet.h"
+#include "lardataobj/Utilities/BitMask.h"
+
 // C/C++ standard libraries
-#include <bitset>
 #include <array>
 #include <string>
 #include <stdexcept> // std::out_of_range
@@ -22,13 +25,6 @@
 
 namespace recob {
   
-  namespace details {
-    
-    /// Prints a number in binary form
-    template <typename Stream, typename T>
-    void printBinary(Stream&& out, T const& data, size_t bits);
-    
-  } // namespace details
   
   /**
    * @brief Namespace for the trajectory point flags
@@ -63,10 +59,20 @@ namespace recob {
    */
   struct TrajectoryPointFlagTraits {
     
-    using FlagIndex_t = size_t; ///< Type for bit indices.
-    
     /// Number of flags allocated (may be unused and unassigned).
-    static constexpr FlagIndex_t MaxFlags = 32;
+    static constexpr unsigned int MaxFlags = 32;
+    
+    /// Type of mask of bits.
+    using Flags_t = util::flags::FlagSet<MaxFlags>;
+    
+    /// Type of mask of bits.
+    using Mask_t = Flags_t::Mask_t;
+    
+    /// Type of single flag.
+    using Flag_t = Flags_t::Flag_t;
+    
+    /// Type of index of a single flag.
+    using FlagIndex_t = Flags_t::FlagIndex_t;
     
     /// @{
     /**
@@ -90,16 +96,29 @@ namespace recob {
      * the failure of the channel was not yet known at the time the trajectory
      * was reconstructed.
      * 
+     * 
+     * Implementation note
+     * --------------------
+     * 
+     * The single flags are of type `Flag_t`, which is effectively represented
+     * as a bit mask with a single bit set.
+     * The boundary flag indices instead are actual indices (type `FlagIndex_t`)
+     * which allows them to be beyond the range of the mask (think especially
+     * to `EndExperimentReservedFlags`, whose value of @f$ 2^{32} @f$ is just
+     * beyond the range of a 32-bit integer).
+     * Each flag can yield its index by the `index()` method, and this can be
+     * used to compare them to flag indices.
+     * 
      */
     
     /// First trajectory flag index.
     static constexpr FlagIndex_t BeginTrajectoryFlags = 0;
     
     /// Hit was not included for the computation of the trajectory.
-    static constexpr FlagIndex_t HitIgnored = 0;
+    static constexpr Flag_t HitIgnored = 0;
     
     /// The trajectory point is not defined.
-    static constexpr FlagIndex_t NoPoint = 1;
+    static constexpr Flag_t NoPoint = 1;
     
     /**
      * @brief The point reconstruction is somehow questionable.
@@ -109,22 +128,22 @@ namespace recob {
      * another track nearby or a &delta; ray emission. Reconstruction of the
      * point might be biased, but we can't guess which type of bias we have.
      */
-    static constexpr FlagIndex_t Suspicious = 2;
+    static constexpr Flag_t Suspicious = 2;
     
     /// The hit might have contribution from particles other than this.
-    static constexpr FlagIndex_t Merged = 3;
+    static constexpr Flag_t Merged = 3;
     
     /// The hit might have contribution from a &delta; ray.
-    static constexpr FlagIndex_t DeltaRay = 4;
+    static constexpr Flag_t DeltaRay = 4;
     
     /// The hit is associated to a problematic channel.
-    static constexpr FlagIndex_t DetectorIssue = 5;
+    static constexpr Flag_t DetectorIssue = 5;
     
     /// The hit is known to be associated also to another trajectory.
-    static constexpr FlagIndex_t Shared = 6;
+    static constexpr Flag_t Shared = 6;
     
     /// Reserved for a future trajectory flag.
-    static constexpr FlagIndex_t TrajReserved1 = 7;
+    static constexpr Flag_t TrajReserved1 = 7;
     
     /// After-the-last trajectory flag index
     static constexpr FlagIndex_t EndTrajectoryFlags = 8;
@@ -149,10 +168,10 @@ namespace recob {
     
     /// The point belongs to this track but it was not included in the fit
     /// because dubious in some sense.
-    static constexpr FlagIndex_t ExcludedFromFit = 8;
+    static constexpr Flag_t ExcludedFromFit = 8;
     
     /// The hit is extraneous to this track.
-    static constexpr FlagIndex_t Rejected = 9;
+    static constexpr Flag_t Rejected = 9;
     
     /**
      * @brief The hit content has been elaborated before being used in the fit.
@@ -167,22 +186,22 @@ namespace recob {
      * flag, it may be useful to consult with LArSoft experts to determine if
      * further support is needed for your use case.
      */
-    static constexpr FlagIndex_t Reinterpreted = 10;
+    static constexpr Flag_t Reinterpreted = 10;
     
     /// Reserved for a future track flag.
-    static constexpr FlagIndex_t TrackReserved5 = 11;
+    static constexpr Flag_t TrackReserved5 = 11;
     
     /// Reserved for a future track flag.
-    static constexpr FlagIndex_t TrackReserved4 = 12;
+    static constexpr Flag_t TrackReserved4 = 12;
     
     /// Reserved for a future track flag.
-    static constexpr FlagIndex_t TrackReserved3 = 13;
+    static constexpr Flag_t TrackReserved3 = 13;
     
     /// Reserved for a future track flag.
-    static constexpr FlagIndex_t TrackReserved2 = 14;
+    static constexpr Flag_t TrackReserved2 = 14;
     
     /// Reserved for a future track flag.
-    static constexpr FlagIndex_t TrackReserved1 = 15;
+    static constexpr Flag_t TrackReserved1 = 15;
     
     /// After-the-last track flag index.
     static constexpr FlagIndex_t EndTrackFlags = 16;
@@ -218,15 +237,17 @@ namespace recob {
     
     
     /// Returns whether the specified index represents a valid flag
-    static constexpr bool isFlag(FlagIndex_t flag)
-      { return flag < MaxFlags; }
+    static constexpr bool isFlag(Flag_t flag)
+      { return flag.index() < MaxFlags; }
     
     /// @{
     /// @name Flag names
     
     /// Returns a string with the name of the specified flag
-    static std::string name(FlagIndex_t flag)
-      { return (flag < MaxFlags)? names[flag]: invalidFlagName(flag); }
+    static std::string name(Flag_t flag)
+      {
+        return isFlag(flag)? names[flag.index()]: invalidFlagName(flag.index());
+      }
     
     /// Type storing flag names.
     using NameMap_t = std::array<std::string, MaxFlags>;
@@ -241,19 +262,20 @@ namespace recob {
       "Too many trajectory flags");
     static_assert(EndTrackFlags <= BeginExperimentReservedFlags,
       "Too many track flags");
-    static_assert(EndExperimentReservedFlags <= BeginUserReservedFlags,
-      "Too many experiment-defined flags");
+    static_assert(
+      EndExperimentReservedFlags <= BeginUserReservedFlags,
+      "Too many experiment-defined flags"
+      );
     static_assert(EndUserReservedFlags <= MaxFlags,
       "Too many user-defined flags");
     
     static const NameMap_t names; ///< Names of the flags.
     
     /// Combines a base name and an index into a flag name.
-    static std::string decorateFlagName
-      (std::string baseName, FlagIndex_t flag);
+    static std::string decorateFlagName(std::string baseName, Flag_t flag);
 
     /// Returns the name of an invalid flag with the specified index.
-    static std::string invalidFlagName(FlagIndex_t flag);
+    static std::string invalidFlagName(Flag_t flag);
     
     /// Initializes a range of flag names with default (decorated) names.
     static void initDefaultFlagRangeNames(
@@ -299,35 +321,17 @@ namespace recob {
     /// Type of flag traits (indices and meaning of flags).
     using flag = TrajectoryPointFlagTraits;
     
-    using FlagIndex_t = typename flag::FlagIndex_t; ///< Type of flag index.
+    
+    using Flags_t = flag::Flags_t; ///< Type holding the flags.
+    
+    using Mask_t = Flags_t::Mask_t; ///< Type holding the flags.
+    
+    using Flag_t = Flags_t::Flag_t; ///< Type of single flag.
+    
+    using FlagIndex_t = Flags_t::FlagIndex_t; ///< Type of index of single flag.
     
     using HitIndex_t = unsigned int; ///< Type for hit index.
     
-    using Flags_t = std::bitset<flag::maxFlags()>; ///< Type holding the flags.
-    
-    /// Type of a bit mask.
-    struct Mask_t {
-      using BitMask_t = decltype(std::declval<Flags_t>().to_ullong());
-      
-      /* explicit */ constexpr Mask_t(BitMask_t mask): mask(mask) {}
-      
-      explicit constexpr operator BitMask_t() const { return mask; }
-      
-      constexpr BitMask_t bits() const { return mask; }
-      
-      bool operator== (Mask_t const& other) const
-        { return other.bits() == bits(); }
-      bool operator!= (Mask_t const& other) const
-        { return other.bits() != bits(); }
-      
-      BitMask_t mask = 0; ///< bit map of the mask
-    }; // Mask_t
-    
-    /// Type to tag a constructor from bit mask
-    struct FromMaskTag_t {};
-    
-    /// Tag used to activate a constructor from a bit mask.
-    static constexpr FromMaskTag_t fromMask = {};
     
     /// Value marking an invalid hit index.
     static constexpr HitIndex_t InvalidHitIndex
@@ -357,7 +361,7 @@ namespace recob {
     constexpr TrajectoryPointFlags
       (HitIndex_t fromHit, Mask_t flags)
       : fFromHit(fromHit)
-      , fFlags(flags.bits())
+      , fFlags(flags)
       {}
     
     /**
@@ -387,35 +391,53 @@ namespace recob {
     
     /**
      * @brief Returns whether there is room for a flag with the specified index.
+     * @param flagIndex index of the flag
      * @return whether there is room for a flag with the specified index.
      * @@see isFlag()
      * 
      * The flag may still be not present, in the sense that the allocated bit
      * has no meaning associated to it and that flag is "unknown".
      */
-    constexpr bool isAllocated(FlagIndex_t flag) const
-      { return isFlag(flag); }
+    constexpr bool isAllocated(FlagIndex_t flagIndex) const
+      { return flagIndex < flags().capacity(); }
     
     /// Returns the number of defined flags.
     constexpr FlagIndex_t nFlags() const
       { return flag::maxFlags(); }
     
     /// Returns whether a flag with the specified index is known.
-    /// (all of them are)
-    constexpr bool isFlag(FlagIndex_t flag) const
-      { return flag < flag::maxFlags(); }
+    /// (all allocated flags are)
+    constexpr bool isFlag(FlagIndex_t flagIndex) const
+      { return flags().isFlag(flagIndex); }
+    
+    /// Returns whether a flag with the specified index is known.
+    /// (all allocated flags are)
+    constexpr bool isFlag(Flag_t flag) const
+      { return flags().isFlag(flag); }
     
     /**
      * @brief Returns whether the specified flag is set.
-     * @param flag index of the flag to be tested 
+     * @param flagIndex index of the flag to be tested 
      * @return whether the specified flag is set
-     * @throw std::out_of_range if the flag is not defined (invalid index)
+     * @throw Flags_t::OutOfRangeError if the flag is not known (invalid index)
+     * @throw Flags_t::FlagNotDefinedError if the flag is not defined
      * 
      * A single flag is tested.
-     * 
      */
-    bool test(FlagIndex_t flag) const
-      { return fFlags.test(flag); }
+    bool test(FlagIndex_t index) const
+      { return flags().test(index); }
+    
+    /**
+     * @brief Returns whether the specified flag is set.
+     * @param flag flag to be tested 
+     * @return whether the specified flag is set
+     * @throw Flags_t::OutOfRangeError if the flag is not known (invalid index)
+     * @throw Flags_t::FlagNotDefinedError if the flag is not defined
+     * 
+     * A single flag is tested.
+     */
+    bool test(Flag_t flag) const
+      { return flags().test(flag); }
     
     
     /**
@@ -426,9 +448,18 @@ namespace recob {
      * A single flag is tested.
      * If the flag is not defined (invalid index), the result is undefined.
      */
-    bool get(FlagIndex_t flag) const
-      { return fFlags[flag]; }
+    bool get(Flag_t flag) const
+      { return flags().get(flag); }
     
+    
+    /**
+     * @brief Returns true if the flag has been assigned a value.
+     * @param flag the flag index
+     * @return true if the flag has been assigned a value
+     * @see isSet(), isUnset(), test()
+     */
+    bool isDefined(Flag_t flag) const
+      { return flags().isDefined(flag); }
     
     /**
      * @brief Returns true if the flag exists and is set.
@@ -436,8 +467,8 @@ namespace recob {
      * @return true if the flag exists and is set
      * @see isUnset()
      */
-    bool isSet(FlagIndex_t flag) const
-      { return isFlag(flag) && get(flag); }
+    bool isSet(Flag_t flag) const
+      { return flags().isSet(flag); }
     
     /**
      * @brief Returns true if the flag exists and is not set.
@@ -445,40 +476,58 @@ namespace recob {
      * @return true if the flag exists and is not set
      * @see isSet()
      */
-    bool isUnset(FlagIndex_t flag) const
-      { return isFlag(flag) && !get(flag); }
+    bool isUnset(Flag_t flag) const
+      { return flags().isUnset(flag); }
     
+    /// @}
+    
+    /// Returns the entire set of bits as a bit mask.
+    constexpr Mask_t const& mask() const
+      { return flags().mask(); }
+    
+    /// Returns the entire set of bits.
+    constexpr Flags_t const& flags() const
+      { return fFlags; }
     
     
     /// @{
-    /// @name Access to flags by mask
+    /// @name Multiple flag access
     
-    /// Returns the entire set of bits as a bit mask
-    Mask_t bits() const { return fFlags.to_ullong(); }
-    
-    /// Returns whether any of the bits on the mask is set
-    bool any(Mask_t bits) const
-      { return !none(bits); }
-    
-    /// Returns whether any of the specified flags is set
+    /// Returns whether any of the specified flags is set.
     template <typename... Flags>
-    bool any(Flags... flagIndices) const;
+    bool any(Flags... flags) const;
     
-    /// Returns whether all of the bits on the mask are set
-    bool all(Mask_t bits) const
-      { return (fFlags & Flags_t(bits.bits())) == Flags_t(bits.bits()); }
-    
-    /// Returns whether all the specified flags are set
+    /// Returns whether all the specified flags are set.
     template <typename... Flags>
-    bool all(Flags... flagIndices) const;
+    bool all(Flags... flags) const;
     
-    /// Returns whether all of the bits on the mask are not set
-    bool none(Mask_t bits) const
-      { return (fFlags & Flags_t(bits.bits())).none(); }
-    
-    /// Returns whether all of the specified flags are not set
+    /// Returns whether all of the specified flags are not set.
     template <typename... Flags>
-    bool none(Flags... flagIndices) const;
+    bool none(Flags... flags) const;
+    
+    /**
+     * @brief Returns whether any of the bits set in the mask are set.
+     * @param mask mask with the bits to be checked defined and set (`isSet()`)
+     * @return whether any of the bits set in the mask are set
+     * 
+     * The method returns true if of all the flags that are set
+     * (`Mask_t::isSet()`) in mask, at least one is set.
+     * Flags of mask that are unset or undefined are ignored.
+     */
+    bool anySet(Mask_t mask) const
+      { return flags().anySet(mask); }
+    
+    /**
+     * @brief Returns whether none of the bits set in the mask is set.
+     * @param mask mask with the bits to be checked defined and set (`isSet()`)
+     * @return whether none of the bits set in the mask is set
+     * @see anySet()
+     * 
+     * This is the logical negation of `anySet()`.
+     */
+    bool noneSet(Mask_t mask) const
+      { return flags().noneSet(mask); }
+    
     
     
     /// @}
@@ -488,36 +537,36 @@ namespace recob {
     
     /// Returns whether the associated hit is considered ignored.
     bool isHitIgnored() const
-      { return get(flag::HitIgnored); }
+      { return isSet(flag::HitIgnored); }
     
     /// Returns whether the associated point is valid.
     bool isPointValid() const
-      { return !get(flag::NoPoint); }
+      { return !isSet(flag::NoPoint); }
     
     /// Returns whether the point has the `Merged` flag set.
     bool isMerged() const
-      { return get(flag::Merged); }
+      { return isSet(flag::Merged); }
     
     /// Returns whether the point has the `Shared` flag set.
     bool isShared() const
-      { return get(flag::Shared); }
+      { return isSet(flag::Shared); }
     
     /// Returns whether the point has the `DeltaRay` flag set.
     bool isDeltaRay() const
-      { return get(flag::DeltaRay); }
+      { return isSet(flag::DeltaRay); }
     
     /// Returns whether the point has the `DetectorIssue` flag set.
     bool hasDetectorIssues() const
-      { return get(flag::DetectorIssue); }
+      { return isSet(flag::DetectorIssue); }
     
     /// Returns whether the point has the `Suspicious` flag set.
     bool isOtherwiseSuspicious() const
-      { return get(flag::Suspicious); }
+      { return isSet(flag::Suspicious); }
     
     /// Returns whether the point has no flag set among `Shared`, `DeltaRay` and
     /// `Merged`.
     bool isExclusive() const
-      { return none(SomehowSharedMask()); }
+      { return noneSet(SomehowSharedMask()); }
     
     /// Returns whether the point has the `ExcludedFromFit` flag set.
     bool isExcludedFromFit() const
@@ -525,16 +574,16 @@ namespace recob {
     
     /// Returns whether the point has the `Rejected` flag set.
     bool belongsToTrack() const
-      { return !get(flag::Rejected); }
+      { return !isSet(flag::Rejected); }
     
     /// Returns whether the point has the `Reinterpreted` flag set.
     bool isHitReinterpreted() const
-      { return get(flag::Reinterpreted); }
+      { return isSet(flag::Reinterpreted); }
     
     /// Returns whether the point has the `ExcludedFromFit` or `Rejected` flag
     /// set.
     bool isIncludedInFit() const
-      { return none(ExcludedFromTrackFitMask()); }
+      { return noneSet(ExcludedFromTrackFitMask()); }
     
     /**
      * @brief Returns whether the trajectory point has any problem flagged.
@@ -572,6 +621,13 @@ namespace recob {
       { return fFromHit; }
     
     /// @}
+    
+    
+    /// Returns whether other has the same content as this one.
+    constexpr bool operator== (TrajectoryPointFlags const& other) const;
+    
+    /// Returns whether other has content different than this one.
+    constexpr bool operator!= (TrajectoryPointFlags const& other) const;
     
     
     /**
@@ -639,6 +695,9 @@ namespace recob {
       private:
     HitIndex_t fFromHit = InvalidHitIndex; ///< Index of the original hit.
     
+    /// Implementation detail of operator==()
+    constexpr bool sameAs(TrajectoryPointFlags const& other) const;
+
     /// Flags to define a non-perfect trajectory point
     static constexpr Mask_t ImperfectPointMask();
     
@@ -648,19 +707,10 @@ namespace recob {
     /// Flags to define a hit that is not included in the track fit
     static constexpr Mask_t ExcludedFromTrackFitMask();
     
-    Flags_t fFlags { DefaultFlagsMask().bits() }; ///< Set of flags
+    Flags_t fFlags { DefaultFlagsMask() }; ///< Set of flags
     
   }; // TrajectoryPointFlags<>
   
-  
-  template <typename Stream>
-  Stream& operator<<
-    (Stream&& out, recob::TrajectoryPointFlags::Mask_t const& mask)
-    {
-      details::printBinary
-        (std::forward<Stream>(out), mask.bits(), 8*sizeof(mask.bits()));
-      return out;
-    }
   
   /// Dumps flags into a stream with default verbosity
   template <typename Stream>
@@ -674,42 +724,16 @@ namespace recob {
 //------------------------------------------------------------------------------
 //--- inline implementation
 //---
-namespace recob {
-  // Due to their constexpr-essiveness, the details that are used by the
-  // constexpr methods need to be defined before the methods themselves.
-  // Here we go.
-  namespace details {
-    
-    using BitMask_t = TrajectoryPointFlags::Mask_t::BitMask_t;
-    
-    /// Creates a mask with all and only the specified bits set (empty)
-    inline constexpr BitMask_t makeMaskImpl() { return 0; }
-
-    /// Creates a mask with all and only the specified bits set
-    template <typename... OtherFlags>
-    constexpr BitMask_t makeMaskImpl
-      (TrajectoryPointFlagTraits::FlagIndex_t first, OtherFlags... others)
-    {
-      return (sizeof...(OtherFlags) == 0)
-        ? (BitMask_t(1) << first)
-        : (makeMaskImpl(first) | makeMaskImpl(others...))
-        ;
-      
-    } // recob::details::makeMaskImpl()
-    
-  } // namespace details
-} // namespace recob
-
-//------------------------------------------------------------------------------
 template <typename... Flags>
 inline constexpr recob::TrajectoryPointFlags::Mask_t
 recob::TrajectoryPointFlags::makeMask(Flags... flags)
-  { return details::makeMaskImpl(flags...); }
+  { return Mask_t(flags...); }
+
 
 //------------------------------------------------------------------------------
 template <typename... Flags>
 bool recob::TrajectoryPointFlags::all(Flags... flagIndices) const
-  { return all(makeMask(flagIndices...)); }
+  { return flags().match(makeMask(flagIndices...)); }
 
 template <typename... Flags>
 bool recob::TrajectoryPointFlags::any(Flags... flagIndices) const
@@ -720,28 +744,41 @@ bool recob::TrajectoryPointFlags::none(Flags... flagIndices) const
   { return none(makeMask(flagIndices...)); }
 
 //------------------------------------------------------------------------------
+inline constexpr bool recob::TrajectoryPointFlags::sameAs
+  (TrajectoryPointFlags const& other) const
+  { return (flags() == other.flags()) && (fromHit() == other.fromHit()); }
+
+inline constexpr bool recob::TrajectoryPointFlags::operator==
+  (TrajectoryPointFlags const& other) const
+  { return sameAs(other); }
+
+inline constexpr bool recob::TrajectoryPointFlags::operator!=
+  (TrajectoryPointFlags const& other) const
+  { return !sameAs(other); }
+
+
+//------------------------------------------------------------------------------
 inline constexpr recob::TrajectoryPointFlags::Mask_t
 recob::TrajectoryPointFlags::ImperfectPointMask() {
-  return makeMask(
-    flag::NoPoint, flag::HitIgnored,
-    flag::Suspicious,
-    flag::Merged, flag::DeltaRay, flag::DetectorIssue, flag::Shared
-    );
+  return flag::NoPoint + flag::HitIgnored
+    + flag::Suspicious
+    + flag::Merged + flag::DeltaRay + flag::DetectorIssue + flag::Shared
+    ;
 } // recob::TrajectoryPointFlags::ImperfectPointMask()
 
 inline constexpr recob::TrajectoryPointFlags::Mask_t
 recob::TrajectoryPointFlags::SomehowSharedMask()
-  { return makeMask(flag::Merged, flag::DeltaRay, flag::Shared); }
+  { return flag::Merged + flag::DeltaRay + flag::Shared; }
 
 inline constexpr recob::TrajectoryPointFlags::Mask_t
 recob::TrajectoryPointFlags::ExcludedFromTrackFitMask()
-  { return makeMask(flag::ExcludedFromFit, flag::Rejected); }
+  { return flag::ExcludedFromFit + flag::Rejected; }
 
 
 //------------------------------------------------------------------------------
 inline constexpr typename recob::TrajectoryPointFlags::Mask_t
 recob::TrajectoryPointFlags::DefaultFlagsMask() {
-  return makeMask();
+  return makeMask( -flag::NoPoint );
 } // recob::TrajectoryPointFlags::DefaultFlagsMask()
 
 

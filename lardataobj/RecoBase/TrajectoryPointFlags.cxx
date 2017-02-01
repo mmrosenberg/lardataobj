@@ -15,31 +15,24 @@
 //------------------------------------------------------------------------------
 //---  recob::TrajectoryPointFlagTraits
 //---
-constexpr recob::TrajectoryPointFlagTraits::FlagIndex_t recob::TrajectoryPointFlagTraits::MaxFlags;
-constexpr recob::TrajectoryPointFlagTraits::FlagIndex_t recob::TrajectoryPointFlagTraits::BeginTrajectoryFlags;
-constexpr recob::TrajectoryPointFlagTraits::FlagIndex_t recob::TrajectoryPointFlagTraits::HitIgnored;
-constexpr recob::TrajectoryPointFlagTraits::FlagIndex_t recob::TrajectoryPointFlagTraits::NoPoint;
-constexpr recob::TrajectoryPointFlagTraits::FlagIndex_t recob::TrajectoryPointFlagTraits::Suspicious;
-constexpr recob::TrajectoryPointFlagTraits::FlagIndex_t recob::TrajectoryPointFlagTraits::Merged;
-constexpr recob::TrajectoryPointFlagTraits::FlagIndex_t recob::TrajectoryPointFlagTraits::DeltaRay;
-constexpr recob::TrajectoryPointFlagTraits::FlagIndex_t recob::TrajectoryPointFlagTraits::DetectorIssue;
-constexpr recob::TrajectoryPointFlagTraits::FlagIndex_t recob::TrajectoryPointFlagTraits::Shared;
-constexpr recob::TrajectoryPointFlagTraits::FlagIndex_t recob::TrajectoryPointFlagTraits::TrajReserved1;
-constexpr recob::TrajectoryPointFlagTraits::FlagIndex_t recob::TrajectoryPointFlagTraits::EndTrajectoryFlags;
-constexpr recob::TrajectoryPointFlagTraits::FlagIndex_t recob::TrajectoryPointFlagTraits::BeginTrackFlags;
-constexpr recob::TrajectoryPointFlagTraits::FlagIndex_t recob::TrajectoryPointFlagTraits::ExcludedFromFit;
-constexpr recob::TrajectoryPointFlagTraits::FlagIndex_t recob::TrajectoryPointFlagTraits::Rejected;
-constexpr recob::TrajectoryPointFlagTraits::FlagIndex_t recob::TrajectoryPointFlagTraits::Reinterpreted;
-constexpr recob::TrajectoryPointFlagTraits::FlagIndex_t recob::TrajectoryPointFlagTraits::TrackReserved5;
-constexpr recob::TrajectoryPointFlagTraits::FlagIndex_t recob::TrajectoryPointFlagTraits::TrackReserved4;
-constexpr recob::TrajectoryPointFlagTraits::FlagIndex_t recob::TrajectoryPointFlagTraits::TrackReserved3;
-constexpr recob::TrajectoryPointFlagTraits::FlagIndex_t recob::TrajectoryPointFlagTraits::TrackReserved2;
-constexpr recob::TrajectoryPointFlagTraits::FlagIndex_t recob::TrajectoryPointFlagTraits::TrackReserved1;
-constexpr recob::TrajectoryPointFlagTraits::FlagIndex_t recob::TrajectoryPointFlagTraits::EndTrackFlags;
-constexpr recob::TrajectoryPointFlagTraits::FlagIndex_t recob::TrajectoryPointFlagTraits::BeginExperimentReservedFlags;
-constexpr recob::TrajectoryPointFlagTraits::FlagIndex_t recob::TrajectoryPointFlagTraits::EndExperimentReservedFlags;
-constexpr recob::TrajectoryPointFlagTraits::FlagIndex_t recob::TrajectoryPointFlagTraits::BeginUserReservedFlags;
-constexpr recob::TrajectoryPointFlagTraits::FlagIndex_t recob::TrajectoryPointFlagTraits::EndUserReservedFlags;
+
+// TODO: The following definitions are temporary, until we figure out what is
+// requiring them.
+constexpr recob::TrajectoryPointFlagTraits::Flag_t recob::TrajectoryPointFlagTraits::HitIgnored;
+constexpr recob::TrajectoryPointFlagTraits::Flag_t recob::TrajectoryPointFlagTraits::NoPoint;
+constexpr recob::TrajectoryPointFlagTraits::Flag_t recob::TrajectoryPointFlagTraits::Suspicious;
+constexpr recob::TrajectoryPointFlagTraits::Flag_t recob::TrajectoryPointFlagTraits::Merged;
+constexpr recob::TrajectoryPointFlagTraits::Flag_t recob::TrajectoryPointFlagTraits::DeltaRay;
+constexpr recob::TrajectoryPointFlagTraits::Flag_t recob::TrajectoryPointFlagTraits::DetectorIssue;
+constexpr recob::TrajectoryPointFlagTraits::Flag_t recob::TrajectoryPointFlagTraits::Shared;
+constexpr recob::TrajectoryPointFlagTraits::Flag_t recob::TrajectoryPointFlagTraits::TrajReserved1;
+constexpr recob::TrajectoryPointFlagTraits::Flag_t recob::TrajectoryPointFlagTraits::ExcludedFromFit;
+constexpr recob::TrajectoryPointFlagTraits::Flag_t recob::TrajectoryPointFlagTraits::Rejected;
+constexpr recob::TrajectoryPointFlagTraits::Flag_t recob::TrajectoryPointFlagTraits::Reinterpreted;
+
+
+
+//------------------------------------------------------------------------------
 const recob::TrajectoryPointFlagTraits::NameMap_t
 recob::TrajectoryPointFlagTraits::names
   = recob::TrajectoryPointFlagTraits::initNames(); ///< Names of the flags
@@ -47,15 +40,15 @@ recob::TrajectoryPointFlagTraits::names
 
 //------------------------------------------------------------------------------
 std::string recob::TrajectoryPointFlagTraits::decorateFlagName
-  (std::string baseName, FlagIndex_t flag)
+  (std::string baseName, Flag_t flag)
 {
-  return baseName + std::to_string(flag);
+  return baseName + std::to_string(flag.index());
 } // recob::TrajectoryPointFlagTraits::decorateFlagName()
 
 
 //------------------------------------------------------------------------------
 std::string recob::TrajectoryPointFlagTraits::invalidFlagName
-  (FlagIndex_t flag)
+  (Flag_t flag)
   { return "<" + decorateFlagName("InvalidFlag", flag) + ">"; }
 
 
@@ -110,18 +103,18 @@ void recob::TrajectoryPointFlagTraits::setFlagNames(NameMap_t& flagNames) {
   //
   
   // trajectory flags
-  flagNames[HitIgnored]    = "HitIgnored"   ;
-  flagNames[NoPoint]       = "NoPoint"      ;
-  flagNames[Suspicious]    = "Suspicious"   ;
-  flagNames[Merged]        = "Merged"       ;
-  flagNames[DeltaRay]      = "DeltaRay"     ;
-  flagNames[DetectorIssue] = "DetectorIssue";
-  flagNames[Shared]        = "Shared"       ;
+  std::get<HitIgnored.index()   >(flagNames) = "HitIgnored"   ;
+  std::get<NoPoint.index()      >(flagNames) = "NoPoint"      ;
+  std::get<Suspicious.index()   >(flagNames) = "Suspicious"   ;
+  std::get<Merged.index()       >(flagNames) = "Merged"       ;
+  std::get<DeltaRay.index()     >(flagNames) = "DeltaRay"     ;
+  std::get<DetectorIssue.index()>(flagNames) = "DetectorIssue";
+  std::get<Shared.index()       >(flagNames) = "Shared"       ;
   
   // track flags
-  flagNames[ExcludedFromFit] = "ExcludedFromFit";
-  flagNames[Rejected]        = "Rejected"       ;
-  flagNames[Reinterpreted]   = "Reinterpreted"  ;
+  std::get<ExcludedFromFit.index()>(flagNames) = "ExcludedFromFit";
+  std::get<Rejected.index()       >(flagNames) = "Rejected"       ;
+  std::get<Reinterpreted.index()  >(flagNames) = "Reinterpreted"  ;
   
 } // recob::TrajectoryPointFlagTraits::initNames()
 
