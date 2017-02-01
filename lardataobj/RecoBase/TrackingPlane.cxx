@@ -18,22 +18,13 @@ namespace recob {
     // par5d[3] = (par6d[4]*cosbeta + par6d[5]*sinbeta)/(par6d[3]*sinalpha - par6d[4]*cosalpha*sinbeta + par6d[5]*cosalpha*cosbeta);
     // par5d[4] = 1./sqrt(par6d[3]*par6d[3]+par6d[4]*par6d[4]+par6d[5]*par6d[5]);
 
-    SVector6 Plane::Local5DToGlobal6DParameters(const SVector5& par5d, const Point_t& planePos,const Vector_t& planeDir, bool trackAlongPlaneDir) {
-      SVector6 par6d;
-      //note: we assume planeDir is a unit vector!
-      const double diryz    = std::hypot(planeDir.Y(), planeDir.Z());
-      const double sinalpha = planeDir.X();
-      const double cosalpha = diryz;
-      const double sinbeta  = (diryz != 0.0) ? -planeDir.Y()/diryz : 0.0;
-      const double cosbeta  = (diryz != 0.0) ?  planeDir.Z()/diryz : 1.0;
-      // this version may be clearer but is slower:
-      // const double alpha = atan2(planeDir.X(), std::hypot(planeDir.Y(), planeDir.Z()));
-      // const double beta = atan2(-planeDir.Y(), planeDir.Z());
-      // const double sinalpha = std::sin(alpha);
-      // const double cosalpha = std::cos(alpha);
-      // const double sinbeta = std::sin(beta);
-      // const double cosbeta = std::cos(beta);
+    SVector6 Plane::Local5DToGlobal6DParameters(const SVector5& par5d, const Point_t& planePos,const Vector_t& planeDir, const TrigCache& trigCache, bool trackAlongPlaneDir) const {
+      const double& sinalpha = trigCache.fSinA;
+      const double& cosalpha = trigCache.fCosA;
+      const double& sinbeta  = trigCache.fSinB;
+      const double& cosbeta  = trigCache.fCosB;
       const double denom = (trackAlongPlaneDir ? par5d[4]*std::sqrt(1. + par5d[2]*par5d[2] + par5d[3]*par5d[3]) : -par5d[4]*std::sqrt(1. + par5d[2]*par5d[2] + par5d[3]*par5d[3]) );
+      SVector6 par6d;
       par6d[0] = planePos.X() + par5d[0]*cosalpha;
       par6d[1] = planePos.Y() + par5d[0]*sinalpha*sinbeta + par5d[1]*cosbeta;
       par6d[2] = planePos.Z() - par5d[0]*sinalpha*cosbeta + par5d[1]*sinbeta;
@@ -43,18 +34,16 @@ namespace recob {
       return par6d;
     }
 
-    SVector5 Plane::Global6DToLocal5DParameters(const SVector6& par6d, const Point_t& planePos,const Vector_t& planeDir) {
-      SVector5 par5d;
-      //note: we assume planeDir is a unit vector!
-      const double diryz    = std::hypot(planeDir.Y(), planeDir.Z());
-      const double sinalpha = planeDir.X();
-      const double cosalpha = diryz;
-      const double sinbeta  = (diryz != 0.0) ? -planeDir.Y()/diryz : 0.0;
-      const double cosbeta  = (diryz != 0.0) ?  planeDir.Z()/diryz : 1.0;
+    SVector5 Plane::Global6DToLocal5DParameters(const SVector6& par6d, const Point_t& planePos,const Vector_t& planeDir, const TrigCache& trigCache) const {
+      const double& sinalpha = trigCache.fSinA;
+      const double& cosalpha = trigCache.fCosA;
+      const double& sinbeta  = trigCache.fSinB;
+      const double& cosbeta  = trigCache.fCosB;
       const double pu = par6d[3]*cosalpha + par6d[4]*sinalpha*sinbeta - par6d[5]*sinalpha*cosbeta;
       const double pv = par6d[4]*cosbeta + par6d[5]*sinbeta;
       const double pw = par6d[3]*sinalpha - par6d[4]*cosalpha*sinbeta + par6d[5]*cosalpha*cosbeta;
       const double pval = sqrt(par6d[3]*par6d[3]+par6d[4]*par6d[4]+par6d[5]*par6d[5]);
+      SVector5 par5d;
       par5d[0] = (par6d[0]-planePos.X())*cosalpha + (par6d[1]-planePos.Y())*sinalpha*sinbeta - (par6d[2]-planePos.Z())*sinalpha*cosbeta;
       par5d[1] = (par6d[1]-planePos.Y())*cosbeta + (par6d[2]-planePos.Z())*sinbeta;
       par5d[2] = pu/pw;
@@ -63,14 +52,11 @@ namespace recob {
       return par5d;
     }
 
-    SMatrix65 Plane::Local5DToGlobal6DJacobian(const Vector_t& momentum, const Vector_t& planeDir) {
-      SMatrix65 j;
-      //note: we assume planeDir is a unit vector!
-      const double diryz    = std::hypot(planeDir.Y(), planeDir.Z());
-      const double sinalpha = planeDir.X();
-      const double cosalpha = diryz;
-      const double sinbeta  = (diryz != 0.0) ? -planeDir.Y()/diryz : 0.0;
-      const double cosbeta  = (diryz != 0.0) ?  planeDir.Z()/diryz : 1.0;
+    SMatrix65 Plane::Local5DToGlobal6DJacobian(const Vector_t& momentum, const Vector_t& planeDir, const TrigCache& trigCache) const {
+      const double& sinalpha = trigCache.fSinA;
+      const double& cosalpha = trigCache.fCosA;
+      const double& sinbeta  = trigCache.fSinB;
+      const double& cosbeta  = trigCache.fCosB;
       const double pu = momentum.X()*cosalpha + momentum.Y()*sinalpha*sinbeta - momentum.Z()*sinalpha*cosbeta;
       const double pv = momentum.Y()*cosbeta + momentum.Z()*sinbeta;
       const double pw = momentum.X()*sinalpha - momentum.Y()*cosalpha*sinbeta + momentum.Z()*cosalpha*cosbeta;
@@ -81,6 +67,8 @@ namespace recob {
       const double l4 = (p2>0. ? 1./sqrt(p2) : 1.);
       const double den23 = l4*(l2*l2+l3*l3+1.)*sqrt(l2*l2+l3*l3+1.);
       const double den4 = l4*l4*sqrt(l2*l2+l3*l3+1.);
+      SMatrix65 j;
+      //
       j(0,0) = cosalpha;
       j(0,1) = 0.;
       j(0,2) = 0.;
@@ -120,16 +108,14 @@ namespace recob {
       return j;
     }
 
-    SMatrix56 Plane::Global6DToLocal5DJacobian(const Vector_t& momentum, const Vector_t& planeDir) {
-      SMatrix56 j;
-      //note: we assume planeDir is a unit vector!
-      const double diryz    = std::hypot(planeDir.Y(), planeDir.Z());
-      const double sinalpha = planeDir.X();
-      const double cosalpha = diryz;
-      const double sinbeta  = (diryz != 0.0) ? -planeDir.Y()/diryz : 0.0;
-      const double cosbeta  = (diryz != 0.0) ?  planeDir.Z()/diryz : 1.0;
+    SMatrix56 Plane::Global6DToLocal5DJacobian(const Vector_t& momentum, const Vector_t& planeDir, const TrigCache& trigCache) const {
+      const double& sinalpha = trigCache.fSinA;
+      const double& cosalpha = trigCache.fCosA;
+      const double& sinbeta  = trigCache.fSinB;
+      const double& cosbeta  = trigCache.fCosB;
       const double den23 = (cosalpha*(cosbeta*momentum.Z() - sinbeta*momentum.Y()) + sinalpha*momentum.X())*(cosalpha*(cosbeta*momentum.Z() - sinbeta*momentum.Y()) + sinalpha*momentum.X());
       const double den4 = sqrt(momentum.X()*momentum.X()+momentum.Y()*momentum.Y()+momentum.Z()*momentum.Z())*(momentum.X()*momentum.X()+momentum.Y()*momentum.Y()+momentum.Z()*momentum.Z());
+      SMatrix56 j;
       //
       j(0,0) = cosalpha;
       j(0,1) = sinalpha*sinbeta ;
@@ -169,13 +155,11 @@ namespace recob {
       return j;
     }
 
-    Rotation_t Plane::Global3DToLocal3DRotation(const Vector_t& planeDir) {
-      //note: we assume planeDir is a unit vector!
-      const double diryz    = std::hypot(planeDir.Y(), planeDir.Z());
-      const double sinalpha = planeDir.X();
-      const double cosalpha = diryz;
-      const double sinbeta  = (diryz != 0.0) ? -planeDir.Y()/diryz : 0.0;
-      const double cosbeta  = (diryz != 0.0) ?  planeDir.Z()/diryz : 1.0;
+    Rotation_t Plane::Global3DToLocal3DRotation(const Vector_t& planeDir, const TrigCache& trigCache) const {
+      const double& sinalpha = trigCache.fSinA;
+      const double& cosalpha = trigCache.fCosA;
+      const double& sinbeta  = trigCache.fSinB;
+      const double& cosbeta  = trigCache.fCosB;
       return {
 	cosalpha /* xx */,  sinalpha * sinbeta /* xy */, -sinalpha * cosbeta /* xz */,
 	0.0      /* yx */,  cosbeta            /* yy */,  sinbeta            /* yz */,
@@ -183,13 +167,11 @@ namespace recob {
       };
     }
 
-    Rotation_t Plane::Local3DToGlobal3DRotation(const Vector_t& planeDir) {
-      //note: we assume planeDir is a unit vector!
-      const double diryz    = std::hypot(planeDir.Y(), planeDir.Z());
-      const double sinalpha = planeDir.X();
-      const double cosalpha = diryz;
-      const double sinbeta  = (diryz != 0.0) ? -planeDir.Y()/diryz : 0.0;
-      const double cosbeta  = (diryz != 0.0) ?  planeDir.Z()/diryz : 1.0;
+    Rotation_t Plane::Local3DToGlobal3DRotation(const Vector_t& planeDir, const TrigCache& trigCache) const {
+      const double& sinalpha = trigCache.fSinA;
+      const double& cosalpha = trigCache.fCosA;
+      const double& sinbeta  = trigCache.fSinB;
+      const double& cosbeta  = trigCache.fCosB;
       return {
 	cosalpha            /* xx */, 0.      /* xy */,  sinalpha           /* xz */,
 	sinalpha * sinbeta  /* yx */, cosbeta /* yy */, -cosalpha * sinbeta /* yz */,
