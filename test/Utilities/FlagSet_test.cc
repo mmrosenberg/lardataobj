@@ -40,22 +40,22 @@ class PrintIntAsError;
 
 //------------------------------------------------------------------------------
 
-struct MyFlags {
+namespace MyFlags {
   
   using Storage_t = unsigned short;
   using MyFlag_t = util::flags::Flag_t<Storage_t>;
   
-  static constexpr MyFlag_t F0 { 0 };
-  static constexpr MyFlag_t F1 { 1 };
-  static constexpr MyFlag_t F2 { 2 };
-  static constexpr MyFlag_t F3 { 3 };
-  static constexpr MyFlag_t F4 { 4 };
-  static constexpr MyFlag_t F5 { 5 };
-  static constexpr MyFlag_t F6 { 6 };
-  static constexpr MyFlag_t F7 { 7 };
-  static constexpr MyFlag_t F8 { 8 };
+  constexpr MyFlag_t F0 { 0 };
+  constexpr MyFlag_t F1 { 1 };
+  constexpr MyFlag_t F2 { 2 };
+  constexpr MyFlag_t F3 { 3 };
+  constexpr MyFlag_t F4 { 4 };
+  constexpr MyFlag_t F5 { 5 };
+  constexpr MyFlag_t F6 { 6 };
+  constexpr MyFlag_t F7 { 7 };
+  constexpr MyFlag_t F8 { 8 };
   
-}; // struct MyFlags
+} // namespace MyFlags
 
 
 template <typename FlagSet>
