@@ -33,17 +33,34 @@ constexpr bool util::flags::FlagSet<NFlags, Storage>::isFlag(Flag_t flag) const
 
 //------------------------------------------------------------------------------
 template <unsigned int NFlags, typename Storage>
+bool util::flags::FlagSet<NFlags, Storage>::test(FlagIndex_t index) const {
+  if (!isFlag(index)) {
+    throw OutOfRangeError
+      ("Invalid flag index was tested: #" + std::to_string(index));
+  }
+  return This_t::testImpl(index);
+} // util::flags::FlagSet<>::test()
+
+//------------------------------------------------------------------------------
+template <unsigned int NFlags, typename Storage>
 bool util::flags::FlagSet<NFlags, Storage>::test(Flag_t flag) const {
   if (!isFlag(flag)) {
     throw OutOfRangeError
       ("Invalid flag was tested: #" + util::flags::to_string(flag));
   }
+  return testImpl(flag);
+} // util::flags::FlagSet<>::test()
+
+
+//------------------------------------------------------------------------------
+template <unsigned int NFlags, typename Storage>
+bool util::flags::FlagSet<NFlags, Storage>::testImpl(Flag_t flag) const {
   if (!This_t::isDefined(flag)) {
     throw FlagNotDefinedError
       ("Undefined flag was tested: #" + util::flags::to_string(flag));
   }
   return This_t::get(flag);
-} // util::flags::FlagSet<>::test()
+} // util::flags::FlagSet<>::testImpl()
 
 //------------------------------------------------------------------------------
 

@@ -135,19 +135,9 @@ void TrajectoryPointFlagsTest_DefaultConstructor() {
     /*
      * bool isUnset(FlagIndex_t flag) const
      */
-    BOOST_CHECK_EQUAL(!flags.isUnset(i), !set);
+    BOOST_CHECK_EQUAL(flags.isUnset(i), !set);
     
   } // for
-  
-  /*
-   * bool isHitIgnored() const
-   */
-  BOOST_CHECK(flags.isHitIgnored());
-  
-  /*
-   * bool isPointValid() const
-   */
-  BOOST_CHECK(flags.isPointValid());
   
   /*
    * Mask_t mask() const
@@ -192,6 +182,76 @@ void TrajectoryPointFlagsTest_DefaultConstructor() {
    */
   BOOST_CHECK(!flags.all(trkflag::NoPoint, trkflag::HitIgnored));
   
+  /*
+   * bool isHitIgnored() const
+   */
+  BOOST_CHECK(flags.isHitIgnored());
+  
+  /*
+   * bool isPointValid() const
+   */
+  BOOST_CHECK(flags.isPointValid());
+  
+  /*
+   * bool isMerged() const
+   */
+  BOOST_CHECK(!flags.isMerged());
+  
+  /*
+   * bool isShared() const
+   */
+  BOOST_CHECK(!flags.isShared());
+  
+  /*
+   * bool isDeltaRay() const
+   */
+  BOOST_CHECK(!flags.isDeltaRay());
+  
+  /*
+   * bool hasDetectorIssues() const
+   */
+  BOOST_CHECK(!flags.hasDetectorIssues());
+  
+  /*
+   * bool isOtherwiseSuspicious() const
+   */
+  BOOST_CHECK(!flags.isOtherwiseSuspicious());
+  
+  /*
+   * bool isExclusive() const
+   */
+  BOOST_CHECK(!flags.isExclusive());
+  
+  /*
+   * bool isExcludedFromFit() const
+   */
+  BOOST_CHECK(!flags.isExcludedFromFit());
+  
+  /*
+   * bool belongsToTrack() const
+   */
+  BOOST_CHECK(!flags.belongsToTrack());
+  
+  /*
+   * bool isHitReinterpreted() const
+   */
+  BOOST_CHECK(!flags.isHitReinterpreted());
+  
+  /*
+   * bool isIncludedInFit() const
+   */
+  BOOST_CHECK(!flags.isIncludedInFit());
+  
+  /*
+   * bool isPointFlawed() const
+   */
+  BOOST_CHECK(!flags.isPointFlawed());
+  
+  /*
+   * bool isPointFlawless() const
+   */
+  BOOST_CHECK(!flags.isPointFlawless());
+
   /*
    * hasOriginalHitIndex() const
    */
