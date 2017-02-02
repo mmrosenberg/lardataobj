@@ -1336,7 +1336,7 @@ namespace util {
 //---  template implementation
 //---  
 
-#include "BitMask.tcc"
+#include "lardataobj/Utilities/BitMask.tcc"
 
 //------------------------------------------------------------------------------
 
