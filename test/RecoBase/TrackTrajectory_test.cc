@@ -118,7 +118,7 @@ void TestTrackTrajectory(
   // some preparation:
   std::set<size_t> validPoints;
   for (size_t i = 0; i < NPoints; ++i) {
-    if (expected.flags[i].test(recob::TrackTrajectory::flag::NoPoint))
+    if (expected.flags[i].isSet(recob::TrackTrajectory::flag::NoPoint))
       continue;
     validPoints.insert(i);
   } // for
