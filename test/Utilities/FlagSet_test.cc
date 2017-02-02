@@ -532,6 +532,35 @@ void BitMaskCombineTests() {
 } // BitMaskCombineTests()
 
 
+
+//------------------------------------------------------------------------------
+void SetUnsetTest() {
+  
+  using Mask_t = util::flags::BitMask<unsigned short>;
+  
+  Mask_t mask(util::flags::Set(MyFlags::F1), util::flags::Unset(MyFlags::F2));
+  
+  std::cout << "Testing Set()/Unset() on " << mask << std::endl;
+  
+  BOOST_CHECK(!mask.isDefined(0));
+  BOOST_CHECK( mask.isDefined(1));
+  BOOST_CHECK( mask.isDefined(2));
+  BOOST_CHECK(!mask.isDefined(3));
+  
+  BOOST_CHECK(!mask.isSet(0));
+  BOOST_CHECK( mask.isSet(1));
+  BOOST_CHECK(!mask.isSet(2));
+  BOOST_CHECK(!mask.isSet(3));
+  
+  BOOST_CHECK(!mask.isUnset(0));
+  BOOST_CHECK(!mask.isUnset(1));
+  BOOST_CHECK( mask.isUnset(2));
+  BOOST_CHECK(!mask.isUnset(3));
+  
+  
+} // SetUnsetTest()
+
+
 //------------------------------------------------------------------------------
 //--- registration of tests
 
@@ -547,5 +576,6 @@ BOOST_AUTO_TEST_CASE(FlagSetTestCase) {
   
   FlagSetStaticTest();
   FlagSetTest();
+  SetUnsetTest();
   
 } // BOOST_AUTO_TEST_CASE(FlagSetTestCase)

@@ -394,7 +394,7 @@ namespace util {
       
       /// @}
       
-    } // namespace BitMaskExceptions
+    } // namespace errors
     
     
     /**
@@ -1313,13 +1313,11 @@ namespace util {
     
     /// Returns a bit mask which sets the specified flag.
     template <typename Storage>
-    constexpr BitMask<Storage> Set(Flag_t<Storage> flag)
-      { return BitMask<Storage>{ flag, flag }; }
+    constexpr BitMask<Storage> Set(Flag_t<Storage> flag);
     
     /// Returns a bit mask which unsets the specified flag.
     template <typename Storage>
-    constexpr BitMask<Storage> Unset(Flag_t<Storage> flag)
-      { return BitMask<Storage>{ Storage(0), flag }; }
+    constexpr BitMask<Storage> Unset(Flag_t<Storage> flag);
     
     
     /// @}

@@ -752,6 +752,18 @@ constexpr BitMask<Storage> operator~ (typename Bits_t<Storage> bits)
 */
 
 //------------------------------------------------------------------------------
+template <typename Storage>
+constexpr util::flags::BitMask<Storage> util::flags::Set(Flag_t<Storage> flag)
+  { return BitMask<Storage>(BitMask<Storage>::fromValues, flag, flag); }
+
+template <typename Storage>
+constexpr util::flags::BitMask<Storage> util::flags::Unset(Flag_t<Storage> flag)
+{ 
+  return BitMask<Storage>
+    (BitMask<Storage>::fromValues, flag, Bits_t<Storage>(0)); 
+}
+
+//------------------------------------------------------------------------------
 
 
 

@@ -491,19 +491,12 @@ namespace recob {
     
     
     /// @{
-    /// @name Multiple flag access
-    
-    /// Returns whether any of the specified flags is set.
-    template <typename... Flags>
-    bool any(Flags... flags) const;
-    
-    /// Returns whether all the specified flags are set.
-    template <typename... Flags>
-    bool all(Flags... flags) const;
-    
-    /// Returns whether all of the specified flags are not set.
-    template <typename... Flags>
-    bool none(Flags... flags) const;
+    /**
+     * @name Multiple flag access
+     * 
+     * @note This implementation is partial. Please contact the author to
+     *       discuss your need.
+     */
     
     /**
      * @brief Returns whether any of the bits set in the mask are set.
@@ -580,7 +573,7 @@ namespace recob {
     bool isHitReinterpreted() const
       { return isSet(flag::Reinterpreted); }
     
-    /// Returns whether the point has the `ExcludedFromFit` or `Rejected` flag
+    /// Returns false if the point has the `ExcludedFromFit` or `Rejected` flag
     /// set.
     bool isIncludedInFit() const
       { return noneSet(ExcludedFromTrackFitMask()); }
@@ -592,7 +585,7 @@ namespace recob {
      * point flags set.
      */
     bool isPointFlawed() const
-      { return any(ImperfectPointMask()); }
+      { return anySet(ImperfectPointMask()); }
     
     /**
      * @brief Returns whether the trajectory point has no flagged problem.
@@ -601,7 +594,7 @@ namespace recob {
      * point flags set.
      */
     bool isPointFlawless() const
-      { return none(ImperfectPointMask()); }
+      { return noneSet(ImperfectPointMask()); }
     
     /// @}
     
@@ -729,19 +722,6 @@ inline constexpr recob::TrajectoryPointFlags::Mask_t
 recob::TrajectoryPointFlags::makeMask(Flags... flags)
   { return Mask_t(flags...); }
 
-
-//------------------------------------------------------------------------------
-template <typename... Flags>
-bool recob::TrajectoryPointFlags::all(Flags... flagIndices) const
-  { return flags().match(makeMask(flagIndices...)); }
-
-template <typename... Flags>
-bool recob::TrajectoryPointFlags::any(Flags... flagIndices) const
-  { return any(makeMask(flagIndices...)); }
-
-template <typename... Flags>
-bool recob::TrajectoryPointFlags::none(Flags... flagIndices) const
-  { return none(makeMask(flagIndices...)); }
 
 //------------------------------------------------------------------------------
 inline constexpr bool recob::TrajectoryPointFlags::sameAs
