@@ -36,8 +36,8 @@ namespace recob {
 	  const double diryz = std::hypot(planeDir.Y(), planeDir.Z());
 	  fCosA = diryz;
 	  fSinA = planeDir.X();
-	  fCosB = (diryz != 0.0) ? -planeDir.Y()/diryz : 0.0;
-	  fSinB = (diryz != 0.0) ?  planeDir.Z()/diryz : 0.0;
+	  fCosB = (diryz != 0.0) ?  planeDir.Z()/diryz : 1.0;
+	  fSinB = (diryz != 0.0) ? -planeDir.Y()/diryz : 0.0;
 	}
 	double fCosA;
 	double fSinA;
