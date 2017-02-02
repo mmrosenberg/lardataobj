@@ -14,7 +14,6 @@
 #include "lardataobj/RecoBase/Cluster.h"
 #include "lardataobj/RecoBase/Hit.h"
 #include "lardataobj/RecoBase/Shower.h"
-#include "lardataobj/RecoBase/Track.h"
 #include "lardataobj/RecoBase/Seed.h"
 #include "lardataobj/RecoBase/EndPoint2D.h"
 #include "lardataobj/RecoBase/SpacePoint.h"
@@ -26,3 +25,9 @@
 #include "lardataobj/RecoBase/PFParticle.h"
 #include "lardataobj/RecoBase/PCAxis.h"
 #include "lardataobj/RecoBase/TrackHitMeta.h"
+
+// classes_def_tracking.xml
+#include "lardataobj/RecoBase/Trajectory.h"
+#include "lardataobj/RecoBase/TrackTrajectory.h"
+#include "lardataobj/RecoBase/Track.h"
+
