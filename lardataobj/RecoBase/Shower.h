@@ -39,7 +39,8 @@ namespace recob {
     std::vector< double > fTotalMIPEnergy;           ///< Calculated Energy per each plane
     std::vector< double > fSigmaTotalMIPEnergy;           ///< Calculated Energy per each plane
     int fBestPlane;
-    double fLength;
+    double fLength;                 ///< the length of the shower
+    double fOpenAngle;              ///< the opening angle of the shower
 #ifndef __GCCXML__
 
   public:
@@ -53,6 +54,8 @@ namespace recob {
 	   std::vector< double >  dEdx,
 	   std::vector< double >  dEdxErr,
 	   int bestplane,
+           double length,
+           double openAngle,
 	   int     id=util::kBogusI);
 
     
@@ -72,7 +75,7 @@ namespace recob {
     void set_dedx      (const std::vector< double >& q) { fdEdx = q;        }
     void set_dedx_err  (const std::vector< double >& q) { fSigmadEdx = q;        }
     void set_length(const double& l) { fLength = l; }    
-    
+    void set_open_angle( const double& a )              { fOpenAngle = a;   }
     
     
     int    ID()               const;
@@ -90,6 +93,7 @@ namespace recob {
     const std::vector< double >& MIPEnergyErr() const;
     int    best_plane()               const;
     inline double Length() const;
+    inline double OpenAngle() const;
     const std::vector< double >& dEdx()    const; 
     const std::vector< double >& dEdxErr() const;
     
@@ -120,6 +124,7 @@ namespace recob {
    inline const std::vector< double >& recob::Shower::MIPEnergyErr() const { return fSigmaTotalMIPEnergy;     }
    inline int    recob::Shower::best_plane()               const { return fBestPlane;               }
    inline double recob::Shower::Length() const { return fLength; }    
+   inline double recob::Shower::OpenAngle() const { return fOpenAngle; }
    inline const std::vector< double >& recob::Shower::dEdx()    const { return fdEdx;          }
    inline const std::vector< double >& recob::Shower::dEdxErr() const { return fSigmadEdx;     }
 
