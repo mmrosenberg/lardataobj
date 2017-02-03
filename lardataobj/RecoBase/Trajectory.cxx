@@ -78,7 +78,7 @@ bool recob::Trajectory::TrajectoryAtPoint
 //------------------------------------------------------------------------------
 void recob::Trajectory::Extent
   (std::vector<double>& start, std::vector<double>& end) const
-  { FillTwoVectors(Start(), End(), start, end); }
+  { details::legacy::FillTwoVectors(Start(), End(), start, end); }
 
 
 
@@ -164,7 +164,7 @@ recob::Trajectory::Vector_t recob::Trajectory::DirectionAtPoint(size_t i) const
 
 //------------------------------------------------------------------------------
 void recob::Trajectory::Direction(double* start, double* end) const
-  { FillTwoVectors(StartDirection(), EndDirection(), start, end); }
+  { details::legacy::FillTwoVectors(StartDirection(), EndDirection(), start, end); }
 
 
 //------------------------------------------------------------------------------

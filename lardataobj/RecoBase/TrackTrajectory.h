@@ -301,7 +301,9 @@ namespace recob {
     double Length (size_t startAt = 0) const;
     
     
-    using Trajectory_t::NumberFitMomentum;
+    [[deprecated("Use NumberTrajectoryPoints() instead")]]
+    size_t NumberFitMomentum() const
+      { return HasMomentum()? NPoints(): 0U; }
     
     /// Returns the direction of the trajectory at the first point.
     Vector_t VertexDirection() const
