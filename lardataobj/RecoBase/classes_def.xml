@@ -62,7 +62,8 @@
   <version ClassVersion="12" checksum="672048823"/>
   <version ClassVersion="11" checksum="2374757403"/>
  </class>
- <class name="recob::Shower"           ClassVersion="13"                   >
+ <class name="recob::Shower"           ClassVersion="14"                   >
+  <version ClassVersion="14" checksum="3539288154"/>
   <version ClassVersion="13" checksum="1829658282"/>
   <version ClassVersion="12" checksum="652922075"/>
   <version ClassVersion="11" checksum="1998712487"/>
