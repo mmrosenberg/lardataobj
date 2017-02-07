@@ -30,9 +30,9 @@ namespace recob{
 	   std::vector< double >  dEdx,
  	   std::vector< double >  dEdxErr,
 	   int bestplane,
+	   int     id,
            double length,
-           double openAngle,
-	   int     id)
+           double openAngle)
     : fID(id)
     , fDCosStart(dcosVtx)
     , fSigmaDCosStart(dcosVtxErr)

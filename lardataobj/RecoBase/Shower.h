@@ -54,9 +54,9 @@ namespace recob {
 	   std::vector< double >  dEdx,
 	   std::vector< double >  dEdxErr,
 	   int bestplane,
-           double length,
-           double openAngle,
-	   int     id=util::kBogusI);
+	   int     id=util::kBogusI,
+           double length = 0.,
+           double openAngle = 0.);
 
     
     
