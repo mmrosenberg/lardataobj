@@ -647,22 +647,6 @@ namespace recob {
     
       protected:
     
-    /// Converts a vector into STL vector
-    template <typename Vect>
-    static void FillVector(Vect const& source, std::vector<double>& dest);
-    
-    /// Converts a vector into a C array
-    template <typename Vect>
-    static void FillVector(Vect const& source, double* dest);
-    
-    /// Converts two vectors into another type of vector using FillVector
-    template <typename SrcVect, typename DestVect>
-    static void FillTwoVectors(
-      SrcVect const& firstSource, SrcVect const& secondSource, 
-      DestVect&& firstDest, DestVect&& secondDest
-      );
-    
-    
       private:
     
     Positions_t fPositions; ///< List of points the trajectory goes through.
@@ -686,6 +670,32 @@ namespace recob {
   template <typename Stream>
   Stream& operator << (Stream&& out, Trajectory const& traj)
     { traj.Dump(std::forward<Stream>(out)); return out; }
+  
+  
+  //----------------------------------------------------------------------------
+  namespace details {
+    namespace legacy {
+      // These implementation details are shared with other classes
+      // until the legacy support is gone.
+      
+      /// Converts a vector into STL vector
+      template <typename Vect>
+      void FillVector(Vect const& source, std::vector<double>& dest);
+      
+      /// Converts a vector into a C array
+      template <typename Vect>
+      void FillVector(Vect const& source, double* dest);
+      
+      /// Converts two vectors into another type of vector using FillVector
+      template <typename SrcVect, typename DestVect>
+      void FillTwoVectors(
+        SrcVect const& firstSource, SrcVect const& secondSource, 
+        DestVect&& firstDest, DestVect&& secondDest
+        );
+      
+      
+    } // namespace legacy
+  } // namespace details
   
   
 } // namespace recob

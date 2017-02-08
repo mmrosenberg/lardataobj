@@ -126,7 +126,7 @@ namespace recob {
   }
   
   //----------------------------------------------------------------------------
-  TMatrixD recob::Track::VertexCovariance() const {
+  TMatrixD Track::VertexCovariance() const {
     TMatrixD result = TMatrixD(5,5);
     for (unsigned int i=0; i<5; i++) {
       for (unsigned int j=0; j<5; j++) {
@@ -137,7 +137,7 @@ namespace recob {
   }
 
   //----------------------------------------------------------------------------
-  TMatrixD recob::Track::EndCovariance() const {
+  TMatrixD Track::EndCovariance() const {
     TMatrixD result = TMatrixD(5,5);
     for (unsigned int i=0; i<5; i++) {
       for (unsigned int j=0; j<5; j++) {
@@ -146,7 +146,12 @@ namespace recob {
     }
     return result;
   }
+  //----------------------------------------------------------------------------
+  void Track::Extent(std::vector<double>& start, std::vector<double>& end) const
+    { details::legacy::FillTwoVectors(Vertex(), End(), start, end); }
 
+
+  //----------------------------------------------------------------------------
   Track::SVector6 Track::VertexParametersGlobal6D() const {
     Track::SVector6 result;
     result[0] = Vertex()[0];

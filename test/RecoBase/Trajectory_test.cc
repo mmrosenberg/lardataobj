@@ -99,7 +99,12 @@ void TestTrajectory(
   const size_t NMomenta = expected.hasMomenta? NPoints: 0;
   BOOST_CHECK_EQUAL(NPoints, expected.positions.size());
   BOOST_CHECK_EQUAL(traj.NumberTrajectoryPoints(), expected.positions.size());
+  
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+  // this is legacy, deprecated code; while we still test it, it should not be used
   BOOST_CHECK_EQUAL(traj.NumberFitMomentum(), NMomenta);
+#pragma GCC diagnostic pop
   
   for (size_t i = 0; i <= NPoints + 1; ++i) {
     BOOST_TEST_MESSAGE("HasPoint() position #" << i);
@@ -146,7 +151,11 @@ void TestTrajectory(
   
   //----------------------------------------------------------------------------
   std::vector<double> Vstart, Vend;
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+  // this is legacy, deprecated code; while we still test it, it should not be used
   traj.Extent(Vstart, Vend);
+#pragma GCC diagnostic pop
   BOOST_CHECK_EQUAL(Vstart[0], expected.positions[0].X());
   BOOST_CHECK_EQUAL(Vstart[1], expected.positions[0].Y());
   BOOST_CHECK_EQUAL(Vstart[2], expected.positions[0].Z());

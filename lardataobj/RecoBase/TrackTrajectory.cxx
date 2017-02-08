@@ -55,7 +55,7 @@ unsigned int recob::TrackTrajectory::CountValidPoints() const {
 //------------------------------------------------------------------------------
 void recob::TrackTrajectory::Extent
   (std::vector<double>& start, std::vector<double>& end) const
-  { Trajectory_t::FillTwoVectors(Start(), End(), start, end); }
+  { details::legacy::FillTwoVectors(Start(), End(), start, end); }
 
 
 //------------------------------------------------------------------------------
@@ -97,7 +97,7 @@ double recob::TrackTrajectory::Length(size_t startAt /* = 0 */) const {
 
 //------------------------------------------------------------------------------
 void recob::TrackTrajectory::Direction(double* start, double* end) const {
-  Trajectory_t::FillTwoVectors(StartDirection(), EndDirection(), start, end); 
+  details::legacy::FillTwoVectors(StartDirection(), EndDirection(), start, end); 
 } // recob::TrackTrajectory::Direction()
 
 
