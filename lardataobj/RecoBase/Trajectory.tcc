@@ -153,35 +153,35 @@ void recob::Trajectory::LowLevelDump
 
 //------------------------------------------------------------------------------
 template <typename Vect>
-void recob::Trajectory::FillVector
+void recob::details::legacy::FillVector
   (Vect const& source, std::vector<double>& dest)
 {
   dest.resize(3);
   dest[0] = source.X();
   dest[1] = source.Y();
   dest[2] = source.Z();
-} // recob::Trajectory::FillVector(std::vector<double>)
+} // recob::details::legacy::FillVector(std::vector<double>)
 
 template <typename Vect>
-void recob::Trajectory::FillVector
+void recob::details::legacy::FillVector
   (Vect const& source, double* dest)
 {
   // just hope there is enough space
   dest[0] = source.X();
   dest[1] = source.Y();
   dest[2] = source.Z();
-} // recob::Trajectory::FillVector(double*)
+} // recob::details::legacy::FillVector(double*)
 
 
 template <typename SrcVect, typename DestVect>
-void recob::Trajectory::FillTwoVectors(
+void recob::details::legacy::FillTwoVectors(
   SrcVect const& firstSource, SrcVect const& secondSource,
   DestVect&& firstDest, DestVect&& secondDest
   )
 {
   FillVector(firstSource, std::forward<DestVect>(firstDest));
   FillVector(secondSource, std::forward<DestVect>(secondDest));
-} // recob::Trajectory::FillTwoVectors()
+} // recob::details::legacy::FillTwoVectors()
 
 
 //------------------------------------------------------------------------------

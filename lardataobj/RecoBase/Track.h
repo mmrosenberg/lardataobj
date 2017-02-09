@@ -62,12 +62,12 @@ namespace recob {
 
   protected:
 
-    TrackTrajectory fTraj   = TrackTrajectory();   ///< Stored trajectory data member
+    TrackTrajectory fTraj;                         ///< Stored trajectory data member
     int fPId                = 0;                   ///< Particle ID hypothesis used in the fit (if any)
     float fChi2             = -1.;                 ///< Fit chi2
     int fNdof               = 0.;                  ///< Number of degrees of freedom of the fit
-    SMatrixSym55 fCovVertex = SMatrixSym55();      ///< Covariance matrix (local 5D representation) at start point (vertex)
-    SMatrixSym55 fCovEnd    = SMatrixSym55();      ///< Covariance matrix (local 5D representation) at end point
+    SMatrixSym55 fCovVertex;                       ///< Covariance matrix (local 5D representation) at start point (vertex)
+    SMatrixSym55 fCovEnd;                          ///< Covariance matrix (local 5D representation) at end point
     int              fID    = -1;                  ///< track's ID
 
     //deprecated:
@@ -228,7 +228,8 @@ namespace recob {
     inline TVector3 DirectionAtPoint (unsigned int p)                                  const { auto dir = fTraj.DirectionAtPoint(p); return TVector3(dir.X(),dir.Y(),dir.Z()); }
     inline TVector3 LocationAtPoint  (unsigned int p)                                  const { auto& loc = fTraj.LocationAtPoint(p); return TVector3(loc.X(),loc.Y(),loc.Z()); }
     inline TMatrixD CovarianceAtPoint(unsigned int p)                                  const { return (p==0 ? this->VertexCovariance() : this->EndCovariance()); }
-    inline size_t   NumberFitMomentum()                                                const { return fTraj.NumberFitMomentum();  }
+    [[deprecated("Use NumberTrajectoryPoints() instead")]]
+    inline size_t   NumberFitMomentum()                                                const { return HasMomentum()? NPoints(): 0U; }
     inline TVector3 Vertex()                                                           const { auto& loc = fTraj.Vertex(); return TVector3(loc.X(),loc.Y(),loc.Z()); }
     inline TVector3 End()                                                              const { auto& loc = fTraj.End(); return TVector3(loc.X(),loc.Y(),loc.Z()); }
     inline TVector3 VertexDirection()                                                  const { auto dir = fTraj.VertexDirection(); return TVector3(dir.X(),dir.Y(),dir.Z()); }
@@ -236,7 +237,8 @@ namespace recob {
            TMatrixD VertexCovariance()                                                 const;
            TMatrixD EndCovariance()                                                    const;
     inline void     TrajectoryAtPoint(unsigned int p, TVector3& pos, TVector3& dir)    const { fTraj.TrajectoryAtPoint(p,pos,dir); }
-    inline void     Extent(std::vector<double> &xyzStart, std::vector<double> &xyzEnd) const { return fTraj.Extent(xyzStart, xyzEnd); }
+    [[deprecated("Use Extent() (with point interface) instead")]]
+    void     Extent(std::vector<double> &xyzStart, std::vector<double> &xyzEnd) const;
     inline void     Direction(double *dcosStart, double *dcosEnd)                      const { return fTraj.Direction(dcosStart, dcosEnd); }
            size_t   NumberdQdx(geo::View_t view=geo::kUnknown)                         const;
     const double&   DQdxAtPoint(unsigned int p, geo::View_t view=geo::kUnknown)        const;
