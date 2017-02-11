@@ -126,10 +126,10 @@ namespace recob {
     //
     
     /// Returns whether the shower has a valid opening angle.
-    bool hasOpeningAngle() const;
+    bool has_open_angle() const;
     
     /// Returns whether the shower has a valid length.
-    bool hasLength() const;
+    bool has_length() const;
     
     
     friend std::ostream& operator << (std::ostream& stream, Shower const& a);
@@ -163,8 +163,8 @@ namespace recob {
    // being floating point numbers, equality is a risky comparison;
    // we use anything negative to denote that the following items are not valid
    //
-   inline bool recob::Shower::hasOpeningAngle() const { return fOpenAngle >= 0.0; }
-   inline bool recob::Shower::hasLength() const { return fLength >= 0.0; }
+   inline bool recob::Shower::has_open_angle() const { return fOpenAngle >= 0.0; }
+   inline bool recob::Shower::has_length() const { return fLength >= 0.0; }
     
     
 
