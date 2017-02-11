@@ -86,22 +86,22 @@ namespace recob {
       /// Compute the jacobian to translate track covariance from global to local coordinates.
       /// The track momentum is needed to compute the jacobian.
       /// Local coordinates are on the plane orthogonal to planeDir (in most cases this will be the same direction as the momentum, but the function is generic).
-      static SMatrix65 Local5DToGlobal6DJacobian(const Vector_t& momentum, const Vector_t& planeDir) {
-	Plane p(Point_t(), planeDir); return p.Local5DToGlobal6DJacobian(momentum);
+      static SMatrix65 Local5DToGlobal6DJacobian(bool hasMomentum, const Vector_t& momOrDir, const Vector_t& planeDir) {
+	Plane p(Point_t(), planeDir); return p.Local5DToGlobal6DJacobian(hasMomentum, momOrDir);
       }
-      inline SMatrix65 Local5DToGlobal6DJacobian(const Vector_t& momentum) const { return Local5DToGlobal6DJacobian(momentum,fPlaneDir,fTrigCache); }
-      SMatrix65 Local5DToGlobal6DJacobian(const Vector_t& momentum, const Vector_t& planeDir, const TrigCache& trigCache) const;
+      inline SMatrix65 Local5DToGlobal6DJacobian(bool hasMomentum, const Vector_t& momOrDir) const { return Local5DToGlobal6DJacobian(hasMomentum, momOrDir,fPlaneDir,fTrigCache); }
+      SMatrix65 Local5DToGlobal6DJacobian(bool hasMomentum, const Vector_t& momOrDir, const Vector_t& planeDir, const TrigCache& trigCache) const;
       //@}
 
       //@{
       /// Compute the jacobian to translate track covariance from local to global coordinates.
       /// The track momentum is needed to compute the jacobian.
       /// Local coordinates are on the plane orthogonal to planeDir (in most cases this will be the same direction as the momentum, but the function is generic).
-      static SMatrix56 Global6DToLocal5DJacobian(const Vector_t& momentum, const Vector_t& planeDir) {
-	Plane p(Point_t(), planeDir); return p.Global6DToLocal5DJacobian(momentum);
+      static SMatrix56 Global6DToLocal5DJacobian(bool hasMomentum, const Vector_t& momOrDir, const Vector_t& planeDir) {
+	Plane p(Point_t(), planeDir); return p.Global6DToLocal5DJacobian(hasMomentum, momOrDir);
       }
-      inline SMatrix56 Global6DToLocal5DJacobian(const Vector_t& momentum) const { return Global6DToLocal5DJacobian(momentum,fPlaneDir,fTrigCache); }
-      SMatrix56 Global6DToLocal5DJacobian(const Vector_t& momentum, const Vector_t& planeDir, const TrigCache& trigCache) const;
+      inline SMatrix56 Global6DToLocal5DJacobian(bool hasMomentum, const Vector_t& momOrDir) const { return Global6DToLocal5DJacobian(hasMomentum, momOrDir,fPlaneDir,fTrigCache); }
+      SMatrix56 Global6DToLocal5DJacobian(bool hasMomentum, const Vector_t& momOrDir, const Vector_t& planeDir, const TrigCache& trigCache) const;
       //@}
 
       //@{

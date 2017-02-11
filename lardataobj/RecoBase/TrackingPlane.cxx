@@ -52,7 +52,7 @@ namespace recob {
       return par5d;
     }
 
-    SMatrix65 Plane::Local5DToGlobal6DJacobian(const Vector_t& momentum, const Vector_t& planeDir, const TrigCache& trigCache) const {
+    SMatrix65 Plane::Local5DToGlobal6DJacobian(bool hasMomentum, const Vector_t& momentum, const Vector_t& planeDir, const TrigCache& trigCache) const {
       const double& sinalpha = trigCache.fSinA;
       const double& cosalpha = trigCache.fCosA;
       const double& sinbeta  = trigCache.fSinB;
@@ -64,7 +64,7 @@ namespace recob {
       const double l2 = pu/pw;
       const double l3 = pv/pw;
       const double p2 = momentum.X()*momentum.X() + momentum.Y()*momentum.Y() + momentum.Z()*momentum.Z();
-      const double l4 = (p2>0. ? 1./sqrt(p2) : 1.);
+      const double l4 = (hasMomentum ? 1./sqrt(p2) : 1.);
       const double den23 = l4*(l2*l2+l3*l3+1.)*sqrt(l2*l2+l3*l3+1.);
       const double den4 = l4*l4*sqrt(l2*l2+l3*l3+1.);
       SMatrix65 j;
@@ -91,24 +91,24 @@ namespace recob {
       j(3,1) = 0.;
       j(3,2) = (cosalpha*(l3*l3+1.) - sinalpha*l2)/den23;
       j(3,3) = -l3*(l2*cosalpha + sinalpha)/den23;
-      j(3,4) = -(l2*cosalpha + sinalpha)/den4;
+      j(3,4) = (hasMomentum ? -(l2*cosalpha + sinalpha)/den4 : 0.);
       //
       j(4,0) = 0.;
       j(4,1) = 0.;
       j(4,2) = (cosalpha*sinbeta*l2 - cosbeta*l2*l3 + sinalpha*sinbeta*(l3*l3+1.))/den23;
       j(4,3) = (sinbeta*l3*(cosalpha-sinalpha*l2) + cosbeta*(l2*l2+1.))/den23;
-      j(4,4) = (cosalpha*sinbeta - cosbeta*l3 - sinalpha*sinbeta*l2)/den4;
+      j(4,4) = (hasMomentum ? (cosalpha*sinbeta - cosbeta*l3 - sinalpha*sinbeta*l2)/den4 : 0.);
       //
       j(5,0) = 0.;
       j(5,1) = 0.;
       j(5,2) = -(cosalpha*cosbeta*l2 + cosbeta*sinalpha*l3*l3 + cosbeta*sinalpha + sinbeta*l2*l3)/den23;
       j(5,3) = (-cosalpha*cosbeta*l3 + cosbeta*sinalpha*l2*l3 + sinbeta*l2*l2 + sinbeta)/den23;
-      j(5,4) = (-cosalpha*cosbeta + cosbeta*sinalpha*l2 - sinbeta*l3)/den4;
+      j(5,4) = (hasMomentum ? (-cosalpha*cosbeta + cosbeta*sinalpha*l2 - sinbeta*l3)/den4 : 0.);
       //
       return j;
     }
 
-    SMatrix56 Plane::Global6DToLocal5DJacobian(const Vector_t& momentum, const Vector_t& planeDir, const TrigCache& trigCache) const {
+    SMatrix56 Plane::Global6DToLocal5DJacobian(bool hasMomentum, const Vector_t& momentum, const Vector_t& planeDir, const TrigCache& trigCache) const {
       const double& sinalpha = trigCache.fSinA;
       const double& cosalpha = trigCache.fCosA;
       const double& sinbeta  = trigCache.fSinB;
@@ -148,9 +148,9 @@ namespace recob {
       j(4,0) = 0.;
       j(4,1) = 0.;
       j(4,2) = 0.;
-      j(4,3) = -momentum.X()/den4;
-      j(4,4) = -momentum.Y()/den4;
-      j(4,5) = -momentum.Z()/den4;
+      j(4,3) = (hasMomentum ? -momentum.X()/den4 : 0.);
+      j(4,4) = (hasMomentum ? -momentum.Y()/den4 : 0.);
+      j(4,5) = (hasMomentum ? -momentum.Z()/den4 : 0.);
       //
       return j;
     }
