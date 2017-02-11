@@ -14,6 +14,9 @@
 #include <iostream>
 
 namespace recob{
+  
+  // the value is assigned in the class definition:
+  constexpr double Shower::InvalidOpeningAngle;
 
   //----------------------------------------------------------------------
   Shower::Shower()

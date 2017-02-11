@@ -39,6 +39,12 @@ namespace recob {
     int fBestPlane;
     double fLength;                 ///< the length of the shower
     double fOpenAngle;              ///< the opening angle of the shower
+    
+    /// Internal value used to denote an invalid shower length.
+    static constexpr double InvalidLength = -1.0;
+    
+    /// Internal value used to denote an invalid shower opening angle.
+    static constexpr double InvalidOpeningAngle = -1.0;
 
   public:
 
@@ -51,9 +57,29 @@ namespace recob {
 	   std::vector< double >  dEdx,
 	   std::vector< double >  dEdxErr,
 	   int bestplane,
-	   int     id=util::kBogusI,
-           double length = 0.,
-           double openAngle = 0.);
+	   int     id,
+           double length,
+           double openAngle);
+
+    /// Legacy constructor (with no length and no opening angle).
+    /// @deprecated Use the complete constructor instead!
+    Shower(TVector3 const& dcosVtx,
+      TVector3 const& dcosVtxErr,
+      TVector3 const& xyz,
+      TVector3 const& xyzErr,
+      std::vector< double >  TotalEnergy,
+      std::vector< double >  TotalEnergyErr,
+      std::vector< double >  dEdx,
+      std::vector< double >  dEdxErr,
+      int bestplane,
+      int     id=util::kBogusI)
+      :
+      Shower(
+        dcosVtx, dcosVtxErr, xyz, xyzErr, TotalEnergy, TotalEnergyErr, dEdx, dEdxErr,
+        bestplane, id,
+        InvalidLength, InvalidOpeningAngle
+        )
+      {}
 
     
     
@@ -89,11 +115,21 @@ namespace recob {
     const std::vector< double >& MIPEnergy()    const;
     const std::vector< double >& MIPEnergyErr() const;
     int    best_plane()               const;
-    inline double Length() const;
-    inline double OpenAngle() const;
+    double Length() const;
+    double OpenAngle() const;
     const std::vector< double >& dEdx()    const; 
     const std::vector< double >& dEdxErr() const;
     
+    //
+    // being floating point numbers, equality is a risky comparison;
+    // we use anything negative to denote that the following items are not valid
+    //
+    
+    /// Returns whether the shower has a valid opening angle.
+    bool hasOpeningAngle() const;
+    
+    /// Returns whether the shower has a valid length.
+    bool hasLength() const;
     
     
     friend std::ostream& operator << (std::ostream& stream, Shower const& a);
@@ -123,6 +159,14 @@ namespace recob {
    inline const std::vector< double >& recob::Shower::dEdx()    const { return fdEdx;          }
    inline const std::vector< double >& recob::Shower::dEdxErr() const { return fSigmadEdx;     }
 
+   //
+   // being floating point numbers, equality is a risky comparison;
+   // we use anything negative to denote that the following items are not valid
+   //
+   inline bool recob::Shower::hasOpeningAngle() const { return fOpenAngle >= 0.0; }
+   inline bool recob::Shower::hasLength() const { return fLength >= 0.0; }
+    
+    
 
 
 
