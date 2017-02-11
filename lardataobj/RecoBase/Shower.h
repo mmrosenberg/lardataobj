@@ -9,10 +9,8 @@
 #ifndef SHOWER_H
 #define SHOWER_H
 
-#ifndef __GCCXML__
 #include <iosfwd>
 #include "larcoreobj/SimpleTypesAndConstants/PhysicalConstants.h"
-#endif
 
 #include "TVector3.h"
 
@@ -41,7 +39,6 @@ namespace recob {
     int fBestPlane;
     double fLength;                 ///< the length of the shower
     double fOpenAngle;              ///< the opening angle of the shower
-#ifndef __GCCXML__
 
   public:
 
@@ -103,12 +100,10 @@ namespace recob {
 
     friend bool          operator <   (const Shower & a, const Shower & b);
 
-#endif
 
       };
 }
 
-#ifndef __GCCXML__
    inline int    recob::Shower::ID()               const { return fID;               }
 
    inline const TVector3& recob::Shower::Direction()    const { return fDCosStart;          }
@@ -128,7 +123,6 @@ namespace recob {
    inline const std::vector< double >& recob::Shower::dEdx()    const { return fdEdx;          }
    inline const std::vector< double >& recob::Shower::dEdxErr() const { return fSigmadEdx;     }
 
-#endif
 
 
 
