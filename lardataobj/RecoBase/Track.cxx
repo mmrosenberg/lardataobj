@@ -10,37 +10,12 @@
 #include "messagefacility/MessageLogger/MessageLogger.h"
 
 #include "lardataobj/RecoBase/Track.h"
+#include "lardataobj/RecoBase/TrackingPlane.h"
 
 #include <iomanip>
 #include <iostream>
 
-namespace recob{
-
-  //----------------------------------------------------------------------
-  Track::Track()
-  {
-  }
-
-  //----------------------------------------------------------------------
-  Track::Track(std::vector<TVector3>              const& xyz,
-	       std::vector<TVector3>              const& dxdydz,
-	       std::vector<std::vector <double> >        dQdx,
-	       std::vector<double>                       fitMomentum,
-               int                                       ID)
-      : fXYZ (xyz)
-      , fDir (dxdydz)
-      , fdQdx(dQdx)
-      , fFitMomentum(fitMomentum)
-      , fID  (ID)
-  {
-    fCov.resize(0);
-
-    if(fXYZ.size() != fDir.size() || fXYZ.size() < 1)
-      throw cet::exception("Track Constructor") << "Position, direction vector "
-						<< " size problem:\n"
-						<< "\t position size = "    << fXYZ.size()
-						<< "\n\t direction size = " << fDir.size() << "\n";
-  }
+namespace recob {
 
   //----------------------------------------------------------------------
   Track::Track(std::vector<TVector3>               const& xyz,
@@ -49,19 +24,41 @@ namespace recob{
 	       std::vector< std::vector <double> >        dQdx,
 	       std::vector<double>                        fitMomentum,
 	       int                                        ID)
-    : fXYZ  (xyz)
-    , fDir  (dxdydz)
-    , fCov  (cov)
-    , fdQdx (dQdx)
-    , fFitMomentum(fitMomentum)
+    : fPId(0), fChi2(-1.), fNdof(0.)
     , fID   (ID)
+    , fdQdx (dQdx)
   {
-    if(fXYZ.size() != fDir.size() || fXYZ.size() < 1)
+    if(xyz.size() != dxdydz.size() || xyz.size() < 1)
       throw cet::exception("Track Constructor") << "Position, direction vectors "
 						<< " size problem:\n"
-						<< "\t position size = "    << fXYZ.size()
-						<< "\n\t direction size = " << fDir.size() << "\n";
+						<< "\t position size = "    << xyz.size()
+						<< "\n\t direction size = " << dxdydz.size() << "\n";
 
+    Positions_t pos = Positions_t();
+    for (auto p : xyz) pos.push_back(std::move(Point_t(p.X(),p.Y(),p.Z())));
+    auto size = pos.size();
+    Momenta_t mom = Momenta_t();    
+    for (auto m : dxdydz) mom.push_back(std::move(Vector_t(m.X(),m.Y(),m.Z())));
+    bool hasMom = false;
+    if ( fitMomentum.size()==2 ) {
+      if (fitMomentum[0]!=util::kBogusD && fitMomentum[1]!=util::kBogusD) {
+	hasMom = true;
+	for (unsigned int i=0;i<size-1;++i) mom[i]*=fitMomentum[0];
+	mom[size-1]*=fitMomentum[1];
+      }
+    } else if (fitMomentum.size()==size) {
+      hasMom = true;
+      for (unsigned int i=0;i<size-1;++i) mom[i]*=fitMomentum[i];
+    }
+    fTraj = TrackTrajectory(std::move(pos),std::move(mom),Flags_t(size),hasMom);
+    if (cov.size()==2) {
+      for (unsigned int i=0; i<5; i++) {
+	for (unsigned int j=i; j<5; j++) {
+	  fCovVertex.At(i,j) = cov[0](i,j);
+	  fCovEnd.At(i,j) = cov[1](i,j);
+	}
+      }
+    }
   }
 
   //----------------------------------------------------------------------
@@ -88,73 +85,6 @@ namespace recob{
     }
 
     return fdQdx.at(view).at(p);
-  }
-
-  //----------------------------------------------------------------------
-  void Track::Extent(std::vector<double> &xyzStart,
-		     std::vector<double> &xyzEnd) const
-  {
-    xyzStart.resize(3);
-    xyzEnd.resize(3);
-
-    xyzStart[0] = fXYZ.front().X();
-    xyzStart[1] = fXYZ.front().Y();
-    xyzStart[2] = fXYZ.front().Z();
-
-    xyzEnd[0]   = fXYZ.back().X();
-    xyzEnd[1]   = fXYZ.back().Y();
-    xyzEnd[2]   = fXYZ.back().Z();
-
-    return;
-  }
-
-  //----------------------------------------------------------------------
-  void Track::Direction(double *dcosStart,
-			double *dcosEnd) const
-  {
-    dcosStart[0] = fDir.front().X();
-    dcosStart[1] = fDir.front().Y();
-    dcosStart[2] = fDir.front().Z();
-
-    dcosEnd[0]   = fDir.back().X();
-    dcosEnd[1]   = fDir.back().Y();
-    dcosEnd[2]   = fDir.back().Z();
-
-    return;
-  }
-
-  //----------------------------------------------------------------------
-  // This is a simple summation of the distance between consecutive
-  // points on the track starting with the p-th point
-  // It assumes that there are sufficient points to make a
-  // reasonable measurement of the length
-  // This method can be combined with a particle id hypothesis to
-  // get an estimate of momentum from range.
-  double Track::Length(size_t p) const
-  {
-    double length = 0.;
-
-    for(size_t i = p+1; i < fXYZ.size(); ++i)
-      length += std::sqrt( pow(fXYZ[i].x() - fXYZ[i-1].x(), 2) +
-			   pow(fXYZ[i].y() - fXYZ[i-1].y(), 2) +
-			   pow(fXYZ[i].z() - fXYZ[i-1].z(), 2) );
-    return length;
-  }
-
-  //----------------------------------------------------------------------
-  // distance from point p on the trajectory to the end of the track
-
-
-
-  //----------------------------------------------------------------------
-  void Track::TrajectoryAtPoint(unsigned int p,
-				TVector3    &pos,
-				TVector3    &dir) const
-  {
-    pos = fXYZ.at(p);
-    dir = fDir.at(p);
-
-    return;
   }
 
   //----------------------------------------------------------------------
@@ -186,76 +116,6 @@ namespace recob{
     return stream;
   }
 
-  //----------------------------------------------------------------------
-  // Fill the global-to-local rotation matrix based on direction at point fDir[p].
-  // The third axis of the local coordinate system points along the track direction.
-  void Track::GlobalToLocalRotationAtPoint(unsigned int p, TMatrixD& rot) const
-  {
-    // Make sure matrix has the correct size.
-
-    if(rot.GetNrows() != 3 || rot.GetNcols() != 3)
-      rot.ResizeTo(3,3);
-
-    // Calculate the global-to-local rotation matrix.
-
-    const TVector3& dir = fDir.at(p);
-    double dirmag = dir.Mag();
-    double diryz = std::sqrt(dir.Y()*dir.Y() + dir.Z()*dir.Z());
-
-    double sinth = dir.X() / dirmag;
-    double costh = diryz / dirmag;
-    double sinphi = 0.;
-    double cosphi = 1.;
-    if(diryz != 0) {
-      sinphi = -dir.Y() / diryz;
-      cosphi = dir.Z() / diryz;
-    }
-    rot(0,0) = costh;
-    rot(1,0) = 0.;
-    rot(2,0) = sinth;
-    rot(0,1) = sinth * sinphi;
-    rot(1,1) = cosphi;
-    rot(2,1) = -costh * sinphi;
-    rot(0,2) = -sinth * cosphi;
-    rot(1,2) = sinphi;
-    rot(2,2) = costh * cosphi;
-  }
-
-  //----------------------------------------------------------------------
-  // Fill the local-to-global rotation matrix based on direction at point fDir[p].
-  // The third axis of the local coordinate system points along the track direction.
-  void Track::LocalToGlobalRotationAtPoint(unsigned int p, TMatrixD& rot) const
-  {
-    // Make sure matrix has the correct size.
-
-    if(rot.GetNrows() != 3 || rot.GetNcols() != 3)
-      rot.ResizeTo(3,3);
-
-    // Calculate the global-to-local rotation matrix.
-
-    const TVector3& dir = fDir.at(p);
-    double dirmag = dir.Mag();
-    double diryz = std::sqrt(dir.Y()*dir.Y() + dir.Z()*dir.Z());
-
-    double sinth = dir.X() / dirmag;
-    double costh = diryz / dirmag;
-    double sinphi = 0.;
-    double cosphi = 1.;
-    if(diryz != 0) {
-      sinphi = -dir.Y() / diryz;
-      cosphi = dir.Z() / diryz;
-    }
-    rot(0,0) = costh;
-    rot(0,1) = 0.;
-    rot(0,2) = sinth;
-    rot(1,0) = sinth * sinphi;
-    rot(1,1) = cosphi;
-    rot(1,2) = -costh * sinphi;
-    rot(2,0) = -sinth * cosphi;
-    rot(2,1) = sinphi;
-    rot(2,2) = costh * cosphi;
-  }
-
   //----------------------------------------------------------------------------
   bool operator < (const Track & a, const Track & b)
   {
@@ -266,35 +126,70 @@ namespace recob{
   }
   
   //----------------------------------------------------------------------------
-  double Track::ZenithAngle() const 
-  {
-    /// Returns the zenith angle, the angle which the track makes with respect to the
-    /// y axis (vertical) in radians. The positive (negative) y direction returns pi (0)
-    /// Conversion from LArSoft co-ordinates to 'regular' cartesian co-ordinates is 
-    /// required and is done by; x -> y, y -> z, z -> x. (LAr -> vec)
-    
-    TVector3 CartVec;
-    CartVec[0] = fDir.front()[2]; // x = z(LAr)
-    CartVec[1] = fDir.front()[0]; // y = x(LAr)
-    CartVec[2] = fDir.front()[1]; // z = y(LAr)
-
-    return util::pi() - CartVec.Theta();
+  TMatrixD Track::VertexCovariance() const {
+    TMatrixD result = TMatrixD(5,5);
+    for (unsigned int i=0; i<5; i++) {
+      for (unsigned int j=0; j<5; j++) {
+	result(i,j) = fCovVertex.At(i,j);
+      }
+    }
+    return result;
   }
 
   //----------------------------------------------------------------------------
-  double Track::AzimuthAngle() const 
-  {
-    /// Returns the azimuthal angle, the angle which the track makes around the y axis
-    /// (vertical) in radians. The positive z direction returns 0.
-    /// Conversion from LArSoft co-ordinates to 'regular' cartesian co-ordinates is 
-    /// required and is done by; x -> y, y -> z, z -> x. (LAr -> vec)
-   
-    TVector3 CartVec;
-    CartVec[0] = fDir.front()[2]; // x = z(LAr)
-    CartVec[1] = fDir.front()[0]; // y = x(LAr)
-    CartVec[2] = fDir.front()[1]; // z = y(LAr)
-    
-    return CartVec.Phi();
+  TMatrixD Track::EndCovariance() const {
+    TMatrixD result = TMatrixD(5,5);
+    for (unsigned int i=0; i<5; i++) {
+      for (unsigned int j=0; j<5; j++) {
+	result(i,j) = fCovEnd.At(i,j);
+      }
+    }
+    return result;
   }
-  
+  //----------------------------------------------------------------------------
+  void Track::Extent(std::vector<double>& start, std::vector<double>& end) const
+    { details::legacy::FillTwoVectors(Vertex(), End(), start, end); }
+
+
+  //----------------------------------------------------------------------------
+  Track::SVector6 Track::VertexParametersGlobal6D() const {
+    Track::SVector6 result;
+    result[0] = Vertex()[0];
+    result[1] = Vertex()[1];
+    result[2] = Vertex()[2];
+    result[3] = VertexDirection()[0];
+    result[4] = VertexDirection()[1];
+    result[5] = VertexDirection()[2];
+    return result;
+  }
+
+  Track::SVector6 Track::EndParametersGlobal6D() const {
+    Track::SVector6 result;
+    result[0] = End()[0];
+    result[1] = End()[1];
+    result[2] = End()[2];
+    result[3] = EndDirection()[0];
+    result[4] = EndDirection()[1];
+    result[5] = EndDirection()[2];
+    return result;
+  }
+
+  Track::SVector5 Track::VertexParametersLocal5D() const {
+    //return tracking::Plane::Global6DToLocal5DParameters(VertexParametersGlobal6D(), fTraj.Vertex(), fTraj.VertexDirection());
+    return Track::SVector5(0.,0.,0.,0.,(HasMomentum() ? 1./VertexMomentum() : 1. ));
+  }
+
+  Track::SVector5 Track::EndParametersLocal5D() const {
+    //return tracking::Plane::Global6DToLocal5DParameters(EndParametersGlobal6D(), fTraj.End(), fTraj.EndDirection());
+    return Track::SVector5(0.,0.,0.,0.,(HasMomentum() ? 1./EndMomentum() : 1. ));
+  }
+
+  Track::SMatrixSym66 Track::VertexCovarianceGlobal6D() const {
+    return ROOT::Math::Similarity(tracking::Plane::Local5DToGlobal6DJacobian(fTraj.VertexMomentumVector(),fTraj.VertexDirection()),fCovVertex);
+  }
+
+  Track::SMatrixSym66 Track::EndCovarianceGlobal6D() const {
+    return ROOT::Math::Similarity(tracking::Plane::Local5DToGlobal6DJacobian(fTraj.EndMomentumVector(),fTraj.EndDirection()),fCovEnd);
+  }
+
 }
