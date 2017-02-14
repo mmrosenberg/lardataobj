@@ -526,7 +526,7 @@ namespace recob {
      * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
      * auto rot = traj.GlobalToLocalRotationAtPoint(0);
      * auto local = rot * traj.DirectionAtPoint(0);
-     * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
      * local will be a `Vector_t` object (like the direction at the right side
      * of the product) that points to (0, 0, 1).
      * 
