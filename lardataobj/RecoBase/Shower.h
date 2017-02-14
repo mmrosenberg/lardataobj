@@ -10,6 +10,7 @@
 #define SHOWER_H
 
 #include <iosfwd>
+#include <limits> // std::numeric_limits<>
 #include "larcoreobj/SimpleTypesAndConstants/PhysicalConstants.h"
 
 #include "TVector3.h"
@@ -41,10 +42,12 @@ namespace recob {
     double fOpenAngle;              ///< the opening angle of the shower
     
     /// Internal value used to denote an invalid shower length.
-    static constexpr double InvalidLength = -1.0;
+    static constexpr double InvalidLength
+      = std::numeric_limits<double>::lowest();
     
     /// Internal value used to denote an invalid shower opening angle.
-    static constexpr double InvalidOpeningAngle = -1.0;
+    static constexpr double InvalidOpeningAngle
+      = std::numeric_limits<double>::lowest();
 
   public:
 
@@ -136,8 +139,11 @@ namespace recob {
 
     friend bool          operator <   (const Shower & a, const Shower & b);
 
-
-      };
+    static_assert(InvalidLength < 0.0f, "Invalid length must be negative!");
+    static_assert
+      (InvalidOpeningAngle < 0.0f, "Invalid opening angle must be negative!");
+    
+  }; // recob::Shower
 }
 
    inline int    recob::Shower::ID()               const { return fID;               }
