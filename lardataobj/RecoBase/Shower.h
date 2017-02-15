@@ -3,16 +3,15 @@
 //
 // \brief Definition of shower object for LArSoft
 //
-// \author brebel@fnal.gov, modifications by andrzej.szelc@yale.edu
+// \author brebel@fnal.gov, modifications by andrzej.szelc@yale.edu and yuntse@slac.stanford.edu
 //
 ////////////////////////////////////////////////////////////////////////////
 #ifndef SHOWER_H
 #define SHOWER_H
 
-#ifndef __GCCXML__
 #include <iosfwd>
+#include <limits> // std::numeric_limits<>
 #include "larcoreobj/SimpleTypesAndConstants/PhysicalConstants.h"
-#endif
 
 #include "TVector3.h"
 
@@ -39,8 +38,55 @@ namespace recob {
     std::vector< double > fTotalMIPEnergy;           ///< Calculated Energy per each plane
     std::vector< double > fSigmaTotalMIPEnergy;           ///< Calculated Energy per each plane
     int fBestPlane;
+    /**
+     * @brief Shower length [cm].
+     *
+     * The length of a shower, and should be greater than 0.
+     * The characteristic depends on shower reconstruction algorithms.
+     * For example, in PCAShowerParticleBuildingAlgorithm (larpandora), 
+     * it is defined as the three standard deviations of the spacepoint 
+     * distribution along the principal axis.
+     *
+     */
     double fLength;
-#ifndef __GCCXML__
+
+    /**
+     * @brief Opening angle [rad].
+     *
+     * The angle is defined in the @f$ [ 0, \pi/2 ] @f$ range.
+     * It is defined as the angle of the shower cone.
+     * The characteristic depends on shower reconstruction algorithms.
+     * For example, in PCAShowerParticleBuildingAlgorithm (larpandora),
+     * it is defined as the ratio of the standard deviation of the 
+     * spacepoint distribution along the principal axis to that along 
+     * the secondary axis.
+     *
+     */
+    double fOpenAngle;
+    
+    /**
+     * @brief The magic constant indicating the invalidity of the 
+     *        shower length variable
+     *
+     * This internal constant represents invalid shower length.
+     * It is how the function has_length() determines the validity
+     * of fLength.
+     *
+     */
+    static constexpr double InvalidLength
+      = std::numeric_limits<double>::lowest();
+    
+    /** 
+     * @brief The magic constant indicating the invalidity of the 
+     *        opening angle variable
+     *
+     * This internal constant represents invalid opening angle.
+     * It is how the function has_open_angle() determines the validity
+     * of fOpenAngle.
+     *
+     */
+    static constexpr double InvalidOpeningAngle
+      = std::numeric_limits<double>::lowest();
 
   public:
 
@@ -53,7 +99,29 @@ namespace recob {
 	   std::vector< double >  dEdx,
 	   std::vector< double >  dEdxErr,
 	   int bestplane,
-	   int     id=util::kBogusI);
+	   int     id,
+           double length,
+           double openAngle);
+
+    /// Legacy constructor (with no length and no opening angle).
+    /// @deprecated Use the complete constructor instead!
+    Shower(TVector3 const& dcosVtx,
+      TVector3 const& dcosVtxErr,
+      TVector3 const& xyz,
+      TVector3 const& xyzErr,
+      std::vector< double >  TotalEnergy,
+      std::vector< double >  TotalEnergyErr,
+      std::vector< double >  dEdx,
+      std::vector< double >  dEdxErr,
+      int bestplane,
+      int     id=util::kBogusI)
+      :
+      Shower(
+        dcosVtx, dcosVtxErr, xyz, xyzErr, TotalEnergy, TotalEnergyErr, dEdx, dEdxErr,
+        bestplane, id,
+        InvalidLength, InvalidOpeningAngle
+        )
+      {}
 
     
     
@@ -72,7 +140,7 @@ namespace recob {
     void set_dedx      (const std::vector< double >& q) { fdEdx = q;        }
     void set_dedx_err  (const std::vector< double >& q) { fSigmadEdx = q;        }
     void set_length(const double& l) { fLength = l; }    
-    
+    void set_open_angle( const double& a )              { fOpenAngle = a;   }
     
     
     int    ID()               const;
@@ -89,22 +157,34 @@ namespace recob {
     const std::vector< double >& MIPEnergy()    const;
     const std::vector< double >& MIPEnergyErr() const;
     int    best_plane()               const;
-    inline double Length() const;
+    double Length() const;
+    double OpenAngle() const;
     const std::vector< double >& dEdx()    const; 
     const std::vector< double >& dEdxErr() const;
     
+    //
+    // being floating point numbers, equality is a risky comparison;
+    // we use anything negative to denote that the following items are not valid
+    //
+    
+    /// Returns whether the shower has a valid opening angle.
+    bool has_open_angle() const;
+    
+    /// Returns whether the shower has a valid length.
+    bool has_length() const;
     
     
     friend std::ostream& operator << (std::ostream& stream, Shower const& a);
 
     friend bool          operator <   (const Shower & a, const Shower & b);
 
-#endif
-
-      };
+    static_assert(InvalidLength < 0.0f, "Invalid length must be negative!");
+    static_assert
+      (InvalidOpeningAngle < 0.0f, "Invalid opening angle must be negative!");
+    
+  }; // recob::Shower
 }
 
-#ifndef __GCCXML__
    inline int    recob::Shower::ID()               const { return fID;               }
 
    inline const TVector3& recob::Shower::Direction()    const { return fDCosStart;          }
@@ -120,10 +200,18 @@ namespace recob {
    inline const std::vector< double >& recob::Shower::MIPEnergyErr() const { return fSigmaTotalMIPEnergy;     }
    inline int    recob::Shower::best_plane()               const { return fBestPlane;               }
    inline double recob::Shower::Length() const { return fLength; }    
+   inline double recob::Shower::OpenAngle() const { return fOpenAngle; }
    inline const std::vector< double >& recob::Shower::dEdx()    const { return fdEdx;          }
    inline const std::vector< double >& recob::Shower::dEdxErr() const { return fSigmadEdx;     }
 
-#endif
+   //
+   // being floating point numbers, equality is a risky comparison;
+   // we use anything negative to denote that the following items are not valid
+   //
+   inline bool recob::Shower::has_open_angle() const { return fOpenAngle >= 0.0; }
+   inline bool recob::Shower::has_length() const { return fLength >= 0.0; }
+    
+    
 
 
 
