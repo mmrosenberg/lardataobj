@@ -3,7 +3,7 @@
 //
 // \brief Definition of shower object for LArSoft
 //
-// \author brebel@fnal.gov, modifications by andrzej.szelc@yale.edu
+// \author brebel@fnal.gov, modifications by andrzej.szelc@yale.edu and yuntse@slac.stanford.edu
 //
 ////////////////////////////////////////////////////////////////////////////
 #ifndef SHOWER_H
@@ -38,14 +38,50 @@ namespace recob {
     std::vector< double > fTotalMIPEnergy;           ///< Calculated Energy per each plane
     std::vector< double > fSigmaTotalMIPEnergy;           ///< Calculated Energy per each plane
     int fBestPlane;
-    double fLength;                 ///< the length of the shower
-    double fOpenAngle;              ///< the opening angle of the shower
+    /**
+     * @brief Shower length [cm].
+     *
+     * The length of a shower, and should be greater than 0.
+     * The characteristic depends on shower reconstruction algorithms.
+     * For example, in the current algorithm, it is defined as the three
+     * standard deviations of the spacepoint distribution along the
+     * principal axis.
+     *
+     */
+    double fLength;
+
+    /**
+     * @brief Opening angle [rad].
+     *
+     * The angle is defined in the @f$ [ 0, \pi/2 ] @f$ range.
+     * It is defined as the angle of the shower cone.
+     * The characteristic depends on shower reconstruction algorithms.
+     * In the current algorithm, it is defined as the ratio of the
+     * standard deviation of the spacepoint distribution along the
+     * principal axis to that along the secondary axis.
+     *
+     */
+    double fOpenAngle;
     
-    /// Internal value used to denote an invalid shower length.
+    /**
+     * @brief Validity of the shower length variable
+     *
+     * This internal variable indicates if the shower length variable is the
+     * algorithm is valid or not (std::numeric_limits<double>::lowest())
+     * It can be accessed by the function has_length()
+     *
+     */
     static constexpr double InvalidLength
       = std::numeric_limits<double>::lowest();
     
-    /// Internal value used to denote an invalid shower opening angle.
+    /** 
+     * @brief Validity of the opening angle variable
+     *
+     * This internal variable denotes whether the opening angle is
+     * valid or not (std::numeric_limits<double>::lowest())
+     * It can be accessed by the function has_open_angle()
+     *
+     */
     static constexpr double InvalidOpeningAngle
       = std::numeric_limits<double>::lowest();
 
