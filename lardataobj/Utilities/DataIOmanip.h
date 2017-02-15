@@ -71,7 +71,7 @@ namespace util {
      * std::cout << "Tv = " << util::manip::vector3D(Tv)
      *   << "; point: " << util::manip::vector3D(p)
      *   << std::endl;
-     * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
      * 
      */
     template <typename Vect>

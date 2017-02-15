@@ -1,5 +1,5 @@
 /**
- * \file MCBaseException.hh
+ * \file MCBaseException.h
  *
  * \ingroup MCBase
  * 
