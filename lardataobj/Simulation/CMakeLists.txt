@@ -1,10 +1,10 @@
 
 cet_make( LIBRARIES nusimdata_SimulationBase
-                    canvas_Persistency_Provenance
-                    canvas_Utilities
+                    canvas
+                    canvas
                     MF_MessageLogger
                     MF_Utilities
-                    cetlib
+                    cetlib cetlib_except
                     ${ROOT_BASIC_LIB_LIST}
           NO_DICTIONARY )
 
