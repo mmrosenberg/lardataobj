@@ -159,6 +159,12 @@ namespace recob {
       { return fFlags[i]; }
     
     /**
+     * @brief Returns all flags.
+     */
+    Flags_t const& Flags() const
+      { return fFlags; }
+
+    /**
      * @brief Returns whether the specified point has `NoPoint` flag unset.
      * @return whether the specified point has `NoPoint` flag unset
      * 

@@ -180,11 +180,11 @@ namespace recob {
   }
 
   Track::SMatrixSym66 Track::VertexCovarianceGlobal6D() const {
-    return ROOT::Math::Similarity(tracking::Plane::Local5DToGlobal6DJacobian(HasMomentum(),fTraj.VertexMomentumVector(),fTraj.VertexDirection()),fCovVertex);
+    return tracking::Plane::Local5DToGlobal6DCovariance(fCovVertex,HasMomentum(),fTraj.VertexMomentumVector(),fTraj.VertexDirection());
   }
 
   Track::SMatrixSym66 Track::EndCovarianceGlobal6D() const {
-    return ROOT::Math::Similarity(tracking::Plane::Local5DToGlobal6DJacobian(HasMomentum(),fTraj.EndMomentumVector(),fTraj.EndDirection()),fCovEnd);
+    return tracking::Plane::Local5DToGlobal6DCovariance(fCovEnd,HasMomentum(),fTraj.EndMomentumVector(),fTraj.EndDirection());
   }
 
 }

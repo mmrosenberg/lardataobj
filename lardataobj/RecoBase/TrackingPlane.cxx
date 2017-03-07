@@ -52,20 +52,21 @@ namespace recob {
       return par5d;
     }
 
-    SMatrix65 Plane::Local5DToGlobal6DJacobian(bool hasMomentum, const Vector_t& momentum, const Vector_t& planeDir, const TrigCache& trigCache) const {
+    SMatrix65 Plane::Local5DToGlobal6DJacobian(bool hasMomentum, const Vector_t& trackMomOrDir, const Vector_t& planeDir, const TrigCache& trigCache) const {
+      bool trackAlongPlaneDir = trackMomOrDir.Dot(planeDir)>0;
       const double& sinalpha = trigCache.fSinA;
       const double& cosalpha = trigCache.fCosA;
       const double& sinbeta  = trigCache.fSinB;
       const double& cosbeta  = trigCache.fCosB;
-      const double pu = momentum.X()*cosalpha + momentum.Y()*sinalpha*sinbeta - momentum.Z()*sinalpha*cosbeta;
-      const double pv = momentum.Y()*cosbeta + momentum.Z()*sinbeta;
-      const double pw = momentum.X()*sinalpha - momentum.Y()*cosalpha*sinbeta + momentum.Z()*cosalpha*cosbeta;
+      const double pu = trackMomOrDir.X()*cosalpha + trackMomOrDir.Y()*sinalpha*sinbeta - trackMomOrDir.Z()*sinalpha*cosbeta;
+      const double pv = trackMomOrDir.Y()*cosbeta + trackMomOrDir.Z()*sinbeta;
+      const double pw = trackMomOrDir.X()*sinalpha - trackMomOrDir.Y()*cosalpha*sinbeta + trackMomOrDir.Z()*cosalpha*cosbeta;
       //local parameters 2,3,4
       const double l2 = pu/pw;
       const double l3 = pv/pw;
-      const double p2 = momentum.X()*momentum.X() + momentum.Y()*momentum.Y() + momentum.Z()*momentum.Z();
+      const double p2 = trackMomOrDir.X()*trackMomOrDir.X() + trackMomOrDir.Y()*trackMomOrDir.Y() + trackMomOrDir.Z()*trackMomOrDir.Z();
       const double l4 = (hasMomentum ? 1./sqrt(p2) : 1.);
-      const double den23 = l4*(l2*l2+l3*l3+1.)*sqrt(l2*l2+l3*l3+1.);
+      const double den23 = ( trackAlongPlaneDir ? l4*(l2*l2+l3*l3+1.)*sqrt(l2*l2+l3*l3+1.) : -l4*(l2*l2+l3*l3+1.)*sqrt(l2*l2+l3*l3+1.) );
       const double den4 = l4*l4*sqrt(l2*l2+l3*l3+1.);
       SMatrix65 j;
       //
@@ -108,13 +109,13 @@ namespace recob {
       return j;
     }
 
-    SMatrix56 Plane::Global6DToLocal5DJacobian(bool hasMomentum, const Vector_t& momentum, const Vector_t& planeDir, const TrigCache& trigCache) const {
+    SMatrix56 Plane::Global6DToLocal5DJacobian(bool hasMomentum, const Vector_t& trackMomOrDir, const Vector_t& planeDir, const TrigCache& trigCache) const {
       const double& sinalpha = trigCache.fSinA;
       const double& cosalpha = trigCache.fCosA;
       const double& sinbeta  = trigCache.fSinB;
       const double& cosbeta  = trigCache.fCosB;
-      const double den23 = (cosalpha*(cosbeta*momentum.Z() - sinbeta*momentum.Y()) + sinalpha*momentum.X())*(cosalpha*(cosbeta*momentum.Z() - sinbeta*momentum.Y()) + sinalpha*momentum.X());
-      const double den4 = sqrt(momentum.X()*momentum.X()+momentum.Y()*momentum.Y()+momentum.Z()*momentum.Z())*(momentum.X()*momentum.X()+momentum.Y()*momentum.Y()+momentum.Z()*momentum.Z());
+      const double den23 = (cosalpha*(cosbeta*trackMomOrDir.Z() - sinbeta*trackMomOrDir.Y()) + sinalpha*trackMomOrDir.X())*(cosalpha*(cosbeta*trackMomOrDir.Z() - sinbeta*trackMomOrDir.Y()) + sinalpha*trackMomOrDir.X());
+      const double den4 = sqrt(trackMomOrDir.X()*trackMomOrDir.X()+trackMomOrDir.Y()*trackMomOrDir.Y()+trackMomOrDir.Z()*trackMomOrDir.Z())*(trackMomOrDir.X()*trackMomOrDir.X()+trackMomOrDir.Y()*trackMomOrDir.Y()+trackMomOrDir.Z()*trackMomOrDir.Z());
       SMatrix56 j;
       //
       j(0,0) = cosalpha;
@@ -134,23 +135,23 @@ namespace recob {
       j(2,0) = 0.;
       j(2,1) = 0.;
       j(2,2) = 0.;
-      j(2,3) = ((cosalpha*cosalpha + sinalpha*sinalpha)*(cosbeta*momentum.Z() - sinbeta*momentum.Y()))/den23;
-      j(2,4) = (sinbeta*momentum.X()*(cosalpha*cosalpha + sinalpha*sinalpha))/den23;
-      j(2,5) = -(cosbeta*momentum.X()*(cosalpha*cosalpha + sinalpha*sinalpha))/den23;
+      j(2,3) = ((cosalpha*cosalpha + sinalpha*sinalpha)*(cosbeta*trackMomOrDir.Z() - sinbeta*trackMomOrDir.Y()))/den23;
+      j(2,4) = (sinbeta*trackMomOrDir.X()*(cosalpha*cosalpha + sinalpha*sinalpha))/den23;
+      j(2,5) = -(cosbeta*trackMomOrDir.X()*(cosalpha*cosalpha + sinalpha*sinalpha))/den23;
       //
       j(3,0) = 0.;
       j(3,1) = 0.;
       j(3,2) = 0.;
-      j(3,3) = -(sinalpha*(cosbeta*momentum.Y() + sinbeta*momentum.Z()))/den23;
-      j(3,4) = (cosalpha*momentum.Z()*(cosbeta*cosbeta + sinbeta*sinbeta) + cosbeta*sinalpha*momentum.X())/den23;
-      j(3,5) = (-cosalpha*cosbeta*cosbeta*momentum.Y() - cosalpha*sinbeta*sinbeta*momentum.Y() + sinalpha*sinbeta*momentum.X())/den23;
+      j(3,3) = -(sinalpha*(cosbeta*trackMomOrDir.Y() + sinbeta*trackMomOrDir.Z()))/den23;
+      j(3,4) = (cosalpha*trackMomOrDir.Z()*(cosbeta*cosbeta + sinbeta*sinbeta) + cosbeta*sinalpha*trackMomOrDir.X())/den23;
+      j(3,5) = (-cosalpha*cosbeta*cosbeta*trackMomOrDir.Y() - cosalpha*sinbeta*sinbeta*trackMomOrDir.Y() + sinalpha*sinbeta*trackMomOrDir.X())/den23;
       //
       j(4,0) = 0.;
       j(4,1) = 0.;
       j(4,2) = 0.;
-      j(4,3) = (hasMomentum ? -momentum.X()/den4 : 0.);
-      j(4,4) = (hasMomentum ? -momentum.Y()/den4 : 0.);
-      j(4,5) = (hasMomentum ? -momentum.Z()/den4 : 0.);
+      j(4,3) = (hasMomentum ? -trackMomOrDir.X()/den4 : 0.);
+      j(4,4) = (hasMomentum ? -trackMomOrDir.Y()/den4 : 0.);
+      j(4,5) = (hasMomentum ? -trackMomOrDir.Z()/den4 : 0.);
       //
       return j;
     }
