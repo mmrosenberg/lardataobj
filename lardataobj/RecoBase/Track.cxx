@@ -37,7 +37,7 @@ namespace recob {
     Positions_t pos = Positions_t();
     for (auto p : xyz) pos.push_back(std::move(Point_t(p.X(),p.Y(),p.Z())));
     auto size = pos.size();
-    Momenta_t mom = Momenta_t();    
+    Momenta_t mom = Momenta_t();
     for (auto m : dxdydz) mom.push_back(std::move(Vector_t(m.X(),m.Y(),m.Z())));
     bool hasMom = false;
     if ( fitMomentum.size()==2 ) {
@@ -124,7 +124,7 @@ namespace recob {
 
     return false; //They are equal
   }
-  
+
   //----------------------------------------------------------------------------
   TMatrixD recob::Track::VertexCovariance() const {
     TMatrixD result = TMatrixD(5,5);
