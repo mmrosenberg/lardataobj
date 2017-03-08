@@ -27,7 +27,6 @@ namespace anab {
     int          fID;                ///< Current size of T0 data product.
     double       fTriggerConfidence; ///< Confidence with which this T0 is known.
 
-#ifndef __GCCXML__
   public:
 
     T0(double Time, unsigned int TriggerType, int TriggerBits, int ID=-1, double TriggerConfidence=-1);
@@ -40,12 +39,10 @@ namespace anab {
     const int&             ID()                const;
     const double&          TriggerConfidence() const;
     
-#endif
   };
 
 }
 
-#ifndef __GCCXML__
 
 inline const double&          anab::T0::Time()              const { return fTime;              }
 inline const unsigned int&    anab::T0::TriggerType()       const { return fTriggerType;       }
@@ -53,6 +50,5 @@ inline const int&             anab::T0::TriggerBits()       const { return fTrig
 inline const int&             anab::T0::ID()                const { return fID;                }
 inline const double&          anab::T0::TriggerConfidence() const { return fTriggerConfidence; }
 
-#endif
 
 #endif //ANAB_T0

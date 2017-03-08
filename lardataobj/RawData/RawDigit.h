@@ -80,7 +80,6 @@ namespace raw {
     /// Default constructor: an empty raw digit
     RawDigit();
     
-#ifndef __GCCXML__
   public:
     
   /*
@@ -179,7 +178,6 @@ namespace raw {
   */
     
     
-#endif // !__GCCXML__
   private:
     std::vector<short> fADC;      ///< ADC readout per tick, before pedestal subtraction
     
@@ -204,7 +202,6 @@ namespace raw {
 //------------------------------------------------------------------------------
 //--- inline implementation
 //---
-#ifndef __GCCXML__
 
 inline size_t          raw::RawDigit::NADC()        const { return fADC.size();  }
 inline short           raw::RawDigit::ADC(int i)    const { return fADC.at(i);   }
@@ -223,7 +220,6 @@ inline const raw::RawDigit::Flags_t&
 inline bool            raw::RawDigit::isSaturated() const { return fFlags.test(fiSaturation); }
 */
 
-#endif // !__GCCXML__
 
 #endif // RAWDATA_RAWDIGIT_H
 

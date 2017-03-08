@@ -36,7 +36,6 @@ namespace sim{
 
     void Clear();
 
-    #ifndef __GCCXML__
 
     simb::Origin_t      Origin   () const { return fOrigin;   }
     int                 PdgCode  () const { return fPDGCode;  }
@@ -81,7 +80,6 @@ namespace sim{
     void AncestorStart   ( const MCStep& s      ) { fAncestorStart   = s;  }
     void AncestorEnd     ( const MCStep& s      ) { fAncestorEnd     = s;  }
 
-    #endif
 
   protected:
 

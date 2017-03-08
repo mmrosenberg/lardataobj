@@ -16,11 +16,9 @@
 #include "TVector3.h"
 #include "lardataobj/RecoBase/TrackTrajectory.h"
 
-#ifndef __GCCXML__
 #include "larcoreobj/SimpleTypesAndConstants/geo_types.h"
 #include "larcoreobj/SimpleTypesAndConstants/PhysicalConstants.h"
 #include <iosfwd>
-#endif
 
 //! A recob::Track consists of a recob::TrackTrajectory, plus additional members relevant for a 'fitted' track:
 //! fit chi2, number of degrees of freedom, particle ID hypothesis used in the fit (if any), covariance matrices at start (vertex) and end positions.
@@ -74,7 +72,6 @@ namespace recob {
     std::vector< std::vector <double> > fdQdx;          ///< charge deposition per unit length at points
                                                         ///< along track outer vector index is over view
 
-#ifndef __GCCXML__
 
   public:
 
@@ -250,7 +247,6 @@ namespace recob {
 
     friend std::ostream& operator << (std::ostream& stream, Track const& a);
 
-#endif
   };
 }
 

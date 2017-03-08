@@ -36,19 +36,16 @@ namespace optdata {
 
     // The sections bracketed with GCCXML tests handle a problem ART
     // with generating its data dictionaries.
-#ifndef __GCCXML__
 
     // No "setter" for the channel number; you have to assign it when
     // you create a ChannelData object.
     Channel_t ChannelNumber() const { return fm_optDetChannel; }
 
-#endif
     
   private:
     unsigned int fm_optDetChannel;
   };
 
-#ifndef __GCCXML__
   // In case we want to sort a collection of ChannelDatas (e.g.,
   // std::set<ChannelData>), here's the definition of the less-than
   // operator.
@@ -59,11 +56,9 @@ namespace optdata {
       return true;
     return false;
   }
-#endif
 
 } // namespace optdata
 
-#ifndef __GCCXML__
 // For no extra charge, include how to sort ChannelData*, just in
 // case we want (for example) a std::set<ChannelData*>.
 namespace std {
@@ -77,6 +72,5 @@ namespace std {
     }
   };
 } // std
-#endif
 
 #endif // OpticalDetectorData_ChannelData_h

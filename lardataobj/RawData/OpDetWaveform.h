@@ -63,7 +63,6 @@ namespace raw {
         // Functions included for backwards compatability with previous data types
         std::vector<ADC_Count_t>& Waveform()         { return *this;  }
 
-#ifndef __GCCXML__
 
         static_assert(sizeof(unsigned long long)==8,"unsigned long long is not 8 bytes");
         
@@ -74,14 +73,12 @@ namespace raw {
         TimeStamp_t TimeStamp() const                { return fTimeStamp; }
         void        SetChannelNumber(Channel_t chan) { fChannel = chan; }
         void        SetTimeStamp(TimeStamp_t time)   { fTimeStamp = time; }
-#endif
     
     };
 }
 
 
 
-#ifndef __GCCXML__
 
 namespace raw {
   bool operator<( const OpDetWaveform& lhs, const OpDetWaveform& rhs )
@@ -108,7 +105,6 @@ namespace std {
     }
   };
 }
-#endif
 
 
 #endif

@@ -24,9 +24,7 @@
 
 // C/C++ standard librraies
 #include <vector>
-#ifndef __GCCXML__
 # include <iosfwd>
-#endif
 
 // LArSoft libraries
 #include "larcoreobj/SimpleTypesAndConstants/geo_types.h" // geo::View_t, geo::SignalType, geo::WireID
@@ -74,7 +72,6 @@ namespace recob {
       geo::SigType_t          fSignalType;     ///< signal type for the plane of the hit
       geo::WireID             fWireID;         ///< WireID for the hit (Cryostat, TPC, Plane, Wire)
 
-#ifndef __GCCXML__
       friend class HitCreator; // helper to create hits
       
     public:
@@ -213,11 +210,9 @@ namespace recob {
       friend std::ostream&  operator << (std::ostream & o, const Hit & a);
       friend bool           operator <  (const Hit & a, const Hit & b);
       
-#endif // !__GCCXML__
   }; // class Hit
 } // namespace recob
 
-#ifndef __GCCXML__
 
 inline raw::TDCtick_t          recob::Hit::StartTick()      const { return fStartTick;     }
 inline raw::TDCtick_t          recob::Hit::EndTick()        const { return fEndTick;       }
@@ -249,6 +244,5 @@ inline float recob::Hit::TimeDistanceAsRMS(float time) const
   { return (time - PeakTime()) / RMS(); }
 
 
-#endif // !__GCCXML__
 
 #endif // HIT_H

@@ -36,7 +36,6 @@ namespace anab {
   private:
     geo::PlaneID        fPlaneID;
 
-#ifndef __GCCXML__
   public:
 
     Calorimetry(double KinematicEnergy,
@@ -80,13 +79,11 @@ namespace anab {
     const std::vector<TVector3>& XYZ()         const;
     const geo::PlaneID&        PlaneID()       const;
 
-#endif
     
   };
 
 }
 
-#ifndef __GCCXML__
 
 inline const std::vector<double>& anab::Calorimetry::dEdx()          const { return fdEdx;          }
 inline const std::vector<double>& anab::Calorimetry::dQdx()          const { return fdQdx;          }
@@ -103,6 +100,5 @@ inline double                     anab::Calorimetry::TrkPitchC()     const
 }
 inline const std::vector<TVector3>& anab::Calorimetry::XYZ()         const { return fXYZ;      }
 inline const geo::PlaneID& anab::Calorimetry::PlaneID()              const { return fPlaneID; }
-#endif
 
 #endif //ANAB_CALORIMETRY_H

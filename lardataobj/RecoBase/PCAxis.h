@@ -15,9 +15,7 @@
 
 #include <vector>
 
-#ifndef __GCCXML__
 #include <iosfwd>
-#endif
 
 namespace recob
 {
@@ -43,7 +41,6 @@ namespace recob
         double       fAveHitDoca;       ///< Average doca of hits used in PCA
         size_t       fID;               ///< axis ID
     
-#ifndef __GCCXML__
     public:
     
         PCAxis(bool ok, int nHits, const double* eigenValues, const EigenVectors& eigenVecs, const double* avePos, const double aveHitDoca = 9999., size_t id=0);
@@ -59,12 +56,10 @@ namespace recob
         friend std::ostream&  operator << (std::ostream & o, const PCAxis& a);
         friend bool operator < (const PCAxis& a, const PCAxis& b);
     
-#endif
     };
     
 }
 
-#ifndef __GCCXML__
 
 inline bool                               recob::PCAxis::getSvdOK()        const {return fSvdOK;}
 inline int                                recob::PCAxis::getNumHitsUsed()  const {return fNumHitsUsed;}
@@ -75,6 +70,5 @@ inline const double                       recob::PCAxis::getAveHitDoca()   const
 inline size_t                             recob::PCAxis::getID()           const {return fID;}
 
 
-#endif
 
 #endif // PCAxis_H

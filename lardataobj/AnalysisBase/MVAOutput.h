@@ -9,12 +9,10 @@
 #ifndef ANAB_FEATUREVECTORS_H
 #define ANAB_FEATUREVECTORS_H
 
-#ifndef __GCCXML__
 #include "cetlib/exception.h"
 #include <iosfwd>
 #include <iostream>
 #include <iomanip>
-#endif
 
 #include <array>
 #include <vector>
@@ -35,7 +33,6 @@ public:
 private:
     float fData[N]; ///< Vector values
 
-#ifndef __GCCXML__
 public:
 
     FeatureVector(float init) { set(init); }
@@ -93,7 +90,6 @@ private:
         else { throw cet::exception("FeatureVector") << "Expected length: " << N << ", provided: " << values.size() << std::endl; }
     }
 
-#endif
 
 }; // class FeatureVector
 
@@ -113,7 +109,6 @@ private:
     std::string fOutputInstance; ///< Instance name of the feature vector collection
     std::string fOutputNames[N]; ///< Feature vector entries names/meaning
 
-#ifndef __GCCXML__
 public:
 
     MVADescription(std::string const & dataTag, std::string const & outputInstance,
@@ -161,7 +156,6 @@ public:
         else { throw cet::exception("FeatureVector") << "Expected max length of outputNames: " << N << ", provided: " << outputNames.size() << std::endl; }
     }
 
-#endif
 }; // class MVADescription
 
 } // namespace anab

@@ -27,9 +27,7 @@
 // Standard C/C++ libraries
 #include <string>
 #include <vector>
-#ifndef __GCCXML__
 #  include <utility> // std::move()
-#endif // __GCCXML__
 
 namespace sim {
 
@@ -43,7 +41,6 @@ namespace sim {
     /// Default destructor
     virtual ~MCShower();
 
-#ifndef __GCCXML__
 
     /// Clear method
     virtual void Clear() { ClearData(); }
@@ -125,7 +122,6 @@ namespace sim {
     
 
     
-#endif // __GCCXML__
 
   protected:
 

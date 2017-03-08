@@ -28,7 +28,6 @@ namespace sim {
 
     unsigned int fChannel;
 
-#ifndef __GCCXML__
 
   public:
 
@@ -49,12 +48,10 @@ namespace sim {
       if(sort) std::sort(begin(),end());
       
     }
-#endif
   };
 }
 
 // Define a pointer comparison
-#ifndef __GCCXML__
 namespace std {
   template <>
   class less<sim::MCWireCollection*>
@@ -64,6 +61,5 @@ namespace std {
     { return (*lhs) < (*rhs); }
   };
 }
-#endif
 
 #endif 

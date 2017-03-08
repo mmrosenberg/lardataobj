@@ -55,7 +55,6 @@ namespace recob {
       size_t              fParent;    ///< Index into PFParticle collection for parent
       std::vector<size_t> fDaughters; ///< Vector of indices into PFParticle Collection for daughters
 
-#ifndef __GCCXML__
 
   public:
       
@@ -90,7 +89,6 @@ namespace recob {
     friend std::ostream& operator << (std::ostream& o, const PFParticle& c);
     friend bool          operator <  (const PFParticle& a, const PFParticle& b);
     
-#endif
   }; // class PFParticle
 } // namespace recob
 

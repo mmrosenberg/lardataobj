@@ -51,7 +51,6 @@ namespace anab {
                         // 1 means cosmic
     CosmicTagID_t fCosmicType; 
 
-#ifndef __GCCXML__
   public:
 
     CosmicTag(std::vector<float> ePt1,
@@ -75,12 +74,10 @@ namespace anab {
     const float&              CosmicScore() const;
     const CosmicTagID_t&      CosmicType()  const;
     
-#endif
   };
 
 }
 
-#ifndef __GCCXML__
 
 inline const std::vector<float>& anab::CosmicTag::EndPoint1()   const {return endPt1;}
 inline const std::vector<float>& anab::CosmicTag::EndPoint2()   const {return endPt2;}
@@ -88,6 +85,5 @@ inline const float& anab::CosmicTag::CosmicScore()              const {return fC
 inline const anab::CosmicTagID_t& anab::CosmicTag::CosmicType() const {return fCosmicType; }
 
 
-#endif
 
 #endif //ANAB_COSMICTAG
