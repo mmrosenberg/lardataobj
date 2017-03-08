@@ -5,8 +5,6 @@
  * @date    April 22, 2014
  * @version 1.0
  *
- * A lot of the code is wrapped in "#ifndef __GCCXML__" areas in order not to
- * disturb GenReflex, which does not know about C++11.
  */
 
 
@@ -22,9 +20,7 @@
 #include <iterator> // std::distance()
 #include <algorithm> // std::lower_bound(), std::max()
 
-#ifndef __GCCXML__
 #	include <type_traits> // std::is_integral
-#endif // __GCCXML__
 
 
 /// Namespace for generic larsoft
@@ -68,7 +64,6 @@ class const_value_box {
 }; // class const_value_box
 
 
-#ifndef __GCCXML__
 /// @brief A constant iterator returning always the same value
 /// @tparam T type of the value returned by dereferenciation
 template <typename T>
@@ -175,7 +170,6 @@ class value_iterator: public value_const_iterator<T> {
 	
 }; // class value_iterator<>
 */
-#endif // __GCCXML__
 
 
 
@@ -194,10 +188,8 @@ class range_t {
 	typedef SIZE size_type; ///< type for the indices in the range
 	typedef std::ptrdiff_t difference_type; ///< type for index difference
 	
-#ifndef __GCCXML__
 	static_assert
 		(std::is_integral<size_type>::value, "range_t needs an integral type");
-#endif // __GCCXML__
 	
 	size_type offset; ///< offset (absolute index) of the first element
 	size_type last; ///< offset (absolute index) after the last element
@@ -515,7 +507,6 @@ class sparse_vector {
 		nominal_size(0), ranges()
 		{ add_range(offset, from.begin(), from.end()); }
 	
-#ifndef __GCCXML__
 	/// Copy constructor: default
 	sparse_vector(sparse_vector const&) = default;
 	
@@ -550,7 +541,6 @@ class sparse_vector {
 	/// Destructor: default
 	~sparse_vector() = default;
 	
-#endif // __GCCXML__
 	
 	//  - - - STL-like interface
 	/// Removes all the data, making the vector empty
@@ -677,7 +667,6 @@ class sparse_vector {
 	template <typename CONT>
 	void assign(const CONT& new_data) { clear(); append(new_data); }
 	
-#ifndef __GCCXML__
 	/**
 	 * @brief Moves data from a vector
 	 * @param new_data vector with the data to be moved
@@ -686,7 +675,7 @@ class sparse_vector {
 	 */
 	void assign(vector_t&& new_data) { clear(); append(std::move(new_data)); }
 	//@}
-#endif // __GCCXML__
+	
 	///@}
 	
 	
@@ -778,7 +767,6 @@ class sparse_vector {
 	const datarange_t& add_range(size_type offset, const CONT& new_data)
 		{ return add_range(offset, new_data.begin(), new_data.end()); }
 	
-#ifndef __GCCXML__
 	/**
 	 * @brief Adds a sequence of elements as a range with specified offset
 	 * @param offset where to add the elements
@@ -793,7 +781,6 @@ class sparse_vector {
 	 * added; otherwise, it is just copied.
 	 */
 	const datarange_t& add_range(size_type offset, vector_t&& new_data);
-#endif // __GCCXML__
 	//@}
 	
 	//@{
@@ -817,11 +804,9 @@ class sparse_vector {
 	const datarange_t& append(const CONT& new_data)
 		{ return add_range(size(), new_data); }
 	
-#ifndef __GCCXML__
 	const datarange_t& append(vector_t&& new_data)
 		{ return add_range(size(), std::move(new_data)); }
 	//@}
-#endif // __GCCXML__
 	
 	
 	//@{
@@ -864,11 +849,7 @@ class sparse_vector {
 	
 	///@{ @name Static members for dealing with this type of value
 	
-#ifndef __GCCXML__
 	static constexpr value_type value_zero{0}; ///< a representation of 0
-#else
-	static const value_type value_zero;
-#endif // __GCCXML__
 	
 	/// Returns the module of the specified value
 	static value_type abs(value_type v) { return (v < value_zero)? -v: v; }
@@ -933,10 +914,8 @@ class sparse_vector {
 	/// Plug a new data range in the specified position; no check performed
 	range_iterator insert_range(range_iterator iInsert, const datarange_t& data)
 		{ return data.empty()? iInsert: ranges.insert(iInsert, data); }
-#ifndef __GCCXML__
 	range_iterator insert_range(range_iterator iInsert, datarange_t&& data)
 		{ return data.empty()? iInsert: ranges.insert(iInsert, std::move(data)); }
-#endif // __GCCXML__
 	//@}
 	
 	/// Voids the starting elements up to index (excluded) of a given range
@@ -999,12 +978,10 @@ class lar::sparse_vector<T>::datarange_t: public range_t<size_type> {
 		values(first, last)
 		{}
 
-#ifndef __GCCXML__
 	/// Constructor: offset and data as a vector (which will be used directly)
 	datarange_t(size_type offset, vector_t&& data):
 		base_t(offset, offset + data.size()), values(data)
 		{}
-#endif // __GCCXML__
 	
 	
 	//@{
@@ -1080,9 +1057,6 @@ class lar::sparse_vector<T>::datarange_t: public range_t<size_type> {
 
 
 
-#ifndef __GCCXML__ // the rest is not needed by ROOT Reflex
-
-
 // -----------------------------------------------------------------------------
 // --- sparse_vector iterators definition
 // ---
@@ -1096,10 +1070,7 @@ class lar::sparse_vector<T>::const_reference {
 	const_reference(const value_type* pValue = 0): ptr(pValue) {}
 	const_reference(const value_type& value): const_reference(&value) {}
 	
-#ifndef __GCCXML__
-	explicit 
-#endif // __GCCXML__
-	operator value_type() const { return ptr? *ptr: value_zero; }
+	explicit operator value_type() const { return ptr? *ptr: value_zero; }
 	operator const value_type&() const
 		{ return ptr? *ptr: value_zero; }
 }; // lar::sparse_vector<T>::const_reference
@@ -1124,18 +1095,13 @@ class lar::sparse_vector<T>::reference: public const_reference {
 	reference(value_type* pValue = 0): const_reference(pValue) {}
 	reference(value_type& value): reference(&value) {}
 	
-#ifndef __GCCXML__
 	reference& operator=(const reference&) = default;
-#endif // __GCCXML__
 	value_type& operator=(value_type v)
 		{ return const_cast<value_type&>(*const_reference::ptr) = v; }
 	
 	operator const_reference() const
 		{ return const_reference(const_reference::ptr); }
-#ifndef __GCCXML__
-	explicit
-#endif // __GCCXML__
-	operator value_type&()
+	explicit operator value_type&()
 		{ return const_cast<value_type&>(*const_reference::ptr); }
 	
 		protected:
@@ -2005,8 +1971,6 @@ void lar::sparse_vector<T>::const_iterator::refresh_state() {
 //
 // nothing new so far
 //
-
-#endif // __GCCXML__
 
 
 #endif // LARCORE_SPARSE_VECTOR_H

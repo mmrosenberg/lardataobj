@@ -31,11 +31,9 @@ namespace sim {
 
     TrackSDP() {}
     
-#ifndef __GCCXML__
     
     TrackSDP(int id, float phF, float ph) : trackID(id), energyFrac(phF), energy (ph) {}
     
-#endif
 
   };
   
@@ -77,7 +75,6 @@ namespace sim {
     /// Default constructor (sets "bogus" values)
     SDP();
     
-#ifndef __GCCXML__
     
     /// Constructor: copies an SDP, and applies the specified offset to track ID
     SDP(SDP const& sdp, int offset);
@@ -97,7 +94,6 @@ namespace sim {
     , z           (zpos)
     {}
     
-#endif
     
     TrackID_t trackID;  ///< Geant4 supplied track ID
     float numPhotons;   ///< number of photons at the optical detector for this track ID and time
@@ -147,7 +143,6 @@ namespace sim {
     // Default constructor
     OpDetBacktrackerRecord();
     
-#ifndef __GCCXML__
     /// Type for iTimePDclock tick used in the interface
     //typedef unsigned short timePDclock_t;
     typedef double timePDclock_t;//This is the G4Time from OpFastScintillation. (ns)
@@ -307,13 +302,11 @@ namespace sim {
       (storedTimePDclock_t timePDclock) const;
     /// @}
 
-#endif
 
   };
 
 } // namespace sim
 
-#ifndef __GCCXML__
 
 inline bool                                sim::OpDetBacktrackerRecord::operator<  (const sim::OpDetBacktrackerRecord& other) const { return iOpDetNum < other.OpDetNum(); }
 inline bool                                sim::OpDetBacktrackerRecord::operator== (const sim::OpDetBacktrackerRecord& other) const { return iOpDetNum == other.OpDetNum(); }
@@ -354,7 +347,6 @@ void sim::OpDetBacktrackerRecord::Dump
     << opDet_photons << " photons and "<< opDet_energy << " MeV.\n" ;
 } // sim::OpDetBacktrackerRecord::Dump<>()
 
-#endif
 
 #endif // LARSIMOBJ_SIMULATION_OPDETBACKTRACKERRECORD_H
 

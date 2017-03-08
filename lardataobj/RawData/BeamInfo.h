@@ -32,7 +32,6 @@ namespace raw {
     uint16_t      fNumberOfDevices;
     std::map<std::string, std::vector<double> > fDataMap;
 
-#ifndef __GCCXML__   
     
   public:
 
@@ -66,7 +65,6 @@ namespace raw {
 
     friend std::ostream& operator<<(std::ostream& , const BeamInfo& );
     
-#endif      
   };
   
   

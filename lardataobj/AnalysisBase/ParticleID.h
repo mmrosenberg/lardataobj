@@ -35,7 +35,6 @@ namespace anab {
     double fPIDA;            ///< PID developed by Bruce Baller
     geo::PlaneID fPlaneID;
 
-#ifndef __GCCXML__
   public:
 
     ParticleID(int Pdg,
@@ -65,12 +64,10 @@ namespace anab {
     const double& MissingEavg() const;
     const double& PIDA()        const;
     const geo::PlaneID& PlaneID() const;
-#endif
   };
 
 }
 
-#ifndef __GCCXML__
 
 inline const int&    anab::ParticleID::Pdg()         const { return fPdg;         } 
 inline const int&    anab::ParticleID::Ndf()         const { return fNdf;         }
@@ -84,6 +81,5 @@ inline const double& anab::ParticleID::MissingE()    const { return fMissingE;  
 inline const double& anab::ParticleID::MissingEavg() const { return fMissingEavg; }
 inline const double& anab::ParticleID::PIDA()        const { return fPIDA; }
 inline const geo::PlaneID& anab::ParticleID::PlaneID() const { return fPlaneID; }
-#endif
 
 #endif //ANAB_PARTICLEID_H

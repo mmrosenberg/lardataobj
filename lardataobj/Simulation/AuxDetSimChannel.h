@@ -49,11 +49,9 @@ namespace sim {
     float exitMomentumY;         ///< Exit Y-Momentum of particle
     float exitMomentumZ;         ///< Exit Z-Momentum of particle
 
-#ifndef __GCCXML__
     bool operator<  (const AuxDetIDE& other) const;
     bool operator== (const AuxDetIDE& other) const;
 
-#endif
 }; // class AuxDetIDE
 
   /**
@@ -73,7 +71,6 @@ namespace sim {
     uint32_t                    fAuxDetSensitiveID; ///< integer used to retrieve AuxDetSensitiveGeo object
     std::vector<sim::AuxDetIDE> fAuxDetIDEs;        ///< one sim::AuxDetIDE for each G4 track id
 
-#ifndef __GCCXML__
   public:
 
     AuxDetSimChannel(uint32_t inputAuxDetID, 
@@ -103,21 +100,18 @@ namespace sim {
     std::vector<sim::AuxDetIDE> const& AuxDetIDEs() const;
     ///@}
     
-#endif
 		
 		
   }; // class AuxDetSimChannel
 
 } // namespace sim
 
-#ifndef __GCCXML__
 
 inline bool      sim::AuxDetIDE::operator<  (const AuxDetIDE& other) const { return trackID < other.trackID;  }
 inline bool      sim::AuxDetIDE::operator== (const AuxDetIDE& other) const { return other.trackID == trackID; }
 inline uint32_t  sim::AuxDetSimChannel::AuxDetID()                   const { return fAuxDetID;                }
 inline uint32_t  sim::AuxDetSimChannel::AuxDetSensitiveID()          const { return fAuxDetSensitiveID;       }
 inline std::vector<sim::AuxDetIDE> const& sim::AuxDetSimChannel::AuxDetIDEs() const { return fAuxDetIDEs; }
-#endif
 
 #endif // SIM_AUXDETSIMCHANNEL_H
 

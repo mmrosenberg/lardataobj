@@ -31,7 +31,6 @@ namespace recob {
     double fSeedDirectionError[3];
     bool   fIsValid;
     
-#ifndef __GCCXML__
 
   public:
 
@@ -77,14 +76,11 @@ namespace recob {
 
     friend bool          operator <   (const Seed & a, const Seed & b);
 
-#endif
   };
 
-#ifndef __GCCXML__
   void CrossProd(double, double, double,
 		 double, double, double,
 		 double&, double&, double&);
-#endif
 }
 
 #endif // SEED_H

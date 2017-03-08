@@ -51,7 +51,6 @@ namespace sim {
     float fPartEnergy;     ///< particle energy deposition (dE) in MeV
     int fPartTrackId;      ///< particle G4 Track ID
 
-#ifndef __GCCXML__
 
   public:
     
@@ -100,13 +99,11 @@ namespace sim {
     /// For sorting with generic time
     inline bool operator< ( const float& rhs) const { return fSignalTime < rhs; }
 
-#endif
   };
 
 }
 
 // Define a pointer comparison
-#ifndef __GCCXML__
 namespace std {
   template <>
   class less<sim::MCHit*>
@@ -116,6 +113,5 @@ namespace std {
     { return (*lhs) < (*rhs); }
   };
 }
-#endif
 
 #endif 

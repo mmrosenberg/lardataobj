@@ -54,13 +54,12 @@ namespace recob {
 
     /// @{
     /// SMatrix and SVector
-    using SMatrixSym11 = ROOT::Math::SMatrix<double,1,1,ROOT::Math::MatRepSym<double,1> >;
     using SMatrixSym55 = ROOT::Math::SMatrix<double,5,5,ROOT::Math::MatRepSym<double,5> >;
     using SMatrixSym66 = ROOT::Math::SMatrix<double,6,6,ROOT::Math::MatRepSym<double,6> >;
     using SMatrix65    = ROOT::Math::SMatrix<double,6,5>;
     using SMatrix56    = ROOT::Math::SMatrix<double,5,6>;
     using SMatrix55    = ROOT::Math::SMatrix<double,5,5>;
-    using SMatrix51    = ROOT::Math::SMatrix<double,5,1>;
+    using SMatrix66    = ROOT::Math::SMatrix<double,6,6>;
     using SVector6     = ROOT::Math::SVector<double,6>;
     using SVector5     = ROOT::Math::SVector<double,5>;
     /// @}

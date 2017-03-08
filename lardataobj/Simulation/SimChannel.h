@@ -32,11 +32,9 @@ namespace sim {
 
     TrackIDE() {}
     
-#ifndef __GCCXML__
     
     TrackIDE(int id, float ef, float e) : trackID(id), energyFrac(ef), energy (e) {}
     
-#endif
 
   };
   
@@ -93,7 +91,6 @@ namespace sim {
     /// Default constructor (sets "bogus" values)
     IDE();
     
-#ifndef __GCCXML__
     
     /// Constructor: copies an IDE, and applies the specified offset to track ID
     IDE(IDE const& ide, int offset);
@@ -113,7 +110,6 @@ namespace sim {
     , z           (zpos)
     {}
     
-#endif
     
     TrackID_t trackID;  ///< Geant4 supplied track ID
     float numElectrons; ///< number of electrons at the readout for this track ID and time
@@ -162,7 +158,6 @@ namespace sim {
     // Default constructor
     SimChannel();
     
-#ifndef __GCCXML__
     /// Type for TDC tick used in the interface
     /// (different type than raw::TDCtick_t! and from internal representation!
     ///  but same meaning!)
@@ -325,13 +320,11 @@ namespace sim {
       (StoredTDC_t tdc) const;
     /// @}
 
-#endif
 
   };
 
 } // namespace sim
 
-#ifndef __GCCXML__
 
 inline bool                           sim::SimChannel::operator<  (const sim::SimChannel& other) const { return fChannel < other.Channel(); }
 inline bool                           sim::SimChannel::operator== (const sim::SimChannel& other) const { return fChannel == other.Channel(); }
@@ -372,7 +365,6 @@ void sim::SimChannel::Dump
     << channel_charge << " electrons and " << channel_energy << " MeV\n";
 } // sim::SimChannel::Dump<>()
 
-#endif
 
 #endif // LARDATAOBJ_SIMULATION_SIMCHANNEL_H
 

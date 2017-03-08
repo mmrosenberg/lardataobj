@@ -30,7 +30,6 @@ private:
       double                fPE;
       double                fFastToTotal;
 
-#ifndef __GCCXML__
 
   public:
 
@@ -56,12 +55,10 @@ private:
       double                FastToTotal()       const;
       friend bool           operator <  (const OpHit & a, const OpHit & b);
 
-#endif
 
   };
 }
 
-#ifndef __GCCXML__
 
 inline int    recob::OpHit::OpChannel()      const { return fOpChannel;      }
 inline unsigned short recob::OpHit::Frame()  const { return fFrame;          }
@@ -73,6 +70,5 @@ inline double recob::OpHit::Amplitude()      const { return fAmplitude;      }
 inline double recob::OpHit::PE()             const { return fPE;             }
 inline double recob::OpHit::FastToTotal()    const { return fFastToTotal;    }
 
-#endif
 
 #endif

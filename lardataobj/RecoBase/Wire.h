@@ -90,7 +90,6 @@ namespace recob {
       geo::View_t         fView;      ///< View corresponding to the plane of this wire
       RegionsOfInterest_t fSignalROI; ///< Signal on the channel
 
-#ifndef __GCCXML__
     
     friend class WireCreator; // helper to create wires in art
     
@@ -152,13 +151,11 @@ namespace recob {
       /// Returns whether this channel ID is smaller than the other
       bool operator< (const Wire& than) const;
       
-#endif // !__GCCXML__
       
   }; // class Wire
   
 } // namespace recob
 
-#ifndef __GCCXML__
 
 inline const recob::Wire::RegionsOfInterest_t&
                                   recob::Wire::SignalROI()  const { return fSignalROI;        }
@@ -168,7 +165,6 @@ inline raw::ChannelID_t           recob::Wire::Channel()    const { return fChan
 inline bool                       recob::Wire::operator< (const Wire& than) const
   { return Channel() < than.Channel(); }
 
-#endif // !__GCCXML__
 
 #endif // WIRE_H
 

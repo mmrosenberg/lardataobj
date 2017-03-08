@@ -33,7 +33,6 @@ namespace raw {
 
   public:
 
-#ifndef __GCCXML__
 
     /// Alternative constructor    
     Trigger(unsigned int counter,
@@ -57,7 +56,6 @@ namespace raw {
     /// Accessor to specific bit
     bool         Triggered(const unsigned char bit) const;
 
-#endif
   };
 }
 

@@ -35,7 +35,6 @@ namespace optdata {
     ~OpticalRawDigit() {};
   };
 
-#ifndef __GCCXML__
   // In case we want to sort a collection of OpticalRawDigits (e.g.,
   // std::set<OpticalRawDigit>), here's the definition of the less-than
   // operator.
@@ -48,11 +47,9 @@ namespace optdata {
       return true;
     return false;
   }
-#endif
 
 } // namespace optdata
 
-#ifndef __GCCXML__
 // For no extra charge, include how to sort OpticalRawDigit*, just in
 // case we want (for example) a std::set<OpticalRawDigit*>.
 namespace std {
@@ -66,6 +63,5 @@ namespace std {
     }
   };
 } // std
-#endif
 
 #endif // optdata_OpticalRawDigit_h

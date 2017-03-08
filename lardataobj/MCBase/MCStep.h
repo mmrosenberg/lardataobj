@@ -35,7 +35,6 @@ namespace sim{
     
     virtual ~MCStep(){}
 
-    #ifndef __GCCXML__
     const TLorentzVector& Momentum() const {return _momentum;}
     
     const TLorentzVector& Position() const {return _position;}
@@ -52,7 +51,6 @@ namespace sim{
     void SetPosition(const TLorentzVector& v) { _position=v; };
     void SetMomentum(const TLorentzVector& v) { _momentum=v; };
 
-    #endif
 
   protected:
     

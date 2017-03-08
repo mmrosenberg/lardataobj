@@ -31,7 +31,6 @@ namespace raw {
 
     std::vector<short> fWaveform; 
     
-#ifndef __GCCXML__
 
   public:
 
@@ -54,11 +53,9 @@ namespace raw {
     void SetPMTFrame(    unsigned int Frame       );
     void SetFirstSample( unsigned int FirstSample );
 
- #endif   
   };
 }
 
-#ifndef __GCCXML__
 inline std::vector<short>&  raw::OpDetPulse::Waveform()               { return fWaveform;        }
 inline unsigned short       raw::OpDetPulse::OpChannel() const     { return fOpChannel;    }
 inline unsigned short       raw::OpDetPulse::Samples()      const     { return fWaveform.size(); }
@@ -68,7 +65,6 @@ inline void                 raw::OpDetPulse::SetPMTFrame(unsigned int Frame)   {
 inline void                 raw::OpDetPulse::SetFirstSample(unsigned int FirstSample)   { fFirstSample = FirstSample; }
 
 
-#endif
 
 #endif // RAWDATA_OPDETPULSE_H
 

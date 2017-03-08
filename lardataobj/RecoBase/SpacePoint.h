@@ -12,11 +12,9 @@
 #ifndef SPACEPOINT_H
 #define SPACEPOINT_H
 
-#ifndef __GCCXML__
 #include <iosfwd>
 
 #include "larcoreobj/SimpleTypesAndConstants/PhysicalConstants.h"
-#endif
 
 namespace recob {
 
@@ -32,7 +30,6 @@ namespace recob {
     double                     fErrXYZ[6]; ///< Error matrix (triangular).
     double                     fChisq;     ///< Chisquare.
 
-#ifndef __GCCXML__
   public:
     SpacePoint(double const*xyz,
 	       double const*err,
@@ -47,18 +44,15 @@ namespace recob {
     friend std::ostream& operator << (std::ostream& o, const SpacePoint & a);
     friend bool          operator <  (const SpacePoint & a, const SpacePoint & b);
 
-#endif
 
   };
 }
 
-#ifndef __GCCXML__
 
 inline int           recob::SpacePoint::ID()      const { return fID;     }
 inline const double* recob::SpacePoint::XYZ()     const { return fXYZ;    }
 inline const double* recob::SpacePoint::ErrXYZ()  const { return fErrXYZ; }
 inline double        recob::SpacePoint::Chisq()   const { return fChisq;  }
 
-#endif
 
 #endif //SPACEPOINT_H
