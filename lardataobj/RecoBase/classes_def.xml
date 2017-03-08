@@ -105,7 +105,10 @@
   <version ClassVersion="18" checksum="507533507"/>
   <version ClassVersion="17" checksum="1882235791"/>
  </class>
- 
+ <class name="recob::TrackFitHitInfo" ClassVersion="10"                   >
+  <version ClassVersion="10" checksum="2600776094"/>
+ </class>
+
  <!-- art pointers and pointer vectors -->
  <class name="art::Ptr<recob::Hit>"                             />
  <class name="art::Ptr<recob::Cluster>"                         />
@@ -118,6 +121,7 @@
  <class name="art::Ptr<recob::Vertex>"                          />
  <class name="art::Ptr<recob::OpHit>"                           />
  <class name="art::Ptr<recob::OpFlash>"                         />
+ <class name="art::Ptr<recob::TrackFitHitInfo>"                 />
  <class name="art::PtrVector<recob::Hit>"                       />
  <class name="art::PtrVector<recob::Event>"                     />
  <class name="art::PtrVector<recob::Cluster>"                   />
@@ -129,8 +133,10 @@
  <class name="art::PtrVector<recob::Vertex>"                    />
  <class name="art::PtrVector<recob::OpHit>"                     />
  <class name="art::PtrVector<recob::OpFlash>"                   />
+ <class name="art::PtrVector<recob::TrackFitHitInfo>"           />
  <class name="std::vector< art::PtrVector<recob::SpacePoint> >" />
  <class name="std::vector< art::PtrVector<recob::Cluster> >"    />
+ <class name="std::vector< art::PtrVector<recob::TrackFitHitInfo> >" />
  
  <!-- pairs and tuples for associations -->
  <class name="std::pair< art::Ptr<recob::Cluster>,    art::Ptr<recob::EndPoint2D> >" />
@@ -252,6 +258,8 @@
  <class name="std::vector<recob::Event>"      />
  <class name="std::vector<recob::OpHit>"      />
  <class name="std::vector<recob::OpFlash>"    />
+ <class name="std::vector<recob::TrackFitHitInfo>" />
+ <class name="std::vector<std::vector<recob::TrackFitHitInfo> >" />
  
  <!-- art data product wrappers -->
  <class name="art::Wrapper< std::vector< recob::Cluster                     > >" />
@@ -269,7 +277,8 @@
  <class name="art::Wrapper< std::vector< recob::OpFlash                     > >" />
  <class name="art::Wrapper< std::vector< art::PtrVector<recob::SpacePoint>   > >" />
  <class name="art::Wrapper< std::vector< art::PtrVector<recob::Cluster>      > >" />
- 
+ <class name="art::Wrapper< std::vector< std::vector<recob::TrackFitHitInfo> > >" />
+
  <!-- art association wrappers -->
  <class name="art::Wrapper< art::Assns<raw::RawDigit,     recob::Hit,        void          > >" />
  <class name="art::Wrapper< art::Assns<raw::RawDigit,     recob::Wire,       void          > >" />
