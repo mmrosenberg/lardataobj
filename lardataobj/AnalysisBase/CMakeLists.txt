@@ -1,9 +1,9 @@
 
-cet_make( LIBRARIES canvas
-		    canvas
+cet_make( LIBRARIES canvas_Persistency_Provenance
+		    canvas_Utilities
 		    MF_MessageLogger
 		    MF_Utilities
-		    cetlib cetlib_except
+		    cetlib
 		    ${ROOT_BASIC_LIB_LIST}
                     NO_DICTIONARY )
 
