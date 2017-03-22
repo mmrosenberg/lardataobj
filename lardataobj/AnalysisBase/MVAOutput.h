@@ -156,6 +156,12 @@ public:
         else { throw cet::exception("FeatureVector") << "Expected max length of outputNames: " << N << ", provided: " << outputNames.size() << std::endl; }
     }
 
+    int getIndex(const std::string & name) const
+    {
+        for (size_t i = 0; i < N; ++i) { if (fOutputNames[i] == name) { return i; } }
+        return -1; // not found
+    }
+
 }; // class MVADescription
 
 } // namespace anab
