@@ -15,8 +15,8 @@
 /// The 3D local positions are defined in terms of the unit vectors u,v,w where w is along the normal direction to the plane,
 /// u is perpendicular to w and coplanar to the global x axis and with position sign along the positive sign of x,
 /// v forms a right handed orthonormal basis with u and w.
-/// The 5D parameters are u,v,du/dw,dv/dw,1/p:
-/// u,v are the local positions, du/dw and dv/dw are the local directions, and 1/p is the inverse of the track momentum.
+/// The 5D track parameters are u,v,du/dw,dv/dw,1/p:
+/// u,v are the local positions, du, dv, and dw are the local directions, and 1/p is the inverse of the track momentum.
 /// The global 6D coordinates are formed by the track position and momentum (or direction) at a given point.
 ///
 /// The discussion above refers to a detector with drift direction along the x axis;
@@ -83,25 +83,57 @@ namespace recob {
       //@}
 
       //@{
-      /// Compute the jacobian to translate track covariance from global to local coordinates.
-      /// The track momentum is needed to compute the jacobian.
-      /// Local coordinates are on the plane orthogonal to planeDir (in most cases this will be the same direction as the momentum, but the function is generic).
-      static SMatrix65 Local5DToGlobal6DJacobian(const Vector_t& momentum, const Vector_t& planeDir) {
-	Plane p(Point_t(), planeDir); return p.Local5DToGlobal6DJacobian(momentum);
+      /// Compute the jacobian to translate track covariance from local to global coordinates.
+      /// The track momentum (or direction) is needed to compute the jacobian.
+      /// Local coordinates are on the plane orthogonal to planeDir (it may be the same direction as the momentum, but the function is generic).
+      static SMatrix65 Local5DToGlobal6DJacobian(bool hasMomentum, const Vector_t& trackMomOrDir, const Vector_t& planeDir) {
+	Plane p(Point_t(), planeDir); return p.Local5DToGlobal6DJacobian(hasMomentum, trackMomOrDir);
       }
-      inline SMatrix65 Local5DToGlobal6DJacobian(const Vector_t& momentum) const { return Local5DToGlobal6DJacobian(momentum,fPlaneDir,fTrigCache); }
-      SMatrix65 Local5DToGlobal6DJacobian(const Vector_t& momentum, const Vector_t& planeDir, const TrigCache& trigCache) const;
+      static SMatrix65 Local5DToGlobal6DJacobian(bool hasMomentum, const SVector6& par6d, const Vector_t& planeDir) {
+	Plane p(Point_t(), planeDir); return p.Local5DToGlobal6DJacobian(hasMomentum, Vector_t(par6d[3],par6d[4],par6d[5]));
+      }
+      inline SMatrix65 Local5DToGlobal6DJacobian(bool hasMomentum, const Vector_t& trackMomOrDir) const { return Local5DToGlobal6DJacobian(hasMomentum, trackMomOrDir,fPlaneDir,fTrigCache); }
+      SMatrix65 Local5DToGlobal6DJacobian(bool hasMomentum, const Vector_t& trackMomOrDir, const Vector_t& planeDir, const TrigCache& trigCache) const;
       //@}
 
       //@{
-      /// Compute the jacobian to translate track covariance from local to global coordinates.
-      /// The track momentum is needed to compute the jacobian.
-      /// Local coordinates are on the plane orthogonal to planeDir (in most cases this will be the same direction as the momentum, but the function is generic).
-      static SMatrix56 Global6DToLocal5DJacobian(const Vector_t& momentum, const Vector_t& planeDir) {
-	Plane p(Point_t(), planeDir); return p.Global6DToLocal5DJacobian(momentum);
+      /// Compute the jacobian to translate track covariance from global to local coordinates.
+      /// The track momentum (or direction) is needed to compute the jacobian.
+      /// Local coordinates are on the plane orthogonal to planeDir (it may be the same direction as the momentum, but the function is generic).
+      /// Warning: some information may be lost in degenerate cases, e.g. the unceratinty along z position when converting to a x-y plane (fixed z)
+      static SMatrix56 Global6DToLocal5DJacobian(bool hasMomentum, const Vector_t& trackMomOrDir, const Vector_t& planeDir) {
+	Plane p(Point_t(), planeDir); return p.Global6DToLocal5DJacobian(hasMomentum, trackMomOrDir);
       }
-      inline SMatrix56 Global6DToLocal5DJacobian(const Vector_t& momentum) const { return Global6DToLocal5DJacobian(momentum,fPlaneDir,fTrigCache); }
-      SMatrix56 Global6DToLocal5DJacobian(const Vector_t& momentum, const Vector_t& planeDir, const TrigCache& trigCache) const;
+      static SMatrix56 Global6DToLocal5DJacobian(bool hasMomentum, const SVector6& par6d, const Vector_t& planeDir) {
+	Plane p(Point_t(), planeDir); return p.Global6DToLocal5DJacobian(hasMomentum, Vector_t(par6d[3],par6d[4],par6d[5]));
+      }
+      inline SMatrix56 Global6DToLocal5DJacobian(bool hasMomentum, const Vector_t& trackMomOrDir) const { return Global6DToLocal5DJacobian(hasMomentum, trackMomOrDir,fPlaneDir,fTrigCache); }
+      SMatrix56 Global6DToLocal5DJacobian(bool hasMomentum, const Vector_t& trackMomOrDir, const Vector_t& planeDir, const TrigCache& trigCache) const;
+      //@}
+
+      //@{
+      /// Translate track covariance from local to global coordinates.
+      /// The track momentum (or direction) is needed to compute the jacobian.
+      /// Local coordinates are on the plane orthogonal to planeDir (it may be the same direction as the momentum, but the function is generic).
+      static SMatrixSym66 Local5DToGlobal6DCovariance(SMatrixSym55 cov5d, bool hasMomentum, const Vector_t& trackMomOrDir, const Vector_t& planeDir) {
+	return ROOT::Math::Similarity(Local5DToGlobal6DJacobian(hasMomentum,trackMomOrDir,planeDir),cov5d);
+      }
+      inline SMatrixSym66 Local5DToGlobal6DCovariance(SMatrixSym55 cov5d, bool hasMomentum, const Vector_t& trackMomOrDir) const {
+	return Local5DToGlobal6DCovariance(cov5d, hasMomentum,trackMomOrDir,fPlaneDir);
+      }
+      //@}
+
+      //@{
+      /// Translate track covariance from global to local coordinates.
+      /// The track momentum (or direction) is needed to compute the jacobian.
+      /// Local coordinates are on the plane orthogonal to planeDir (it may be the same direction as the momentum, but the function is generic).
+      /// Warning: some information may be lost in degenerate cases, e.g. the unceratinty along z position when converting to a x-y plane (fixed z)
+      static SMatrixSym55 Global6DToLocal5DCovariance(SMatrixSym66 cov6d, bool hasMomentum, const Vector_t& trackMomOrDir, const Vector_t& planeDir) {
+	return ROOT::Math::Similarity(Global6DToLocal5DJacobian(hasMomentum,trackMomOrDir,planeDir),cov6d);
+      }
+      inline SMatrixSym55 Global6DToLocal5DCovariance(SMatrixSym66 cov6d, bool hasMomentum, const Vector_t& trackMomOrDir) const {
+	return Global6DToLocal5DCovariance(cov6d,hasMomentum,trackMomOrDir,fPlaneDir);
+      }
       //@}
 
       //@{
