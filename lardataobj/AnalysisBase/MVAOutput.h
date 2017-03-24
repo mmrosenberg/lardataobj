@@ -164,6 +164,9 @@ public:
 
 }; // class MVADescription
 
+template <size_t N>
+using FVecDescription = MVADescription<N>;
+
 } // namespace anab
 
 #endif //ANAB_FEATUREVECTORS
