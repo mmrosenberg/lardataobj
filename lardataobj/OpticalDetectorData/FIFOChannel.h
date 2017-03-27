@@ -37,7 +37,6 @@ namespace optdata {
 
     // Here we have getters and setters for the time information.
 
-#ifndef __GCCXML__
 
     Optical_Category_t Category() const { return fm_category; }
 
@@ -51,7 +50,6 @@ namespace optdata {
     Frame_t Frame() const { return fm_frame; }
     void SetFrame( Frame_t f ) { fm_frame = f; }
 
-#endif
 
   private:
     Optical_Category_t fm_category; // A channel category from Types.h
@@ -59,7 +57,6 @@ namespace optdata {
     Frame_t fm_frame;               // The frame number corresponding to the above time
   };
 
-#ifndef __GCCXML__
   // In case we want to sort a collection of FIFOChannels (e.g.,
   // std::set<FIFOChannel>), here's the definition of the less-than
   // operator.
@@ -72,11 +69,9 @@ namespace optdata {
       return true;
     return false;
   }
-#endif
 
 } // namespace optdata
 
-#ifndef __GCCXML__
 // For no extra charge, include how to sort FIFOChannel*, just in
 // case we want (for example) a std::set<FIFOChannel*>.
 namespace std {
@@ -90,6 +85,5 @@ namespace std {
     }
   };
 } // std
-#endif
 
 #endif // optdata_FIFOChannel_h

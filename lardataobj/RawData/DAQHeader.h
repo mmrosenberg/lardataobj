@@ -37,7 +37,6 @@ namespace raw {
       short          fSpare;
       uint32_t       fNchan;
 
-#ifndef __GCCXML__
 
   public:
 
@@ -86,11 +85,9 @@ namespace raw {
       short            GetSpareWord()       const;
       uint32_t         GetNChannels()       const;
      
-#endif
     };
 }
 
-#ifndef __GCCXML__
 
 inline void           raw::DAQHeader::SetStatus(unsigned int i)             { fStatus = i;      }
 inline void           raw::DAQHeader::SetFixedWord(int i)                   { fFixed = i;       }
@@ -113,7 +110,6 @@ inline time_t         raw::DAQHeader::GetTimeStamp()       const 	    { return f
 inline short          raw::DAQHeader::GetSpareWord()       const 	    { return fSpare;    }   
 inline uint32_t       raw::DAQHeader::GetNChannels()       const 	    { return fNchan;    }   
 
-#endif
 
 #endif // DAQHEADER_H
 

@@ -32,3 +32,4 @@
 #include "lardataobj/RecoBase/TrackTrajectory.h"
 #include "lardataobj/RecoBase/Track.h"
 
+#include "lardataobj/RecoBase/TrackFitHitInfo.h"

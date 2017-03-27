@@ -31,7 +31,6 @@ namespace raw {
                                     ///< for the seconds since 1970
                                     ///< lower 32 for nanoseconds
     
-#ifndef __GCCXML__
 
 static_assert(sizeof(unsigned long long)==8,"unsigned long long is not 8 bytes");
 
@@ -50,18 +49,15 @@ static_assert(sizeof(unsigned long long)==8,"unsigned long long is not 8 bytes")
     std::string const& AuxDetName()  const;
     unsigned long long TimeStamp()   const;
 
-#endif
   };
 }
 
-#ifndef __GCCXML__
 
 inline size_t             raw::AuxDetDigit::NADC()       const { return fADC.size(); }
 inline unsigned short     raw::AuxDetDigit::Channel()    const { return fChannel;    }
 inline std::string const& raw::AuxDetDigit::AuxDetName() const { return fAuxDetName; }
 inline unsigned long long raw::AuxDetDigit::TimeStamp()  const { return fTimeStamp;  }
 
-#endif
 
 #endif // RAWDATA_AUXDETDIGIT_H
 

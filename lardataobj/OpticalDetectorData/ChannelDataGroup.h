@@ -37,7 +37,6 @@ namespace optdata {
 
     // Here we have getters and setters for the time information.
 
-#ifndef __GCCXML__
 
     Optical_Category_t Category() const { return fm_category; }
 
@@ -51,7 +50,6 @@ namespace optdata {
     Frame_t Frame() const { return fm_frame; }
     void SetFrame( Frame_t f ) { fm_frame = f; }
 
-#endif
 
   private:
     Optical_Category_t fm_category;

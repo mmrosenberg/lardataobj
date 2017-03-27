@@ -16,11 +16,9 @@
 #include "TVector3.h"
 #include "lardataobj/RecoBase/TrackTrajectory.h"
 
-#ifndef __GCCXML__
 #include "larcoreobj/SimpleTypesAndConstants/geo_types.h"
 #include "larcoreobj/SimpleTypesAndConstants/PhysicalConstants.h"
 #include <iosfwd>
-#endif
 
 //! A recob::Track consists of a recob::TrackTrajectory, plus additional members relevant for a 'fitted' track:
 //! fit chi2, number of degrees of freedom, particle ID hypothesis used in the fit (if any), covariance matrices at start (vertex) and end positions.
@@ -74,7 +72,6 @@ namespace recob {
     std::vector< std::vector <double> > fdQdx;          ///< charge deposition per unit length at points
                                                         ///< along track outer vector index is over view
 
-#ifndef __GCCXML__
 
   public:
 
@@ -96,7 +93,7 @@ namespace recob {
     /// Access to the stored recob::TrackTrajectory
     inline const recob::TrackTrajectory& Trajectory()  const { return fTraj; }
 
-    //@{ 
+    //@{
     /// Various functions related to the presence and the number of (valid) points
     inline size_t       NumberTrajectoryPoints()         const { return fTraj.NumberTrajectoryPoints(); }
     inline size_t       NPoints()                        const { return fTraj.NPoints(); }
@@ -111,13 +108,13 @@ namespace recob {
     inline unsigned int CountValidPoints()               const { return fTraj.CountValidPoints(); }
     //@}
 
-    //@{ 
+    //@{
     /// Access to i-th TrajectoryPoint or its Flags
     inline TrajectoryPoint_t   TrajectoryPoint(size_t i) const { return fTraj.TrajectoryPoint(i); }
     inline PointFlags_t const& FlagsAtPoint(size_t i)    const { return fTraj.FlagsAtPoint(i); }
     //@}
 
-    //@{ 
+    //@{
     /// Access to track position at different points
     inline Point_t const& Start()  const { return fTraj.Start(); }
     //inline Point_t const& Vertex() const { return fTraj.Vertex(); }
@@ -125,7 +122,7 @@ namespace recob {
     //inline Point_t const& LocationAtPoint(size_t i) const { return fTraj.LocationAtPoint(i); }
     //@}
 
-    //@{ 
+    //@{
     /// Access to track direction at different points
     inline Vector_t StartDirection()  const { return fTraj.StartDirection(); }
     //inline Vector_t VertexDirection() const { return fTraj.VertexDirection(); }
@@ -133,7 +130,7 @@ namespace recob {
     //inline Vector_t const& DirectionAtPoint(size_t i) const { return fTraj.DirectionAtPoint(i); }
     //@}
 
-    //@{ 
+    //@{
     /// Access to track momentum at different points.
     /// The user must check that HasMomentum() returns true to ensure the validity of the result of these functions.
     inline bool            HasMomentum()                   const { return fTraj.HasMomentum(); }
@@ -146,22 +143,22 @@ namespace recob {
     inline Vector_t const& EndMomentumVector()             const { return fTraj.EndMomentumVector(); }
     inline Vector_t const& MomentumVectorAtPoint(size_t i) const { return fTraj.MomentumVectorAtPoint(i); }
     //@}
-    
-    //@{ 
+
+    //@{
     /// Access to covariance matrices
     const SMatrixSym55& StartCovariance() const { return fCovVertex; }
     //const SMatrixSym55& VertexCovariance() const { return fCovVertex; }
     //const SMatrixSym55& EndCovariance()    const { return fCovEnd; }
     //@}
 
-    //@{ 
+    //@{
     /// Access to position, momentum or covariance at the start and end of the track
     inline std::pair<Point_t, Point_t>           Extent()      const { return fTraj.Extent(); }
     inline std::pair<Vector_t, Vector_t>         Direction()   const { return fTraj.Direction(); }
     inline std::pair<SMatrixSym55, SMatrixSym55> Covariances() const { return std::pair<SMatrixSym55, SMatrixSym55>(fCovVertex,fCovEnd); }
     //@}
 
-    //@{ 
+    //@{
     /// Access to various track properties
     inline double  Length(size_t p=0) const { return fTraj.Length(p); }
     inline float   Chi2()             const { return fChi2; }
@@ -170,7 +167,7 @@ namespace recob {
     inline int     ParticleId()       const { return fPId; }
     //@}
 
-    //@{ 
+    //@{
     /// Access to spherical or geographical angles at vertex or at any point
     inline double  Theta()                const { return fTraj.Theta(); }
     inline double  Theta(size_t p)        const { return fTraj.Theta(p); }
@@ -182,7 +179,7 @@ namespace recob {
     inline double  AzimuthAngle(size_t p) const { return fTraj.AzimuthAngle(p); }
     //@}
 
-    //@{ 
+    //@{
     // Calculate rotation matrices between global (x,y,z) and local (u,v,w)
     // coordinate systems based on track direction (fDir).
     // The local w-axis points along the track direction.
@@ -190,7 +187,7 @@ namespace recob {
     inline Rotation_t LocalToGlobalRotationAtPoint(size_t p) const { return fTraj.LocalToGlobalRotationAtPoint(p); }
     //@}
 
-    //@{ 
+    //@{
     /// Track ID number, needed to relate a track to its possible track parent (e.g. in case of a refit).
     /// Note that art Assns to the same object are not currently supported.
     /// The < operator is based on the track ID.
@@ -198,7 +195,7 @@ namespace recob {
     friend bool operator < (const Track & a, const Track & b);
     //@}
 
-    //@{ 
+    //@{
     /// Accessors to track parameters and covariance matrices in Local5D and Global6D coordinates
     SVector5            VertexParametersLocal5D()  const;
     SVector5            EndParametersLocal5D()     const;
@@ -209,8 +206,8 @@ namespace recob {
     SMatrixSym66        VertexCovarianceGlobal6D() const;
     SMatrixSym66        EndCovarianceGlobal6D()    const;
     //@}
-    
-    //@{ 
+
+    //@{
     //deprecated methods, temporarily kept for backward compatibility but soon to be removed
     Track(std::vector<TVector3>               const& xyz,
     	  std::vector<TVector3>               const& dxdydz,
@@ -250,7 +247,6 @@ namespace recob {
 
     friend std::ostream& operator << (std::ostream& stream, Track const& a);
 
-#endif
   };
 }
 

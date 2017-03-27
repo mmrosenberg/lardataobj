@@ -10,11 +10,9 @@
 #ifndef RB_VERTEX_H
 #define RB_VERTEX_H
 
-#ifndef __GCCXML__
 #include <iosfwd>
 
 #include "larcoreobj/SimpleTypesAndConstants/PhysicalConstants.h"
-#endif
 
 namespace recob {
 
@@ -29,7 +27,6 @@ namespace recob {
     double fXYZ[3];    ///< location of vertex
     int    fID;        ///< id number for vertex
 
-#ifndef __GCCXML__
   public:
 
     explicit  Vertex(double *xyz,
@@ -40,14 +37,11 @@ namespace recob {
     friend bool          operator <   (const Vertex & a, const Vertex & b);
     friend std::ostream& operator <<  (std::ostream& o,  const Vertex & a);
 
-#endif
 
   };
 }
 
-#ifndef __GCCXML__
 
 inline int recob::Vertex::ID() const { return fID; }
 
-#endif 
 #endif // RB_VERTEX_H

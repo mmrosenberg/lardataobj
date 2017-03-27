@@ -16,9 +16,7 @@
 #define CLUSTER_H
 
 // C/C++ standard library
-#ifndef __GCCXML__
 # include <iosfwd> // std::ostream
-#endif
 
 // LArSoft libraries
 #include "larcoreobj/SimpleTypesAndConstants/geo_types.h" // geo::PlaneID, geo::View_t
@@ -171,7 +169,6 @@ namespace recob {
       
       geo::PlaneID fPlaneID; ///< Location of the start of the cluster
 
-#ifndef __GCCXML__
       
     public:
       
@@ -759,7 +756,6 @@ namespace recob {
       friend std::ostream& operator << (std::ostream& o, Cluster const& c);
       friend bool          operator <  (Cluster const& a, Cluster const& b);
     
-#endif // __GCCXML__
     
   }; // class Cluster
   

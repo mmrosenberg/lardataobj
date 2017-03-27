@@ -27,7 +27,6 @@ namespace sim {
 
     // The sections bracketed with GCCXML tests handle a problem ART
     // with generating its data dictionaries.
-#ifndef __GCCXML__
 
     // No "setters" for beam-gate start or width; you have to assign
     // them when you create a BeamGateInfo object.
@@ -35,7 +34,6 @@ namespace sim {
     double Width() const { return fm_width; }
     BeamType_t BeamType() const { return fm_beam_type; }
 
-#endif
     
   private:
     double fm_start; // Start of the beam gate relative to the t0 of the initial simulated event window, in ns.
@@ -44,7 +42,6 @@ namespace sim {
     
   };
 
-#ifndef __GCCXML__
   // In case we want to sort a collection of BeamGateInfos (e.g.,
   // std::set<BeamGateInfo>), here's the definition of the less-than
   // operator.
@@ -58,11 +55,9 @@ namespace sim {
       return ( lhs.Width() < lhs.Width() );
     return false;
   }
-#endif
 
 } // namespace sim
 
-#ifndef __GCCXML__
 // For no extra charge, include how to sort BeamGateInfo*, just in
 // case we want (for example) a std::set<BeamGateInfo*>.
 namespace std {
@@ -76,6 +71,5 @@ namespace std {
     }
   };
 } // std
-#endif
 
 #endif // Simulation_BeamGateInfo_h

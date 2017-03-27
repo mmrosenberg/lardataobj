@@ -20,9 +20,7 @@
 #ifndef TRACKHITMET_H
 #define TRACKHITMET_H
 
-#ifndef __GCCXML__
 #include <iosfwd>
-#endif
 
 // #include "TVector3.h"
 
@@ -48,11 +46,9 @@ public:
 	/// Candidate to keep 3D trajectory point here instead of inside recob::Track
 	//TVector3 const & Position3D(void) const { return fPosition3D; }
 
-#ifndef __GCCXML__
 public:
     friend std::ostream&  operator << (std::ostream & o, const TrackHitMeta & a);
     friend bool           operator <  (const TrackHitMeta & a, const TrackHitMeta & b);
-#endif
 
 private:
 	unsigned int fIndex;

@@ -29,7 +29,6 @@ namespace sim {
 
     unsigned int fStartTDC;
 
-#ifndef __GCCXML__
 
   public:
 
@@ -60,12 +59,10 @@ namespace sim {
     /// For sorting
     inline bool operator< ( const MCWire& rhs ) const { return fStartTDC < rhs.fStartTDC; }
     
-#endif
   };
 }
 
 // Define a pointer comparison
-#ifndef __GCCXML__
 namespace std {
   template <>
   class less<sim::MCWire*>
@@ -75,6 +72,5 @@ namespace std {
     { return (*lhs) < (*rhs); }
   };
 }
-#endif
 
 #endif 

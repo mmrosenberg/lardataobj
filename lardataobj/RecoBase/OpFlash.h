@@ -39,7 +39,6 @@ private:
       
 
 
-#ifndef __GCCXML__
 
   public:
       OpFlash(double time, double timewidth, double abstime, unsigned int frame,
@@ -72,13 +71,11 @@ private:
       double                TotalPE()           const;
       double                FastToTotal()       const;
 
-#endif
 
   };
 
 }
 
-#ifndef __GCCXML__
 
 inline double recob::OpFlash::Time()              const { return fTime;        }
 inline double recob::OpFlash::TimeWidth()         const { return fTimeWidth;   }
@@ -101,6 +98,5 @@ namespace recob{
   };
 }
 
-#endif
 
 #endif
