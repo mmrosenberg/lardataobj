@@ -2,11 +2,10 @@
 include_directories( $ENV{NUSIMDATA_INC} )
 
 cet_make( LIBRARIES larcoreobj_SummaryData
-		    canvas_Persistency_Provenance
-		    canvas_Utilities
+		    canvas
 		    MF_MessageLogger
 		    MF_Utilities
-		    cetlib
+		    cetlib cetlib_except
                     ${Boost_SYSTEM_LIBRARY}
 		    ${ROOT_BASIC_LIB_LIST}
                     ${ROOT_EG}
