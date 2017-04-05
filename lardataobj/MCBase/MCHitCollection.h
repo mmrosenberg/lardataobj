@@ -3,6 +3,7 @@
 #define MCHITCOLLECTION_H
 
 // C++ includes
+#include <vector>
 #include "lardataobj/MCBase/MCHit.h"
 
 namespace sim {
