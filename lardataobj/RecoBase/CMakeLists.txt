@@ -1,9 +1,9 @@
 
 cet_make( LIBRARIES lardataobj_RawData
-		    canvas_Persistency_Common
+		    canvas
 		    MF_MessageLogger
 		    MF_Utilities
-		    cetlib
+		    cetlib cetlib_except
 		    ${ROOT_MATHCORE}
 		    ${ROOT_GENVECTOR}
 		    ${ROOT_PHYSICS}

@@ -571,7 +571,7 @@ class sparse_vector {
 	const_iterator begin() const;
 	const_iterator end() const;
 	const_iterator cbegin() const { return begin(); }
-	const_iterator cend() const { return begin(); }
+	const_iterator cend() const { return end(); }
 	//@}
 	
 	/// Access to an element (read only)
