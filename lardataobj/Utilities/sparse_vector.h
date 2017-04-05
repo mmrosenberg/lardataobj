@@ -19,6 +19,7 @@
 #include <ostream>
 #include <iterator> // std::distance()
 #include <algorithm> // std::lower_bound(), std::max()
+#include <numeric> // std::accumulate
 
 #	include <type_traits> // std::is_integral
 
