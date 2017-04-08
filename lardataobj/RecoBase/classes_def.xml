@@ -222,6 +222,7 @@
  <class name="art::Assns<recob::PCAxis,     recob::PFParticle, void          >" />
  <class name="art::Assns<recob::PCAxis,     recob::Shower,     void>"           />
  <class name="art::Assns<recob::PFParticle, recob::Cluster,    void          >" />
+ <class name="art::Assns<recob::PFParticle, recob::Edge,       void          >" />
  <class name="art::Assns<recob::PFParticle, recob::PCAxis,     void          >" />
  <class name="art::Assns<recob::PFParticle, recob::Seed,       void          >" />
  <class name="art::Assns<recob::PFParticle, recob::Shower,     void          >" />
@@ -235,6 +236,7 @@
  <class name="art::Assns<recob::Shower,     recob::PFParticle, void          >" />
  <class name="art::Assns<recob::Shower,     recob::SpacePoint, void          >" />
  <class name="art::Assns<recob::Shower,     recob::Vertex,     void          >" />
+ <class name="art::Assns<recob::SpacePoint, recob::Edge,       void          >" />
  <class name="art::Assns<recob::SpacePoint, recob::Hit,        void          >" />
  <class name="art::Assns<recob::SpacePoint, recob::Cluster,    void          >" />
  <class name="art::Assns<recob::SpacePoint, recob::PFParticle, void          >" />
