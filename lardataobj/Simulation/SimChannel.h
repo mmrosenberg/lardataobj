@@ -356,7 +356,7 @@ void sim::SimChannel::Dump
       tdc_charge += ide.numElectrons;
     } // for IDEs
     out << indent << "    => TDC #" << tdc << " CH #" << Channel()
-      << " collected " << tdc_energy << " electrons and " << tdc_energy
+      << " collected " << tdc_charge << " electrons and " << tdc_energy
       << " MeV\n";
     channel_energy += tdc_energy;
     channel_charge += tdc_charge;

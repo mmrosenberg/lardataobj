@@ -362,9 +362,9 @@ namespace recob{
   bool operator < (const Seed & a, const Seed & b)
   {
     if      (a.fSeedPoint[2] != b.fSeedPoint[2])
-      return a.fSeedPoint[2] < b.fSeedPoint[2];
+      { return a.fSeedPoint[2] < b.fSeedPoint[2]; }
     else if (a.fSeedPoint[1] != b.fSeedPoint[1])
-      return a.fSeedPoint[1] < b.fSeedPoint[1];
+      { return a.fSeedPoint[1] < b.fSeedPoint[1]; }
 
       return a.fSeedPoint[0] < b.fSeedPoint[0];
 
