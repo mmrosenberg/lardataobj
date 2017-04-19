@@ -1,5 +1,5 @@
 /**
- * @file classes.h
+ * @file RecoBase/classes.h
  * @brief Dictionary selection for RecoBase
  * 
  * Original author Rob Kutschke, modified by klg

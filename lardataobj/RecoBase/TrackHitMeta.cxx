@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////
 ///
-/// \file   TrackHitMetadata.h
+/// \file   TrackHitMeta.cxx
 ///
 /// \brief  Class to keep data related to recob::Hit associated with recob::Track.
 ///
