@@ -1,5 +1,4 @@
 ////////////////////////////////////////////////////////////////////////////
-// \version $Id: Track.h,v 1.5 2010/02/15 20:32:46 brebel Exp $
 //
 // \brief Definition of track object for LArSoft
 //

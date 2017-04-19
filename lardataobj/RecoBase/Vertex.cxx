@@ -1,5 +1,4 @@
 ////////////////////////////////////////////////////////////////////////////
-// \version $Id: Vertex.cxx,v 1.4 2010/06/10 16:21:31 antonm Exp $
 //
 // \brief Definition of vertex object for LArSoft
 //

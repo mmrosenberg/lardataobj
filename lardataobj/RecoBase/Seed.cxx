@@ -1,5 +1,4 @@
 ////////////////////////////////////////////////////////////////////////////
-// \version $Id: Seed.cxx,v 1.4 2010/06/10 16:21:31 antonm Exp $
 //
 // \brief 3D seed object for kalman tracking package
 //                and bezier tracking algorithm

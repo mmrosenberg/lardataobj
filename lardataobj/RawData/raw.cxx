@@ -2,7 +2,6 @@
 /// \brief   raw data utilities
 /// \author  brebel@fnal.gov
 /// \modified by jti3@fnal.gov
-/// \version $Id: raw.cxx,v 2.0 2013/01/16  jti3 Exp $
 
 #include "lardataobj/RawData/raw.h"
 

@@ -1,4 +1,3 @@
-/// $Id: SConscript,v 1.3 2010/05/18 21:47:28 kutschke Exp $
 /// VectorMap
 /// 17-Apr-2008 William Seligman <seligman@nevis.columbia.edu>
 ///

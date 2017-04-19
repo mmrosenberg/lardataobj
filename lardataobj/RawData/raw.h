@@ -2,7 +2,6 @@
 /// \brief   Collect all the RawData header files together
 /// \author  brebel@fnal.gov
 /// \modified by jti3@fnal.gov
-/// \version $Id: raw.h,v 2.0 2013/01/16  jti3 Exp $
 
 #ifndef RAWDATA_RAW_H
 #define RAWDATA_RAW_H

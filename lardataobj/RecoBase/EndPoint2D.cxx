@@ -1,5 +1,4 @@
 ////////////////////////////////////////////////////////////////////////////
-// \version $Id: EndPoint2D.cxx,v 1.2 2010/06/19 22:20:12 spitz7 Exp $
 //
 // \brief Definition of vertex object for LArSoft
 //
