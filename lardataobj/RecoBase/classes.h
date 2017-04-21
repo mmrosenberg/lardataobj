@@ -32,3 +32,5 @@
 #include "lardataobj/RecoBase/Track.h"
 
 #include "lardataobj/RecoBase/TrackFitHitInfo.h"
+
+#include "lardataobj/RecoBase/MCSFitResult.h"
