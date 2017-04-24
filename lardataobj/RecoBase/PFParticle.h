@@ -76,14 +76,29 @@ namespace recob {
     PFParticle& operator= (const PFParticle& other) = default;
     PFParticle& operator= (PFParticle&& other)      = default;
     
-    /// Accessors
+    /// @{
+    /// @name Accessors
     int                        PdgCode()            const {return fPdgCode;}
     bool                       IsPrimary()          const {return fParent == PFParticle::kPFParticlePrimary;}
     int                        NumDaughters()       const {return fDaughters.size();}
     size_t                     Self()               const {return fSelf;}
     size_t                     Parent()             const {return fParent;}
-    size_t                     Daughter(size_t idx) const;
+    /**
+     * @brief Returns the ID of the specified daughter.
+     * @param idx index of the daughter to be queried (`0` to `NumDaughters()-1`)
+     * @return the ID of the specified daughter
+     * @throw std::out_of_range if the requested daughter does not exist
+     *
+     * The returned value describes the ID of the `idx`-th daughter of this
+     * PFParticle. Note that this is not the same as the index of that PFParticle
+     * in the data product or PFParticle collection.
+     *
+     * This function checks the validity of the index (`idx`). For unchecked access,
+     * use `Daughters()[idx]` instead.
+     */
+    size_t                     Daughter(size_t idx) const {return Daughters().at(idx);}
     const std::vector<size_t>& Daughters()          const {return fDaughters;}
+    /// @}
 
     friend std::ostream& operator << (std::ostream& o, const PFParticle& c);
     friend bool          operator <  (const PFParticle& a, const PFParticle& b);
