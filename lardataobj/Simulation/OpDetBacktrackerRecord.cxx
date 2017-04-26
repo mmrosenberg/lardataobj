@@ -1,4 +1,3 @@
-// $Id: OpDetBacktrackerRecord.cxx,v 1.3 2010/03/26 20:08:36 brebel Exp $
 ///
 /// \file  Simulation/OpDetBacktrackerRecord.cxx
 ///

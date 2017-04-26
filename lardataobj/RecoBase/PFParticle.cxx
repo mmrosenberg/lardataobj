@@ -1,5 +1,4 @@
 ////////////////////////////////////////////////////////////////////////////
-// \version $Id: PFParticle.cxx,v 1.0 2014/07/23 12:00:00 usher Exp $
 //
 // \brief Definition of PFParticle object for LArSoft
 //

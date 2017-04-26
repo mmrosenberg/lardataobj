@@ -1,5 +1,4 @@
 ////////////////////////////////////////////////////////////////////////////
-// \version $Id: OpHit.h,v 1.7 2010/03/01 21:32:44 bpage Exp $
 //
 // \brief Definition of OpHit object for LArSoft
 //

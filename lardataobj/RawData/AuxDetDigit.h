@@ -1,5 +1,4 @@
 ////////////////////////////////////////////////////////////////////////
-// $Id: AuxDetDigit.h,v 1.15 2010/03/26 20:06:04 brebel Exp $
 //
 // Definition of basic digits for auxiliary detectors
 //

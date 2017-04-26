@@ -1,5 +1,4 @@
 ////////////////////////////////////////////////////////////////////////////
-// \version $Id: PCAxis.h,v 1.0 2010/02/15 20:32:46 usher Exp $
 //
 // \file  PCAxis.h
 // \brief Definition of a Principal Component Axis object for LArSoft

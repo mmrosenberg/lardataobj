@@ -7,7 +7,6 @@
 //
 // Ben Jones, MIT, 06/04/2010
 //
-/// \version $Id: ParticleHistory.cxx,v 1.1 2010/04/29 15:38:01 seligman Exp $
 
 
 #include "lardataobj/Simulation/SimPhotons.h"
