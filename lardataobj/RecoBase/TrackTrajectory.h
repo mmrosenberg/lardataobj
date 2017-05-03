@@ -129,8 +129,17 @@ namespace recob {
       Flags_t&& flags,
       bool hasMomenta
       );
-    
-    
+
+
+    TrackTrajectory(
+      const Trajectory& traj,
+      Flags_t&& flags) {
+      auto pos = traj.Positions();
+      auto mom = traj.Momenta();
+      TrackTrajectory(std::move(pos),std::move(mom),std::move(flags),traj.HasMomentum());
+    }
+
+
     /// Returns the plain trajectory of this object
     Trajectory_t const& Trajectory() const
       { return static_cast<Trajectory_t const&>(*this); }

@@ -177,7 +177,18 @@ namespace recob {
      */
     bool HasPoint(size_t i) const
       { return i < NPoints(); }
-    
+
+    /**
+     * @brief Returns reference to stored vector of positions
+     * @return reference to stored vector of positions
+     */
+    const Positions_t& Positions() const { return fPositions; }
+
+    /**
+     * @brief Returns reference to stored vector of momenta
+     * @return reference to stored vector of momenta
+     */
+    const Momenta_t& Momenta() const { return fMomenta; }
     
     /**
      * @brief Fills position and direction at the specified trajectory point.
