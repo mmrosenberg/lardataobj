@@ -131,13 +131,14 @@ namespace recob {
       );
 
 
-    TrackTrajectory(
-      const Trajectory& traj,
-      Flags_t&& flags) {
-      auto pos = traj.Positions();
-      auto mom = traj.Momenta();
-      TrackTrajectory(std::move(pos),std::move(mom),std::move(flags),traj.HasMomentum());
-    }
+    /**
+     * @brief Constructor: copies positions and momenta from an existing Trajecotry, adds the flags.
+     * @param traj existing Trajectory
+     * @param flags (_moved_) flag sets, one flag set per point
+     * @throw std::runtime_error if the invariants are violated
+     */
+    TrackTrajectory(const Trajectory& traj, Flags_t&& flags)
+      : TrackTrajectory(Positions_t(traj.Positions()),Momenta_t(traj.Momenta()),std::move(flags),traj.HasMomentum()) {}
 
 
     /// Returns the plain trajectory of this object
