@@ -264,6 +264,7 @@
  <class name="std::vector<recob::Event>"      />
  <class name="std::vector<recob::OpHit>"      />
  <class name="std::vector<recob::OpFlash>"    />
+ <class name="std::vector<recob::MCSFitResult>"    />
  <class name="std::vector<recob::TrackFitHitInfo>" />
  <class name="std::vector<std::vector<recob::TrackFitHitInfo> >" />
  
