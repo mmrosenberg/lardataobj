@@ -81,7 +81,7 @@ namespace raw {
 
 
 namespace raw {
-  bool operator<( const OpDetWaveform& lhs, const OpDetWaveform& rhs )
+  inline bool operator<( const OpDetWaveform& lhs, const OpDetWaveform& rhs )
   {
       // Sort by channel, then time
       if ( lhs.ChannelNumber()  < rhs.ChannelNumber() ) return true;
