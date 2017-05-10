@@ -51,7 +51,8 @@
   <version ClassVersion="13" checksum="3306685703"/>
   <version ClassVersion="12" checksum="1302402512"/>
  </class>
- <class name="recob::Edge"         ClassVersion="19"                       >
+ <class name="recob::Edge"         ClassVersion="20"                       >
+  <version ClassVersion="20" checksum="2649087970"/>
   <version ClassVersion="19" checksum="4224291429"/>
      <version ClassVersion="18" checksum="1452403705"/>
  </class>

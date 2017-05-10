@@ -21,11 +21,16 @@ namespace recob {
   class SpacePoint {
 
   public:
+    using ID_t = int; ///< type of spacepoint ID
+    
+    /// Special value for an invalid ID.
+    static constexpr ID_t InvalidID = util::kBogusI;
+    
 
     SpacePoint();  ///Default constructor
 
   private:
-    int                        fID;        ///< SpacePoint ID
+    ID_t                       fID;        ///< SpacePoint ID
     double                     fXYZ[3];    ///< position of SpacePoint in xyz
     double                     fErrXYZ[6]; ///< Error matrix (triangular).
     double                     fChisq;     ///< Chisquare.
@@ -34,9 +39,9 @@ namespace recob {
     SpacePoint(double const*xyz,
 	       double const*err,
 	       double  chisq,
-	       int     id=util::kBogusI);
+	       int     id=InvalidID);
 
-    int                        ID()      const;
+    ID_t                       ID()      const;
     const double*              XYZ()     const;
     const double*              ErrXYZ()  const;
     double                     Chisq()   const;
@@ -46,13 +51,18 @@ namespace recob {
 
 
   };
+
+  /// Comparison of a space point with an ID, for sorting and lookup.
+  inline bool operator< (SpacePoint const& s, SpacePoint::ID_t id) { return s.ID() < id; }
+  /// Comparison of a space point with an ID, for sorting and lookup.
+  inline bool operator< (SpacePoint::ID_t id, SpacePoint const& s) { return id < s.ID(); }
+
 }
 
 
-inline int           recob::SpacePoint::ID()      const { return fID;     }
+inline recob::SpacePoint::ID_t recob::SpacePoint::ID() const { return fID; }
 inline const double* recob::SpacePoint::XYZ()     const { return fXYZ;    }
 inline const double* recob::SpacePoint::ErrXYZ()  const { return fErrXYZ; }
 inline double        recob::SpacePoint::Chisq()   const { return fChisq;  }
-
 
 #endif //SPACEPOINT_H
