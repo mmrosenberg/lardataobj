@@ -1,5 +1,4 @@
 ////////////////////////////////////////////////////////////////////////
-// $Id: DAQHeader.h,v 1.7 2009/02/19 23:07:30 soderber Exp $
 //
 // Definition of basic DAQ header information
 //

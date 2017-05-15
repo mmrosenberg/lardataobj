@@ -1,5 +1,4 @@
 ////////////////////////////////////////////////////////////////////////////
-// \version $Id: PCAxis.cxx,v 1.5 2010/02/15 20:32:46 usher Exp $
 //
 // \file  PCAxis.cxx
 // \brief Definition of Principal Components Axis object for LArSoft

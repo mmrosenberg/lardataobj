@@ -343,7 +343,7 @@ namespace recob {
      * The angle is measured on the plane orthogonal to the _z_ axis, in the
      * same reference where `Theta()` is measured. The angle is measured
      * counterclockwise from the _x_ axis. Skyward direction is expected to be
-     * @f$ +\pi/2 @f@ radians in this system, provided that the standard
+     * @f$ +\pi/2 @f$ radians in this system, provided that the standard
      * reference frame with the _y_ axis pointing skyward is chosen.
      * 
      * If the point number is invalid, the behaviour is undefined.

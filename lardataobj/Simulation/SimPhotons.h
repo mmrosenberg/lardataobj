@@ -2,7 +2,6 @@
 /// \file  SimPhotons.h
 /// \brief contains objects relating to OpDet hits
 ///
-/// \version $Id: ParticleList.h,v 1.13 2010/05/13 16:12:20 seligman Exp $
 /// \author  Ben Jones
 ////////////////////////////////////////////////////////////////////////
 // This file contains the definitions of the classes which

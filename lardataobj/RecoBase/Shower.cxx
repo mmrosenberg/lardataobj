@@ -1,5 +1,4 @@
 ////////////////////////////////////////////////////////////////////////////
-// \version $Id: Shower.cxx,v 1.2 2010/02/15 20:32:46 brebel Exp $
 //
 // \brief Definition of shower object for LArSoft
 //

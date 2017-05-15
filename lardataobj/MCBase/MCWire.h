@@ -5,6 +5,7 @@
 // C++ includes
 #include <vector>
 #include <algorithm>
+#include <functional> // std::less
 #include "MCLimits.h"
 
 namespace sim {

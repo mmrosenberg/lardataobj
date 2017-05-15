@@ -1,5 +1,4 @@
 ////////////////////////////////////////////////////////////////////////
-// \version $Id: OpFlash.cxx,v 1.7 2010/02/15 20:32:46 brebel Exp $
 //
 // \brief Definition of OpFlash reconstruction object
 //
