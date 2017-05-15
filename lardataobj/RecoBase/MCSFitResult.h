@@ -2,6 +2,13 @@
 #define MCSFitResult_h
 
 namespace recob {
+  /**
+   * @brief Class storing the result of the Maximum Likelihood fit of Multiple Coulomb Scattering angles between segments within a Track or Trajectory.
+   *
+   * Class storing the result of the Maximum Likelihood fit of Multiple Coulomb Scattering angles between segments within a Track or Trajectory.
+   * It stores: the resulting momentum, momentum uncertainty, and best likelihood value (both for fwd and bwd fit);
+   * the vectors of segment (radiation) lengths and of scattering angles; the PID hypothesis used in the fit.
+   */
   class MCSFitResult {
   public:
     MCSFitResult()=default;
