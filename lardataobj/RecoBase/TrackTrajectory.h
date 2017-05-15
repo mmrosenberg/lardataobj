@@ -129,8 +129,18 @@ namespace recob {
       Flags_t&& flags,
       bool hasMomenta
       );
-    
-    
+
+
+    /**
+     * @brief Constructor: copies positions and momenta from an existing Trajecotry, adds the flags.
+     * @param traj existing Trajectory
+     * @param flags (_moved_) flag sets, one flag set per point
+     * @throw std::runtime_error if the invariants are violated
+     */
+    TrackTrajectory(const Trajectory& traj, Flags_t&& flags)
+      : TrackTrajectory(Positions_t(traj.Positions()),Momenta_t(traj.Momenta()),std::move(flags),traj.HasMomentum()) {}
+
+
     /// Returns the plain trajectory of this object
     Trajectory_t const& Trajectory() const
       { return static_cast<Trajectory_t const&>(*this); }
