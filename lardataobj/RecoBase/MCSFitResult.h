@@ -2,10 +2,17 @@
 #define MCSFitResult_h
 
 namespace recob {
+  /**
+   * @brief Class storing the result of the Maximum Likelihood fit of Multiple Coulomb Scattering angles between segments within a Track or Trajectory.
+   *
+   * Class storing the result of the Maximum Likelihood fit of Multiple Coulomb Scattering angles between segments within a Track or Trajectory.
+   * It stores: the resulting momentum, momentum uncertainty, and best likelihood value (both for fwd and bwd fit);
+   * the vectors of segment (radiation) lengths and of scattering angles; the PID hypothesis used in the fit.
+   */
   class MCSFitResult {
   public:
-    MCSFitResult() {}
-  MCSFitResult(int pid, double momFwd, double momFwdUnc, double llhdFwd, double momBwd, double momBwdUnc, double llhdBwd, std::vector<double>& radlengths, std::vector<double>& angles)
+    MCSFitResult()=default;
+    MCSFitResult(int pid, double momFwd, double momFwdUnc, double llhdFwd, double momBwd, double momBwdUnc, double llhdBwd, const std::vector<double>& radlengths, const std::vector<double>& angles)
       : pid_(pid), momFwd_(momFwd), momFwdUnc_(momFwdUnc), llhdFwd_(llhdFwd), momBwd_(momBwd), momBwdUnc_(momBwdUnc), llhdBwd_(llhdBwd), radlengths_(radlengths), angles_(angles) {}
     //
     int    particleIdHyp()     const { return pid_;   }
@@ -22,7 +29,7 @@ namespace recob {
     double bestMomentum()       const { return isBestFwd() ? momFwd_    : momBwd_;   }
     double bestMomUncertainty() const { return isBestFwd() ? momFwdUnc_ : momBwdUnc_;}
     double bestLogLikelihood()  const { return isBestFwd() ? llhdFwd_   : llhdBwd_;  }
-    double deltaLogLikelihood() const { return llhdFwd_-llhdBwd_; }
+    double deltaLogLikelihood() const { return std::abs(llhdFwd_-llhdBwd_); }
     //
   private:
     double pid_;
