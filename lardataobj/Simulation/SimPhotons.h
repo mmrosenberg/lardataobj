@@ -50,6 +50,7 @@ namespace sim
     TVector3       FinalLocalPosition; // in cm
     float          Time;
     float          Energy;
+    int            MotherTrackID;
   };
   
   class SimPhotonsLite
@@ -83,6 +84,7 @@ namespace sim
 
       int  fOpChannel;  /// volume number for the OpDet
 
+#ifndef __GCCXML__
     public:
 
       typedef std::vector<OnePhoton>             list_type;
@@ -104,6 +106,7 @@ namespace sim
       int       OpChannel() const;
       void      SetChannel(int ch);
 
+#endif
       
     };
  
@@ -120,6 +123,7 @@ namespace sim
   private:
     std::string fTheSDName;
     
+#ifndef __GCCXML__
     
   public:
     typedef std::map<int,SimPhotons>           list_type;
@@ -147,10 +151,12 @@ namespace sim
     void SetSDName(std::string TheSDName);
     std::string GetSDName();
     
+#endif
   };
   
 }
 
+#ifndef __GCCXML__
 
 inline int         sim::SimPhotons::OpChannel()       const                     { return fOpChannel;      }
 inline void        sim::SimPhotons::SetChannel(int ch)                          { fOpChannel = ch;        }
@@ -160,5 +166,6 @@ inline void        sim::SimPhotonsCollection::SetSDName(std::string TheSDName)  
 inline bool sim::SimPhotons::operator==(const sim::SimPhotons& other) const          { return fOpChannel == other.OpChannel(); }
 inline bool sim::SimPhotonsLite::operator==(const sim::SimPhotonsLite& other) const  { return OpChannel == other.OpChannel; }
 
+#endif
 
 #endif

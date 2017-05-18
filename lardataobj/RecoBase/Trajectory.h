@@ -135,6 +135,20 @@ namespace recob {
       bool hasMomenta
       );
     
+    /**
+     * @brief Constructor: copies positions and momenta.
+     * @param positions trajectory as a sorted list of points
+     * @param momenta momentum along the trajectory, one per point
+     * @param hasMomenta whether the information on momentum modulus is provided
+     * @throw std::runtime_error if the invariants are violated
+     */
+    Trajectory(
+      Positions_t const& positions,
+      Momenta_t const&   momenta,
+      bool hasMomenta
+      )
+      : Trajectory(Positions_t(positions), Momenta_t(momenta), hasMomenta)
+      {}
     
     /// @{
     /// @name Access to trajectory information
@@ -177,7 +191,18 @@ namespace recob {
      */
     bool HasPoint(size_t i) const
       { return i < NPoints(); }
-    
+
+    /**
+     * @brief Returns reference to stored vector of positions
+     * @return reference to stored vector of positions
+     */
+    const Positions_t& Positions() const { return fPositions; }
+
+    /**
+     * @brief Returns reference to stored vector of momenta
+     * @return reference to stored vector of momenta
+     */
+    const Momenta_t& Momenta() const { return fMomenta; }
     
     /**
      * @brief Fills position and direction at the specified trajectory point.
