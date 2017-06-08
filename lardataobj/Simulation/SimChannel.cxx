@@ -9,6 +9,7 @@
 #include <limits> // std::numeric_limits
 #include <utility>
 #include <stdexcept>
+#include <algorithm> // std::lower_bound(), std::max()
 
 #include "lardataobj/Simulation/SimChannel.h"
 #include "lardataobj/Simulation/sim.h"
