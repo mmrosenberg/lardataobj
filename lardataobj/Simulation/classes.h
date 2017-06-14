@@ -4,7 +4,7 @@
 // $Author:  $
 // $Date: 2010/04/12 18:12:28 $
 // 
-// Original author Rob Kutschke, modified by klg
+// Original author Rob Kutschke, modified by klg and Steven Gardiner
 
 #include "canvas/Persistency/Common/Wrapper.h"
 #include "canvas/Persistency/Common/Assns.h"
@@ -18,3 +18,4 @@
 #include "lardataobj/Simulation/SimPhotons.h"
 #include "lardataobj/Simulation/BeamGateInfo.h"
 #include "lardataobj/Simulation/AuxDetSimChannel.h"
+#include "lardataobj/Simulation/SupernovaTruth.h"
