@@ -11,6 +11,7 @@
 #include <limits> // std::numeric_limits
 #include <utility>
 #include <stdexcept>
+#include <algorithm> // std::lower_bound(), std::max()
 
 #include "lardataobj/Simulation/OpDetBacktrackerRecord.h"
 #include "lardataobj/Simulation/sim.h"
