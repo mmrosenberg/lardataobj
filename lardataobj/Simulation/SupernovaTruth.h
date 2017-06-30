@@ -35,12 +35,16 @@ namespace sim {
       /// supernova, not the start of the detector readout window.
       double SNTime;
 
-      /// @brief Event weight for the supernova neutrino
-      /// @details The weight will be one unless the event was generated
+      /// @brief Event weight for the supernova neutrino (fm^2)
+      /// @details The weight will be equal to the flux-averaged total
+      /// cross section (over all energies and times and for all defined
+      /// MARLEY reactions) unless the event was generated
       /// using a biased sampling method. In general, the weight is
-      /// given by @f$cross section(E_{\nu}) * flux(E_{\nu}, t_{SN})
-      /// / g(E_{\nu}, t_{SN})@f$ where @f$ g(E_nu, t_SN) @f$ is the true
-      /// distribution that was sampled.
+      /// given by @f$ \sigma * f(E_{\nu}, t_{SN})
+      /// / g(E_{\nu}, t_{SN})@f$ where @f$ \sigma @f$ is the flux-averaged
+      /// total cross section, @f$ f(E_nu, t_SN) @f$ is the unbiased
+      /// probability density, and @f$ g(E_{\nu}, t_{SN})@f$ is the actual
+      /// probability density that was used for sampling.
       double Weight;
 
       /// @brief Method used to sample the supernova neutrino's energy
