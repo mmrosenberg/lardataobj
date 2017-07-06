@@ -40,7 +40,7 @@ namespace recob
      * auto const iFirstPoint = std::lower_bound
      *   (points.begin(), points.end(), edge.FirstPointID());
      * 
-     * if (iFirstPoint == points.end()) {
+     * if ((iFirstPoint == points.end()) || (iFirstPoint->ID() != edge.FirstPointID())) {
      *   throw std::runtime_error
      *     ("First point not found: ID=" + std::to_string(edge.FirstPointID()));
      * }  
@@ -50,7 +50,7 @@ namespace recob
      * auto const iSecondPoint = std::lower_bound
      *   (points.begin(), points.end(), edge.SecondPointID());
      * 
-     * if (iSecondPoint == points.end()) {
+     * if ((iSecondPoint == points.end()) || (iSecondPoint->ID() != edge.SecondPointID())) {
      *   throw std::runtime_error
      *     ("Second point not found: ID=" + std::to_string(edge.SecondPointID()));
      * }  
@@ -149,7 +149,7 @@ namespace recob
     /// Comparison operator: strict ordering of edge by ID.
     inline bool operator< (Edge::ID_t id, const Edge& e)
       { return id < e.ID(); }
-
+    
 } // namespace recob
 
 

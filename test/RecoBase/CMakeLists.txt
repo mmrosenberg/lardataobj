@@ -10,6 +10,10 @@ cet_test(Cluster_test USE_BOOST_UNIT
   LIBRARIES lardataobj_RecoBase
   )
 
+cet_test(Edge_test USE_BOOST_UNIT
+  LIBRARIES lardataobj_RecoBase
+  )
+
 cet_test(TrajectoryPointFlags_test USE_BOOST_UNIT
   LIBRARIES lardataobj_RecoBase
   )
