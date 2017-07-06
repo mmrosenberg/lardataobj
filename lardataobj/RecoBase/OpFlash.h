@@ -54,6 +54,10 @@ private:
       double                AbsTime()           const;
       unsigned int          Frame()             const;
       double                PE(unsigned int i)  const;
+      
+      /// Returns a vector with a number of photoelectrons per channel.
+      std::vector<double> const& PEs()          const;
+      
       double                YCenter()           const;
       double                YWidth()            const;
       double                ZCenter()           const;
@@ -81,6 +85,7 @@ inline double recob::OpFlash::TimeWidth()         const { return fTimeWidth;   }
 inline double recob::OpFlash::AbsTime()           const { return fAbsTime;     }
 inline unsigned int recob::OpFlash::Frame()       const { return fFrame;       }
 inline double recob::OpFlash::PE(unsigned int i)  const { return fPEperOpDet[i]; }
+inline std::vector<double> const& recob::OpFlash::PEs() const { return fPEperOpDet; }
 inline double recob::OpFlash::YCenter()           const { return fYCenter;     }
 inline double recob::OpFlash::YWidth()            const { return fYWidth;      }
 inline double recob::OpFlash::ZCenter()           const { return fZCenter;     }
