@@ -37,12 +37,12 @@ namespace recob {
    * experiment specific and user specific.
    * 
    * The trajectory flags have a meaning in the bare context of reconstructed
-   * trajectory in space and patter recognition (@see `recob::Trajectory` and
-   * @see `recob::TrackTrajectory1), and they should preserve the same meaning
+   * trajectory in space and patter recognition (see `recob::Trajectory` and
+   * see `recob::TrackTrajectory`), and they should preserve the same meaning
    * after fitting into a track.
    * 
    * The track flags have a meaning only in the context of a track
-   * (@see `recob::Track`).
+   * (see `recob::Track`).
    * 
    * The experiment-specific flags are placeholders that are expected to get
    * a meaning that is consistent within a single experiment, and unrelated
@@ -306,8 +306,8 @@ namespace recob {
    *   users
    * * an index pointing to the position of the hit in an originating
    *   trajectory, if such a trajectory exists. The specific convention to use
-   *   this index must be documented by the using class (@see
-   * `recob::TrackTrajectory`)
+   *   this index must be documented by the using class (see
+   *   `recob::TrackTrajectory`)
    * 
    * The meaning of the flags is described in the FlagTraits type.
    * This type needs to provide a `maxFlags()` static constexpr method to
@@ -393,7 +393,7 @@ namespace recob {
      * @brief Returns whether there is room for a flag with the specified index.
      * @param flagIndex index of the flag
      * @return whether there is room for a flag with the specified index.
-     * @@see isFlag()
+     * @see isFlag()
      * 
      * The flag may still be not present, in the sense that the allocated bit
      * has no meaning associated to it and that flag is "unknown".
