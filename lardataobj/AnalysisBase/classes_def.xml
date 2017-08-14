@@ -201,8 +201,10 @@
  <class name="art::Assns<recob::Shower,     anab::T0,          void>"                  />
  <class name="art::Assns<raw::ExternalTrigger, anab::T0,       void>"                  />
  <class name="art::Assns<recob::OpFlash,    anab::T0,          void>"                  />
- <class name="art::Assns<recob::Track,       simb::MCParticle,  void > "  />
- <class name="art::Assns<recob::Track,       simb::MCParticle,  std::pair<double, double> > "  />
+ <class name="art::Assns< simb::MCParticle,   recob::Track,    void > "                />
+ <class name="art::Assns< simb::MCParticle,   recob::Track,    std::pair<double, double> > "  />
+ <class name="art::Assns< recob::Track,     simb::MCParticle,  void > "                />
+ <class name="art::Assns< recob::Track,     simb::MCParticle,  std::pair<double, double> > "  />
  <class name="art::Wrapper< std::vector<anab::Calorimetry>      	>"	       />
  <class name="art::Wrapper<art::Assns<recob::Track,      anab::Calorimetry,  void> >"  />
  <class name="art::Wrapper<art::Assns<anab::Calorimetry, recob::Track,       void> >"  />
@@ -245,6 +247,7 @@
  <class name="art::Wrapper< art::Assns<raw::ExternalTrigger, anab::T0,       void> >"  />
  <class name="art::Wrapper< art::Assns<anab::T0,          recob::OpFlash,    void> >"  />
  <class name="art::Wrapper< art::Assns<recob::OpFlash,    anab::T0,          void> >"  />
- <class name="art::Wrapper< art::Assns<recob::Track,    simb::MCParticle,          std::pair<double, double> > >"  />
+ <class name="art::Wrapper< art::Assns< simb::MCParticle, recob::Track,      std::pair<double, double> > >"  />
+ <class name="art::Wrapper< art::Assns< recob::Track,     simb::MCParticle,  std::pair<double, double> > >"  />
 
 </lcgdict>

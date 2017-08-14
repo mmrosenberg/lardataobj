@@ -32,5 +32,5 @@
 
 namespace {
 //template<> class art::Assns<recob::Track,    simb::MCParticle,          std::pair<double, double> >;
-  art::Wrapper< art::Assns<recob::Track,    simb::MCParticle,          std::pair<double, double> > > dummy;
+  art::Wrapper< art::Assns< simb::MCParticle, recob::Track,    std::pair<double, double> > > dummy;
 }
