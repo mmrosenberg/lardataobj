@@ -21,35 +21,33 @@ namespace sim {
 
   class SupernovaTruth {
     public:
-      //SupernovaTruth();
-      //SupernovaTruth(double time, double weight,
-      //  SupernovaSamplingMode_t sampling_mode);
-      inline SupernovaTruth() : SNTime(0.), Weight(0.),
-        SamplingMode(kUnknownSupernovaSamplingMode) {}
-      inline SupernovaTruth(double time, double weight,
-        SupernovaSamplingMode_t sampling_mode) : SNTime(time), Weight(weight),
-        SamplingMode(sampling_mode) {}
+      SupernovaTruth();
+      SupernovaTruth(double time, double weight,
+       double xs_avg, SupernovaSamplingMode_t sampling_mode);
 
       /// @brief Arrival time of the supernova neutrino (seconds)
-      /// @details The arrival time is measured relative to the start of the
-      /// supernova, not the start of the detector readout window.
-      double SNTime;
+      /// @details The arrival time is measured relative to the supernova
+      /// core bounce (defined to be t = 0), not the start of the detector
+      /// readout window.
+      double SupernovaTime;
 
-      /// @brief Event weight for the supernova neutrino (fm^2)
-      /// @details The weight will be equal to the flux-averaged total
-      /// cross section (over all energies and times and for all defined
-      /// MARLEY reactions) unless the event was generated
-      /// using a biased sampling method. In general, the weight is
-      /// given by @f$ \sigma * f(E_{\nu}, t_{SN})
-      /// / g(E_{\nu}, t_{SN})@f$ where @f$ \sigma @f$ is the flux-averaged
-      /// total cross section, @f$ f(E_nu, t_SN) @f$ is the unbiased
+      /// @brief Statistical weight for this neutrino vertex.
+      /// @details The statistical weight will always be unity unless
+      /// a biased sampling method was used. In general, the weight is
+      /// given by the likelihood ratio @f$f(E_{\nu}, t_{SN})
+      /// / g(E_{\nu}, t_{SN})@f$ where @f$ f(E_nu, t_SN) @f$ is the unbiased
       /// probability density, and @f$ g(E_{\nu}, t_{SN})@f$ is the actual
       /// probability density that was used for sampling.
       double Weight;
 
+      /// @brief Flux-averaged total cross section (fm<sup>2</sup>,
+      /// average is taken over all energies and times for all defined
+      /// MARLEY reactions) used by MARLEY to generate this neutrino vertex
+      double FluxAveragedCrossSection;
+
       /// @brief Method used to sample the supernova neutrino's energy
       /// and arrival time
-      SupernovaSamplingMode_t SamplingMode; 
+      SupernovaSamplingMode_t SamplingMode;
   };
 
 }

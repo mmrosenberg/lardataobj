@@ -45,7 +45,8 @@
   <version ClassVersion="10" checksum="2389124613"/>
  </class>
  <enum name="sim::SupernovaSamplingMode_t"                         />
- <class name="sim::SupernovaTruth" ClassVersion="10">
+ <class name="sim::SupernovaTruth" ClassVersion="11">
+  <version ClassVersion="11" checksum="1831734181"/>
   <version ClassVersion="10" checksum="1873453733"/>
  </class>
  <enum name="sim::BeamType_t"                                      />

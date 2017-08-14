@@ -3,7 +3,7 @@
 //
 // $Author:  $
 // $Date: 2010/04/12 18:12:28 $
-// 
+//
 // Original author Rob Kutschke, modified by klg and Steven Gardiner
 
 #include "canvas/Persistency/Common/Wrapper.h"
