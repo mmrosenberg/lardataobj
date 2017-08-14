@@ -164,6 +164,7 @@
  <class name="std::pair< art::Ptr<anab::FlashMatch>, art::Ptr<anab::CosmicTag>  >"    />    
  <class name="std::pair< art::Ptr<recob::Cluster>,   art::Ptr<anab::FlashMatch> >"    />    
  <class name="std::pair< art::Ptr<anab::FlashMatch>, art::Ptr<recob::Cluster>   >"    />    
+ <class name="std::pair< art::Ptr<recob::Track>, art::Ptr<simb::MCParticle> >"    /> 
  <class name="art::Assns<recob::Track,      anab::Calorimetry,  void>"	               />
  <class name="art::Assns<anab::Calorimetry, recob::Track,       void>"	               />
  <class name="art::Assns<recob::Shower,      anab::Calorimetry,  void>"	               />
@@ -200,6 +201,8 @@
  <class name="art::Assns<recob::Shower,     anab::T0,          void>"                  />
  <class name="art::Assns<raw::ExternalTrigger, anab::T0,       void>"                  />
  <class name="art::Assns<recob::OpFlash,    anab::T0,          void>"                  />
+ <class name="art::Assns<recob::Track,       simb::MCParticle,  void > "  />
+ <class name="art::Assns<recob::Track,       simb::MCParticle,  std::pair<double, double> > "  />
  <class name="art::Wrapper< std::vector<anab::Calorimetry>      	>"	       />
  <class name="art::Wrapper<art::Assns<recob::Track,      anab::Calorimetry,  void> >"  />
  <class name="art::Wrapper<art::Assns<anab::Calorimetry, recob::Track,       void> >"  />
@@ -242,5 +245,6 @@
  <class name="art::Wrapper< art::Assns<raw::ExternalTrigger, anab::T0,       void> >"  />
  <class name="art::Wrapper< art::Assns<anab::T0,          recob::OpFlash,    void> >"  />
  <class name="art::Wrapper< art::Assns<recob::OpFlash,    anab::T0,          void> >"  />
+ <class name="art::Wrapper< art::Assns<recob::Track,    simb::MCParticle,          std::pair<double, double> > >"  />
 
 </lcgdict>

@@ -27,3 +27,10 @@
 #include "lardataobj/RecoBase/Cluster.h"
 
 #include "lardataobj/RawData/ExternalTrigger.h"
+
+#include "nusimdata/SimulationBase/MCParticle.h"
+
+namespace {
+//template<> class art::Assns<recob::Track,    simb::MCParticle,          std::pair<double, double> >;
+  art::Wrapper< art::Assns<recob::Track,    simb::MCParticle,          std::pair<double, double> > > dummy;
+}
