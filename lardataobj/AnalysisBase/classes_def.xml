@@ -198,10 +198,12 @@
  <class name="art::Assns<recob::Cluster,    anab::FlashMatch,  void>"	               />
  <class name="art::Assns<anab::T0,          recob::Track,      void>"                  />
  <class name="art::Assns<anab::T0,          recob::Shower,     void>"                  />
+ <class name="art::Assns<anab::T0,          recob::PFParticle, void>"                  />
  <class name="art::Assns<anab::T0,          raw::ExternalTrigger, void>"               />
  <class name="art::Assns<anab::T0,          recob::OpFlash,    void>"                  />
  <class name="art::Assns<recob::Track,      anab::T0,          void>"                  />
  <class name="art::Assns<recob::Shower,     anab::T0,          void>"                  />
+ <class name="art::Assns<recob::PFParticle, anab::T0,          void>"                  />
  <class name="art::Assns<raw::ExternalTrigger, anab::T0,       void>"                  />
  <class name="art::Assns<recob::OpFlash,    anab::T0,          void>"                  />
  <class name="art::Assns< simb::MCParticle,   recob::Track,    void > "                />
@@ -246,6 +248,8 @@
  <class name="art::Wrapper< art::Assns<recob::Track,      anab::T0,          void> >"  />
  <class name="art::Wrapper< art::Assns<anab::T0,          recob::Shower,     void> >"  />
  <class name="art::Wrapper< art::Assns<recob::Shower,     anab::T0,          void> >"  />
+ <class name="art::Wrapper< art::Assns<anab::T0,          recob::PFParticle, void> >"  />
+ <class name="art::Wrapper< art::Assns<recob::PFParticle, anab::T0,          void> >"  />
  <class name="art::Wrapper< art::Assns<anab::T0,          raw::ExternalTrigger, void> >" />
  <class name="art::Wrapper< art::Assns<raw::ExternalTrigger, anab::T0,       void> >"  />
  <class name="art::Wrapper< art::Assns<anab::T0,          recob::OpFlash,    void> >"  />
