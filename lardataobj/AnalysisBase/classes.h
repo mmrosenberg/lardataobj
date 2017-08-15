@@ -17,6 +17,7 @@
 #include "lardataobj/AnalysisBase/FlashMatch.h"
 #include "lardataobj/AnalysisBase/CosmicTag.h"
 #include "lardataobj/AnalysisBase/T0.h"
+#include "lardataobj/AnalysisBase/anab::BackTrackerMatchingData.h"
 
 #include "lardataobj/RecoBase/OpFlash.h"
 #include "lardataobj/RecoBase/PFParticle.h"
@@ -32,5 +33,5 @@
 
 namespace {
 //template<> class art::Assns<recob::Track,    simb::MCParticle,          std::pair<double, double> >;
-  art::Wrapper< art::Assns< simb::MCParticle, recob::Track,    std::pair<double, double> > > dummy;
+  art::Wrapper< art::Assns< simb::MCParticle, recob::Track,  anab::BackTrackerMatchingData > > dummy;
 }
