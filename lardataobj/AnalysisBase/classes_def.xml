@@ -124,6 +124,9 @@
   <version ClassVersion="12" checksum="1711426196"/>
   <version ClassVersion="11" checksum="2353091006"/>
  </class>
+ <class name="anab::BackTrackerMatchingData"            ClassVersion="10"                    >
+  <version ClassVersion="10" checksum="81935589"/>
+ </class>
  <enum name="anab::cosmic_tag_id"                                                      />
  <class name="std::vector<anab::Calorimetry>"                                          />
  <class name="std::vector<anab::ParticleID>"                                           />
@@ -131,12 +134,14 @@
  <class name="std::vector<anab::FlashMatch>"                                           />
  <class name="std::vector<anab::CosmicTag>"                                            />
  <class name="std::vector<anab::T0>"                                                   />
+ <class name="std::vector<anab::BackTrackerMatchingData>"                                    />
  <class name="art::Ptr<anab::Calorimetry>"                                   	       />
  <class name="art::Ptr<anab::ParticleID>"                                              />
  <class name="art::Ptr<anab::MVAPIDResult>"                                            />
  <class name="art::Ptr<anab::FlashMatch>"                                   	       />
  <class name="art::Ptr<anab::CosmicTag>"                                   	       />
  <class name="art::Ptr<anab::T0>"                                                      />
+ <class name="art::Ptr<anab::BackTrackerMatchingData>"                                       />
  <class name="std::pair< art::Ptr<recob::Track>,      art::Ptr<anab::Calorimetry> >"   />
  <class name="std::pair< art::Ptr<anab::Calorimetry>, art::Ptr<recob::Track>      >"   />
  <class name="std::pair< art::Ptr<recob::Shower>,      art::Ptr<anab::Calorimetry> >"   />
@@ -163,6 +168,7 @@
  <class name="std::pair< art::Ptr<anab::FlashMatch>, art::Ptr<anab::CosmicTag>  >"    />    
  <class name="std::pair< art::Ptr<recob::Cluster>,   art::Ptr<anab::FlashMatch> >"    />    
  <class name="std::pair< art::Ptr<anab::FlashMatch>, art::Ptr<recob::Cluster>   >"    />    
+ <class name="std::pair< art::Ptr<recob::Track>, art::Ptr<simb::MCParticle> >"    /> 
  <class name="art::Assns<recob::Track,      anab::Calorimetry,  void>"	               />
  <class name="art::Assns<anab::Calorimetry, recob::Track,       void>"	               />
  <class name="art::Assns<recob::Shower,      anab::Calorimetry,  void>"	               />
@@ -193,12 +199,26 @@
  <class name="art::Assns<recob::Cluster,    anab::FlashMatch,  void>"	               />
  <class name="art::Assns<anab::T0,          recob::Track,      void>"                  />
  <class name="art::Assns<anab::T0,          recob::Shower,     void>"                  />
+ <class name="art::Assns<anab::T0,          recob::PFParticle, void>"                  />
  <class name="art::Assns<anab::T0,          raw::ExternalTrigger, void>"               />
  <class name="art::Assns<anab::T0,          recob::OpFlash,    void>"                  />
  <class name="art::Assns<recob::Track,      anab::T0,          void>"                  />
  <class name="art::Assns<recob::Shower,     anab::T0,          void>"                  />
+ <class name="art::Assns<recob::PFParticle, anab::T0,          void>"                  />
  <class name="art::Assns<raw::ExternalTrigger, anab::T0,       void>"                  />
  <class name="art::Assns<recob::OpFlash,    anab::T0,          void>"                  />
+ <class name="art::Assns< simb::MCParticle,   recob::Track,    void > "                />
+ <class name="art::Assns< simb::MCParticle,   recob::Track,    anab::BackTrackerMatchingData > "  />
+ <class name="art::Assns< recob::Track,     simb::MCParticle,  void > "                />
+ <class name="art::Assns< recob::Track,     simb::MCParticle,  anab::BackTrackerMatchingData > "  />
+ <class name="art::Assns< simb::MCParticle,   recob::Shower,    void > "                />
+ <class name="art::Assns< simb::MCParticle,   recob::Shower,    anab::BackTrackerMatchingData > "  />
+ <class name="art::Assns< recob::Shower,     simb::MCParticle,  void > "                />
+ <class name="art::Assns< recob::Shower,     simb::MCParticle,  anab::BackTrackerMatchingData > "  />
+ <class name="art::Assns< simb::MCParticle,   recob::PFParticle,    void > "                />
+ <class name="art::Assns< simb::MCParticle,   recob::PFParticle,    anab::BackTrackerMatchingData > "  />
+ <class name="art::Assns< recob::PFParticle,     simb::MCParticle,  void > "                />
+ <class name="art::Assns< recob::PFParticle,     simb::MCParticle,  anab::BackTrackerMatchingData > "  />
  <class name="art::Wrapper< std::vector<anab::Calorimetry>      	>"	       />
  <class name="art::Wrapper<art::Assns<recob::Track,      anab::Calorimetry,  void> >"  />
  <class name="art::Wrapper<art::Assns<anab::Calorimetry, recob::Track,       void> >"  />
@@ -237,9 +257,17 @@
  <class name="art::Wrapper< art::Assns<recob::Track,      anab::T0,          void> >"  />
  <class name="art::Wrapper< art::Assns<anab::T0,          recob::Shower,     void> >"  />
  <class name="art::Wrapper< art::Assns<recob::Shower,     anab::T0,          void> >"  />
+ <class name="art::Wrapper< art::Assns<anab::T0,          recob::PFParticle, void> >"  />
+ <class name="art::Wrapper< art::Assns<recob::PFParticle, anab::T0,          void> >"  />
  <class name="art::Wrapper< art::Assns<anab::T0,          raw::ExternalTrigger, void> >" />
  <class name="art::Wrapper< art::Assns<raw::ExternalTrigger, anab::T0,       void> >"  />
  <class name="art::Wrapper< art::Assns<anab::T0,          recob::OpFlash,    void> >"  />
  <class name="art::Wrapper< art::Assns<recob::OpFlash,    anab::T0,          void> >"  />
+ <class name="art::Wrapper< art::Assns< simb::MCParticle, recob::Track,      anab::BackTrackerMatchingData > >"  />
+ <class name="art::Wrapper< art::Assns< recob::Track,     simb::MCParticle,  anab::BackTrackerMatchingData > >"  />
+ <class name="art::Wrapper< art::Assns< simb::MCParticle, recob::Shower,      anab::BackTrackerMatchingData > >"  />
+ <class name="art::Wrapper< art::Assns< recob::Shower,     simb::MCParticle,  anab::BackTrackerMatchingData > >"  />
+ <class name="art::Wrapper< art::Assns< simb::MCParticle, recob::PFParticle,      anab::BackTrackerMatchingData > >"  />
+ <class name="art::Wrapper< art::Assns< recob::PFParticle,     simb::MCParticle,  anab::BackTrackerMatchingData > >"  />
 
 </lcgdict>
