@@ -263,11 +263,17 @@
  <class name="art::Wrapper< art::Assns<raw::ExternalTrigger, anab::T0,       void> >"  />
  <class name="art::Wrapper< art::Assns<anab::T0,          recob::OpFlash,    void> >"  />
  <class name="art::Wrapper< art::Assns<recob::OpFlash,    anab::T0,          void> >"  />
+ <class name="art::Wrapper< art::Assns< simb::MCParticle, recob::Track,      void > >"  />
  <class name="art::Wrapper< art::Assns< simb::MCParticle, recob::Track,      anab::BackTrackerMatchingData > >"  />
+ <class name="art::Wrapper< art::Assns< recob::Track,     simb::MCParticle,  void > >"  />
  <class name="art::Wrapper< art::Assns< recob::Track,     simb::MCParticle,  anab::BackTrackerMatchingData > >"  />
+ <class name="art::Wrapper< art::Assns< simb::MCParticle, recob::Shower,      void > >"  />
  <class name="art::Wrapper< art::Assns< simb::MCParticle, recob::Shower,      anab::BackTrackerMatchingData > >"  />
+ <class name="art::Wrapper< art::Assns< recob::Shower,     simb::MCParticle,  void > >"  />
  <class name="art::Wrapper< art::Assns< recob::Shower,     simb::MCParticle,  anab::BackTrackerMatchingData > >"  />
+ <class name="art::Wrapper< art::Assns< simb::MCParticle, recob::PFParticle,      void > >"  />
  <class name="art::Wrapper< art::Assns< simb::MCParticle, recob::PFParticle,      anab::BackTrackerMatchingData > >"  />
+ <class name="art::Wrapper< art::Assns< recob::PFParticle,     simb::MCParticle,  void > >"  />
  <class name="art::Wrapper< art::Assns< recob::PFParticle,     simb::MCParticle,  anab::BackTrackerMatchingData > >"  />
 
 </lcgdict>
