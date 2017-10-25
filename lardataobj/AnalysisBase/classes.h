@@ -32,6 +32,7 @@
 
 namespace {
 //template<> class art::Assns<recob::Track,    simb::MCParticle,          std::pair<double, double> >;
+  art::Wrapper< art::Assns< simb::MCParticle, recob::Hit,  anab::BackTrackerHitMatchingData > > dummy;
   art::Wrapper< art::Assns< simb::MCParticle, recob::Track,  anab::BackTrackerMatchingData > > dummy;
   art::Wrapper< art::Assns< simb::MCParticle, recob::Shower,  anab::BackTrackerMatchingData > > dummy1;
   art::Wrapper< art::Assns< simb::MCParticle, recob::PFParticle,  anab::BackTrackerMatchingData > > dummy2;
