@@ -11,4 +11,10 @@ namespace anab{
     double completeness;
   };
 
+  //per hit/MCParticle assn...
+  struct BackTrackerHitMatchingData{
+    float        ideFraction; //fraction of energy in hit from this particle
+    bool         isMaxIDE;    //is this particle the max contributor to this hit?
+  };
+  
 }
