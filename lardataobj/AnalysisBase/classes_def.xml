@@ -128,7 +128,9 @@
  <class name="anab::BackTrackerMatchingData"            ClassVersion="10"                    >
   <version ClassVersion="10" checksum="81935589"/>
  </class>
- <class name="anab::BackTrackerHitMatchingData"         ClassVersion="0"                     >
+ <class name="anab::BackTrackerHitMatchingData"         ClassVersion="11"                    >
+  <version ClassVersion="11" checksum="534978548"/>
+     <version ClassVersion="10" checksum="0"/>
  </class>
  <enum name="anab::cosmic_tag_id"                                                      />
  <class name="std::vector<anab::Calorimetry>"                                          />
