@@ -4,6 +4,10 @@
 // Stores the cleanliness and completeness of a match
 // Cleanliness = charge in reco object from true object / total charge in reco object
 // Completeness = charge in reco object from true object / total charge deposited by true object
+
+#ifndef ANAB_BACKTRACKERMATCHINGDATA_H
+#define ANAB_BACKTRACKERMATCHINGDATA_H
+
 namespace anab{
 
   struct BackTrackerMatchingData{
@@ -18,3 +22,5 @@ namespace anab{
   };
   
 }
+
+#endif //BACKTRACKERMATCHINGDATA_FLASHMATCH
