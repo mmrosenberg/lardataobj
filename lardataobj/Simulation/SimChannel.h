@@ -29,11 +29,12 @@ namespace sim {
     int trackID;      ///< Geant4 supplied trackID
     float energyFrac; ///< fraction of hit energy from the particle with this trackID
     float energy;     ///< energy from the particle with this trackID [MeV]
+    float numElectrons; ///< number of electrons from the particle detected on the wires
 
     TrackIDE() {}
     
     
-    TrackIDE(int id, float ef, float e) : trackID(id), energyFrac(ef), energy (e) {}
+    TrackIDE(int id, float ef, float e, float ne ) : trackID(id), energyFrac(ef), energy (e), numElectrons (ne) {}
     
 
   };
