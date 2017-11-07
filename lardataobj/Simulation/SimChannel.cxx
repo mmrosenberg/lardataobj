@@ -1,4 +1,3 @@
-/// $Id: SimChannel.cxx,v 1.3 2010/03/26 20:08:36 brebel Exp $
 ///
 /// \file  Simulation/SimChannel.cxx
 ///
@@ -10,6 +9,7 @@
 #include <limits> // std::numeric_limits
 #include <utility>
 #include <stdexcept>
+#include <algorithm> // std::lower_bound(), std::max()
 
 #include "lardataobj/Simulation/SimChannel.h"
 #include "lardataobj/Simulation/sim.h"
@@ -264,7 +264,7 @@ namespace sim{
     // loop over the entries in the map and fill the input vectors    
     for (auto const& ide : ides){      
       if(ide.trackID == sim::NoParticleId) continue;
-      trackIDEs.emplace_back(ide.trackID, ide.energy/totalE, ide.energy);
+      trackIDEs.emplace_back(ide.trackID, ide.energy/totalE, ide.energy, ide.numElectrons);
     }
     
     return trackIDEs;
