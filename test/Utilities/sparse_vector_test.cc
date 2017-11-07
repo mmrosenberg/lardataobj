@@ -290,22 +290,30 @@ namespace actions {
 		This_t& set_expected_errors(int exp_err)
 			{ expected_errors = exp_err; return *this; }
 		
-		/// Print a description of this action into the specified steam
-		virtual void describe(TestClass_t& tc, std::ostream& out) const
-			{ out << "no action"; }
+		/// Print a description of this action into the specified steam.
+		void describe(TestClass_t& tc, std::ostream& out) const
+			{ doDescribe(tc, out); }
 		
-		/// Print a description of this action in the test class stream
-		void describe(TestClass_t& tc) const { return describe(tc, tc.out); }
+		/// Print a description of this action in the test class stream.
+		void describe(TestClass_t& tc) const { return doDescribe(tc, tc.out); }
 		
-		/// Returns a string with a description of this action
+		/// Returns a string with a description of this action.
 		std::string description(TestClass_t& tc) const
 			{ std::ostringstream sstr; describe(tc, sstr); return sstr.str(); }
 		
-		/// Action performed on a STL vector
-		virtual void operator() (Vector_t&) const {}
+		/// Action performed on a STL vector.
+		void operator() (Vector_t& v) const { actionOnVector(v); }
 		
-		/// Action performed on a sparse vector
-		virtual void operator() (SparseVector_t&) const {}
+		/// Action performed on a sparse vector.
+		void operator() (SparseVector_t& v) const { actionOnSparseVector(v); }
+		
+		  protected:
+		
+		virtual void doDescribe(TestClass_t&, std::ostream& out) const
+			{ out << "no action"; }
+		
+		virtual void actionOnVector(Vector_t&) const {}
+		virtual void actionOnSparseVector(SparseVector_t&) const {}
 		
 	}; // BaseAction<>
 	
@@ -319,13 +327,17 @@ namespace actions {
 		using typename Base_t::Vector_t;
 		using typename Base_t::SparseVector_t;
 		
-		virtual void describe(TestClass_t& tc, std::ostream& out) const
+		  protected:
+		virtual void doDescribe(TestClass_t&, std::ostream& out) const override
 			{ out << "print the vectors"; }
 		
-		virtual void operator() (Vector_t& v) const
-			{ PrintVector(v) << std::endl; }
-		virtual void operator() (SparseVector_t& v) const
-			{ PrintVector(v) << std::endl; }
+		virtual void actionOnVector(Vector_t& v) const override
+			{ doPrintVector(v); }
+		virtual void actionOnSparseVector(SparseVector_t& v) const override
+			{ doPrintVector(v); }
+		
+		template <typename Vector>
+		static void doPrintVector(Vector const& v) { PrintVector(v) << std::endl; }
 		
 	}; // Print<>
 	
@@ -338,11 +350,11 @@ namespace actions {
 		using typename Base_t::Vector_t;
 		using typename Base_t::SparseVector_t;
 		
-		virtual void describe(TestClass_t& tc, std::ostream& out) const
+		  protected:
+		virtual void doDescribe(TestClass_t&, std::ostream& out) const override
 			{ out << "print the sparse vector"; }
 		
-		virtual void operator() (Vector_t& v) const {}
-		virtual void operator() (SparseVector_t& v) const
+		virtual void actionOnSparseVector(SparseVector_t& v) const override
 			{ PrintVector(v) << std::endl; }
 		
 	}; // PrintSparseVector<>
@@ -361,10 +373,11 @@ namespace actions {
 		
 		PrintRange(size_t pos): position(pos) {}
 		
-		virtual void describe(TestClass_t& tc, std::ostream& out) const
+		  protected:
+		virtual void doDescribe(TestClass_t&, std::ostream& out) const override
 			{ out << "print the range at position " << position; }
 		
-		virtual void operator() (SparseVector_t& v) const
+		virtual void actionOnSparseVector(SparseVector_t& v) const override
 			{
 				try {
 					std::string range_str = VectorToString(v.find_range(position));
@@ -388,10 +401,11 @@ namespace actions {
 		using typename Base_t::Vector_t;
 		using typename Base_t::SparseVector_t;
 		
-		virtual void describe(TestClass_t& tc, std::ostream& out) const
+		  protected:
+		virtual void doDescribe(TestClass_t&, std::ostream& out) const override
 			{ out << "print the elements which are not in the void"; }
 		
-		virtual void operator() (Vector_t& v) const
+		virtual void actionOnVector(Vector_t& v) const override
 			{
 				typedef typename Base_t::SparseVector_t::value_type (*cmp_t)
 					(typename Base_t::SparseVector_t::value_type);
@@ -400,7 +414,7 @@ namespace actions {
 						(v.begin(), v.end(), cmp_t(&Base_t::SparseVector_t::is_zero)))
 					<< std::endl;
 			}
-		virtual void operator() (SparseVector_t& v) const
+		virtual void actionOnSparseVector(SparseVector_t& v) const override
 			{
 				std::cout << "Non-void elements in sparse vector: "
 					<< v.count() << std::endl;
@@ -419,11 +433,17 @@ namespace actions {
 		using typename Base_t::SparseVector_t;
 		
 		
-		virtual void describe(TestClass_t& tc, std::ostream& out) const
+		  protected:
+		virtual void doDescribe(TestClass_t&, std::ostream& out) const override
 			{ out << "clear the vectors"; }
 		
-		virtual void operator() (Vector_t& v) const { v.clear(); }
-		virtual void operator() (SparseVector_t& v) const { v.clear(); }
+		virtual void actionOnVector(Vector_t& v) const override
+		  { doClearVector(v); }
+		virtual void actionOnSparseVector(SparseVector_t& v) const override
+		  { doClearVector(v); }
+		
+		template <typename Vector>
+		static void doClearVector(Vector& v) { v.clear(); }
 		
 	}; // Clear<>
 	
@@ -442,11 +462,17 @@ namespace actions {
 		
 		Resize(size_t new_size = 0): size(new_size) {}
 		
-		virtual void describe(TestClass_t& tc, std::ostream& out) const
+		  protected:
+		virtual void doDescribe(TestClass_t&, std::ostream& out) const override
 			{ out << "resize to " << size << " elements"; }
 		
-		virtual void operator() (Vector_t& v) const { v.resize(size); }
-		virtual void operator() (SparseVector_t& v) const { v.resize(size); }
+		virtual void actionOnVector(Vector_t& v) const override
+		  { doResizeVector(v); }
+		virtual void actionOnSparseVector(SparseVector_t& v) const override
+		  { doResizeVector(v); }
+		
+		template <typename Vector>
+		void doResizeVector(Vector& v) const { v.resize(size); }
 		
 	}; // Resize<>
 	
@@ -459,7 +485,8 @@ namespace actions {
 		
 		Truncate(size_t new_size = 0): Base_t(new_size) {}
 		
-		virtual void describe(TestClass_t& tc, std::ostream& out) const
+		  protected:
+		virtual void doDescribe(TestClass_t&, std::ostream& out) const override
 			{ out << "truncate to " << Base_t::size << " elements"; }
 		
 	}; // Truncate<>
@@ -479,12 +506,17 @@ namespace actions {
 		
 		ResizeWith(size_t new_size, Data_t val): size(new_size), value(val) {}
 		
-		virtual void describe(TestClass_t& tc, std::ostream& out) const
+		  protected:
+		virtual void doDescribe(TestClass_t&, std::ostream& out) const override
 			{ out << "resize to " << size << " elements, filling with " << value; }
 		
-		virtual void operator() (Vector_t& v) const { v.resize(size, value); }
-		virtual void operator() (SparseVector_t& v) const
-			{ v.resize(size, value); }
+		virtual void actionOnVector(Vector_t& v) const override
+		  { doResizeVector(v); }
+		virtual void actionOnSparseVector(SparseVector_t& v) const override
+		  { doResizeVector(v); }
+		
+		template <typename Vector>
+		void doResizeVector(Vector& v) const { v.resize(size, value); }
 		
 	}; // ResizeWith<>
 	
@@ -503,16 +535,20 @@ namespace actions {
 		
 		Assign(Vector_t new_data): data(new_data) {}
 		
-		virtual void describe(TestClass_t& tc, std::ostream& out) const
+		  protected:
+		virtual void doDescribe(TestClass_t&, std::ostream& out) const override
 			{
 				out << "assign ";
 				PrintVector(data, out);
 			} // describe()
 		
-		virtual void operator() (Vector_t& v) const
-			{ v.assign(data.begin(), data.end()); }
-		virtual void operator() (SparseVector_t& v) const
-			{ v.assign(data.begin(), data.end()); }
+		virtual void actionOnVector(Vector_t& v) const override
+			{ doAssignVector(v); }
+		virtual void actionOnSparseVector(SparseVector_t& v) const override
+			{ doAssignVector(v); }
+		
+		template <typename Vector>
+		void doAssignVector(Vector& v) const { v.assign(data.begin(), data.end()); }
 		
 	}; // Assign<>
 	
@@ -531,23 +567,24 @@ namespace actions {
 		
 		AssignMove(Vector_t new_data): data(new_data) {}
 		
-		virtual void describe(TestClass_t& tc, std::ostream& out) const
+		  protected:
+		virtual void actionOnVector(Vector_t& v) const override
+			{
+				Vector_t local(data);
+				v.swap(local);
+			}
+		virtual void actionOnSparseVector(SparseVector_t& v) const override
+			{
+				SparseVector_t local(data);
+				v.assign(std::move(local));
+			}
+		
+		virtual void doDescribe(TestClass_t&, std::ostream& out) const override
 			{
 				out << "move ";
 				PrintVector(data, out);
 				out << " into the vector";
 			} // describe()
-		
-		virtual void operator() (Vector_t& v) const
-			{
-				Vector_t local(data);
-				v.swap(local);
-			}
-		virtual void operator() (SparseVector_t& v) const
-			{
-				SparseVector_t local(data);
-				v.assign(std::move(local));
-			}
 		
 	}; // AssignMove<>
 	
@@ -566,21 +603,22 @@ namespace actions {
 		
 		Insert(size_t pos, Vector_t new_data): position(pos), data(new_data) {}
 		
-		virtual void describe(TestClass_t& tc, std::ostream& out) const
-			{
-				out << "add data vector ";
-				PrintVector(data, out);
-				out << " starting at position " << position;
-			} // describe()
-		
-		virtual void operator() (Vector_t& v) const
+		  protected:
+		virtual void actionOnVector(Vector_t& v) const override
 			{
 				size_t max_size = std::max(v.size(), position + data.size());
 				v.resize(max_size, 0);
 				std::copy(data.begin(), data.end(), v.begin() + position);
 			}
-		virtual void operator() (SparseVector_t& v) const
+		virtual void actionOnSparseVector(SparseVector_t& v) const override
 			{ v.add_range(position, data); }
+		
+		virtual void doDescribe(TestClass_t&, std::ostream& out) const override
+			{
+				out << "add data vector ";
+				PrintVector(data, out);
+				out << " starting at position " << position;
+			} // describe()
 		
 	}; // Insert<>
 	
@@ -598,13 +636,8 @@ namespace actions {
 		
 		Erase(size_t from, size_t to): first(from), last(to) {}
 		
-		virtual void describe(TestClass_t& tc, std::ostream& out) const
-			{
-				out << "render elements from " << first << " to " << last
-					<< " void";
-			} // describe()
-		
-		virtual void operator() (Vector_t& v) const
+		  protected:
+		virtual void actionOnVector(Vector_t& v) const override
 			{
 				std::fill(
 					v.begin() + std::min(first, v.size()),
@@ -612,8 +645,14 @@ namespace actions {
 					Base_t::SparseVector_t::value_zero
 					);
 			}
-		virtual void operator() (SparseVector_t& v) const
+		virtual void actionOnSparseVector(SparseVector_t& v) const override
 			{ v.make_void(v.begin() + first, v.begin() + last); }
+		
+		virtual void doDescribe(TestClass_t&, std::ostream& out) const override
+			{
+				out << "render elements from " << first << " to " << last
+					<< " void";
+			} // describe()
 		
 	}; // Erase<>
 	
@@ -631,11 +670,12 @@ namespace actions {
 		
 		EraseRangeAt(size_t pos): Base_t(1), position(pos) {}
 		
-		virtual void describe(TestClass_t& tc, std::ostream& out) const
-			{ out << "void range containing position " << position; }
-		
-		virtual void operator() (SparseVector_t& v) const
+		  protected:
+		virtual void actionOnSparseVector(SparseVector_t& v) const override
 			{ v.make_void_around(position); }
+		
+		virtual void doDescribe(TestClass_t&, std::ostream& out) const override
+			{ out << "void range containing position " << position; }
 		
 	}; // Erase<>
 	
@@ -655,13 +695,14 @@ namespace actions {
 		SetElement(size_t pos, Data_t new_value): position(pos), value(new_value)
 			{}
 		
-		virtual void describe(TestClass_t& tc, std::ostream& out) const
-			{ out << "set the element " << position << " to " << value; }
-		
-		virtual void operator() (Vector_t& v) const
+		  protected:
+		virtual void actionOnVector(Vector_t& v) const override
 			{ v[position] = value; }
-		virtual void operator() (SparseVector_t& v) const
+		virtual void actionOnSparseVector(SparseVector_t& v) const override
 			{ v.set_at(position, value); }
+		
+		virtual void doDescribe(TestClass_t&, std::ostream& out) const override
+			{ out << "set the element " << position << " to " << value; }
 		
 	}; // SetElement<>
 	
@@ -679,13 +720,14 @@ namespace actions {
 		
 		UnsetElement(size_t pos): position(pos) {}
 		
-		virtual void describe(TestClass_t& tc, std::ostream& out) const
-			{ out << "turn the element " << position << " into the void"; }
-		
-		virtual void operator() (Vector_t& v) const
+		  protected:
+		virtual void actionOnVector(Vector_t& v) const override
 			{ v[position] = Base_t::SparseVector_t::value_zero; }
-		virtual void operator() (SparseVector_t& v) const
+		virtual void actionOnSparseVector(SparseVector_t& v) const override
 			{ v.unset_at(position); }
+		
+		virtual void doDescribe(TestClass_t&, std::ostream& out) const override
+			{ out << "turn the element " << position << " into the void"; }
 		
 	}; // SetElement<>
 	
@@ -703,13 +745,14 @@ namespace actions {
 		
 		PushBack(Data_t val): value(val) {}
 		
-		virtual void describe(TestClass_t& tc, std::ostream& out) const
-			{ out << "add element " << value << " (if non-zero)"; }
-		
-		virtual void operator() (Vector_t& v) const
+		  protected:
+		virtual void actionOnVector(Vector_t& v) const override
 			{ v.push_back(value); }
-		virtual void operator() (SparseVector_t& v) const
+		virtual void actionOnSparseVector(SparseVector_t& v) const override
 			{ v.push_back(value, 0. /* SparseVector_t::value_zero */); }
+		
+		virtual void doDescribe(TestClass_t&, std::ostream& out) const override
+			{ out << "add element " << value << " (if non-zero)"; }
 		
 	}; // PushBack<>
 	
@@ -728,13 +771,17 @@ namespace actions {
 		
 		SetValue(size_t pos, Data_t val): position(pos), value(val) {}
 		
-		virtual void describe(TestClass_t& tc, std::ostream& out) const
+		  protected:
+		virtual void actionOnVector(Vector_t& v) const override
+			{ doAssignValue(v); }
+		virtual void actionOnSparseVector(SparseVector_t& v) const override
+			{ doAssignValue(v); }
+		
+		virtual void doDescribe(TestClass_t&, std::ostream& out) const override
 			{ out << "set element " << position << " to " << value; }
 		
-		virtual void operator() (Vector_t& v) const
-			{ v[position] = value; }
-		virtual void operator() (SparseVector_t& v) const
-			{ v[position] = value; }
+		template <typename Vector>
+		void doAssignValue(Vector& v) const { v[position] = value; }
 		
 	}; // SetValue<>
 	
@@ -752,13 +799,17 @@ namespace actions {
 		
 		FlipSign(size_t pos): position(pos) {}
 		
-		virtual void describe(TestClass_t& tc, std::ostream& out) const
+		  protected:
+		virtual void doDescribe(TestClass_t&, std::ostream& out) const override
 			{ out << "change the sign of element " << position; }
 		
-		virtual void operator() (Vector_t& v) const
-			{ v[position] = -v[position]; }
-		virtual void operator() (SparseVector_t& v) const
-			{ v[position] = -v[position]; }
+		virtual void actionOnVector(Vector_t& v) const override
+      { doFlipValue(v); }
+		virtual void actionOnSparseVector(SparseVector_t& v) const override
+      { doFlipValue(v); }
+    
+		template <typename Vector>
+		void doFlipValue(Vector& v) const { v[position] = -v[position]; }
 		
 	}; // FlipSign<>
 	
@@ -776,18 +827,19 @@ namespace actions {
 		
 		Optimize(int param): opt_param(param) {}
 		
-		virtual void describe(TestClass_t& tc, std::ostream& out) const
+		  protected:
+		virtual void actionOnSparseVector(SparseVector_t& v) const override
+			{
+				if (opt_param < 0) v.optimize();
+				else               v.optimize(opt_param);
+			}
+		
+		virtual void doDescribe(TestClass_t&, std::ostream& out) const override
 			{ 
 				out << "optimize the sparse vector (";
 				if (opt_param < 0) out << "default settings";
 				else out << "optimization parameter: " << opt_param;
 				out << ")";
-			}
-		
-		virtual void operator() (SparseVector_t& v) const
-			{
-				if (opt_param < 0) v.optimize();
-				else               v.optimize(opt_param);
 			}
 		
 	}; // Optimize<>
@@ -802,11 +854,12 @@ namespace actions {
 		using typename Base_t::Vector_t;
 		using typename Base_t::SparseVector_t;
 		
-		virtual void describe(TestClass_t& tc, std::ostream& out) const
-			{ out << "designed failure: changes only vector"; }
-		
-		virtual void operator() (Vector_t& v) const
+		  protected:
+		virtual void actionOnVector(Vector_t& v) const override
 			{ v.push_back(Data_t(v.size())); }
+		
+		virtual void doDescribe(TestClass_t&, std::ostream& out) const override
+			{ out << "designed failure: changes only vector"; }
 		
 	}; // FailTest<>
 	
