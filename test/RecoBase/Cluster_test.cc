@@ -78,14 +78,26 @@ void CheckCluster(
   // - start wire
   BOOST_CHECK_EQUAL(cluster.StartWire(), start_wire);
   
+  // - start wire uncertainty
+  BOOST_CHECK_EQUAL(cluster.SigmaStartWire(), sigma_start_wire);
+  
   // - start tick
   BOOST_CHECK_EQUAL(cluster.StartTick(), start_tick);
+  
+  // - start tick uncertainty
+  BOOST_CHECK_EQUAL(cluster.SigmaStartTick(), sigma_start_tick);
   
   // - end wire
   BOOST_CHECK_EQUAL(cluster.EndWire(), end_wire);
   
+  // - end wire uncertainty
+  BOOST_CHECK_EQUAL(cluster.SigmaEndWire(), sigma_end_wire);
+  
   // - end tick
   BOOST_CHECK_EQUAL(cluster.EndTick(), end_tick);
+  
+  // - end tick uncertainty
+  BOOST_CHECK_EQUAL(cluster.SigmaEndTick(), sigma_end_tick);
   
   // - wire coordinates
   BOOST_CHECK_EQUAL

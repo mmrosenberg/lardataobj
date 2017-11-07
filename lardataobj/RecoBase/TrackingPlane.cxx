@@ -18,7 +18,7 @@ namespace recob {
     // par5d[3] = (par6d[4]*cosbeta + par6d[5]*sinbeta)/(par6d[3]*sinalpha - par6d[4]*cosalpha*sinbeta + par6d[5]*cosalpha*cosbeta);
     // par5d[4] = 1./sqrt(par6d[3]*par6d[3]+par6d[4]*par6d[4]+par6d[5]*par6d[5]);
 
-    SVector6 Plane::Local5DToGlobal6DParameters(const SVector5& par5d, const Point_t& planePos,const Vector_t& planeDir, const TrigCache& trigCache, bool trackAlongPlaneDir) const {
+    SVector6 Plane::Local5DToGlobal6DParameters(const SVector5& par5d, const Point_t& planePos,const Vector_t& /* planeDir */, const TrigCache& trigCache, bool trackAlongPlaneDir) const {
       const double& sinalpha = trigCache.fSinA;
       const double& cosalpha = trigCache.fCosA;
       const double& sinbeta  = trigCache.fSinB;
@@ -34,7 +34,7 @@ namespace recob {
       return par6d;
     }
 
-    SVector5 Plane::Global6DToLocal5DParameters(const SVector6& par6d, const Point_t& planePos,const Vector_t& planeDir, const TrigCache& trigCache) const {
+    SVector5 Plane::Global6DToLocal5DParameters(const SVector6& par6d, const Point_t& planePos,const Vector_t& /* planeDir */, const TrigCache& trigCache) const {
       const double& sinalpha = trigCache.fSinA;
       const double& cosalpha = trigCache.fCosA;
       const double& sinbeta  = trigCache.fSinB;
@@ -109,7 +109,7 @@ namespace recob {
       return j;
     }
 
-    SMatrix56 Plane::Global6DToLocal5DJacobian(bool hasMomentum, const Vector_t& trackMomOrDir, const Vector_t& planeDir, const TrigCache& trigCache) const {
+    SMatrix56 Plane::Global6DToLocal5DJacobian(bool hasMomentum, const Vector_t& trackMomOrDir, const Vector_t& /* planeDir */, const TrigCache& trigCache) const {
       const double& sinalpha = trigCache.fSinA;
       const double& cosalpha = trigCache.fCosA;
       const double& sinbeta  = trigCache.fSinB;
@@ -156,7 +156,7 @@ namespace recob {
       return j;
     }
 
-    Rotation_t Plane::Global3DToLocal3DRotation(const Vector_t& planeDir, const TrigCache& trigCache) const {
+    Rotation_t Plane::Global3DToLocal3DRotation(const Vector_t& /* planeDir */, const TrigCache& trigCache) const {
       const double& sinalpha = trigCache.fSinA;
       const double& cosalpha = trigCache.fCosA;
       const double& sinbeta  = trigCache.fSinB;
@@ -168,7 +168,7 @@ namespace recob {
       };
     }
 
-    Rotation_t Plane::Local3DToGlobal3DRotation(const Vector_t& planeDir, const TrigCache& trigCache) const {
+    Rotation_t Plane::Local3DToGlobal3DRotation(const Vector_t& /* planeDir */, const TrigCache& trigCache) const {
       const double& sinalpha = trigCache.fSinA;
       const double& cosalpha = trigCache.fCosA;
       const double& sinbeta  = trigCache.fSinB;

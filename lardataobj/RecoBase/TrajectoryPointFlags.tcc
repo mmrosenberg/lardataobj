@@ -21,7 +21,7 @@ template <typename Stream>
 void recob::TrajectoryPointFlags::dump(
   Stream&& out,
   unsigned int verbosity,
-  std::string indent, std::string indentFirst
+  std::string /* indent */, std::string indentFirst
   ) const
 {
   /*

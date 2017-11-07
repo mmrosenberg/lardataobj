@@ -49,7 +49,7 @@ namespace recob
         const double*       getEigenValues()  const;
         const EigenVectors& getEigenVectors() const;
         const double*       getAvePosition()  const;
-        const double        getAveHitDoca()   const;
+        double              getAveHitDoca()   const;
         size_t              getID()           const;
     
         friend std::ostream&  operator << (std::ostream & o, const PCAxis& a);
@@ -65,7 +65,7 @@ inline int                                recob::PCAxis::getNumHitsUsed()  const
 inline const double*                      recob::PCAxis::getEigenValues()  const {return fEigenValues;}
 inline const recob::PCAxis::EigenVectors& recob::PCAxis::getEigenVectors() const {return fEigenVectors;}
 inline const double*                      recob::PCAxis::getAvePosition()  const {return fAvePosition;}
-inline const double                       recob::PCAxis::getAveHitDoca()   const {return fAveHitDoca;}
+inline double                             recob::PCAxis::getAveHitDoca()   const {return fAveHitDoca;}
 inline size_t                             recob::PCAxis::getID()           const {return fID;}
 
 
