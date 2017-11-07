@@ -127,7 +127,8 @@
  <class name="anab::BackTrackerMatchingData"            ClassVersion="10"                    >
   <version ClassVersion="10" checksum="81935589"/>
  </class>
- <class name="anab::BackTrackerHitMatchingData"         ClassVersion="11"                    >
+ <class name="anab::BackTrackerHitMatchingData"         ClassVersion="12"                    >
+  <version ClassVersion="12" checksum="228403910"/>
   <version ClassVersion="11" checksum="534978548"/>
      <version ClassVersion="10" checksum="0"/>
  </class>
