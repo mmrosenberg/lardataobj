@@ -378,7 +378,7 @@
  <class name="art::Wrapper< art::Assns<recob::Wire,       raw::RawDigit,     void          > >" />
  <class name="art::Wrapper< art::Assns<recob::Wire,       recob::Hit,        void          > >" />
  <class name="art::Wrapper< art::Assns<recob::Vertex,     recob::Track,      recob::TrackVertexMeta>>" />
- <class name="art::Wrapper< art::Assns<recob::Track,      recob::Vertex,     recob::TrackHitMeta>>" />
+ <class name="art::Wrapper< art::Assns<recob::Track,      recob::Vertex,     recob::TrackVertexMeta>>" />
 
 <!-- <ioread 
     version="[-11]" 
