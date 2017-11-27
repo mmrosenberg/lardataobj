@@ -35,3 +35,5 @@
 #include "lardataobj/RecoBase/TrackFitHitInfo.h"
 
 #include "lardataobj/RecoBase/MCSFitResult.h"
+
+#include "lardataobj/RecoBase/TrackVertexMeta.h"

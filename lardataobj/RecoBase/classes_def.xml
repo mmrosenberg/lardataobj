@@ -96,7 +96,8 @@
  <class name="recob::SpacePoint"       ClassVersion="12"                   >
   <version ClassVersion="12" checksum="4256037352"/>
  </class>
- <class name="recob::Vertex"           ClassVersion="12"                   >
+ <class name="recob::Vertex"           ClassVersion="13"                   >
+  <version ClassVersion="13" checksum="1229739518"/>
   <version ClassVersion="12" checksum="1317803878"/>
  </class>
  <class name="recob::Event"            ClassVersion="11"                   >
@@ -117,6 +118,11 @@
   <version ClassVersion="10" checksum="1923850317"/>
  </class>
 
+ <class name="recob::TrackVertexMeta" ClassVersion="11"                   >
+  <version ClassVersion="11" checksum="1863868229"/>
+  <version ClassVersion="10" checksum="1923850317"/>
+ </class>
+
  <!-- art pointers and pointer vectors -->
  <class name="art::Ptr<recob::Edge>"                            />
  <class name="art::Ptr<recob::Hit>"                             />
@@ -133,6 +139,7 @@
  <class name="art::PtrVector<recob::Edge>"                      />
  <class name="art::Ptr<recob::TrackFitHitInfo>"                 />
  <class name="art::Ptr<recob::MCSFitResult>"                    />
+ <class name="art::Ptr<recob::TrackVertexMeta>" />
  <class name="art::PtrVector<recob::Hit>"                       />
  <class name="art::PtrVector<recob::Event>"                     />
  <class name="art::PtrVector<recob::Cluster>"                   />
@@ -263,6 +270,8 @@
  <class name="art::Assns<recob::Vertex,     recob::Shower,     void          >" />
  <class name="art::Assns<recob::Wire,       raw::RawDigit,     void          >" />
  <class name="art::Assns<recob::Wire,       recob::Hit,        void          >" />
+ <class name="art::Assns<recob::Vertex, recob::Track, recob::TrackVertexMeta>" />
+ <class name="art::Assns<recob::Track, recob::Vertex, recob::TrackVertexMeta>" />
  
  <!-- vectors for data products -->
  <class name="std::vector<recob::Cluster>"    />
@@ -282,6 +291,7 @@
  <class name="std::vector<recob::MCSFitResult>"    />
  <class name="std::vector<recob::TrackFitHitInfo>" />
  <class name="std::vector<std::vector<recob::TrackFitHitInfo> >" />
+ <class name="std::vector<recob::TrackVertexMeta>" />
  
  <!-- art data product wrappers -->
  <class name="art::Wrapper< std::vector< recob::Cluster                     > >" />
@@ -367,6 +377,8 @@
  <class name="art::Wrapper< art::Assns<recob::Vertex,     recob::Shower,     void          > >" />
  <class name="art::Wrapper< art::Assns<recob::Wire,       raw::RawDigit,     void          > >" />
  <class name="art::Wrapper< art::Assns<recob::Wire,       recob::Hit,        void          > >" />
+ <class name="art::Wrapper< art::Assns<recob::Vertex,     recob::Track,      recob::TrackVertexMeta>>" />
+ <class name="art::Wrapper< art::Assns<recob::Track,      recob::Vertex,     recob::TrackHitMeta>>" />
 
 <!-- <ioread 
     version="[-11]" 
