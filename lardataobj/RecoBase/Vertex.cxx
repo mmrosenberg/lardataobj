@@ -18,6 +18,8 @@ namespace recob{
   {
     status_ = Invalid;
     id_ = util::kBogusI;
+    chi2_ = util::kBogusD;
+    ndof_ = util::kBogusI;
   }
 
   //----------------------------------------------------------------------
@@ -27,6 +29,8 @@ namespace recob{
   {
     pos_ = Point_t(xyz[0],xyz[1],xyz[2]);
     status_ = Valid;
+    chi2_ = util::kBogusD;
+    ndof_ = util::kBogusI;
   }
 
   //----------------------------------------------------------------------

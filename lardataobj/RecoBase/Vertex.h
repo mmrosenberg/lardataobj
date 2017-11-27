@@ -30,9 +30,9 @@ namespace recob {
     /// all valid go after 'Valid', and all valid with covariance go after 'ValidWithCovariance'
     enum Status { Invalid, Valid, ValidWithCovariance };
 
-    Vertex();  // Default constructor
+    Vertex();  ///< Default constructor
 
-    explicit  Vertex(double *xyz, int id=util::kBogusI);//fixme id!
+    explicit  Vertex(double *xyz, int id=util::kBogusI);
 
     Vertex(const Point_t& pos, const SMatrixSym33& cov, double chi2, int ndof, int id=util::kBogusI)
       : pos_(pos), cov_(cov), chi2_(chi2), ndof_(ndof), status_(ValidWithCovariance), id_(id) {}

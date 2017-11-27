@@ -694,6 +694,33 @@
     ]]>
   </ioread> 
   
+  <!-- recob::Vertex: schema evolution rules -->
+      <!-- version 13 -->
+        <!-- * position -->
+  <ioread
+    version="[-12]"
+    sourceClass="recob::Vertex"
+    source="double fXYZ[3];"
+    targetClass="recob::Vertex"
+    target="pos_"
+    include="lardataobj/RecoBase/Vertex.h">
+    <![CDATA[
+	 pos_ = recob::tracking::Point_t(onfile.fXYZ[0],onfile.fXYZ[1],onfile.fXYZ[2]);
+    ]]>
+  </ioread>
+        <!-- * id -->
+  <ioread
+    version="[-12]"
+    sourceClass="recob::Vertex"
+    source="int fID;"
+    targetClass="recob::Vertex"
+    target="id_"
+    include="lardataobj/RecoBase/Vertex.h">
+    <![CDATA[
+	 id_ = onfile.fID;
+    ]]>
+  </ioread>
+
   
     <!-- art pointers and wrappers -->
   <class name="art::Ptr<recob::Track>" />
