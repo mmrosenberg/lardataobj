@@ -119,7 +119,7 @@
  </class>
 
  <class name="recob::VertexAssnMeta" ClassVersion="10"                   >
-  <version ClassVersion="10" checksum="398471911"/>
+  <version ClassVersion="10" checksum="135721609"/>
  </class>
 
  <!-- art pointers and pointer vectors -->
