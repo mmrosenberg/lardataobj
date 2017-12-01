@@ -36,4 +36,4 @@
 
 #include "lardataobj/RecoBase/MCSFitResult.h"
 
-#include "lardataobj/RecoBase/TrackVertexMeta.h"
+#include "lardataobj/RecoBase/VertexAssnMeta.h"
