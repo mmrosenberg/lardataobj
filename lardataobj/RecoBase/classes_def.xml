@@ -96,7 +96,8 @@
  <class name="recob::SpacePoint"       ClassVersion="12"                   >
   <version ClassVersion="12" checksum="4256037352"/>
  </class>
- <class name="recob::Vertex"           ClassVersion="13"                   >
+ <class name="recob::Vertex"           ClassVersion="14"                   >
+  <version ClassVersion="14" checksum="2896315066"/>
   <version ClassVersion="13" checksum="1229739518"/>
   <version ClassVersion="12" checksum="1317803878"/>
  </class>
