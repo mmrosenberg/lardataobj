@@ -438,7 +438,7 @@
   <ioread 
     version="[-10]" 
     sourceClass="recob::Trajectory"
-    source="std::vector<ROOT::Math::PositionVector3D<ROOT::Math::Cartesian3D<double>, ROOT::Math::GlobalCoordinateSystemTag>> fPositions;"
+    source="std::vector<ROOT::Math::PositionVector3D<ROOT::Math::Cartesian3D<double>, ROOT::Math::DefaultCoordinateSystemTag>> fPositions;"
     targetClass="recob::Trajectory"
     target="fPositions"
     include="Math/GenVector/CoordinateSystemTags.h;Math/GenVector/Cartesian3D.h;Math/GenVector/PositionVector3D.h">
@@ -453,7 +453,7 @@
   <ioread 
     version="[-10]" 
     sourceClass="recob::Trajectory"
-    source="std::vector<ROOT::Math::DisplacementVector3D<ROOT::Math::Cartesian3D<double>, ROOT::Math::GlobalCoordinateSystemTag>> fMomenta;"
+    source="std::vector<ROOT::Math::DisplacementVector3D<ROOT::Math::Cartesian3D<double>, ROOT::Math::DefaultCoordinateSystemTag>> fMomenta;"
     targetClass="recob::Trajectory"
     target="fMomenta"
     include="Math/GenVector/CoordinateSystemTags.h;Math/GenVector/Cartesian3D.h;Math/GenVector/DisplacementVector3D.h">
