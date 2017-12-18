@@ -733,6 +733,20 @@
   </ioread> 
   
   <!-- recob::Vertex: schema evolution rules -->
+      <!-- version 14 -->
+        <!-- * position -->
+  <ioread
+    version="[13]"
+    sourceClass="recob::Vertex"
+    source="ROOT::Math::PositionVector3D<ROOT::Math::Cartesian3D<double>,ROOT::Math::DefaultCoordinateSystemTag> pos_;"
+    targetClass="recob::Vertex"
+    target="pos_"
+    include="lardataobj/RecoBase/Vertex.h"
+    >
+    <![CDATA[
+	 pos_ = recob::tracking::Point_t(onfile.pos_.X(), onfile.pos_.Y(), onfile.pos_.Z());
+    ]]>
+  </ioread>
       <!-- version 13 -->
         <!-- * position -->
   <ioread
