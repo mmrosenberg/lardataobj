@@ -1,5 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////
 //
+// \file  lardataobj/RecoBase/Vertex.h
 // \brief Definition of vertex object for LArSoft
 //
 // \author brebel@fnal.gov
@@ -17,13 +18,12 @@
 namespace recob {
 
   /**
-   * @file  lardataobj/RecoBase/Vertex.h
    * @class recob::Vertex
    *
    * @brief Definition of vertex object for LArSoft
    *
    * Vertex object, containing 3D position, position covariance (also in 3D, but the matrix rank may be = 2),
-   * vertex fit chi2 and number of degress of freedom, plus a vertex status and a vertex id.
+   * vertex fit chi2 and number of degrees of freedom, plus a vertex status and a vertex id.
    * The vertex object may be associated (via art Assn) to the recob::Track objects used in the vertex fit, possibly with
    * a meta data, see recob::VertexAssnMeta.
    *
