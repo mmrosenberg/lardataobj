@@ -851,6 +851,32 @@
   
   
   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+  <!-- recob::PointCharge -->
+  
+    <!--   class -->
+  <class name="recob::PointCharge" ClassVersion="10" >
+   <version ClassVersion="10" checksum="3152949279"/>
+  </class>
+  
+    <!-- art pointers and wrappers -->
+      <!-- data product collection (recob::PointCharge) -->
+  <class name="art::Ptr<recob::PointCharge>" />
+  <class name="std::vector<recob::PointCharge>" />
+  <class name="art::Wrapper<std::vector<recob::PointCharge>>" />
+      
+    <!-- associations and wrappers (recob::PointCharge <==> OTHER) -->
+  <!--
+  <class name="art::Assns<recob::PointCharge, OTHER, void>" />
+  <class name="art::Assns<OTHER, recob::PointCharge, void>" />
+  <class name="std::pair<art::Ptr<recob::PointCharge>, art::Ptr<OTHER>>" />
+  <class name="art::Wrapper<art::Assns<OTHER, recob::PointCharge, void>>" />
+  <class name="std::pair<art::Ptr<OTHER>, art::Ptr<recob::PointCharge>>" />
+  <class name="art::Wrapper<art::Assns<OTHER, recob::PointCharge, void>>" />
+    -->
+  
+  
+  
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
   <!-- copy&paste templates for: -->
   <!-- PROD -->
   
