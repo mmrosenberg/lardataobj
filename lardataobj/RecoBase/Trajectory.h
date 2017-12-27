@@ -27,10 +27,6 @@
 // ROOT forward declarations (for legacy interface)
 class TVector3;
 
-namespace trkf {
-  class BezierTrack;
-}
-
 namespace recob {
   
   
@@ -73,7 +69,6 @@ namespace recob {
    * 
    */
   class Trajectory {
-    friend class trkf::BezierTrack;
       public:
     /// Type used for coordinates and values in general.
     using Coord_t = tracking::Coord_t;
