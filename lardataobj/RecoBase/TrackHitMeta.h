@@ -1,62 +1,88 @@
 ////////////////////////////////////////////////////////////////////////////////////
 ///
-/// \file   TrackHitMeta.h
+/// \file   lardataobj/RecoBase/TrackHitMeta.h
 ///
-/// \brief  Class to keep data related to recob::Hit associated with recob::Track.
+/// \brief  Class to keep data related to `recob::Hit` associated with `recob::Track`.
 ///
-/// \author R. Sulej 
-///
-/// The purpose is to collect several variables that do not work well alone inside
-/// track class and are related to 2D hits along the 3D trajectory. So in the first
-/// place it is the hit index along the trajectory.
-/// There is aldo dx associated to hit to help dE/dx calculations.
-///
-/// Please, add other variables that may fit here. One candidate is 3D position.
-///
-/// PLEASE, remember to add ***errors on values*** whenever this is possible to calculate.
+/// \author R. Sulej
 ///
 ////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef TRACKHITMET_H
-#define TRACKHITMET_H
+#ifndef LARDATAOBJ_RECOBASE_TRACKHITMETA_H
+#define LARDATAOBJ_RECOBASE_TRACKHITMETA_H
 
 #include <iosfwd>
 
-// #include "TVector3.h"
+// #include "larcoreobj/SimpleTypesAndConstants/geo_vectors.h"
 
 namespace recob {
 
+/**
+ * \brief Data related to `recob::Hit` associated with `recob::Track`.
+ * \ingroup DataProductRecoBase
+ * 
+ * The purpose is to collect several variables that do not work well alone inside
+ * track class and are related to 2D hits along the 3D trajectory. So in the first
+ * place it is the hit index along the trajectory.
+ * There is also dx associated to hit to help dE/dx calculations.
+ *
+ * Please, add other variables that may fit here. One candidate is 3D position.
+ *
+ * PLEASE, remember to add **errors on values** whenever this is possible to calculate.
+ * 
+ * The expected association takes the form of:
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+ * art::Assns<recob::Track, recob::Hit, recob::TrackHitMeta>
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * It is also expected and recommended practice to create the association list
+ * sorted by track, as in the
+ * @ref LArSoftProxyDefinitionOneToManySeqAssn "one-to-many sequential association"
+ * definition.
+ * 
+ */
 class TrackHitMeta
 {
 public:
 	/// Default needed by ROOT.
-	TrackHitMeta(void) { fIndex = 0; fDx = 0.0; }
+	TrackHitMeta() = default;
 
 	/// Constructor with initialization.
-	TrackHitMeta(unsigned int idx, double dx = 0.0);
+	TrackHitMeta(unsigned int idx, double dx = 0.0)
+	  : fIndex(idx), fDx(dx)
+	  {}
 
-	/// Hit index along the track tracjectory.
-	unsigned int Index(void) const { return fIndex; }
+	/// Hit index along the track trajectory.
+	unsigned int Index() const { return fIndex; }
 
-	/// Track section length associated with the 2D hit;
-	/// i.e. half-dist to the next hit in the same plane plus
-	/// half-dist to the preceding hit in the same plane.
-	double Dx(void) const { return fDx; }
+	/**
+	 * \brief Length of the track segments associated with the 2D hit.
+	 * \return lenth of the track segments [cm]
+	 * 
+	 * The length is the sum of lengths of the two segments: half-distance to the
+	 * next hit in the same plane and half-distance to the preceding hit in the
+	 * same plane.
+	 */
+	double Dx() const { return fDx; }
 
-	/// Candidate to keep 3D trajectory point here instead of inside recob::Track
-	//TVector3 const & Position3D(void) const { return fPosition3D; }
-
-public:
-    friend std::ostream&  operator << (std::ostream & o, const TrackHitMeta & a);
-    friend bool           operator <  (const TrackHitMeta & a, const TrackHitMeta & b);
+	// /// Candidate to keep 3D trajectory point here instead of inside recob::Track
+	//geo::Point_t const & Position3D(void) const { return fPosition3D; }
 
 private:
-	unsigned int fIndex;
-	double fDx;
+	unsigned int fIndex = 0U; ///< Stored index of the hit in the sequence.
+	double fDx = 0.0; ///< Stored _dx_ size, in centimeters.
 
-	//TVector3 fPosition3D;
-};
+	//geo::Point_t fPosition3D;
+}; // class TrackHitMeta
 
-}
 
-#endif
+template <typename Stream>
+inline Stream& operator<< (Stream&& o, const TrackHitMeta & a)
+  { o << a.Index(); return o; }
+
+inline bool operator < (const TrackHitMeta & a, const TrackHitMeta & b)
+  { return a.Index() < b.Index(); }
+
+
+} // namespace recob
+
+#endif // LARDATAOBJ_RECOBASE_TRACKHITMETA_H
