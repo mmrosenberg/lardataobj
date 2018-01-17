@@ -15,4 +15,4 @@ art_dictionary( DICTIONARY_LIBRARIES lardataobj_RecoBase )
 
 install_headers(EXTRAS TrajectoryPointFlags.tcc TrackTrajectory.tcc Trajectory.tcc)
 install_fhicl()
-install_source()
+install_source(EXTRAS RecoBase.dox)
