@@ -33,8 +33,12 @@
 
 namespace {
 //template<> class art::Assns<recob::Track,    simb::MCParticle,          std::pair<double, double> >;
-  art::Wrapper< art::Assns< simb::MCParticle, recob::Hit,  anab::BackTrackerHitMatchingData > > dummy;
-  art::Wrapper< art::Assns< simb::MCParticle, recob::Track,  anab::BackTrackerMatchingData > > dummy1;
-  art::Wrapper< art::Assns< simb::MCParticle, recob::Shower,  anab::BackTrackerMatchingData > > dummy2;
-  art::Wrapper< art::Assns< simb::MCParticle, recob::PFParticle,  anab::BackTrackerMatchingData > > dummy3;
+  art::Wrapper< art::Assns< simb::MCParticle, recob::Hit,  anab::BackTrackerHitMatchingData > > dummyA;
+  art::Wrapper< art::Assns< simb::MCParticle, recob::Track,  anab::BackTrackerMatchingData > > dummy1A;
+  art::Wrapper< art::Assns< simb::MCParticle, recob::Shower,  anab::BackTrackerMatchingData > > dummy2A;
+  art::Wrapper< art::Assns< simb::MCParticle, recob::PFParticle,  anab::BackTrackerMatchingData > > dummy3A;
+  art::Wrapper< art::Assns< recob::Hit, simb::MCParticle, anab::BackTrackerHitMatchingData > > dummyB;
+  art::Wrapper< art::Assns< recob::Track, simb::MCParticle, anab::BackTrackerMatchingData > > dummy1B;
+  art::Wrapper< art::Assns< recob::Shower, simb::MCParticle, anab::BackTrackerMatchingData > > dummy2B;
+  art::Wrapper< art::Assns< recob::PFParticle, simb::MCParticle, anab::BackTrackerMatchingData > > dummy3B;
 }
