@@ -175,7 +175,12 @@
  <class name="std::pair< art::Ptr<anab::FlashMatch>, art::Ptr<anab::CosmicTag>  >"    />    
  <class name="std::pair< art::Ptr<recob::Cluster>,   art::Ptr<anab::FlashMatch> >"    />    
  <class name="std::pair< art::Ptr<anab::FlashMatch>, art::Ptr<recob::Cluster>   >"    />    
+ <class name="std::pair< art::Ptr<simb::MCParticle>, art::Ptr<recob::Hit> >"    />
+ <class name="std::pair< art::Ptr<recob::Hit>, art::Ptr<simb::MCParticle> >"    />
+ <class name="std::pair< art::Ptr<simb::MCParticle>, art::Ptr<recob::Track> >"    />
  <class name="std::pair< art::Ptr<recob::Track>, art::Ptr<simb::MCParticle> >"    />
+ <class name="std::vector<std::pair< art::Ptr<simb::MCParticle>, art::Ptr<recob::Hit> > >" />
+ <class name="std::vector<std::pair< art::Ptr<recob::Hit>, art::Ptr<simb::MCParticle> > >" />
  <class name="art::Assns<recob::Track,      anab::Calorimetry,  void>"	               />
  <class name="art::Assns<anab::Calorimetry, recob::Track,       void>"	               />
  <class name="art::Assns<recob::Shower,      anab::Calorimetry,  void>"	               />
