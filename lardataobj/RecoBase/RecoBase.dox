@@ -1,0 +1,12 @@
+/**
+ * @defgroup DataProducts Data products
+ * @brief Classes designed to be stored in _art_ ROOT files
+ */
+/**
+ * @defgroup DataProductRecoBase Reconstruction base data products
+ * @ingroup DataProducts
+ *
+ * Set of basic reconstruction data products for LArSoft.
+ * They all live in `recob` namespace.
+ *
+ */

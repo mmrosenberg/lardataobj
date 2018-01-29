@@ -96,7 +96,9 @@
  <class name="recob::SpacePoint"       ClassVersion="12"                   >
   <version ClassVersion="12" checksum="4256037352"/>
  </class>
- <class name="recob::Vertex"           ClassVersion="12"                   >
+ <class name="recob::Vertex"           ClassVersion="14"                   >
+  <version ClassVersion="14" checksum="2896315066"/>
+  <version ClassVersion="13" checksum="1229739518"/>
   <version ClassVersion="12" checksum="1317803878"/>
  </class>
  <class name="recob::Event"            ClassVersion="11"                   >
@@ -117,6 +119,10 @@
   <version ClassVersion="10" checksum="1923850317"/>
  </class>
 
+ <class name="recob::VertexAssnMeta" ClassVersion="10"                   >
+  <version ClassVersion="10" checksum="135721609"/>
+ </class>
+
  <!-- art pointers and pointer vectors -->
  <class name="art::Ptr<recob::Edge>"                            />
  <class name="art::Ptr<recob::Hit>"                             />
@@ -133,6 +139,7 @@
  <class name="art::PtrVector<recob::Edge>"                      />
  <class name="art::Ptr<recob::TrackFitHitInfo>"                 />
  <class name="art::Ptr<recob::MCSFitResult>"                    />
+ <class name="art::Ptr<recob::VertexAssnMeta>" />
  <class name="art::PtrVector<recob::Hit>"                       />
  <class name="art::PtrVector<recob::Event>"                     />
  <class name="art::PtrVector<recob::Cluster>"                   />
@@ -263,6 +270,8 @@
  <class name="art::Assns<recob::Vertex,     recob::Shower,     void          >" />
  <class name="art::Assns<recob::Wire,       raw::RawDigit,     void          >" />
  <class name="art::Assns<recob::Wire,       recob::Hit,        void          >" />
+ <class name="art::Assns<recob::Vertex, recob::Track, recob::VertexAssnMeta>" />
+ <class name="art::Assns<recob::Track, recob::Vertex, recob::VertexAssnMeta>" />
  
  <!-- vectors for data products -->
  <class name="std::vector<recob::Cluster>"    />
@@ -282,6 +291,7 @@
  <class name="std::vector<recob::MCSFitResult>"    />
  <class name="std::vector<recob::TrackFitHitInfo>" />
  <class name="std::vector<std::vector<recob::TrackFitHitInfo> >" />
+ <class name="std::vector<recob::VertexAssnMeta>" />
  
  <!-- art data product wrappers -->
  <class name="art::Wrapper< std::vector< recob::Cluster                     > >" />
@@ -367,6 +377,8 @@
  <class name="art::Wrapper< art::Assns<recob::Vertex,     recob::Shower,     void          > >" />
  <class name="art::Wrapper< art::Assns<recob::Wire,       raw::RawDigit,     void          > >" />
  <class name="art::Wrapper< art::Assns<recob::Wire,       recob::Hit,        void          > >" />
+ <class name="art::Wrapper< art::Assns<recob::Vertex,     recob::Track,      recob::VertexAssnMeta>>" />
+ <class name="art::Wrapper< art::Assns<recob::Track,      recob::Vertex,     recob::VertexAssnMeta>>" />
 
 <!-- <ioread 
     version="[-11]" 
@@ -415,7 +427,43 @@
   <!-- recob::Trajectory -->
   
   <!--   class -->
-  <class name="recob::Trajectory" />
+  <class name="recob::Trajectory" ClassVersion="11" >
+   <version ClassVersion="11" checksum="2541107521"/>
+   <version ClassVersion="10" checksum="3286658271"/>
+  </class>
+  
+    <!-- schema evolution rules -->
+      <!-- version 11 -->
+        <!-- * positions -->
+  <ioread 
+    version="[-10]" 
+    sourceClass="recob::Trajectory"
+    source="std::vector<ROOT::Math::PositionVector3D<ROOT::Math::Cartesian3D<double>, ROOT::Math::DefaultCoordinateSystemTag>> fPositions;"
+    targetClass="recob::Trajectory"
+    target="fPositions"
+    include="Math/GenVector/CoordinateSystemTags.h;Math/GenVector/Cartesian3D.h;Math/GenVector/PositionVector3D.h">
+    <![CDATA[
+      fPositions.clear();
+      fPositions.reserve(onfile.fPositions.size());
+      for (auto const& point: onfile.fPositions)
+        fPositions.emplace_back(point.X(), point.Y(), point.Z());
+    ]]>
+  </ioread> 
+        <!-- * momenta -->
+  <ioread 
+    version="[-10]" 
+    sourceClass="recob::Trajectory"
+    source="std::vector<ROOT::Math::DisplacementVector3D<ROOT::Math::Cartesian3D<double>, ROOT::Math::DefaultCoordinateSystemTag>> fMomenta;"
+    targetClass="recob::Trajectory"
+    target="fMomenta"
+    include="Math/GenVector/CoordinateSystemTags.h;Math/GenVector/Cartesian3D.h;Math/GenVector/DisplacementVector3D.h">
+    <![CDATA[
+      fMomenta.clear();
+      fMomenta.reserve(onfile.fMomenta.size());
+      for (auto const& mom: onfile.fMomenta)
+        fMomenta.emplace_back(mom.X(), mom.Y(), mom.Z());
+    ]]>
+  </ioread> 
   
     <!-- art pointers and wrappers -->
   <class name="art::Ptr<recob::Trajectory>" />
@@ -493,7 +541,9 @@
   <class name="util::flags::FlagSet<32U, unsigned int>" />
   
   <!--   class -->
-  <class name="recob::TrackTrajectory" />
+  <class name="recob::TrackTrajectory" ClassVersion="10" >
+   <version ClassVersion="10" checksum="4198737063"/>
+  </class>
   
     <!-- art pointers and wrappers -->
   <class name="art::Ptr<recob::TrackTrajectory>" />
@@ -501,7 +551,7 @@
   <class name="art::Wrapper<std::vector<recob::TrackTrajectory>>" />
   
     <!-- associations and wrappers -->
-     <!-- hits -->
+      <!-- hits -->
   <class name="art::Assns<recob::Hit, recob::TrackTrajectory, void>" />
   <class name="art::Assns<recob::TrackTrajectory, recob::Hit, void>" />
   <class name="std::pair<art::Ptr<recob::Hit>, art::Ptr<recob::TrackTrajectory>>" />
@@ -682,6 +732,47 @@
     ]]>
   </ioread> 
   
+  <!-- recob::Vertex: schema evolution rules -->
+      <!-- version 14 -->
+        <!-- * position -->
+  <ioread
+    version="[13]"
+    sourceClass="recob::Vertex"
+    source="ROOT::Math::PositionVector3D<ROOT::Math::Cartesian3D<double>,ROOT::Math::DefaultCoordinateSystemTag> pos_;"
+    targetClass="recob::Vertex"
+    target="pos_"
+    include="lardataobj/RecoBase/Vertex.h"
+    >
+    <![CDATA[
+	 pos_ = recob::tracking::Point_t(onfile.pos_.X(), onfile.pos_.Y(), onfile.pos_.Z());
+    ]]>
+  </ioread>
+      <!-- version 13 -->
+        <!-- * position -->
+  <ioread
+    version="[-12]"
+    sourceClass="recob::Vertex"
+    source="double fXYZ[3];"
+    targetClass="recob::Vertex"
+    target="pos_"
+    include="lardataobj/RecoBase/Vertex.h">
+    <![CDATA[
+	 pos_ = recob::tracking::Point_t(onfile.fXYZ[0],onfile.fXYZ[1],onfile.fXYZ[2]);
+    ]]>
+  </ioread>
+        <!-- * id -->
+  <ioread
+    version="[-12]"
+    sourceClass="recob::Vertex"
+    source="int fID;"
+    targetClass="recob::Vertex"
+    target="id_"
+    include="lardataobj/RecoBase/Vertex.h">
+    <![CDATA[
+	 id_ = onfile.fID;
+    ]]>
+  </ioread>
+
   
     <!-- art pointers and wrappers -->
   <class name="art::Ptr<recob::Track>" />
@@ -756,6 +847,32 @@
   <class name="art::Assns<recob::Track, recob::Hit, recob::TrackHitMeta>" />
   <class name="art::Wrapper<art::Assns<recob::Hit, recob::Track, recob::TrackHitMeta>>" />
   <class name="art::Wrapper<art::Assns<recob::Track, recob::Hit, recob::TrackHitMeta>>" />
+  
+  
+  
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+  <!-- recob::PointCharge -->
+  
+    <!--   class -->
+  <class name="recob::PointCharge" ClassVersion="10" >
+   <version ClassVersion="10" checksum="3152949279"/>
+  </class>
+  
+    <!-- art pointers and wrappers -->
+      <!-- data product collection (recob::PointCharge) -->
+  <class name="art::Ptr<recob::PointCharge>" />
+  <class name="std::vector<recob::PointCharge>" />
+  <class name="art::Wrapper<std::vector<recob::PointCharge>>" />
+      
+    <!-- associations and wrappers (recob::PointCharge <==> OTHER) -->
+  <!--
+  <class name="art::Assns<recob::PointCharge, OTHER, void>" />
+  <class name="art::Assns<OTHER, recob::PointCharge, void>" />
+  <class name="std::pair<art::Ptr<recob::PointCharge>, art::Ptr<OTHER>>" />
+  <class name="art::Wrapper<art::Assns<OTHER, recob::PointCharge, void>>" />
+  <class name="std::pair<art::Ptr<OTHER>, art::Ptr<recob::PointCharge>>" />
+  <class name="art::Wrapper<art::Assns<OTHER, recob::PointCharge, void>>" />
+    -->
   
   
   

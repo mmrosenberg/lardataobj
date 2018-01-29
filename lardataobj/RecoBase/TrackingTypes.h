@@ -1,10 +1,10 @@
 #ifndef TRACKINGTYPE_H
 #define TRACKINGTYPE_H
 
+// LArSoft libraries
+#include "larcoreobj/SimpleTypesAndConstants/geo_vectors.h"
+
 // ROOT libraries
-#include "Math/GenVector/Cartesian3D.h"
-#include "Math/GenVector/PositionVector3D.h"
-#include "Math/GenVector/DisplacementVector3D.h"
 #include "Math/GenVector/Rotation3D.h"
 #include "Math/GenVector/AxisAngle.h"
 #include "Math/SMatrix.h"
@@ -17,12 +17,10 @@ namespace recob {
     using Coord_t = double;
     
     /// Type for representation of position in physical 3D space.
-    using Point_t
-      = ROOT::Math::PositionVector3D<ROOT::Math::Cartesian3D<Coord_t>>;
+    using Point_t = geo::Point_t;
     
     /// Type for representation of momenta in 3D space.
-    using Vector_t
-      = ROOT::Math::DisplacementVector3D<ROOT::Math::Cartesian3D<Coord_t>>;
+    using Vector_t = geo::Vector_t;
     
     /// Type of trajectory point list.
     using Positions_t = std::vector<Point_t>;
@@ -54,6 +52,8 @@ namespace recob {
 
     /// @{
     /// SMatrix and SVector
+    using SMatrixSym22 = ROOT::Math::SMatrix<double,2,2,ROOT::Math::MatRepSym<double,2> >;
+    using SMatrixSym33 = ROOT::Math::SMatrix<double,3,3,ROOT::Math::MatRepSym<double,3> >;
     using SMatrixSym55 = ROOT::Math::SMatrix<double,5,5,ROOT::Math::MatRepSym<double,5> >;
     using SMatrixSym66 = ROOT::Math::SMatrix<double,6,6,ROOT::Math::MatRepSym<double,6> >;
     using SMatrix65    = ROOT::Math::SMatrix<double,6,5>;
@@ -62,6 +62,8 @@ namespace recob {
     using SMatrix66    = ROOT::Math::SMatrix<double,6,6>;
     using SVector6     = ROOT::Math::SVector<double,6>;
     using SVector5     = ROOT::Math::SVector<double,5>;
+    using SVector3     = ROOT::Math::SVector<double,3>;
+    using SVector2     = ROOT::Math::SVector<double,2>;
     /// @}
     
   }

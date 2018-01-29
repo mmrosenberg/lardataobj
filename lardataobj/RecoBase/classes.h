@@ -25,9 +25,9 @@
 #include "lardataobj/RecoBase/Wire.h"
 #include "lardataobj/RecoBase/PFParticle.h"
 #include "lardataobj/RecoBase/PCAxis.h"
+#include "lardataobj/RecoBase/PointCharge.h"
 #include "lardataobj/RecoBase/TrackHitMeta.h"
 
-// classes_def_tracking.xml
 #include "lardataobj/RecoBase/Trajectory.h"
 #include "lardataobj/RecoBase/TrackTrajectory.h"
 #include "lardataobj/RecoBase/Track.h"
@@ -35,3 +35,5 @@
 #include "lardataobj/RecoBase/TrackFitHitInfo.h"
 
 #include "lardataobj/RecoBase/MCSFitResult.h"
+
+#include "lardataobj/RecoBase/VertexAssnMeta.h"

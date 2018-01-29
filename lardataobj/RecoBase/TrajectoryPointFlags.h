@@ -338,12 +338,13 @@ namespace recob {
       = std::numeric_limits<HitIndex_t>::max();
     
     
-    /// Default constructor: no hit index, default flags (`DefaultFlagsMask()`).
+    /// Default constructor: invalid hit index, default flags
+    /// (`DefaultFlagsMask()`).
     constexpr TrajectoryPointFlags() = default;
     
     /**
      * @brief Constructor: specified hit index, default flags.
-     * @param fromHit the original hit index (_default: `InvalidHitIndex`_)
+     * @param fromHit the original hit index
      * 
      * This constructor can be used in constexpr flag definitions:
      * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
@@ -357,7 +358,7 @@ namespace recob {
      
     /**
      * @brief Constructor: copies all the flags.
-     * @param fromHit the original hit index (_default: `InvalidHitIndex`_)
+     * @param fromHit the original hit index
      * @param flags all the flags to set, as a bit mask
      * 
      * This constructor can be used in constexpr flag definitions:
@@ -381,7 +382,7 @@ namespace recob {
     /**
      * @brief Constructor: activates only the specified flags.
      * @tparam Flags the type of flags to be set
-     * @param fromHit the original hit index (_default: `InvalidHitIndex`_)
+     * @param fromHit the original hit index
      * @param flags all the flags to set
      * 
      * This constructor can be used in constexpr flag definitions:

@@ -1,13 +1,13 @@
-////////////////////////////////////////////////////////////////////////////
-//
-// \brief Definition of track object for LArSoft
-//
-// \author brebel@fnal.gov
-//
-////////////////////////////////////////////////////////////////////////////
+/**
+ * @file    lardataobj/RecoBase/Track.h
+ * @brief   Provides `recob::Track` data product.
+ * @author  Brian Rebel (brebel@fnal.gov)
+ * @ingroup DataProductRecoBase
+ * @see     lardataobj/RecoBase/Track.cxx
+ */
 
-#ifndef TRACK_H
-#define TRACK_H
+#ifndef LARDATAOBJ_RECOBASE_TRACK_H
+#define LARDATAOBJ_RECOBASE_TRACK_H
 
 #include <vector>
 
@@ -19,23 +19,35 @@
 #include "larcoreobj/SimpleTypesAndConstants/PhysicalConstants.h"
 #include <iosfwd>
 
-//! A recob::Track consists of a recob::TrackTrajectory, plus additional members relevant for a 'fitted' track:
-//! fit chi2, number of degrees of freedom, particle ID hypothesis used in the fit (if any), covariance matrices at start (vertex) and end positions.
-//! Please refer to the recob::TrackTrajectory documentation for more information about it.
-//!
-//! In terms of interface, recob::Track extends recob::TrackTrajectory, so that methods of the stored recob::TrackTrajectory can be called directly from the recob::Track interface,
-//! e.g.: size_t       NumberTrajectoryPoints()         const { return fTraj.NumberTrajectoryPoints(); }
-//!
-//! Two different parameter conventions are used in a recob::Track, and functions to convert from one to the other are provided:
-//! 1. Trajectory points and momenta (or directions) are in form of 3-vectors, corresponding to a global cartesian 6D representation
-//! 2. Covariance matrices are stored in a Local 5D representation (so that the covariance matrix is invertible),
-//!    where the parameters are defined on the plane orthogonal to the track direction at a given track point.
-//!    By construction the local parameters of the track itself are (0,0,0,0,1/p).
-//! See TrackingPlane.h for more information.
-//!
-
 namespace recob {
 
+  /**
+   * @brief Track from a non-cascading particle.
+   * @ingroup DataProductRecoBase
+   * 
+   * A `recob::Track` consists of a `recob::TrackTrajectory`, plus additional members relevant for a "fitted" track:
+   * 
+   * * fit &chi;&sup2;
+   * * number of degrees of freedom
+   * * particle ID hypothesis used in the fit (if any)
+   * * covariance matrices at start (vertex) and end positions.
+   * 
+   * Please refer to the `recob::TrackTrajectory` documentation for more information about it.
+   *
+   * In terms of interface, `recob::Track` extends `recob::TrackTrajectory`, so that methods of the stored `recob::TrackTrajectory` can be called directly from the `recob::Track interface`,
+   * e.g.:
+   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+   * size_t       NumberTrajectoryPoints()         const { return fTraj.NumberTrajectoryPoints(); }
+   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   *
+   * Two different parameter conventions are used in a `recob::Track`, and functions to convert from one to the other are provided:
+   * 
+   * 1. Trajectory points and momenta (or directions) are in form of 3-vectors, corresponding to a global Cartesian 6D representation
+   * 2. Covariance matrices are stored in a Local 5D representation (so that the covariance matrix is invertible),
+   *    where the parameters are defined on the plane orthogonal to the track direction at a given track point.
+   *    By construction the local parameters of the track itself are (0,0,0,0,1/p).
+   * See `lardataobj/RecoBase/TrackingPlane.h` for more information.
+   */
   class Track {
 
   public:
@@ -249,4 +261,4 @@ namespace recob {
   };
 }
 
-#endif // TRACK_H
+#endif // LARDATAOBJ_RECOBASE_TRACK_H
