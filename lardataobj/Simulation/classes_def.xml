@@ -9,7 +9,8 @@
 
 
 <lcgdict>
- <class name="sim::SimEnergyDeposit"         ClassVersion="15">
+ <class name="sim::SimEnergyDeposit"         ClassVersion="16">
+  <version ClassVersion="16" checksum="2652853768"/>
   <version ClassVersion="15" checksum="2953985021"/>
   <version ClassVersion="14" checksum="933111578"/>
   <version ClassVersion="13" checksum="671029830"/>

@@ -60,7 +60,8 @@ namespace sim
     //			           { endX,   endY,   endZ   },
     //			           startTime, 
     //                             endTime,
-    //			           trackID);
+    //			           trackID,
+    //                             pdgCode);
 
     SimEnergyDeposit(int np = 0,
 		     int ne = 0,
@@ -69,7 +70,8 @@ namespace sim
 		     Point_t end = {0.,0.,0.},
 		     double t0 = 0.,
 		     double t1 = 0.,
-		     int id = 0)
+		     int id = 0,
+		     int pdg = 0)
       : numPhotons(np)
       , numElectrons(ne)
       , edep(e)
@@ -78,6 +80,7 @@ namespace sim
       , startTime(t0)
       , endTime(t1)
       , trackID(id)
+      , pdgCode(pdg)
     {}
 
 
@@ -94,6 +97,7 @@ namespace sim
     geo::Point_t End() const { return { endPos.X(), endPos.Y(), endPos.Z() }; }
     double Time() const { return (startTime+endTime)/2.; }
     int TrackID() const { return trackID; }
+    int PdgCode() const { return pdgCode; }
 
     // While it's clear how a SimEnergyDeposit will be created by its
     // constructor, it's not clear how users will want to access its
@@ -183,6 +187,7 @@ namespace sim
     double        startTime;    //< (ns)
     double        endTime;      //< (ns)
     int           trackID;      //< simulation track id
+    int           pdgCode;      //< pdg code of particle to avoid lookup by particle type later
   };
 
 #ifndef __GCCXML__
@@ -197,6 +202,7 @@ namespace sim
     // Note that the geo::Point_t type (returned by Start() and End())
     // has an ostream operator defined for it.
     os << "trackID " << sed.TrackID()
+       << " pdgCode=" << sed.PdgCode()
        << " start=" << sed.Start()
        << " t0=" << sed.T0()
        << " end=" << sed.End()
