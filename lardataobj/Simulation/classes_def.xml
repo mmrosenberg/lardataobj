@@ -9,6 +9,11 @@
 
 
 <lcgdict>
+ <class name="sim::SimEnergyDeposit"         ClassVersion="15">
+  <version ClassVersion="15" checksum="2953985021"/>
+  <version ClassVersion="14" checksum="933111578"/>
+  <version ClassVersion="13" checksum="671029830"/>
+ </class>
  <class name="sim::OnePhoton"                ClassVersion="12">
   <version ClassVersion="12" checksum="124883757"/>
   <version ClassVersion="11" checksum="1948463887"/>
@@ -45,6 +50,7 @@
   <version ClassVersion="10" checksum="2389124613"/>
  </class>
  <enum name="sim::BeamType_t"                                      />
+ <class name="std::vector<sim::SimEnergyDeposit>"                  />
  <class name="std::vector<sim::OnePhoton>"                         />
  <class name="std::vector<sim::SimPhotonsLite>"                    />
  <class name="std::vector<sim::SimPhotons  >" 		     		    	   />
@@ -63,6 +69,7 @@
  <class name="art::Wrapper< std::vector<sim::SimPhotons>   >"		   />
  <class name="art::Wrapper< std::vector<sim::SimPhotonsLite>   >"  />
  <class name="art::Wrapper< std::vector<sim::SimChannel>   >"		   />
+ <class name="art::Wrapper< std::vector<sim::SimEnergyDeposit>   >"		   />
  <class name="art::Wrapper< std::vector<sim::BeamGateInfo> >"		   />
  <class name="art::Wrapper< std::vector<sim::AuxDetSimChannel>  >" />
  <class name="art::Wrapper< std::vector<sim::OpDetBacktrackerRecord> >"      />
