@@ -529,19 +529,22 @@ namespace util {
       
       /**
        * @brief Constructor: merges all arguments in the argument list.
-       * @tparam Others type of the remaining parameters to be merged
+       * @tparam Second type of the second argument to be merged
+       * @tparam Others type of the remaining arguments to be merged
        * @param first first argument to be merged (here, a Mask_t)
+       * @param second second argument to be merged
        * @param others remaining arguments to be merged
        * @see create()
        * 
        * The effect is equivalent to call `create(first, others...)`.
        */
-      template <typename... Others>
-      constexpr BitMask(Mask_t first, Others... others)
-        : BitMask(create(first, others...))
-        {
-          static_assert(sizeof...(Others) > 0, "This is no copy constructor!");
-        }
+      // NOTE: if the first argument passed as reference prevent constexpr,
+      //       two separate constructors will be needed;
+      //       also note that this works as copy constructor as well
+      template <typename Second, typename... Others>
+      constexpr BitMask(Mask_t first, Second second, Others... others)
+        : BitMask(create(first, second, others...))
+        {}
       
       
       /// @{

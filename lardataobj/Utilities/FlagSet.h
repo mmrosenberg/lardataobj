@@ -74,7 +74,19 @@ namespace util {
       /// @}
       
       
-      using Base_t::Base_t; // inherit constructors
+      FlagSet() = default;
+      FlagSet(This_t const&) = default;
+      FlagSet(This_t&&) = default;
+      FlagSet& operator= (This_t const&) = default;
+      FlagSet& operator= (This_t&&) = default;
+      
+      /// Constructor: copy the specified mask.
+      // This is effectively a copy constructor due to the definition of Mask_t.
+      constexpr FlagSet(Mask_t const& from): Base_t(from) {}
+      
+      
+      using Base_t::Base_t; // inherit the rest of the constructors
+      
       
       
       /// @{
