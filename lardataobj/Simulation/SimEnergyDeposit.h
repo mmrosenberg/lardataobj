@@ -189,7 +189,7 @@ namespace sim
     int           trackID;      //< simulation track id
     int           pdgCode;      //< pdg code of particle to avoid lookup by particle type later
   };
-
+  /*
 #ifndef __GCCXML__
   // Class utility functions. 
 
@@ -223,6 +223,6 @@ namespace sim
     return (*lhs) < (*rhs); 
   }
 #endif // __GCCXML__
-
+  */
 } // namespace sim
 #endif // SimEnergyDeposit_n
