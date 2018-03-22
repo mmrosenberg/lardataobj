@@ -156,7 +156,9 @@ class SineWaveCreator: public DataCreatorBase {
 	/// Creates and returns the data sample
 	virtual InputData_t create(size_t size) override
 		{
-			constexpr float two_pi = float(2. * std::acos(-1.));
+        // for c2: constexpr variable 'two_pi' must be initialized by a constant expression
+			//constexpr float two_pi = float(2. * std::acos(-1.));
+                        constexpr float two_pi = float(2*3.14159265358979323846);
 			InputData_t data;
 			data.reserve(size);
 			for (size_t i = 0; i < size; ++i)

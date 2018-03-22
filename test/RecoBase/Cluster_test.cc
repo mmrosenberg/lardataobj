@@ -717,7 +717,8 @@ void ClusterTestCopyMoveOperations() {
   // Part VII: move assignment (self)
   //
   // step VII.1: move the cluster into itself
-  cluster_move = std::move(cluster_move);
+  // for c2: redundant and illegal
+  //cluster_move = std::move(cluster_move);
   
   // step VII.3: verify that the cluster is unchanged
   CheckCluster(cluster_move,

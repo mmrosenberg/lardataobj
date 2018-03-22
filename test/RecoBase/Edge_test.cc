@@ -207,13 +207,13 @@ void EdgeTestSpacePointConstructor() {
    *    
    */
   
-  std::array<double, 3U> const error = { 0.1, 0.1, 0.1 };
+  std::array<double, 3U> const error = {{ 0.1, 0.1, 0.1 }};
   std::array<double, 3U> point;
   
-  point = { 1.0, 1.0, 1.0 };
+  point = {{ 1.0, 1.0, 1.0 }};
   recob::SpacePoint const p1(point.data(), error.data(), 1.0, 0);
   
-  point = { 4.0, 5.0, 13.0 };
+  point = {{ 4.0, 5.0, 13.0 }};
   recob::SpacePoint const p2(point.data(), error.data(), 1.0, 1);
   
   recob::Edge const e(p1, p2, 0);
@@ -232,8 +232,8 @@ void EdgeTestSpacePointConstructor() {
 void EdgeClassDocumentationTest() {
   
   // prepare the space points for the test, already sorted
-  std::array<double, 3U> const error = { 0.1, 0.1, 0.1 };
-  std::array<double, 3U> const point = { 1.0, 1.0, 1.0 };
+  std::array<double, 3U> const error = {{ 0.1, 0.1, 0.1 }};
+  std::array<double, 3U> const point = {{ 1.0, 1.0, 1.0 }};
   std::vector<recob::SpacePoint> points;
   for (unsigned int i = 0; i < 10; ++i)
     points.emplace_back(point.data(), error.data(), 1.0, i);
