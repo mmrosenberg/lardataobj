@@ -1265,7 +1265,7 @@ class lar::sparse_vector<T>::const_iterator {
 template <typename T>
 class lar::sparse_vector<T>::iterator: public const_iterator {
 	typedef typename const_iterator::container_t container_t;
-	friend class const_iterator::container_t;
+	friend typename const_iterator::container_t;
 	
 		public:
 	typedef typename const_iterator::reference reference;
