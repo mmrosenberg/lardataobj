@@ -21,6 +21,7 @@
 
 // C/C++ standard libraries
 #include <vector>
+#include <iosfwd> // std::ostream
 #include <limits> // std::numeric_limits<>
 
 
@@ -661,9 +662,7 @@ namespace recob {
    * 
    * See `recob::Trajectory::Dump()` for details.
    */
-  template <typename Stream>
-  Stream& operator << (Stream&& out, TrackTrajectory const& traj)
-    { traj.Dump(std::forward<Stream>(out)); return out; }
+  std::ostream& operator << (std::ostream&& out, TrackTrajectory const& traj);
   
   
 } // namespace recob

@@ -18,6 +18,7 @@
 #include "TMatrixD.h" // legacy interface
 
 // C/C++ standard libraries
+#include <ostream>
 #include <utility> // std::move()
 #include <string> // std::to_string()
 #include <stdexcept> // std::runtime_error
@@ -199,6 +200,12 @@ void recob::Trajectory::LocalToGlobalRotationAtPoint
   auto trackRot = LocalToGlobalRotationAtPoint(p);
   fillTMatrixD(trackRot, rot);
 } // recob::Trajectory::LocalToGlobalRotationAtPoint(TMatrixD)
+
+
+//------------------------------------------------------------------------------
+std::ostream& recob::operator <<
+  (std::ostream& out, recob::Trajectory const& traj)
+  { traj.Dump(out); return out; }
 
 
 //------------------------------------------------------------------------------

@@ -12,6 +12,7 @@
 // LArSoft libraries
 
 // C/C++ standard libraries
+#include <ostream>
 #include <utility> // std::move()
 #include <string> // std::to_string()
 #include <stdexcept> // std::runtime_error
@@ -114,5 +115,11 @@ bool recob::TrackTrajectory::AtLeastValidTrajectoryPoints
   return false;
   
 } // moreThanTwoValidTrajectoryPoints()
+
+//------------------------------------------------------------------------------
+std::ostream& recob::operator<<
+  (std::ostream&& out, recob::TrackTrajectory const& traj)
+  { traj.Dump(out); return out; }
+
 
 //------------------------------------------------------------------------------

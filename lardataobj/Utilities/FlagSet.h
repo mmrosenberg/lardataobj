@@ -15,6 +15,7 @@
 #include "lardataobj/Utilities/BitMask.h"
 
 // C/C++ standard library
+#include <iosfwd> // std::ostream
 #include <string>
 #include <exception>
 
@@ -190,9 +191,10 @@ namespace util {
     
     
     /// Output of a flag set into a stream.
-    template <typename Stream, unsigned int NBits, typename Storage>
-    Stream& operator<< (Stream&& out, FlagSet<NBits, Storage> const& flags)
-      { flags.dump(std::forward<Stream>(out)); return out; }
+    template <unsigned int NBits, typename Storage>
+    std::ostream& operator<<
+      (std::ostream& out, FlagSet<NBits, Storage> const& flags)
+      { flags.dump(out); return out; }
     
   } // namespace flags
   

@@ -22,6 +22,7 @@
 // C/C++ standard libraries
 #include <vector>
 #include <utility> // std::pair<>
+#include <iosfwd> // std::ostream
 
 
 // ROOT forward declarations (for legacy interface)
@@ -687,9 +688,7 @@ namespace recob {
    * 
    * See `recob::Trajectory::Dump()` for details.
    */
-  template <typename Stream>
-  Stream& operator << (Stream&& out, Trajectory const& traj)
-    { traj.Dump(std::forward<Stream>(out)); return out; }
+  std::ostream& operator << (std::ostream& out, Trajectory const& traj);
   
   
   //----------------------------------------------------------------------------

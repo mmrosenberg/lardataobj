@@ -11,6 +11,9 @@
 
 #include "TrajectoryPointFlags.h"
 
+// C/C++ standard library
+#include <ostream>
+
 
 //------------------------------------------------------------------------------
 //---  recob::TrajectoryPointFlagTraits
@@ -136,5 +139,10 @@ recob::TrajectoryPointFlagTraits::initNames() {
   
 } // recob::TrajectoryPointFlagTraits::initNames()
 
+
+//------------------------------------------------------------------------------
+std::ostream& recob::operator<<
+  (std::ostream& out, recob::TrajectoryPointFlags const& flags)
+  { flags.dump(out); return out; }
 
 //------------------------------------------------------------------------------

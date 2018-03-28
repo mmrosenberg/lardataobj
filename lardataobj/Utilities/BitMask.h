@@ -16,6 +16,7 @@
 
 
 // C/C++ standard library
+#include <ostream>
 #include <string>
 #include <exception>
 
@@ -177,8 +178,8 @@ namespace util {
     /// @}
       
     /// Output of a flag into a stream (prints its index).
-    template <typename Stream, typename Storage>
-    Stream& operator<< (Stream&& out, Flag_t<Storage> flag)
+    template <typename Storage>
+    std::ostream& operator<< (std::ostream& out, Flag_t<Storage> flag)
       { out << '[' << flag.index() << ']'; return out; }
     
     /// Convert a flag into a stream (shows its index).
