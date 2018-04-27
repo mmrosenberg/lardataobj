@@ -1,8 +1,8 @@
 /** ****************************************************************************
- * @file Hit.cxx
+ * @file lardataobj/RecoBase/Hit.cxx
  * @brief Definition of signal hit object.
  * @author mitchell.soderberg@yale.edu
- * @see  Hit.h
+ * @see  lardataobj/RecoBase/Hit.h
  * 
  * ****************************************************************************/
 

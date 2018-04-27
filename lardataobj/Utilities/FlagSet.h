@@ -140,7 +140,7 @@ namespace util {
       
       /**
        * @brief Returns if the specified flag is set.
-       * @param index index of the flag to test
+       * @param flagIndex index of the flag to test
        * @return whether the specified flag is set
        * @throw FlagNotDefinedError if the flag was not defined at all
        * @throw OutOfRangeError if the flag index denotes a non-existing flag

@@ -1,5 +1,5 @@
 /**
- * @file   TrajectoryPointFlags.h
+ * @file   lardataobj/RecoBase/TrajectoryPointFlags.h
  * @brief  Set of flags pertaining a point of the track.
  * @author Giuseppe Cerati (cerati@fnal.gov),
  *         Gianluca Petrillo (petrillo@fnal.gov)
@@ -433,7 +433,7 @@ namespace recob {
     
     /**
      * @brief Returns whether the specified flag is set.
-     * @param flagIndex index of the flag to be tested 
+     * @param index index of the flag to be tested 
      * @return whether the specified flag is set
      * @throw Flags_t::OutOfRangeError if the flag is not known (invalid index)
      * @throw Flags_t::FlagNotDefinedError if the flag is not defined

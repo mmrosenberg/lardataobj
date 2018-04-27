@@ -1,5 +1,5 @@
 /**
- * @file    Charge_test.cc
+ * @file    PointCharge_test.cc
  * @brief   Simple test on a recob::PointCharge object.
  * @author  Gianluca Petrillo (petrillo@fnal.gov)
  * @date    December 20, 2017
