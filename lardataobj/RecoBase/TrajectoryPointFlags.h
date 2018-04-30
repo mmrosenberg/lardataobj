@@ -116,10 +116,10 @@ namespace recob {
     static constexpr FlagIndex_t BeginTrajectoryFlags = 0;
     
     /// Hit was not included for the computation of the trajectory.
-    static constexpr Flag_t HitIgnored = 0;
+    static constexpr Flag_t HitIgnored { 0 };
     
     /// The trajectory point is not defined.
-    static constexpr Flag_t NoPoint = 1;
+    static constexpr Flag_t NoPoint { 1 };
     
     /**
      * @brief The point reconstruction is somehow questionable.
@@ -129,22 +129,22 @@ namespace recob {
      * another track nearby or a &delta; ray emission. Reconstruction of the
      * point might be biased, but we can't guess which type of bias we have.
      */
-    static constexpr Flag_t Suspicious = 2;
+    static constexpr Flag_t Suspicious { 2 };
     
     /// The hit might have contribution from particles other than this.
-    static constexpr Flag_t Merged = 3;
+    static constexpr Flag_t Merged { 3 };
     
     /// The hit might have contribution from a &delta; ray.
-    static constexpr Flag_t DeltaRay = 4;
+    static constexpr Flag_t DeltaRay { 4 };
     
     /// The hit is associated to a problematic channel.
-    static constexpr Flag_t DetectorIssue = 5;
+    static constexpr Flag_t DetectorIssue { 5 };
     
     /// The hit is known to be associated also to another trajectory.
-    static constexpr Flag_t Shared = 6;
+    static constexpr Flag_t Shared { 6 };
     
     /// Reserved for a future trajectory flag.
-    static constexpr Flag_t TrajReserved1 = 7;
+    static constexpr Flag_t TrajReserved1 { 7 };
     
     /// After-the-last trajectory flag index
     static constexpr FlagIndex_t EndTrajectoryFlags = 8;
@@ -169,10 +169,10 @@ namespace recob {
     
     /// The point belongs to this track but it was not included in the fit
     /// because dubious in some sense.
-    static constexpr Flag_t ExcludedFromFit = 8;
+    static constexpr Flag_t ExcludedFromFit { 8 };
     
     /// The hit is extraneous to this track.
-    static constexpr Flag_t Rejected = 9;
+    static constexpr Flag_t Rejected { 9 };
     
     /**
      * @brief The hit content has been elaborated before being used in the fit.
@@ -187,22 +187,22 @@ namespace recob {
      * flag, it may be useful to consult with LArSoft experts to determine if
      * further support is needed for your use case.
      */
-    static constexpr Flag_t Reinterpreted = 10;
+    static constexpr Flag_t Reinterpreted { 10 };
     
     /// Reserved for a future track flag.
-    static constexpr Flag_t TrackReserved5 = 11;
+    static constexpr Flag_t TrackReserved5 { 11 };
     
     /// Reserved for a future track flag.
-    static constexpr Flag_t TrackReserved4 = 12;
+    static constexpr Flag_t TrackReserved4 { 12 };
     
     /// Reserved for a future track flag.
-    static constexpr Flag_t TrackReserved3 = 13;
+    static constexpr Flag_t TrackReserved3 { 13 };
     
     /// Reserved for a future track flag.
-    static constexpr Flag_t TrackReserved2 = 14;
+    static constexpr Flag_t TrackReserved2 { 14 };
     
     /// Reserved for a future track flag.
-    static constexpr Flag_t TrackReserved1 = 15;
+    static constexpr Flag_t TrackReserved1 { 15 };
     
     /// After-the-last track flag index.
     static constexpr FlagIndex_t EndTrackFlags = 16;
