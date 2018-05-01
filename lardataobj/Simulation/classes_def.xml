@@ -89,9 +89,8 @@
  <class name="art::Wrapper< art::Assns<sim::SupernovaTruth, simb::MCTruth, void> >" />
  <class name="art::Wrapper< art::Assns<simb::MCTruth, sim::SupernovaTruth, void> >" />
 
- 
- <class name="ROOT::Math::Cartesian3D<float>" />
- <class name="ROOT::Math::PositionVector3D<ROOT::Math::Cartesian3D<float>,ROOT::Math::DefaultCoordinateSystemTag>"/>
+<!-- <class name="ROOT::Math::Cartesian3D<float>" /> -->
+<!-- <class name="ROOT::Math::PositionVector3D<ROOT::Math::Cartesian3D<float>,ROOT::Math::DefaultCoordinateSystemTag>"/> -->
 
  <ioread 
     version="[-13]" 
