@@ -10,6 +10,7 @@
 #include <utility>
 #include <stdexcept>
 #include <algorithm> // std::lower_bound(), std::max()
+#include <map>
 
 #include "lardataobj/Simulation/SimChannel.h"
 #include "lardataobj/Simulation/sim.h"
