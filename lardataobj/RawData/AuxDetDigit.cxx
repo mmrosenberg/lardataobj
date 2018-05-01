@@ -8,7 +8,7 @@
 
 #include "lardataobj/RawData/AuxDetDigit.h"
 
-#include "cetlib/exception.h"
+#include "cetlib_except/exception.h"
 
 namespace raw{
 

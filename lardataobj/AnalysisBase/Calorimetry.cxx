@@ -7,6 +7,7 @@
 
 #include "lardataobj/AnalysisBase/Calorimetry.h"
 #include "messagefacility/MessageLogger/MessageLogger.h"
+#include "cetlib_except/exception.h"
 
 namespace anab{
 
