@@ -495,6 +495,23 @@ namespace recob {
     bool isUnset(Flag_t flag) const
       { return flags().isUnset(flag); }
     
+    /**
+     * @brief Returns true if the specified mask is matched.
+     * @param mask the mask of flags to be tested
+     * @return true if the specified mask is matched
+     * @see `util::flags::BitMask::match()`
+     * 
+     * The current flags are tested against the specified mask.
+     * The flags that in `mask` are undefined are not tested at all.
+     * For this method to return true, all the remaining flags (that is, all the
+     * flags defined in `mask`) must be defined, and their value must match the
+     * one in `mask`.
+     */
+    bool match(Mask_t mask) const
+      { return flags().match(mask); }
+    
+    
+    
     /// @}
     
     /// Returns the entire set of bits as a bit mask.
