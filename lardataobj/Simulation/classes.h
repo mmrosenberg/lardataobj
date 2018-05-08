@@ -14,6 +14,7 @@
 #include "nusimdata/SimulationBase/MCTruth.h"
 
 // Simulation includes
+#include "lardataobj/Simulation/SimEnergyDeposit.h"
 #include "lardataobj/Simulation/SimChannel.h"
 #include "lardataobj/Simulation/OpDetBacktrackerRecord.h"
 #include "lardataobj/Simulation/SimPhotons.h"
