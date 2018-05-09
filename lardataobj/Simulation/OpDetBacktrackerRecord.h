@@ -4,7 +4,7 @@
  * Based on SimChannels by seligman@nevis.columbia.edu
  * @author jason.stock@mines.sdsmt.edu
  * @see    OpDetBacktrackerRecord.cxx
- * 
+ *
  * This class uses only LArSoft libraries that are header only.
  */
 
@@ -22,7 +22,7 @@
 
 
 namespace sim {
-  
+
   /// Ionization photons from a Geant4 track
   struct TrackSDP{
     int trackID;      ///< Geant4 supplied trackID
@@ -30,55 +30,55 @@ namespace sim {
     float energy;     ///< energy from the particle with this trackID [MeV]
 
     TrackSDP() {}
-    
-    
+
+
     TrackSDP(int id, float phF, float ph) : trackID(id), energyFrac(phF), energy (ph) {}
-    
+
 
   };
-  
-  
+
+
   /**
    * This class stores information about the Scintillation Light from the simulation
    * of a small step of a track through the TPC active volume.
-   * 
+   *
    * Scintillation information consists of both energy and number of photons.
    * It is of paramount importance to understand what each field stores:
-   * 
+   *
    * - position: where the scintillation occurred (from Geant4 simulation)
    * - track ID: Geant4 track ID of the ionizing particle
-   * - energy: amount of energy released by ionization (from Geant4 simulation)
+   * - energy: amount of energy from G4Step (from Geant4 simulation)
    * - photons: amount of photons reaching the optical detector
    *
    * Note the different definition of the photons respect to the rest:
    * it describes the photons at the OpticlaDetector,
    * while all the other quantities can be related to the moment the scintillation
    * happened.
-   * 
+   *
    * The number of photons is the result of the OpFastScintillation sim, so no real photons are simulated.
-   * 
+   *
    * Each SDP is also typically associated with a time (timePDclock) count, that is
    * the time at which the scintillation photons are generated, as drift time is assumed to be zero for the
-   * photons. This time will differ from the time reflected in recob::OpHits as the time stored does not 
-   * account for any signal processing time. The backtracker will handle that with a FCL parameter 
-   * called Delay. Each experiment will have to determine the correct Delay to use with their system. 
+   * photons. This time will differ from the time reflected in recob::OpHits as the time stored does not
+   * account for any signal processing time. The backtracker will handle that with a FCL parameter
+   * called Delay. Each experiment will have to determine the correct Delay to use with their system.
    * For dune10KT the delay is ~300 ns.
    *
    * The SDP (Scintillation Deposited Photons) records are generated in OpFastScintillation.cxx.
-   * 
+   *
    */
   struct SDP{
-    
+
     /// Type of track ID (the value comes from Geant4)
     typedef int TrackID_t;
-    
+
     /// Default constructor (sets "bogus" values)
     SDP();
-    
-    
+
+
     /// Constructor: copies an SDP, and applies the specified offset to track ID
     SDP(SDP const& sdp, int offset);
-    
+
     /// Constructor: sets all data members
     SDP(TrackID_t tid,
         float nPh,
@@ -93,8 +93,8 @@ namespace sim {
     , y           (ypos)
     , z           (zpos)
     {}
-    
-    
+
+
     TrackID_t trackID;  ///< Geant4 supplied track ID
     float numPhotons;   ///< number of photons at the optical detector for this track ID and time
     float energy;       ///< energy deposited by ionization
@@ -102,55 +102,55 @@ namespace sim {
     float y;            ///< y position of ionization [cm]
     float z;            ///< z position of ionization [cm]
   }; // struct SDP
-  
-  
+
+
   /// List of energy deposits at the same time (on this Optical Detector)
   typedef std::pair< double, std::vector<sim::SDP> > timePDclockSDP_t;
-  
+
   /**
    * @brief Energy deposited on a readout Optical Detector by simulated tracks
    *
    * This class stores a time organized list of scintillation photons detected connected to the G4 tracks
    * they originated from. This class also tracks the energy deposited by those tracks, and what fraction of the
    * energy deposited is realted to the photons detected by this OpDet.
-   * 
+   *
    * The information is organized by time: it is divided by timePDclock ticks (units of ns), and
    * each timePDclock tick where some energy was deposited appears in a separate entry,
    * while the quiet timePDclock ticks are omitted.
    * For each timePDclock, the information is stored as a list of energy deposits;
    * each deposit comes from a single Geant4 track and stores the location where
    * the ionization happened according to the simulation (see `sim::SDP` class).
-   * 
+   *
    * Note that there can be multiple energy deposit records (that is `sim::SDP`)
    * for a single track in a single timePDclock tick.
    */
   class OpDetBacktrackerRecord
   {
   public:
-    /// Type for timePDclock tick used in the internal representation 
+    /// Type for timePDclock tick used in the internal representation
     typedef timePDclockSDP_t::first_type storedTimePDclock_t;
-  
+
     /// Type of list of energy deposits for each timePDclock with signal
     typedef std::vector<timePDclockSDP_t> timePDclockSDPs_t;
-    
+
   private:
     int              iOpDetNum; ///< OpticalDetector where the photons were detected
     timePDclockSDPs_t      timePDclockSDPs; ///< list of energy deposits for each timePDclock with signal
-    
-    
+
+
   public:
 
     // Default constructor
     OpDetBacktrackerRecord();
-    
+
     /// Type for iTimePDclock tick used in the interface
     //typedef unsigned short timePDclock_t;
     typedef double timePDclock_t;//This is the G4Time from OpFastScintillation. (ns)
-    
+
     /// Type of track ID (the value comes from Geant4)
     typedef SDP::TrackID_t TrackID_t;
-    
-    
+
+
     /// Constructor: immediately sets the Optical Detector number
     explicit OpDetBacktrackerRecord(int detNum);
 
@@ -161,23 +161,23 @@ namespace sim {
      * @param numberPhotons deteted at the OpticalDetector at this time from this track
      * @param xyz coordinates of original location of ionization/scintillation (3D array) [cm]
      * @param energy energy deposited at this point by this track [MeV]
-     * 
+     *
      */
     void AddScintillationPhotons(TrackID_t trackID,
                                 timePDclock_t timePDclock,
                                 double numberPhotons,
                                 double const* xyz,
-                                double energy); 
-    
+                                double energy);
+
     /// Returns the readout Optical Detector this object describes
     int OpDetNum() const;
-    
+
     /**
      * @brief Return all the recorded energy deposition within a time interval
      * @param startTimePDclock iTimePDclock tick opening the time window
      * @param endTimePDclock iTimePDclock tick closing the time window (included in the interval)
      * @return a collection of energy deposit information from all tracks
-     * 
+     *
      * This method returns the energy deposited on this Optical Detector by each track
      * ID active in the specified iTimePDclock time interval.
      *
@@ -186,30 +186,30 @@ namespace sim {
      * * energy and number of photons, as the integral in the time interval
      * * position, as average weighted by the number of photons
      * * the ID of the track depositing this energy
-     * 
+     *
      * Entries are sorted by track ID number.
      */
     std::vector<sim::SDP> TrackIDsAndEnergies(timePDclock_t startTimePDclock,
                                               timePDclock_t endTimePDclock) const;
-    
+
     /**
      * @brief Returns all the deposited energy information as stored
      * @return all the deposited energy information as stored in the object
-     * 
+     *
      * The returned list is organized in pairs. Each pair contains all
      * ionization information in a single iTimePDclock tick (collection of `sim::SDP`),
      * and the number of that tick. The information is sorted by increasing timePDclock
      * tick.
-     * 
+     *
      * See the class description for the details of the ionization information
      * content.
      */
     timePDclockSDPs_t const& timePDclockSDPsMap() const;
-    
-    
+
+
     /// Returns the total number of scintillation photons on this Optical Detector in the specified timePDclock
     double Photons(timePDclock_t iTimePDclock) const;
-    
+
     /// Returns the total energy on this Optical Detector in the specified iTimePDclock [MeV]
     double Energy(timePDclock_t iTimePDclock) const;
 
@@ -219,7 +219,7 @@ namespace sim {
      * @param endTimePDclock iTimePDclock tick closing the time window (included in the interval)
      * @return a collection of energy and fraction from each track in interval
      * @see TrackIDsAndEnergies()
-     * 
+     *
      * This method returns the energy deposited on this Optical Detector by each track
      * ID active in the specified iTimePDclock time interval.
      *
@@ -228,34 +228,34 @@ namespace sim {
      * * energy of the track, as the integral in the time interval [MeV]
      * * energy fraction respect to the total (see below)
      * * the ID of the track depositing this energy
-     * 
+     *
      * The energy fraction is the energy deposited by the track on this Optical Detector
      * in the specified time interval, divided by the total of the energy
      * deposited by all tracks on this Optical Detector in that same time interval.
-     * 
+     *
      * Entries are sorted by track ID number.
      */
     std::vector<sim::TrackSDP> TrackSDPs(timePDclock_t startTimePDclock,
                                          timePDclock_t endTimePDclock) const;
-    
+
     /// Comparison: sorts by Optical Detector ID
     bool operator<  (const OpDetBacktrackerRecord& other)     const;
-    
+
     /// Comparison: true if OpDetBacktrackerRecords have the same Optical Detector ID
     bool operator== (const OpDetBacktrackerRecord& other)     const;
-    
+
     /**
      * @brief Merges the deposits from another Optical Detector into this one
      * @param opDetNum the sim::OpDetBacktrackerRecord holding information to be merged
      * @param offset track ID offset for the merge
      * @return range of the IDs of the added tracks
-     * 
+     *
      * The information from the specified simulated opDetRecord is added to the
      * current one.
      * This is achieved by appending the energy deposit information (`sim::SDP`)
      * at each iTimePDclock tick from the merged opDetRecord to the list of existing energy
      * deposits for that iTimePDclock tick.
-     * 
+     *
      * In addition, the track IDs of the merged opDetRecord are added an offset,
      * so that they can be distinguished from the existing ones.
      * This is useful when simulating tracks with multiple Geant4 runs. Geant4
@@ -266,13 +266,13 @@ namespace sim {
      * The return value is a pair including the lowest and the largest track IDs
      * added to this opDetRecord, equivalent to the lowest and the highest track IDs
      * present in the merged opDetRecord, both augmented by the applied offset.
-     * 
+     *
      * The opDetNum number of the merged opDetRecord is ignored.
      */
     std::pair<TrackID_t,TrackID_t> MergeOpDetBacktrackerRecord
       (const OpDetBacktrackerRecord& opDetNum, int offset);
-    
-    
+
+
     //@{
     /**
      * @brief Dumps the full content of the OpDetBacktrackerRecord into a stream
@@ -283,20 +283,20 @@ namespace sim {
      */
     template <typename Stream>
     void Dump(Stream&& out, std::string indent, std::string first_indent) const;
-    
+
     template <typename Stream>
     void Dump(Stream&& out, std::string indent = "") const
       { Dump(std::forward<Stream>(out), indent, indent); }
     //@}
-    
-    
+
+
   private:
     /// Comparison functor, sorts by increasing timePDclocktick value
     struct CompareByTimePDclock;
-    
+
     /// Return the iterator to the first timePDclockSDP not earlier than timePDclock
     timePDclockSDPs_t::iterator findClosestTimePDclockSDP(storedTimePDclock_t timePDclock);
-    
+
     /// Return the (constant) iterator to the first timePDclockSDP not earlier than timePDclock
     timePDclockSDPs_t::const_iterator findClosestTimePDclockSDP
       (storedTimePDclock_t timePDclock) const;
@@ -338,7 +338,7 @@ void sim::OpDetBacktrackerRecord::Dump
       timePDclock_photons += sdp.numPhotons;
     } // for SDPs
     out << indent << "    => timePDclock #" << iTimePDclock << " CH #" << OpDetNum()
-      << " collected " << timePDclock_energy << " MeV and " 
+      << " collected " << timePDclock_energy << " MeV and "
       << timePDclock_photons <<" photons. \n";
     opDet_energy += timePDclock_energy;
     opDet_photons += timePDclock_photons;
