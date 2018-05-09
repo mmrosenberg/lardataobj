@@ -75,8 +75,7 @@ private:
 }; // class TrackHitMeta
 
 
-template <typename Stream>
-inline Stream& operator<< (Stream&& o, const TrackHitMeta & a)
+inline std::ostream& operator<< (std::ostream& o, const TrackHitMeta & a)
   { o << a.Index(); return o; }
 
 inline bool operator < (const TrackHitMeta & a, const TrackHitMeta & b)

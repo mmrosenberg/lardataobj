@@ -1,4 +1,4 @@
-/// \file sim.h
+/// \file lardataobj/Simulation/sim.h
 ///
 /// \brief Tools and modules for checking out the basics of the Monte Carlo
 ///
@@ -11,8 +11,8 @@
 /// code that generates Electrons would re-compile.  This class exists
 /// solely as a bookkeeping tool.
 
-#ifndef SIM_H
-#define SIM_H
+#ifndef LARDATAOBJ_SIMULATION_SIM_H
+#define LARDATAOBJ_SIMULATION_SIM_H
 
 #include <limits>
 #include "TRandom3.h"
@@ -41,4 +41,4 @@ inline unsigned int sim::GetRandomNumberSeed(){
 }
 
 
-#endif// SIM_H
+#endif// LARDATAOBJ_SIMULATION_SIM_H

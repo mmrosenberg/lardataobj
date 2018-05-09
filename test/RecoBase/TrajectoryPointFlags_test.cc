@@ -124,8 +124,6 @@ void CheckFlagsByIndex(
 //------------------------------------------------------------------------------
 void TrajectoryPointFlagsTest_DefaultConstructor() {
   
-  using trkflag = recob::TrajectoryPointFlags::flag;
-  
   constexpr auto InvalidHitIndex = recob::TrajectoryPointFlags::InvalidHitIndex;
   
   /*

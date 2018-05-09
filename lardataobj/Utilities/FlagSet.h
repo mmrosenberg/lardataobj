@@ -15,6 +15,7 @@
 #include "lardataobj/Utilities/BitMask.h"
 
 // C/C++ standard library
+#include <iosfwd> // std::ostream
 #include <string>
 #include <exception>
 
@@ -74,7 +75,19 @@ namespace util {
       /// @}
       
       
-      using Base_t::Base_t; // inherit constructors
+      FlagSet() = default;
+      FlagSet(This_t const&) = default;
+      FlagSet(This_t&&) = default;
+      FlagSet& operator= (This_t const&) = default;
+      FlagSet& operator= (This_t&&) = default;
+      
+      /// Constructor: copy the specified mask.
+      // This is effectively a copy constructor due to the definition of Mask_t.
+      constexpr FlagSet(Mask_t const& from): Base_t(from) {}
+      
+      
+      using Base_t::Base_t; // inherit the rest of the constructors
+      
       
       
       /// @{
@@ -127,7 +140,7 @@ namespace util {
       
       /**
        * @brief Returns if the specified flag is set.
-       * @param index index of the flag to test
+       * @param flagIndex index of the flag to test
        * @return whether the specified flag is set
        * @throw FlagNotDefinedError if the flag was not defined at all
        * @throw OutOfRangeError if the flag index denotes a non-existing flag
@@ -178,9 +191,10 @@ namespace util {
     
     
     /// Output of a flag set into a stream.
-    template <typename Stream, unsigned int NBits, typename Storage>
-    Stream& operator<< (Stream&& out, FlagSet<NBits, Storage> const& flags)
-      { flags.dump(std::forward<Stream>(out)); return out; }
+    template <unsigned int NBits, typename Storage>
+    std::ostream& operator<<
+      (std::ostream& out, FlagSet<NBits, Storage> const& flags)
+      { flags.dump(out); return out; }
     
   } // namespace flags
   

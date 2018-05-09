@@ -14,6 +14,7 @@
 #include <limits>
 #include <string>
 #include <utility> // std::forward()
+#include <iosfwd> // std::ostream
 
 
 namespace recob {
@@ -130,9 +131,9 @@ namespace recob {
   
   
   /// Dumps the content of a `recob::PointCharge` object into an output stream.
-  template <typename Stream>
-  Stream& operator<< (Stream&& out, recob::PointCharge const& charge)
-    { charge.dump(std::forward<Stream>(out)); return out; }
+  inline std::ostream& operator<<
+    (std::ostream& out, recob::PointCharge const& charge)
+    { charge.dump(out); return out; }
   
   
 } // namespace recob

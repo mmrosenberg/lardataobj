@@ -32,7 +32,7 @@ namespace raw{
   RawDigit::RawDigit(
     ChannelID_t                  channel,
     unsigned short               samples,
-    RawDigit::ADCvector_t const& adclist,
+    ADCvector_t const&           adclist,
     Compress_t                   compression /* = kNone */ /*,
     const Flags_t&               flags / * = DefaultFlags * / */
   )
@@ -50,7 +50,7 @@ namespace raw{
   RawDigit::RawDigit(
     ChannelID_t             channel,
     unsigned short          samples,
-    RawDigit::ADCvector_t&& adclist,
+    ADCvector_t&&           adclist,
     Compress_t              compression /* = kNone */ /*,
     const Flags_t&          flags / * = DefaultFlags * / */
   )

@@ -16,6 +16,7 @@
 
 
 // C/C++ standard library
+#include <ostream>
 #include <string>
 #include <exception>
 
@@ -29,9 +30,9 @@ namespace util {
    * * `Flag_t`: a single bit; it can be initialized with the bit index, but
    *     it is stored as a bit mask. A flag has two states: set and unset.
    * * `Bits_t`: a set of flags (represented as a bit mask).
-   * * `Mask_t`: a set of flags which can have one of three states each:
+   * * `BitMask`: a set of flags which can have one of three states each:
    *     set, unset or undefined.
-   * * `FlagSet`: a set of flags (like Mask_t), with the knowledge of a total
+   * * `FlagSet`: a set of flags (like `BitMask`), with the knowledge of a total
    *     number of supported flags.
    * 
    * The first three classes manage exactly how many bits they have storage for.
@@ -44,13 +45,13 @@ namespace util {
    * More specifically:
    * 
    * * a `Bits_t` can be created out of a `Flag_t`
-   * * a `Mask_t` can be created out of a `Bits_t` (or a `Flag_t`)
+   * * a `BitMask` can be created out of a `Bits_t` (or a `Flag_t`)
    * * `~Flag_t` is not defined
    * * `Bits_t | Bits_t` and `Bits_t + Bits_t` are still `Bits_t` (and they are
    *     equivalent)
-   * * `Bits_t & Bits_t` and `Bits_t - Bits_t` are `Mask_t`, to preserve the
+   * * `Bits_t & Bits_t` and `Bits_t - Bits_t` are `BitMask`, to preserve the
    *     information of bits that are defined and unset
-   * * `~Bits_t` is a `Mask_t` as well
+   * * `~Bits_t` is a `BitMask` as well
    * 
    */
   namespace flags {
@@ -177,8 +178,8 @@ namespace util {
     /// @}
       
     /// Output of a flag into a stream (prints its index).
-    template <typename Stream, typename Storage>
-    Stream& operator<< (Stream&& out, Flag_t<Storage> flag)
+    template <typename Storage>
+    std::ostream& operator<< (std::ostream& out, Flag_t<Storage> flag)
       { out << '[' << flag.index() << ']'; return out; }
     
     /// Convert a flag into a stream (shows its index).
@@ -446,14 +447,25 @@ namespace util {
       /// Constructor tag from values.
       static constexpr FromValuesTag fromValues {};
       
-
+      
+      // -- BEGIN Constructors from values -------------------------------------
+      /**
+       * @name Constructors from values
+       * 
+       * These constructors initialize the bit mask from the traditional bit
+       * mask constants in C style.
+       * The first argument of them should be `util::flags::maskFromValues`
+       * (or the equivalent `fromValues` from `BitMask` itself).
+       */
+      /// @{
+      
       /// Default constructor: no flag defined at all.
       explicit constexpr BitMask() = default;
       
       
       /**
        * @brief Constructor: defines and sets flags.
-       * @param values a bit mask of the values to be defined and set
+       * @param defined a bit mask of the values to be defined and set
        * 
        * All bits in `values` will be defined and set.
        * Example:
@@ -499,6 +511,14 @@ namespace util {
       constexpr BitMask(FromValuesTag, Bits_t defined, Bits_t values);
       
       
+      /// @}
+      // -- END Constructors from values ---------------------------------------
+      
+      
+      // -- BEGIN Constructors combining flags ---------------------------------
+      /// @name Constructors combining flags
+      /// @{
+      
       /**
        * @brief Constructor: merges all arguments in the argument list.
        * @tparam Others type of the remaining parameters to be merged
@@ -529,23 +549,30 @@ namespace util {
       
       /**
        * @brief Constructor: merges all arguments in the argument list.
-       * @tparam Others type of the remaining parameters to be merged
+       * @tparam Second type of the second argument to be merged
+       * @tparam Others type of the remaining arguments to be merged
        * @param first first argument to be merged (here, a Mask_t)
+       * @param second second argument to be merged
        * @param others remaining arguments to be merged
        * @see create()
        * 
        * The effect is equivalent to call `create(first, others...)`.
        */
-      template <typename... Others>
-      constexpr BitMask(Mask_t first, Others... others)
-        : BitMask(create(first, others...))
-        {
-          static_assert(sizeof...(Others) > 0, "This is no copy constructor!");
-        }
+      // NOTE: if the first argument passed as reference prevent constexpr,
+      //       two separate constructors will be needed;
+      //       also note that this works as copy constructor as well
+      template <typename Second, typename... Others>
+      constexpr BitMask(Mask_t first, Second second, Others... others)
+        : BitMask(create(first, second, others...))
+        {}
+      
+      /// @}
+      // -- END Constructors combining flags -----------------------------------
       
       
-      /// @{
+      // -- BEGIN Access to flags ----------------------------------------------
       /// @name Access to flags
+      /// @{
       
       /**
        * @brief Returns whether the flag is defined.
@@ -641,7 +668,7 @@ namespace util {
        * @brief Returns whether at least one of the specified bits is set.
        * @param bits bits to check
        * @return whether any of the bits is set
-       * @see isSet(Flag_t)
+       * @see `isSet(Flag_t)`
        * 
        * This method is equivalent to calling `isSet(Flag_t)` on each single
        * flag defined in `bits`. The result is true only if at least one of them
@@ -653,7 +680,7 @@ namespace util {
        * @brief Returns whether all the specified bits are unset.
        * @param bits bits to check
        * @return whether all bits are unset
-       * @see isUnset(Flag_t)
+       * @see `isUnset(Flag_t)`
        * 
        * This method is equivalent to calling `isUnset(Flag_t)` on each single
        * flag defined in `bits`. The result is true only if all of them are
@@ -666,7 +693,7 @@ namespace util {
        * @brief Returns whether any of the bits set in the mask are set.
        * @param mask the mask of bits
        * @return whether we have any of those bits set
-       * @see noneSet(), match()
+       * @see `noneSet()`, `match()`
        * 
        * The bits that are undefined in mask are not used to compute the result.
        */
@@ -676,7 +703,7 @@ namespace util {
        * @brief Returns whether none of the bits set in the mask is set.
        * @param mask the mask of bits
        * @return whether we have any of those bits set
-       * @see anySet(), match()
+       * @see `anySet()`, `match()`
        * 
        * This is the logical negation of `anySet()`.
        */
@@ -687,24 +714,27 @@ namespace util {
        * @param mask the mask of bits
        * @return whether the mask matches ours
        * 
-       * The bits that are undefined in mask are not used to compute the result.
-       * If all the flags in mask that are set (`isSet()`) must be set, and all
-       * the flags in mask that are unset (`isUnset()`) must be unset, this
-       * method returns `true`.
+       * The flags that are undefined in mask are not used to compute the
+       * result.
+       * If all the flags that are set in `mask` (`isSet()`) are set in this
+       * object, and likewise all the flags that are unset in `mask`
+       * (`isUnset()`) are unset, this method returns `true`.
        */
       constexpr bool match(Mask_t const& mask) const;
       
       /// @}
+      // -- END Access to flags ------------------------------------------------
       
       
-      /// @{
+      // -- BEGIN Setting flags ------------------------------------------------
       /// @name Setting flags
+      /// @{
       
       /**
        * @brief Sets all specified flags
        * @tparam Flag types of the first flag
        * @tparam OtherFlags types of other optional flags
-       * @param flag the first flag to be set
+       * @param first the first flag to be set
        * @param others flags also to be set
        * 
        * All specified flags are set. Flags set are automatically defined.
@@ -734,7 +764,7 @@ namespace util {
        * @brief Unsets all specified flags
        * @tparam Flag types of the first flag
        * @tparam OtherFlags types of other optional flags
-       * @param flag the first flag to be unset
+       * @param first the first flag to be unset
        * @param others flags also to be unset
        * @see set()
        * 
@@ -763,7 +793,7 @@ namespace util {
        * @brief Declares all specified flags as undefined.
        * @tparam Flag types of the first flag
        * @tparam OtherFlags types of other optional flags
-       * @param flag the first flag to be removed
+       * @param first the first flag to be removed
        * @param others flags also to be removed
        * @see set(), unset(), isDefined()
        * 
@@ -788,15 +818,18 @@ namespace util {
         { presence.clear(); values.clear(); }
       
       /// @}
+      // -- END Setting flags --------------------------------------------------
       
       
-      /// @{
+      // -- BEGIN Number of flags ----------------------------------------------
       /// @name Number of flags
+      /// @{
       
       /// Returns the number of flags the set has room for.
       static constexpr size_t capacity();
       
       /// @}
+      // -- END Number of flags ------------------------------------------------
       
       /// Comparison: all flags must be the same
       /// @bug Also the value of undefined flags is currently checked
@@ -819,8 +852,9 @@ namespace util {
         { dump(std::forward<Stream>(out), capacity()); }
       
       
-      /// @{
+      // -- BEGIN Static mask manipulation -------------------------------------
       /// @name Static mask manipulation
+      /// @{
       
       /**
        * @brief Creates a new BitMask.
@@ -852,12 +886,12 @@ namespace util {
        * where '-' represents an undefined flag (`isUndefined()`), '0' an unset
        * flag (`isUnset()`), and '1' a set flag (`isSet()`).
        * 
-       * |             mask  ||    -    |    0    |    1    |
-       * | -------- | ------- | ------- | ------- | ------- |
-       * | baseMask |         |         |         |         |
-       * |    ^     |    -    |    -    |    0    |    1    |
-       * |    ^     |    0    |    0    |    0    |    1    |
-       * |    ^     |    1    |    1    |    0    |    1    |
+       * |     `mask` |    -    |    0    |    1    |
+       * | ---------- | ------- | ------- | ------- |
+       * | `baseMask` |         |         |         |
+       * |      -     |    -    |    0    |    1    |
+       * |      0     |    0    |    0    |    1    |
+       * |      1     |    1    |    0    |    1    |
        * 
        */
       static constexpr Mask_t mergeIntoMask(Mask_t baseMask, Mask_t mask);
@@ -869,15 +903,15 @@ namespace util {
        * @return a new mask with all content from baseMask, plus the flag bit
        *         set
        * 
-       * The truth table of this operation follows (see `mergeWithMask()` for
+       * The truth table of this operation follows (see `mergeIntoMask()` for
        * its legend).
        * 
-       * |             bits  ||    0    |    1    |
-       * | -------- | ------- | ------- | ------- |
-       * | baseMask |         |         |         |
-       * |    ^     |    -    |    -    |    1    |
-       * |    ^     |    0    |    0    |    1    |
-       * |    ^     |    1    |    1    |    1    |
+       * |     `bits` |    0    |    1    |
+       * | ---------- | ------- | ------- |
+       * | `baseMask` |         |         |
+       * |      -     |    -    |    1    |
+       * |      0     |    0    |    1    |
+       * |      1     |    1    |    1    |
        */
       static constexpr Mask_t mergeIntoMask(Mask_t baseMask, Bits_t bits);
       
@@ -912,12 +946,12 @@ namespace util {
        * where '-' represents an undefined flag (`isUndefined()`), '0' an unset
        * flag (`isUnset()`), and '1' a set flag (`isSet()`).
        * 
-       * |               B   ||    -    |    0    |    1    |
-       * | -------- | ------- | ------- | ------- | ------- |
-       * |    A     |         |         |         |         |
-       * |    ^     |    -    |    -    |    0    |    1    |
-       * |    ^     |    0    |    0    |    0    |    1    |
-       * |    ^     |    1    |    1    |    1    |    1    |
+       * |   B |    -    |    0    |    1    |
+       * | --- | ------- | ------- | ------- |
+       * |  A  |         |         |         |
+       * |  -  |    -    |    0    |    1    |
+       * |  0  |    0    |    0    |    1    |
+       * |  1  |    1    |    1    |    1    |
        * 
        */
       static constexpr Mask_t combineWithMask(Mask_t A, Mask_t B);
@@ -929,15 +963,15 @@ namespace util {
        * @return a new mask with all content from baseMask, plus the flag bit
        *         set
        * 
-       * The truth table of this operation follows (see `mergeWithMask()` for
+       * The truth table of this operation follows (see `mergeIntoMask()` for
        * its legend).
        * 
-       * |             bits  ||    0    |    1    |
-       * | -------- | ------- | ------- | ------- |
-       * | baseMask |         |         |         |
-       * |    ^     |    -    |    -    |    1    |
-       * |    ^     |    0    |    0    |    1    |
-       * |    ^     |    1    |    1    |    1    |
+       * |     `bits` |    0    |    1    |
+       * | ---------- | ------- | ------- |
+       * | `baseMask` |         |         |
+       * |      -     |    -    |    1    |
+       * |      0     |    0    |    1    |
+       * |      1     |    1    |    1    |
        * 
        */
       static constexpr Mask_t combineWithMask(Mask_t baseMask, Bits_t bits);
@@ -967,12 +1001,12 @@ namespace util {
        * where '-' represents an undefined flag (`isUndefined()`), '0' an unset
        * flag (`isUnset()`), and '1' a set flag (`isSet()`).
        * 
-       * |               B   ||    -    |    0    |    1    |
-       * | -------- | ------- | ------- | ------- | ------- |
-       * |    A     |         |         |         |         |
-       * |    ^     |    -    |    -    |    0    |    1    |
-       * |    ^     |    0    |    0    |    0    |    0    |
-       * |    ^     |    1    |    1    |    0    |    1    |
+       * |   `B` |    -    |    0    |    1    |
+       * | ----- | ------- | ------- | ------- |
+       * |  `A`  |         |         |         |
+       * |   -   |    -    |    0    |    1    |
+       * |   0   |    0    |    0    |    0    |
+       * |   1   |    1    |    0    |    1    |
        * 
        */
       static constexpr Mask_t intersectWithMask(Mask_t A, Mask_t B);
@@ -986,15 +1020,15 @@ namespace util {
        * 
        * All bits in the argument are also defined.
        * 
-       * The truth table of this operation follows (see `mergeWithMask()` for
+       * The truth table of this operation follows (see `mergeIntoMask()` for
        * its legend).
        * 
-       * |             bits  ||    0    |    1    |
-       * | -------- | ------- | ------- | ------- |
-       * | baseMask |         |         |         |
-       * |    ^     |    -    |    -    |    1    |
-       * |    ^     |    0    |    0    |    0    |
-       * |    ^     |    1    |    0    |    1    |
+       * |     `bits` |    0    |    1    |
+       * | ---------- | ------- | ------- |
+       * | `baseMask` |         |         |
+       * |      -     |    -    |    1    |
+       * |      0     |    0    |    0    |
+       * |      1     |    0    |    1    |
        * 
        */
       static constexpr Mask_t intersectWithMask(Mask_t baseMask, Bits_t bits);
@@ -1009,8 +1043,8 @@ namespace util {
       
       /**
        * @brief Returns a new mask with the bits set from both masks.
-       * @param A one of the masks to be combined
-       * @param B the other mask to be combined
+       * @param baseMask one of the masks to be combined
+       * @param mask the other mask to be combined
        * @return a new mask with all bits set in both masks
        * 
        * The content of the new mask has a bit set if it was set (`isSet()`) in
@@ -1018,15 +1052,15 @@ namespace util {
        * either of the masks, or else undefined (`isUndefined()`), as it was
        * undefined in both masks.
        * 
-       * The truth table of this operation follows (see `mergeWithMask()` for
+       * The truth table of this operation follows (see `mergeIntoMask()` for
        * its legend).
        * 
-       * |             mask  ||    -    |    0    |    1    |
-       * | -------- | ------- | ------- | ------- | ------- |
-       * | baseMask |         |         |         |         |
-       * |    ^     |    -    |    -    |    0    |    0    |
-       * |    ^     |    0    |    0    |    0    |    0    |
-       * |    ^     |    1    |    1    |    1    |    0    |
+       * |     `mask` |    -    |    0    |    1    |
+       * | ---------- | ------- | ------- | ------- |
+       * | `baseMask` |         |         |         |
+       * |      -     |    -    |    0    |    0    |
+       * |      0     |    0    |    0    |    0    |
+       * |      1     |    1    |    1    |    0    |
        * 
        */
       static constexpr Mask_t unsetMask(Mask_t baseMask, Mask_t mask);
@@ -1040,15 +1074,15 @@ namespace util {
        * 
        * All bits in the argument are also defined.
        * 
-       * The truth table of this operation follows (see `mergeWithMask()` for
+       * The truth table of this operation follows (see `mergeIntoMask()` for
        * its legend).
        * 
-       * |             bits  ||    0    |    1    |
-       * | -------- | ------- | ------- | ------- |
-       * | baseMask |         |         |         |
-       * |    ^     |    -    |    -    |    0    |
-       * |    ^     |    0    |    0    |    0    |
-       * |    ^     |    1    |    1    |    0    |
+       * |     `bits` |    0    |    1    |
+       * | ---------- | ------- | ------- |
+       * | `baseMask` |         |         |
+       * |      -     |    -    |    0    |
+       * |      0     |    0    |    0    |
+       * |      1     |    1    |    0    |
        * 
        */
       static constexpr Mask_t unsetMask(Mask_t baseMask, Bits_t bits);
@@ -1068,15 +1102,14 @@ namespace util {
        * 
        * The bits which were undefined, stay so. The others change their value.
        * 
-       * The truth table of this operation follows (see `mergeWithMask()` for
+       * The truth table of this operation follows (see `mergeIntoMask()` for
        * its legend).
        * 
-       * |  mask   | negate() |
-       * | ------- | -------  |
-       * |         |          |
-       * |    -    |    -     |
-       * |    0    |    1     |
-       * |    1    |    0     |
+       * |  `mask`  | `negate()` |
+       * | -------- | ---------- |
+       * |     -    |      -     |
+       * |     0    |      1     |
+       * |     1    |      0     |
        * 
        */
       static constexpr Mask_t negateMask(Mask_t mask);
@@ -1098,6 +1131,7 @@ namespace util {
       static constexpr Mask_t negateMask(Flag_t flag);
       
       /// @}
+      // -- END Static mask manipulation ---------------------------------------
       
         private:
       
@@ -1166,7 +1200,7 @@ namespace util {
       { mask.dump(std::forward<Stream>(out)); return out; }
     
     
-    /// @{
+    // -- BEGIN Flag and mask management ---------------------------------------
     /**
      * @name Flag and mask management
      * 
@@ -1187,6 +1221,7 @@ namespace util {
      * * unary minus sign is not defined
      * 
      */
+    /// @{
     
     
     /// Returns a mask which combines two of them.
@@ -1321,6 +1356,7 @@ namespace util {
     
     
     /// @}
+    // -- END Flag and mask management -----------------------------------------
   
     /// Constructs a mask from bits
     template <typename Storage>

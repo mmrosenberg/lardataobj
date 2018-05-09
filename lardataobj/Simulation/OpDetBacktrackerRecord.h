@@ -47,7 +47,7 @@ namespace sim {
    *
    * - position: where the scintillation occurred (from Geant4 simulation)
    * - track ID: Geant4 track ID of the ionizing particle
-   * - energy: amount of energy from G4Step (from Geant4 simulation)
+   * - energy: amount of energy in G4Step (from Geant4 simulation)
    * - photons: amount of photons reaching the optical detector
    *
    * Note the different definition of the photons respect to the rest:
@@ -157,8 +157,8 @@ namespace sim {
     /**
      * @brief Add scintillation photons and energy to this OpticalDetector
      * @param trackID ID of simulated track depositing this energy (from Geant4)
-     * @param iTimePDclock timePDclock tick when this deposit was collected (ns)
-     * @param numberPhotons deteted at the OpticalDetector at this time from this track
+     * @param timePDclock tick when this deposit was collected (ns)
+     * @param numberPhotons detected at the OpticalDetector at this time from this track
      * @param xyz coordinates of original location of ionization/scintillation (3D array) [cm]
      * @param energy energy deposited at this point by this track [MeV]
      *
@@ -273,21 +273,20 @@ namespace sim {
       (const OpDetBacktrackerRecord& opDetNum, int offset);
 
 
-    //@{
     /**
      * @brief Dumps the full content of the OpDetBacktrackerRecord into a stream
      * @tparam Stream an ostream-like stream object
      * @param out the stream to send the information into
      * @param indent indentation of the lines (default: none)
-     * @param indent_first indentation for the first line (default: as indent)
+     * @param first_indent indentation for the first line (default: as indent)
      */
     template <typename Stream>
     void Dump(Stream&& out, std::string indent, std::string first_indent) const;
 
+    /// Documentation at `Dump(Stream&&, std::string, std::string) const`.
     template <typename Stream>
     void Dump(Stream&& out, std::string indent = "") const
       { Dump(std::forward<Stream>(out), indent, indent); }
-    //@}
 
 
   private:

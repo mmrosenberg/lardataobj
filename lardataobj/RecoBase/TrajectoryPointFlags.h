@@ -1,5 +1,5 @@
 /**
- * @file   TrajectoryPointFlags.h
+ * @file   lardataobj/RecoBase/TrajectoryPointFlags.h
  * @brief  Set of flags pertaining a point of the track.
  * @author Giuseppe Cerati (cerati@fnal.gov),
  *         Gianluca Petrillo (petrillo@fnal.gov)
@@ -20,6 +20,7 @@
 #include <stdexcept> // std::out_of_range
 #include <limits> // std::numeric_limits<>
 #include <utility> // std::forward(), std::declval()
+#include <iosfwd> // std::ostream
 #include <cstddef> // std::size_t
 
 
@@ -432,7 +433,7 @@ namespace recob {
     
     /**
      * @brief Returns whether the specified flag is set.
-     * @param flagIndex index of the flag to be tested 
+     * @param index index of the flag to be tested 
      * @return whether the specified flag is set
      * @throw Flags_t::OutOfRangeError if the flag is not known (invalid index)
      * @throw Flags_t::FlagNotDefinedError if the flag is not defined
@@ -720,10 +721,9 @@ namespace recob {
   }; // TrajectoryPointFlags<>
   
   
-  /// Dumps flags into a stream with default verbosity
-  template <typename Stream>
-  Stream& operator<< (Stream&& out, recob::TrajectoryPointFlags const& flags)
-    { flags.dump(std::forward<Stream>(out)); return out; }
+  /// Dumps flags into a stream with default verbosity.
+  std::ostream& operator<<
+    (std::ostream& out, recob::TrajectoryPointFlags const& flags);
   
   
 } // namespace recob

@@ -292,21 +292,20 @@ namespace sim {
       (const SimChannel& channel, int offset);
     
     
-    //@{
     /**
      * @brief Dumps the full content of the SimChannel into a stream
      * @tparam Stream an ostream-like stream object
      * @param out the stream to send the information into
      * @param indent indentation of the lines (default: none)
-     * @param indent_first indentation for the first line (default: as indent)
+     * @param first_indent indentation for the first line (default: as `indent`)
      */
     template <typename Stream>
     void Dump(Stream&& out, std::string indent, std::string first_indent) const;
     
+    /// Documentation at `Dump(Stream&&, std::string, std::string) const`.
     template <typename Stream>
     void Dump(Stream&& out, std::string indent = "") const
       { Dump(std::forward<Stream>(out), indent, indent); }
-    //@}
     
     
   private:

@@ -45,15 +45,15 @@ namespace MyFlags {
   using Storage_t = unsigned short;
   using MyFlag_t = util::flags::Flag_t<Storage_t>;
   
-  constexpr MyFlag_t F0 { 0 };
-  constexpr MyFlag_t F1 { 1 };
-  constexpr MyFlag_t F2 { 2 };
-  constexpr MyFlag_t F3 { 3 };
-  constexpr MyFlag_t F4 { 4 };
-  constexpr MyFlag_t F5 { 5 };
-  constexpr MyFlag_t F6 { 6 };
-  constexpr MyFlag_t F7 { 7 };
-  constexpr MyFlag_t F8 { 8 };
+  constexpr MyFlag_t F0                 { 0 };
+  constexpr MyFlag_t F1                 { 1 };
+  constexpr MyFlag_t F2                 { 2 };
+  constexpr MyFlag_t F3                 { 3 };
+  constexpr MyFlag_t F4                 { 4 };
+  constexpr MyFlag_t F5                 { 5 };
+  constexpr MyFlag_t F6                 { 6 };
+  constexpr MyFlag_t F7                 { 7 };
+  constexpr MyFlag_t F8 [[gnu::unused]] { 8 };
   
 } // namespace MyFlags
 
@@ -156,8 +156,6 @@ void FlagSetStaticTest() {
   
   
   using FlagSet_t = util::flags::FlagSet<7U, MyFlags::Storage_t>;
-  using FlagIndex_t = FlagSet_t::FlagIndex_t;
-  using Flag_t = FlagSet_t::Flag_t;
   
   constexpr FlagSet_t flags0;
   static_assert(flags0.size() == 7U, "Invalid size.");
@@ -223,12 +221,14 @@ void FlagSetStaticTest() {
 void FlagSetTest() {
   
   using FlagSet_t = util::flags::FlagSet<7U, MyFlags::Storage_t>;
-  using FlagIndex_t = FlagSet_t::FlagIndex_t;
   using Flag_t = FlagSet_t::Flag_t;
   
   
   // the last flag is "unsupported"
-  std::array<Flag_t, 3> const indices = { 4, MyFlags::F6, 7 };
+  // BUG the double brace syntax is required to work around clang bug 21629
+  // (https://bugs.llvm.org/show_bug.cgi?id=21629)
+//  std::array<Flag_t, 3> const indices = { 4, MyFlags::F6, 7 };
+  std::array<Flag_t, 3> const indices = {{ 4, MyFlags::F6, 7 }};
   
   std::set<Flag_t> defined, set;
   

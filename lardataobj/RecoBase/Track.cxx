@@ -34,10 +34,12 @@ namespace recob {
 						<< "\n\t direction size = " << dxdydz.size() << "\n";
 
     Positions_t pos = Positions_t();
-    for (auto p : xyz) pos.push_back(std::move(Point_t(p.X(),p.Y(),p.Z())));
+    // for c2: remove std::move from push_back
+    for (auto p : xyz) pos.push_back(Point_t(p.X(),p.Y(),p.Z()));
     auto size = pos.size();
     Momenta_t mom = Momenta_t();
-    for (auto m : dxdydz) mom.push_back(std::move(Vector_t(m.X(),m.Y(),m.Z())));
+    // for c2: remove std::move from push_back
+    for (auto m : dxdydz) mom.push_back(Vector_t(m.X(),m.Y(),m.Z()));
     bool hasMom = false;
     if ( fitMomentum.size()==2 ) {
       if (fitMomentum[0]!=util::kBogusD && fitMomentum[1]!=util::kBogusD) {

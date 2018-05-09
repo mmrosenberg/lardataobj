@@ -40,6 +40,7 @@
 #include <boost/test/test_tools.hpp> // BOOST_CHECK()
 
 // LArSoft libraries
+#include "larcoreobj/SimpleTypesAndConstants/PhysicalConstants.h" // util::pi()
 #include "larcoreobj/SimpleTypesAndConstants/RawTypes.h" // raw::Compress_t
 #include "lardataobj/RawData/raw.h"
 
@@ -156,7 +157,9 @@ class SineWaveCreator: public DataCreatorBase {
 	/// Creates and returns the data sample
 	virtual InputData_t create(size_t size) override
 		{
-			constexpr float two_pi = float(2. * std::acos(-1.));
+        // for c2: constexpr variable 'two_pi' must be initialized by a constant expression
+			//constexpr float two_pi = float(2. * std::acos(-1.));
+			constexpr float two_pi = 2.0F * util::pi<float>();
 			InputData_t data;
 			data.reserve(size);
 			for (size_t i = 0; i < size; ++i)

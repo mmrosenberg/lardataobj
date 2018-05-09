@@ -1,8 +1,8 @@
 /** ****************************************************************************
- * @file Hit.h
+ * @file lardataobj/RecoBase/Hit.h
  * @brief Declaration of signal hit object.
  * @author mitchell.soderberg@yale.edu
- * @see  Hit.cxx
+ * @see  lardataobj/RecoBase/Hit.cxx
  * 
  * Changes:
  * 20141212 Gianluca Petrillo (petrillo@fnal.gov)
@@ -18,8 +18,8 @@
  * 
  * ****************************************************************************/
 
-#ifndef HIT_H
-#define HIT_H
+#ifndef LARDATAOBJ_RECOBASE_HIT_H
+#define LARDATAOBJ_RECOBASE_HIT_H
 
 
 // C/C++ standard librraies
@@ -198,7 +198,7 @@ namespace recob {
       
       /**
        * @brief Returns the distance of the specified time from peak, in RMS units
-       * @param ticks the time, in TDC tick units
+       * @param time the time, in TDC tick units
        * @return the distance of the specified time from peak, in RMS units
        *
        * This returns (ticks - PeakTime()) / RMS().
@@ -245,4 +245,4 @@ inline float recob::Hit::TimeDistanceAsRMS(float time) const
 
 
 
-#endif // HIT_H
+#endif // LARDATAOBJ_RECOBASE_HIT_H

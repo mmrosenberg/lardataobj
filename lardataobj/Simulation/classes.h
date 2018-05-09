@@ -10,6 +10,7 @@
 #include "canvas/Persistency/Common/Assns.h"
 
 // nutools includes
+#include "nusimdata/SimulationBase/MCParticle.h"
 #include "nusimdata/SimulationBase/MCTruth.h"
 
 // Simulation includes
@@ -19,3 +20,4 @@
 #include "lardataobj/Simulation/BeamGateInfo.h"
 #include "lardataobj/Simulation/AuxDetSimChannel.h"
 #include "lardataobj/Simulation/SupernovaTruth.h"
+#include "lardataobj/Simulation/GeneratedParticleInfo.h"

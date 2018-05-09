@@ -360,7 +360,7 @@ void TrajectoryTestMainConstructor() {
   //
   // Part I: initialization of trajectory inputs
   //
-  constexpr recob::Trajectory::Coord_t V2_2 = std::sqrt(0.5);
+  const recob::Trajectory::Coord_t V2_2 = std::sqrt(0.5);
   Expected_t expected;
   // we describe a trajectory with uniform electric and magnetic fields aligned
   // on z; curvature is 1 on the x/y plane.

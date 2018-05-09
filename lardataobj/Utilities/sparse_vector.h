@@ -1,5 +1,5 @@
 /**
- * @file    sparse_vector.h
+ * @file    lardataobj/Utilities/sparse_vector.h
  * @brief   Class defining a sparse vector (holes are zeroes)
  * @author  Gianluca Petrillo (petrillo@fnal.gov)
  * @date    April 22, 2014
@@ -8,8 +8,8 @@
  */
 
 
-#ifndef LARCORE_SPARSE_VECTOR_H
-#define LARCORE_SPARSE_VECTOR_H
+#ifndef LARDATAOBJ_UTILITIES_SPARSE_VECTOR_H
+#define LARDATAOBJ_UTILITIES_SPARSE_VECTOR_H
 
 
 // C/C++ standard library
@@ -433,8 +433,8 @@ class range_t {
  * This has no clear meaning. A usage analogous to STL would precede a sequence
  * of push_back's. In that case, we should create a new empty range at the end
  * of the vector, and reserve that. Empty ranges are currently not allowed.
- * A replacement of this pattern is to create a new std::vector, reserve space
- * for it and fill it, and finally use sparse_vector\<\>::append(). If the end
+ * A replacement of this pattern is to create a new `std::vector`, reserve space
+ * for it and fill it, and finally use `sparse_vector::append()`. If the end
  * of the vector is void, there will be no performance penalty, otherwise a
  * reserve + copy will happen.
  * 
@@ -786,27 +786,44 @@ class sparse_vector {
 	
 	//@{
 	/**
-	 * @brief Adds a sequence of elements as a range at the end of the vector
+	 * @brief Adds a sequence of elements as a range at the end of the vector.
 	 * @param first iterator to the first element to be added
 	 * @param last iterator after the last element to be added
-	 * @param new_data contained holding the data to be copied or moved
 	 * @return the range where the new data was added
 	 *
-	 * If there is a range at the end of the sparse vector, it will be expanded
-	 * with the new data.
-	 * Otherwise, the rvalue version of this method will use the data vector
-	 * directly as the new range added.
+	 * The input range is copied at the end of the sparse vector.
+	 * If the end of the sparse vector was the end of a range, that range is
+	 * expanded, otherwise a new one is created.
 	 */
 	template <typename ITER>
 	const datarange_t& append(ITER first, ITER last)
 		{ return add_range(size(), first, last); }
 	
+	/**
+	 * @brief Adds a sequence of elements as a range at the end of the vector.
+	 * @param range_data contained holding the data to be copied or moved
+	 * @return the range where the new data was added
+	 *
+	 * The input data is copied at the end of the sparse vector.
+	 * If the end of the sparse vector was the end of a range, that range is
+	 * expanded, otherwise a new one is created.
+	 */
 	template <typename CONT>
-	const datarange_t& append(const CONT& new_data)
-		{ return add_range(size(), new_data); }
+	const datarange_t& append(const CONT& range_data)
+		{ return add_range(size(), range_data); }
 	
-	const datarange_t& append(vector_t&& new_data)
-		{ return add_range(size(), std::move(new_data)); }
+	/**
+	 * @brief Adds a sequence of elements as a range at the end of the vector.
+	 * @param range_data contained holding the data to be copied or moved
+	 * @return the range where the new data was added
+	 *
+	 * If there is a range at the end of the sparse vector, it will be expanded
+	 * with the new data.
+	 * Otherwise, this method will use the data vector directly as a new range
+	 * added at the end of the sparse vector.
+	 */
+	const datarange_t& append(vector_t&& range_data)
+		{ return add_range(size(), std::move(range_data)); }
 	//@}
 	
 	
@@ -893,15 +910,25 @@ class sparse_vector {
 	range_list_t ranges; ///< list of ranges
 	
 	//@{
-	/// Returns an iterator to the range after the specified index, or end()
-	/// @param index the absolute index
-	/// @param rbegin consider only from this range on
-	/// @return iterator to the next range not including index, or ranges.end()
-	/// if none
+	/**
+	   * @brief Returns an iterator to the range after `index`, or `end()` if none.
+	   * @param index the absolute index
+	   * @return iterator to the next range not including index, or ranges.end()
+	   *         if none
+	   */
 	range_iterator find_next_range_iter(size_type index)
 		{ return find_next_range_iter(index, ranges.begin()); }
 	range_const_iterator find_next_range_iter(size_type index) const
 		{ return find_next_range_iter(index, ranges.begin()); }
+	//@}
+	//@{
+	/**
+	 * @brief Returns an iterator to the range after `index`, or `end()` if none.
+	 * @param index the absolute index
+	 * @param rbegin consider only from this range on
+	 * @return iterator to the next range not including index, or `ranges.end()`
+	 *         if none
+	 */
 	range_iterator find_next_range_iter(size_type index, range_iterator rbegin);
 	range_const_iterator find_next_range_iter
 		(size_type index, range_const_iterator rbegin) const;
@@ -1034,17 +1061,17 @@ class lar::sparse_vector<T>::datarange_t: public range_t<size_type> {
 	
 	
 	/**
-		* @brief Moves the begin of this range
-		* @param index absolute index to move the head to
-		* @param def_value value to be inserted in case of expansion of the range
-		*/
+	 * @brief Moves the begin of this range
+	 * @param to_index absolute index to move the head to
+	 * @param def_value value to be inserted in case of expansion of the range
+	 */
 	void move_head(size_type to_index, value_type def_value = value_zero);
 	
 	/**
-		* @brief Moves the end of this range
-		* @param index absolute index to move the tail to
-		* @param def_value value to be inserted in case of expansion of the range
-		*/
+	 * @brief Moves the end of this range
+	 * @param to_index absolute index to move the tail to
+	 * @param def_value value to be inserted in case of expansion of the range
+	 */
 	void move_tail(size_type to_index, value_type def_value = value_zero)
 		{ resize(base_t::relative_index(to_index), def_value); }
 	
@@ -1116,7 +1143,7 @@ class lar::sparse_vector<T>::reference: public const_reference {
 template <typename T>
 class lar::sparse_vector<T>::const_iterator {
 	//
-	// This iterator fulfills the traits of an immutable forward iterator.
+	// This iterator fulfils the traits of an immutable forward iterator.
 	//
 	
 		protected:
@@ -1265,7 +1292,7 @@ class lar::sparse_vector<T>::const_iterator {
 template <typename T>
 class lar::sparse_vector<T>::iterator: public const_iterator {
 	typedef typename const_iterator::container_t container_t;
-	friend class const_iterator::container_t;
+	friend typename const_iterator::container_t;
 	
 		public:
 	typedef typename const_iterator::reference reference;
@@ -1974,4 +2001,4 @@ void lar::sparse_vector<T>::const_iterator::refresh_state() {
 //
 
 
-#endif // LARCORE_SPARSE_VECTOR_H
+#endif // LARDATAOBJ_UTILITIES_SPARSE_VECTOR_H

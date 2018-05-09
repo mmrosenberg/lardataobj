@@ -24,7 +24,8 @@ namespace raw {
   private:
 
     unsigned short  fOpChannel;     ///< channel in the readout
-    unsigned short  fSamples;          ///< number of ticks of the clock
+    // for c2: fSamples is not used 
+    //unsigned short  fSamples;          ///< number of ticks of the clock
     unsigned int    fPMTFrame;         ///< frame number where pulse begins
     unsigned int    fFirstSample;      ///< first sample number within pmt frame
 

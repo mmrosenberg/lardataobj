@@ -92,6 +92,7 @@
 #include <map>
 #include <functional>
 #include <algorithm>
+#include <stdexcept> // std::out_of_range
 
 namespace util {
 
@@ -262,7 +263,7 @@ namespace util {
     {
       const_iterator __i = lower_bound(__k);
       if (__i == end() || key_comp()(__k, (*__i).first))
-	std::__throw_out_of_range(__N("Utilities/VectorMap::operator[]"));
+        throw std::out_of_range("Utilities/VectorMap::operator[]");
       return (*__i).second;
     }
 
@@ -272,7 +273,7 @@ namespace util {
     {
       iterator __i = lower_bound(__k);
       if (__i == end() || key_comp()(__k, (*__i).first))
-	std::__throw_out_of_range(__N("Utilities/VectorMap::at"));
+        throw std::out_of_range("Utilities/VectorMap::at");
       return (*__i).second;
     }
 
@@ -280,7 +281,7 @@ namespace util {
     {
       const_iterator __i = lower_bound(__k);
       if (__i == end() || key_comp()(__k, (*__i).first))
-	std::__throw_out_of_range(__N("Utilities/VectorMap::at"));
+        throw std::out_of_range("Utilities/VectorMap::at");
       return (*__i).second;
     }
 

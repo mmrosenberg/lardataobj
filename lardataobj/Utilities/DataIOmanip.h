@@ -13,6 +13,7 @@
 #define LARDATAOBJ_UTILITIES_DATAIOMANIP_H
 
 // C++ standard library
+#include <iosfwd> // std::ostream
 #include <utility> // std::forward()
 
 
@@ -51,9 +52,10 @@ namespace util {
       }; // class vector3D
       
       /// Operator to print the manipulator
-      template <typename Stream, typename Vect>
-      Stream& operator<< (Stream&& out, Vector3DStruct<Vect> const& vmanip)
-        { return vmanip(std::forward<Stream>(out)); }
+      template <typename Vect>
+      std::ostream& operator<<
+        (std::ostream& out, Vector3DStruct<Vect> const& vmanip)
+        { return vmanip(out); }
       
     } // namespace details
     

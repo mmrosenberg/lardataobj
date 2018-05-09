@@ -217,9 +217,13 @@ namespace recob {
     SMatrixSym66        VertexCovarianceGlobal6D() const;
     SMatrixSym66        EndCovarianceGlobal6D()    const;
     //@}
-
-    //@{
-    //deprecated methods, temporarily kept for backward compatibility but soon to be removed
+    
+    /// --- BEGIN Deprecated methods -------------------------------------------
+    /// @name Deprecated methods
+    /// 
+    /// Temporarily kept for backward compatibility but soon to be removed.
+    /// @deprecated All these `recob::Track` methods are deprecated.
+    /// @{
     Track(std::vector<TVector3>               const& xyz,
     	  std::vector<TVector3>               const& dxdydz,
     	  std::vector< std::vector <double> > dQdx = std::vector< std::vector<double> >(0),
@@ -252,7 +256,8 @@ namespace recob {
     const double&   DQdxAtPoint(unsigned int p, geo::View_t view=geo::kUnknown)        const;
     inline void     GlobalToLocalRotationAtPoint(unsigned int p, TMatrixD& rot)        const { return fTraj.GlobalToLocalRotationAtPoint(p,rot); }
     inline void     LocalToGlobalRotationAtPoint(unsigned int p, TMatrixD& rot)        const { return fTraj.LocalToGlobalRotationAtPoint(p,rot); }
-    //@}
+    /// @}
+    /// --- END Deprecated methods ---------------------------------------------
 
   protected:
 

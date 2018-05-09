@@ -25,8 +25,8 @@
   <version ClassVersion="11" checksum="2699414988"/>
   <version ClassVersion="10" checksum="1690717253"/>
  </class>
- <class name="raw::OpDetPulse 	  " ClassVersion="14"           >
-  <version ClassVersion="14" checksum="3733748172"/>
+ <class name="raw::OpDetPulse 	  " ClassVersion="15"           >
+  <version ClassVersion="15" checksum="2717173384"/>
  </class>
  <class name="raw::OpDetWaveform 	  " ClassVersion="13"  >
   <version ClassVersion="13" checksum="1572518718"/>

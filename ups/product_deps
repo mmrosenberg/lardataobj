@@ -1,24 +1,24 @@
 # The parent line must be the first non-comment line in the file
 # This line defines the product name and version
-parent	lardataobj	v1_28_00
+parent	lardataobj	v1_31_00
 defaultqual	e15
 #
 fcldir product_dir job
 #
 product         version
-larcoreobj	v1_20_00
-nusimdata	v1_09_01
+larcoreobj	v1_23_00
+nusimdata	v1_12_01
 
-cetbuildtools	v6_01_01	-	only_for_build
+cetbuildtools	v7_02_01	-	only_for_build
 end_product_list
 
 qualifier       larcoreobj     nusimdata	notes
 e15:debug       e15:debug      e15:debug
 e15:opt         e15:opt        e15:opt
 e15:prof        e15:prof       e15:prof
-e14:debug       e14:debug      e14:debug
-e14:opt         e14:opt        e14:opt
-e14:prof        e14:prof       e14:prof
+c2:debug        c2:debug       c2:debug
+c2:opt          c2:opt         c2:opt
+c2:prof         c2:prof        c2:prof
 end_qualifier_list
 
 # Preserve tabs and formatting in emacs and vi / vim:

@@ -92,4 +92,19 @@
     <![CDATA[fChannel = onfile.fChannel;]]>
 </ioread> 
 
+  <!-- association: simb::MCParticle to simb::MCTruth, with metadata -->
+  <!-- metadata: sim::GeneratedParticleInfo, used in `larg4::LArG4` -->
+    <!-- simb::MCParticle -> simb::MCTruth -->
+  <class name="sim::GeneratedParticleInfo" />
+  <class name="std::vector<sim::GeneratedParticleInfo>" />
+  <class name="art::Assns<simb::MCParticle, simb::MCTruth, sim::GeneratedParticleInfo>" />
+  <class name="art::Wrapper<art::Assns<simb::MCParticle, simb::MCTruth, sim::GeneratedParticleInfo>>" />
+    
+    <!-- simb::MCTruth -> simb::MCParticle -->
+  <class name="art::Assns<simb::MCTruth, simb::MCParticle, sim::GeneratedParticleInfo>" />
+  <class name="art::Wrapper<art::Assns<simb::MCTruth, simb::MCParticle, sim::GeneratedParticleInfo>>" />
+  
+  <!-- end association: simb::MCParticle to simb::MCTruth, with metadata -->
+
+
 </lcgdict>
