@@ -2,7 +2,7 @@
 cet_make( LIBRARIES lardataobj_RawData
 		    canvas
 		    MF_MessageLogger
-		    MF_Utilities
+		    
 		    cetlib cetlib_except
 		    ${ROOT_MATHCORE}
 		    ${ROOT_GENVECTOR}
