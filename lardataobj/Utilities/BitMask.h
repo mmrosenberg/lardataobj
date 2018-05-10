@@ -398,6 +398,11 @@ namespace util {
     } // namespace errors
     
     
+    struct BitMaskFromValuesTag {}; ///< Type for constructor tag from values.
+    
+    /// Value useful for `BitMask` constructors from value.
+    constexpr BitMaskFromValuesTag maskFromValues {};
+    
     /**
      * @brief A class containing a set of flags.
      * @tparam NFlags number of flags to be allocated
@@ -442,10 +447,8 @@ namespace util {
       
       /// @}
       
-      struct FromValuesTag {}; ///< Type for constructor tag from values.
-      
       /// Constructor tag from values.
-      static constexpr FromValuesTag fromValues {};
+      static constexpr auto fromValues = maskFromValues;
       
       
       // -- BEGIN Constructors from values -------------------------------------
@@ -474,7 +477,7 @@ namespace util {
        * constexpr MyMask_t DefaultMask(MyMask_t::fromValues, 0x0300U);
        * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
        */
-      constexpr BitMask(FromValuesTag, Storage_t defined);
+      constexpr BitMask(BitMaskFromValuesTag, Storage_t defined);
       
       
       /**
@@ -490,14 +493,15 @@ namespace util {
        * constexpr MyMask_t DefaultMask(MyMask_t::fromValues, 0x0300U, 0x0200U);
        * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
        */
-      constexpr BitMask(FromValuesTag, Storage_t defined, Storage_t values);
+      constexpr BitMask
+        (BitMaskFromValuesTag, Storage_t defined, Storage_t values);
       
       
       /**
        * @brief Constructor: defines and sets flags.
        * @param values a bit mask of the values to be set
        */
-      constexpr BitMask(FromValuesTag, Bits_t values);
+      constexpr BitMask(BitMaskFromValuesTag, Bits_t values);
       
       
       /**
@@ -508,7 +512,7 @@ namespace util {
        * If a bit value is requested to be set (in `values`), it will be also
        * defined, regardless whether its definition bit (in `defined`) is set.
        */
-      constexpr BitMask(FromValuesTag, Bits_t defined, Bits_t values);
+      constexpr BitMask(BitMaskFromValuesTag, Bits_t defined, Bits_t values);
       
       
       /// @}

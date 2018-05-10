@@ -278,26 +278,26 @@ constexpr util::flags::Bits_t<Storage> util::flags::operator+ (
 //---
 template <typename Storage>
 constexpr util::flags::BitMask<Storage>::BitMask
-  (FromValuesTag, Bits_t defined, Bits_t values)
+  (BitMaskFromValuesTag, Bits_t defined, Bits_t values)
   : values(values)
   , presence(defined.combine(values))
   {}
 
 template <typename Storage>
 constexpr util::flags::BitMask<Storage>::BitMask
-  (FromValuesTag tag, Bits_t bits)
+  (BitMaskFromValuesTag tag, Bits_t bits)
   : BitMask(tag, bits, bits)
   {}
 
 template <typename Storage>
 constexpr util::flags::BitMask<Storage>::BitMask
-  (FromValuesTag tag, Storage_t defined, Storage_t values)
+  (BitMaskFromValuesTag tag, Storage_t defined, Storage_t values)
   : BitMask(tag, Bits_t(defined), Bits_t(values))
   {}
 
 template <typename Storage>
 constexpr util::flags::BitMask<Storage>::BitMask
-  (FromValuesTag tag, Storage_t values)
+  (BitMaskFromValuesTag tag, Storage_t values)
   : BitMask(tag, Bits_t(values))
   {}
 

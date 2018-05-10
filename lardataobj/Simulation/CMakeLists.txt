@@ -5,7 +5,9 @@ cet_make( LIBRARIES nusimdata_SimulationBase
                     MF_Utilities
                     cetlib cetlib_except
                     ${ROOT_BASIC_LIB_LIST}
-          NO_DICTIONARY )
+          NO_DICTIONARY 
+                    ${ROOT_BASIC_LIB_LIST}
+)
 
 art_dictionary( DICTIONARY_LIBRARIES lardataobj_Simulation )
 
