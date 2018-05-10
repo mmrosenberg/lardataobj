@@ -1,7 +1,7 @@
 
 cet_make( LIBRARIES canvas
 		    MF_MessageLogger
-		    MF_Utilities
+		    
 		    cetlib cetlib_except
 		    ${ROOT_BASIC_LIB_LIST}
                     NO_DICTIONARY )
