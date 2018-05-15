@@ -6,7 +6,7 @@ defaultqual	e15
 fcldir product_dir job
 #
 product         version
-larcoreobj	v1_23_00_01
+larcoreobj	v1_23_00_02
 nusimdata	v1_13_01
 
 cetbuildtools	v7_03_02	-	only_for_build
