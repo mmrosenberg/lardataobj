@@ -4,7 +4,7 @@ include_directories( $ENV{NUSIMDATA_INC} )
 cet_make( LIBRARIES larcoreobj_SummaryData
 		    canvas
 		    MF_MessageLogger
-		    MF_Utilities
+		    
 		    cetlib cetlib_except
                     ${Boost_SYSTEM_LIBRARY}
 		    ${ROOT_BASIC_LIB_LIST}
