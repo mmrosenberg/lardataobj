@@ -22,3 +22,5 @@
 #include "lardataobj/Simulation/AuxDetSimChannel.h"
 #include "lardataobj/Simulation/SupernovaTruth.h"
 #include "lardataobj/Simulation/GeneratedParticleInfo.h"
+// Template the wrapper for the vector (typedef okay)
+template class art::Wrapper< sim::SimEnergyDepositCollection >;
