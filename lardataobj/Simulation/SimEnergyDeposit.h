@@ -40,7 +40,7 @@
 
 // C++ includes
 #include <iostream>
-
+#include <vector>
 namespace sim
 {
   class SimEnergyDeposit 
@@ -66,8 +66,8 @@ namespace sim
     SimEnergyDeposit(int np = 0,
 		     int ne = 0,
 		     double e = 0.,
-		     Point_t start = {0.,0.,0.},
-		     Point_t end = {0.,0.,0.},
+		     geo::Point_t start = {0.,0.,0.},
+		     geo::Point_t end = {0.,0.,0.},
 		     double t0 = 0.,
 		     double t1 = 0.,
 		     int id = 0,
@@ -182,8 +182,8 @@ namespace sim
     int           numPhotons;   //< of scintillation photons
     int           numElectrons; //< of ionization electrons 
     float         edep;         //< energy deposition (MeV)
-    Point_t       startPos;     //< positions in (cm)
-    Point_t       endPos;
+    geo::Point_t       startPos;     //< positions in (cm)
+    geo::Point_t       endPos;
     double        startTime;    //< (ns)
     double        endTime;      //< (ns)
     int           trackID;      //< simulation track id
@@ -224,5 +224,6 @@ namespace sim
   }
 #endif // __GCCXML__
   */
+  typedef std::vector<SimEnergyDeposit> SimEnergyDepositCollection;
 } // namespace sim
 #endif // SimEnergyDeposit_n
