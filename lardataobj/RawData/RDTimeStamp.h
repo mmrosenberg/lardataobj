@@ -16,7 +16,7 @@ namespace raw {
   {
 
   public:
-    RDTimeStamp(uint64_t tstamp); // Default constructor
+    RDTimeStamp(uint64_t tstamp=0, uint16_t flags=0) {fTimeStamp = tstamp; fFlags=flags;} // Constructor
  
 #ifndef __GCCXML__
     void SetTimeStamp(uint64_t tstamp);
@@ -25,10 +25,13 @@ namespace raw {
     uint64_t GetTimeStamp() const;
     uint32_t GetTimeStamp_Low() const;
     uint32_t GetTimeStamp_High() const;
+    void SetFlags(uint16_t flags);
+    uint16_t GetFlags() const;
 #endif
 
   private:
     uint64_t fTimeStamp;
+    uint16_t fFlags;
   };
 
 #ifndef __GCCXML__
@@ -38,6 +41,8 @@ namespace raw {
   inline uint64_t RDTimeStamp::GetTimeStamp() const { return fTimeStamp; }
   inline uint32_t RDTimeStamp::GetTimeStamp_Low() const { return fTimeStamp & 0xFFFFFFFF; }
   inline uint32_t RDTimeStamp::GetTimeStamp_High() const { return fTimeStamp >> 32; }
+  inline void RDTimeStamp::SetFlags(uint16_t flags) {fFlags = flags; }
+  inline uint16_t RDTimeStamp::GetFlags() const { return fFlags; }
 #endif
 
 }
