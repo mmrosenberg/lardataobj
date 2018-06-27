@@ -6,6 +6,9 @@
 
 
 <lcgdict>
+ <class name="raw::RDTimeStamp     " ClassVersion="10"          >
+  <version ClassVersion="10" checksum="2497518507"/>
+ </class>
  <class name="raw::BeamInfo       " ClassVersion="12"           >
   <version ClassVersion="12" checksum="1420893295"/>
   <version ClassVersion="11" checksum="2883012746"/>
@@ -66,6 +69,7 @@
  <class name="art::Wrapper< std::vector<raw::AuxDetDigit>     >"/>
  <class name="art::Wrapper< std::vector<raw::ExternalTrigger> >"/>
  <class name="art::Wrapper< std::vector<raw::Trigger>         >"/>
+ <class name="art::Wrapper< std::vector<raw::RDTimeStamp>     >"/>
 
  <ioread 
     version="[-11]" 

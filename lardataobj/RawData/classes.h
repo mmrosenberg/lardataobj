@@ -16,3 +16,4 @@
 #include "lardataobj/RawData/ExternalTrigger.h"
 #include "lardataobj/RawData/TriggerData.h"
 #include "lardataobj/RawData/OpDetWaveform.h"
+#include "lardataobj/RawData/RDTimeStamp.h"
