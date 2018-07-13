@@ -55,6 +55,9 @@
   <version ClassVersion="11" checksum="1831734181"/>
   <version ClassVersion="10" checksum="1873453733"/>
  </class>
+ <class name="sim::SimDriftedElectronCluster" ClassVersion="10">
+  <version ClassVersion="10" checksum="155859597"/>
+ </class>
  <enum name="sim::BeamType_t"                                      />
  <class name="art::Ptr<sim::SupernovaTruth>"                       />
  <class name="std::pair< art::Ptr<sim::SupernovaTruth>, art::Ptr<simb::MCTruth> >" />
@@ -72,6 +75,7 @@
  <class name="std::vector<sim::BeamGateInfo>" 	    		    	     />
  <class name="std::vector<sim::OpDetBacktrackerRecord>"                      />
  <class name="std::vector<sim::SupernovaTruth>"                    />
+ <class name="std::vector<sim::SimDriftedElectronCluster>"                    />
  <class name="sim::TDCIDE"                                         />
  <class name="std::vector<sim::TDCIDE>"            	               />
  <class name="sim::SDP" />
@@ -86,21 +90,22 @@
  <class name="art::Wrapper< std::vector<sim::AuxDetSimChannel>  >" />
  <class name="art::Wrapper< std::vector<sim::OpDetBacktrackerRecord> >"      />
  <class name="art::Wrapper< std::vector<sim::SupernovaTruth> >"      />
+ <class name="art::Wrapper< std::vector<sim::SimDriftedElectronCluster> >"      />
  <class name="art::Wrapper< art::Assns<sim::SupernovaTruth, simb::MCTruth, void> >" />
  <class name="art::Wrapper< art::Assns<simb::MCTruth, sim::SupernovaTruth, void> >" />
 
 <!-- <class name="ROOT::Math::Cartesian3D<float>" /> -->
 <!-- <class name="ROOT::Math::PositionVector3D<ROOT::Math::Cartesian3D<float>,ROOT::Math::DefaultCoordinateSystemTag>"/> -->
 
- <ioread 
-    version="[-13]" 
-    sourceClass="sim::SimChannel" 
-    source="unsigned short fChannel" 
-    targetClass="sim::SimChannel" 
-    target="fChannel" 
+ <ioread
+    version="[-13]"
+    sourceClass="sim::SimChannel"
+    source="unsigned short fChannel"
+    targetClass="sim::SimChannel"
+    target="fChannel"
     include="lardataobj/Simulation/SimChannel.h">
     <![CDATA[fChannel = onfile.fChannel;]]>
-</ioread> 
+</ioread>
 
   <!-- association: simb::MCParticle to simb::MCTruth, with metadata -->
   <!-- metadata: sim::GeneratedParticleInfo, used in `larg4::LArG4` -->
@@ -109,11 +114,11 @@
   <class name="std::vector<sim::GeneratedParticleInfo>" />
   <class name="art::Assns<simb::MCParticle, simb::MCTruth, sim::GeneratedParticleInfo>" />
   <class name="art::Wrapper<art::Assns<simb::MCParticle, simb::MCTruth, sim::GeneratedParticleInfo>>" />
-    
+
     <!-- simb::MCTruth -> simb::MCParticle -->
   <class name="art::Assns<simb::MCTruth, simb::MCParticle, sim::GeneratedParticleInfo>" />
   <class name="art::Wrapper<art::Assns<simb::MCTruth, simb::MCParticle, sim::GeneratedParticleInfo>>" />
-  
+
   <!-- end association: simb::MCParticle to simb::MCTruth, with metadata -->
 
 
