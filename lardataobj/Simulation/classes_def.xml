@@ -55,7 +55,10 @@
   <version ClassVersion="11" checksum="1831734181"/>
   <version ClassVersion="10" checksum="1873453733"/>
  </class>
- <class name="sim::SimDriftedElectronCluster" ClassVersion="10">
+ <class name="sim::SimDriftedElectronCluster" ClassVersion="13">
+  <version ClassVersion="13" checksum="1286084441"/>
+  <version ClassVersion="12" checksum="1973944804"/>
+  <version ClassVersion="11" checksum="394157494"/>
   <version ClassVersion="10" checksum="155859597"/>
  </class>
  <enum name="sim::BeamType_t"                                      />
