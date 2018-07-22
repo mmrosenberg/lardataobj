@@ -64,14 +64,17 @@ void TestLazyVector_defaultConstructed() {
   BOOST_CHECK_EQUAL(v.get      (6), -6);
   BOOST_CHECK_EQUAL(v.const_get(6), -6);
   BOOST_CHECK_EQUAL(v          [6], -6);
+  BOOST_CHECK_EQUAL(v.data_address(6), &(v[6]));
   
   for (Vector_t::size_type i = 0; i < iBegin; ++i) {
     BOOST_CHECK_EQUAL(v.const_at(i), v.data_defvalue());
     BOOST_CHECK_EQUAL(v.const_get(i), v.data_defvalue());
+    BOOST_CHECK_EQUAL(v.data_address(i), nullptr);
   }
   for (Vector_t::size_type i = iEnd; i < v.size(); ++i) {
     BOOST_CHECK_EQUAL(v.const_at(i), v.data_defvalue());
     BOOST_CHECK_EQUAL(v.const_get(i), v.data_defvalue());
+    BOOST_CHECK_EQUAL(v.data_address(i), nullptr);
   }
   BOOST_CHECK_THROW(v.at(v.size()), std::out_of_range);
   BOOST_CHECK_THROW(v.const_at(v.size()), std::out_of_range);
@@ -100,26 +103,31 @@ void TestLazyVector_defaultConstructed() {
   BOOST_CHECK_EQUAL(v.get      (6U), -6);
   BOOST_CHECK_EQUAL(v.const_get(6U), -6);
   BOOST_CHECK_EQUAL(v          [6U], -6);
+  BOOST_CHECK_EQUAL(v.data_address(6U), &(v[6U]));
   
   BOOST_CHECK_EQUAL(v.at       (7U), v.data_defvalue());
   BOOST_CHECK_EQUAL(v.const_at (7U), v.data_defvalue());
   BOOST_CHECK_EQUAL(v.get      (7U), v.data_defvalue());
   BOOST_CHECK_EQUAL(v.const_get(7U), v.data_defvalue());
   BOOST_CHECK_EQUAL(v          [7U], v.data_defvalue());
+  BOOST_CHECK_EQUAL(v.data_address(7U), &(v[7U]));
   
   BOOST_CHECK_EQUAL(v.at       (8U), -8);
   BOOST_CHECK_EQUAL(v.const_at (8U), -8);
   BOOST_CHECK_EQUAL(v.get      (8U), -8);
   BOOST_CHECK_EQUAL(v.const_get(8U), -8);
   BOOST_CHECK_EQUAL(v          [8U], -8);
+  BOOST_CHECK_EQUAL(v.data_address(8U), &(v[8U]));
   
   for (Vector_t::size_type i = 0; i < iBegin; ++i) {
     BOOST_CHECK_EQUAL(v.const_at(i), v.data_defvalue());
     BOOST_CHECK_EQUAL(v.const_get(i), v.data_defvalue());
+    BOOST_CHECK_EQUAL(v.data_address(i), nullptr);
   }
   for (Vector_t::size_type i = iEnd; i < v.size(); ++i) {
     BOOST_CHECK_EQUAL(v.const_at(i), v.data_defvalue());
     BOOST_CHECK_EQUAL(v.const_get(i), v.data_defvalue());
+    BOOST_CHECK_EQUAL(v.data_address(i), nullptr);
   }
   BOOST_CHECK_THROW(v.at(v.size()), std::out_of_range);
   BOOST_CHECK_THROW(v.const_at(v.size()), std::out_of_range);
@@ -150,38 +158,45 @@ void TestLazyVector_defaultConstructed() {
   BOOST_CHECK_EQUAL(v.get      (4U), -4);
   BOOST_CHECK_EQUAL(v.const_get(4U), -4);
   BOOST_CHECK_EQUAL(v          [4U], -4);
+  BOOST_CHECK_EQUAL(v.data_address(4U), &(v[4U]));
   
   BOOST_CHECK_EQUAL(v.at       (5U), v.data_defvalue());
   BOOST_CHECK_EQUAL(v.const_at (5U), v.data_defvalue());
   BOOST_CHECK_EQUAL(v.get      (5U), v.data_defvalue());
   BOOST_CHECK_EQUAL(v.const_get(5U), v.data_defvalue());
   BOOST_CHECK_EQUAL(v          [5U], v.data_defvalue());
+  BOOST_CHECK_EQUAL(v.data_address(5U), &(v[5U]));
   
   BOOST_CHECK_EQUAL(v.at       (6U), -6);
   BOOST_CHECK_EQUAL(v.const_at (6U), -6);
   BOOST_CHECK_EQUAL(v.get      (6U), -6);
   BOOST_CHECK_EQUAL(v.const_get(6U), -6);
   BOOST_CHECK_EQUAL(v          [6U], -6);
+  BOOST_CHECK_EQUAL(v.data_address(6U), &(v[6U]));
   
   BOOST_CHECK_EQUAL(v.at       (7U), v.data_defvalue());
   BOOST_CHECK_EQUAL(v.const_at (7U), v.data_defvalue());
   BOOST_CHECK_EQUAL(v.get      (7U), v.data_defvalue());
   BOOST_CHECK_EQUAL(v.const_get(7U), v.data_defvalue());
   BOOST_CHECK_EQUAL(v          [7U], v.data_defvalue());
+  BOOST_CHECK_EQUAL(v.data_address(7U), &(v[7U]));
   
   BOOST_CHECK_EQUAL(v.at       (8U), -8);
   BOOST_CHECK_EQUAL(v.const_at (8U), -8);
   BOOST_CHECK_EQUAL(v.get      (8U), -8);
   BOOST_CHECK_EQUAL(v.const_get(8U), -8);
   BOOST_CHECK_EQUAL(v          [8U], -8);
+  BOOST_CHECK_EQUAL(v.data_address(8U), &(v[8U]));
   
   for (Vector_t::size_type i = 0; i < iBegin; ++i) {
     BOOST_CHECK_EQUAL(v.const_at(i), v.data_defvalue());
     BOOST_CHECK_EQUAL(v.const_get(i), v.data_defvalue());
+    BOOST_CHECK_EQUAL(v.data_address(i), nullptr);
   }
   for (Vector_t::size_type i = iEnd; i < v.size(); ++i) {
     BOOST_CHECK_EQUAL(v.const_at(i), v.data_defvalue());
     BOOST_CHECK_EQUAL(v.const_get(i), v.data_defvalue());
+    BOOST_CHECK_EQUAL(v.data_address(i), nullptr);
   }
   BOOST_CHECK_THROW(v.at(v.size()), std::out_of_range);
   BOOST_CHECK_THROW(v.const_at(v.size()), std::out_of_range);
@@ -210,32 +225,38 @@ void TestLazyVector_defaultConstructed() {
   BOOST_CHECK_EQUAL(v.get      (4U), -4);
   BOOST_CHECK_EQUAL(v.const_get(4U), -4);
   BOOST_CHECK_EQUAL(v          [4U], -4);
-  
+  BOOST_CHECK_EQUAL(v.data_address(4U), &(v[4U]));
+
   BOOST_CHECK_EQUAL(v.at       (5U), v.data_defvalue());
   BOOST_CHECK_EQUAL(v.const_at (5U), v.data_defvalue());
   BOOST_CHECK_EQUAL(v.get      (5U), v.data_defvalue());
   BOOST_CHECK_EQUAL(v.const_get(5U), v.data_defvalue());
   BOOST_CHECK_EQUAL(v          [5U], v.data_defvalue());
+  BOOST_CHECK_EQUAL(v.data_address(5U), &(v[5U]));
   
   BOOST_CHECK_EQUAL(v.at       (6U), -6);
   BOOST_CHECK_EQUAL(v.const_at (6U), -6);
   BOOST_CHECK_EQUAL(v.get      (6U), -6);
   BOOST_CHECK_EQUAL(v.const_get(6U), -6);
   BOOST_CHECK_EQUAL(v          [6U], -6);
+  BOOST_CHECK_EQUAL(v.data_address(6U), &(v[6U]));
   
   BOOST_CHECK_EQUAL(v.at       (7U), v.data_defvalue());
   BOOST_CHECK_EQUAL(v.const_at (7U), v.data_defvalue());
   BOOST_CHECK_EQUAL(v.get      (7U), v.data_defvalue());
   BOOST_CHECK_EQUAL(v.const_get(7U), v.data_defvalue());
   BOOST_CHECK_EQUAL(v          [7U], v.data_defvalue());
+  BOOST_CHECK_EQUAL(v.data_address(7U), &(v[7U]));
   
   for (Vector_t::size_type i = 0; i < iBegin; ++i) {
     BOOST_CHECK_EQUAL(v.const_at(i), v.data_defvalue());
     BOOST_CHECK_EQUAL(v.const_get(i), v.data_defvalue());
+    BOOST_CHECK_EQUAL(v.data_address(i), nullptr);
   }
   for (Vector_t::size_type i = iEnd; i < v.size(); ++i) {
     BOOST_CHECK_EQUAL(v.const_at(i), v.data_defvalue());
     BOOST_CHECK_EQUAL(v.const_get(i), v.data_defvalue());
+    BOOST_CHECK_EQUAL(v.data_address(i), nullptr);
   }
   BOOST_CHECK_THROW(v.at(v.size()), std::out_of_range);
   BOOST_CHECK_THROW(v.const_at(v.size()), std::out_of_range);
@@ -263,32 +284,38 @@ void TestLazyVector_defaultConstructed() {
   BOOST_CHECK_EQUAL(v.get      (4U), -4);
   BOOST_CHECK_EQUAL(v.const_get(4U), -4);
   BOOST_CHECK_EQUAL(v          [4U], -4);
+  BOOST_CHECK_EQUAL(v.data_address(4U), &(v[4U]));
   
   BOOST_CHECK_EQUAL(v.at       (5U), v.data_defvalue());
   BOOST_CHECK_EQUAL(v.const_at (5U), v.data_defvalue());
   BOOST_CHECK_EQUAL(v.get      (5U), v.data_defvalue());
   BOOST_CHECK_EQUAL(v.const_get(5U), v.data_defvalue());
   BOOST_CHECK_EQUAL(v          [5U], v.data_defvalue());
+  BOOST_CHECK_EQUAL(v.data_address(5U), &(v[5U]));
   
   BOOST_CHECK_EQUAL(v.at       (6U), -6);
   BOOST_CHECK_EQUAL(v.const_at (6U), -6);
   BOOST_CHECK_EQUAL(v.get      (6U), -6);
   BOOST_CHECK_EQUAL(v.const_get(6U), -6);
   BOOST_CHECK_EQUAL(v          [6U], -6);
+  BOOST_CHECK_EQUAL(v.data_address(6U), &(v[6U]));
   
   BOOST_CHECK_EQUAL(v.at       (7U), v.data_defvalue());
   BOOST_CHECK_EQUAL(v.const_at (7U), v.data_defvalue());
   BOOST_CHECK_EQUAL(v.get      (7U), v.data_defvalue());
   BOOST_CHECK_EQUAL(v.const_get(7U), v.data_defvalue());
   BOOST_CHECK_EQUAL(v          [7U], v.data_defvalue());
+  BOOST_CHECK_EQUAL(v.data_address(7U), &(v[7U]));
   
   for (Vector_t::size_type i = 0; i < iBegin; ++i) {
     BOOST_CHECK_EQUAL(v.const_at(i), v.data_defvalue());
     BOOST_CHECK_EQUAL(v.const_get(i), v.data_defvalue());
+    BOOST_CHECK_EQUAL(v.data_address(i), nullptr);
   }
   for (Vector_t::size_type i = iEnd; i < v.size(); ++i) {
     BOOST_CHECK_EQUAL(v.const_at(i), v.data_defvalue());
     BOOST_CHECK_EQUAL(v.const_get(i), v.data_defvalue());
+    BOOST_CHECK_EQUAL(v.data_address(i), nullptr);
   }
   BOOST_CHECK_THROW(v.at(v.size()), std::out_of_range);
   BOOST_CHECK_THROW(v.const_at(v.size()), std::out_of_range);
@@ -313,10 +340,12 @@ void TestLazyVector_defaultConstructed() {
   for (Vector_t::size_type i = 0; i < iBegin; ++i) {
     BOOST_CHECK_EQUAL(v.const_at(i), v.data_defvalue());
     BOOST_CHECK_EQUAL(v.const_get(i), v.data_defvalue());
+    BOOST_CHECK_EQUAL(v.data_address(i), nullptr);
   }
   for (Vector_t::size_type i = iEnd; i < v.size(); ++i) {
     BOOST_CHECK_EQUAL(v.const_at(i), v.data_defvalue());
     BOOST_CHECK_EQUAL(v.const_get(i), v.data_defvalue());
+    BOOST_CHECK_EQUAL(v.data_address(i), nullptr);
   }
   BOOST_CHECK_THROW(v.at(v.size()), std::out_of_range);
   BOOST_CHECK_THROW(v.const_at(v.size()), std::out_of_range);

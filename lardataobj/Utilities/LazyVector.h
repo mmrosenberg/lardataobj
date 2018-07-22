@@ -169,6 +169,18 @@ namespace util {
     bool data_has_index(size_type pos) const
       { return (pos >= data_begin_index()) && (pos < data_end_index()); }
     
+    /**
+     * @brief Returns a constant pointer to the specified element.
+     * @param pos position of the element
+     * @return pointer to storage for specified element, `nullptr` if not stored
+     * 
+     * If `pos` represents an element that has storage, the pointer to that
+     * element is returned. If instead `pos` represents a valid element with no
+     * storage (default value), `nullptr` is returned.
+     * If `pos` does not represent a valid element, the result is undefined.
+     */
+    const_pointer data_address(size_type pos) const;
+    
     /// @}
     // --- END Container information -------------------------------------------
     
@@ -318,6 +330,9 @@ namespace util {
     
     /// Removes all stored data and sets the nominal size to 0.
     void clear();
+    
+    /// Reduces memory usage to the amount needed by the elements with storage.
+    void shrink_to_fit() { storage().shrink_to_fit(); }
     
     /// @}
     // --- END Container operations --------------------------------------------
@@ -479,6 +494,25 @@ typename util::LazyVector<T,A>::value_type util::LazyVector<T,A>::operator[]
   auto const index = index_of(pos);
   return (index < data_size())? storage()[index]: data_defvalue();
 } // util::LazyVector<T,A>::operator[] () const
+
+
+//------------------------------------------------------------------------------
+template <typename T, typename A /* = std::vector<T>::allocator_type */>
+typename util::LazyVector<T,A>::const_pointer
+util::LazyVector<T,A>::data_address(size_type pos) const
+{
+  /*
+   * Behaviour summary:
+   * * if `pos` is out of vector range, behaviour is undefined
+   * * if element at `pos` has no storage, return nullptr
+   * * otherwise, return the pointer to the specified element
+   */
+  // this implementation will return nullptr if `pos` is out of range;
+  // this is not a requirement, and may change at any time.
+  if (pos < data_begin_index()) return nullptr;
+  auto const index = index_of(pos);
+  return (index < data_size())? storage().data() + index: nullptr;
+} // util::LazyVector<T,A>::data_address()
 
 
 //------------------------------------------------------------------------------
