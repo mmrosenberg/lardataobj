@@ -22,3 +22,4 @@
 #include "lardataobj/Simulation/AuxDetSimChannel.h"
 #include "lardataobj/Simulation/SupernovaTruth.h"
 #include "lardataobj/Simulation/GeneratedParticleInfo.h"
+#include "lardataobj/Simulation/SimDriftedElectronCluster.h"
