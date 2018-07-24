@@ -400,7 +400,7 @@ namespace util {
       { static constexpr T value { 0 }; };
     
     template <typename T>
-    const auto DefaultValue_v = DefaultValueType<T>::value;
+    auto const& DefaultValue_v = DefaultValueType<T>::value;
     
     
     
