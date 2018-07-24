@@ -104,7 +104,21 @@ namespace util {
     
     /// Constructor: like default, but using the specified allocator.
     LazyVector(allocator_type const& a);
-    
+   
+     
+    /**
+     * @brief Constructor: a lazy vector with a specified maximum size.
+     * @param n the initial maximum size of the vector
+     * 
+     * @note This constructor is essentially different from the one of STL
+     *       vector with the same signature.
+     *
+     * The vector is set to a nominal size of `n`, with _no stored data_.
+     *
+     * The default value of vector elements is the default-constructed `T`
+     * value, as returned by `defaultValueType()`.
+     */
+    LazyVector(size_type n);
     
     /**
      * @brief Constructor: a lazy vector with a specified maximum size.
@@ -127,7 +141,8 @@ namespace util {
      * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
      * will print something like: "Default element [1]: 5".
      */
-    LazyVector(size_type n, value_type const& defValue = defaultValueType());
+    LazyVector(size_type n, value_type const& defValue);
+
     
     /// --- END Constructors -------------------------------------------------
     
@@ -417,8 +432,14 @@ util::LazyVector<T,A>::LazyVector(allocator_type const& a)
 
 //------------------------------------------------------------------------------
 template <typename T, typename A /* = std::vector<T>::allocator_type */>
-util::LazyVector<T,A>::LazyVector
-  (size_type n, value_type const& defValue /* = defaultValueType() */)
+util::LazyVector<T,A>::LazyVector(size_type n)
+  : LazyVector(n, defaultValueType())
+  {}
+
+
+//------------------------------------------------------------------------------
+template <typename T, typename A /* = std::vector<T>::allocator_type */>
+util::LazyVector<T,A>::LazyVector(size_type n, value_type const& defValue)
   : fNominalSize(n)
   , fDefValue(defValue)
   {}
