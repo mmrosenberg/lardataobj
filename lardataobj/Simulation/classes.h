@@ -22,11 +22,7 @@
 #include "lardataobj/Simulation/AuxDetSimChannel.h"
 #include "lardataobj/Simulation/SupernovaTruth.h"
 #include "lardataobj/Simulation/GeneratedParticleInfo.h"
-// This line is from Jose Soto dated 2018-07-13
-//#include "lardataobj/Simulation/SimDriftedElectronCluster.h"
-// These two lines are from Hans Wenzel dated 2018-06-20
-// Template the wrapper for the vector (typedef okay)
-//template class art::Wrapper< sim::SimEnergyDepositCollection >;
-// Try picking the include first
 #include "lardataobj/Simulation/SimDriftedElectronCluster.h"
+// Template the wrapper for the vector (typedef okay)
+template class art::Wrapper< sim::SimEnergyDepositCollection >;
 
