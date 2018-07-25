@@ -22,58 +22,58 @@
 namespace util {
   
   /**
-  * @brief A contiguous data container expanded on write.
-  * @tparam T type of contained data
-  * @tparam A allocator for the data (default: STL vector's default allocator)
-  * 
-  * This container class represents a number of data elements contiguously
-  * allocated in memory.
-  * It mimics the behaviour and interface of STL vector, but the actual data
-  * allocation is lazy, that is it happens only when writing to an element is
-  * requested. The internal allocation is always contiguous, including as little
-  * data as it can accommodate elements from the first to the last index written
-  * at any point.
-  * 
-  * The interface is also a partial replica of STL vector, with the addition of
-  * members specific to this class, whose names start with `data_`.
-  * Among the relevant features missing from this object there is iterators.
-  * 
-  * For some internal resizing operations, a default value is used to construct
-  * the new values. This default value can be specified in some constructors,
-  * Otherwise, a value equivalent to `0` (i.e. `value_type(0)`) is used for
-  * arithmetic value types, and the default-constructed value is used for all
-  * other types.
-  * 
-  * Example of usage:
-  * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
-  * // start with a lazy vector of nominal size 6 elements and no actual data:
-  * util::LazyVector<double> v(6U);
-  * 
-  * // add a value `-4.0` at the previous-to-last element `4`:
-  * // the vector will look like: { ... [4] -4.0 ... }
-  * // (nominal size: 6, 1 stored datum)
-  * v[4] = -4.0;
-  * 
-  * // add a value `-2.0` at the third element:
-  * // the vector will look like: { ... [2] -2.0, [3] def, [4] -4.0 ... }
-  * // (nominal size still 6, 3 stored data, the default value "def" is 0.0)
-  * v[2] = -2.0;
-  * 
-  * // we want to set element #6 to -6.0: we need to expand the vector first.
-  * v.resize(7U); // barely enough for element #6
-  * // the vector will look like: { ... [2] -2.0, [3] def, [4] -4.0 [5] def [6] -6.0 }
-  * // (nominal size 7, 5 stored data, the default value "def" is 0.0)
-  * v[6] = -6.0;
-  * 
-  * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  * 
-  * @note Special care needs to be used when accessing a non-const `LazyVector`,
-  *       since every access will create storage for the specified element
-  *       (like in STL map `operator[]`).
-  *       For this reason, the special methods `const_at(size_type)` and
-  *       `const_get(size_type)` are provided, which never create storage.
-  * 
-  */
+   * @brief A contiguous data container expanded on write.
+   * @tparam T type of contained data
+   * @tparam A allocator for the data (default: STL vector's default allocator)
+   * 
+   * This container class represents a number of data elements contiguously
+   * allocated in memory.
+   * It mimics the behaviour and interface of STL vector, but the actual data
+   * allocation is lazy, that is it happens only when writing to an element is
+   * requested. The internal allocation is always contiguous, including as little
+   * data as it can accommodate elements from the first to the last index written
+   * at any point.
+   * 
+   * The interface is also a partial replica of STL vector, with the addition of
+   * members specific to this class, whose names start with `data_`.
+   * Among the relevant features missing from this object there is iterators.
+   * 
+   * For some internal resizing operations, a default value is used to construct
+   * the new values. This default value can be specified in some constructors,
+   * Otherwise, a value equivalent to `0` (i.e. `value_type(0)`) is used for
+   * arithmetic value types, and the default-constructed value is used for all
+   * other types.
+   * 
+   * Example of usage:
+   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+   * // start with a lazy vector of nominal size 6 elements and no actual data:
+   * util::LazyVector<double> v(6U);
+   * 
+   * // add a value `-4.0` at the previous-to-last element `4`:
+   * // the vector will look like: { ... [4] -4.0 ... }
+   * // (nominal size: 6, 1 stored datum)
+   * v[4] = -4.0;
+   * 
+   * // add a value `-2.0` at the third element:
+   * // the vector will look like: { ... [2] -2.0, [3] def, [4] -4.0 ... }
+   * // (nominal size still 6, 3 stored data, the default value "def" is 0.0)
+   * v[2] = -2.0;
+   * 
+   * // we want to set element #6 to -6.0: we need to expand the vector first.
+   * v.resize(7U); // barely enough for element #6
+   * // the vector will look like: { ... [2] -2.0, [3] def, [4] -4.0 [5] def [6] -6.0 }
+   * // (nominal size 7, 5 stored data, the default value "def" is 0.0)
+   * v[6] = -6.0;
+   * 
+   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   * 
+   * @note Special care needs to be used when accessing a non-const `LazyVector`,
+   *       since every access will create storage for the specified element
+   *       (like in STL map `operator[]`).
+   *       For this reason, the special methods `const_at(size_type)` and
+   *       `const_get(size_type)` are provided, which never create storage.
+   * 
+   */
   template <typename T, typename A = typename std::vector<T>::allocator_type>
   class LazyVector {
     
@@ -359,8 +359,8 @@ namespace util {
     size_type fFirstIndex = fData.max_size();  ///< First element currently stored.
     value_type fDefValue = defaultValueType(); ///< Default value.
     
-    /// Returns a default-initialised value of type `value_type`.
-    static value_type defaultValueType();
+    /// Default-initialised value of type `value_type` used as default fallback.
+    static value_type const fDefaultDefaultValue;
     
     //@{
     /// Returns the data storage.
@@ -392,6 +392,11 @@ namespace util {
     /// Throws `std::out_of_range` if `pos` is not contained in the vector.
     void check_range(size_type pos) const;
     
+    
+    /// Returns the class default value (used when user does not specify any).
+    static value_type const& defaultValueType() { return fDefaultDefaultValue; } 
+    
+    
   }; // LazyVector<>
 
 } // namespace util
@@ -400,27 +405,9 @@ namespace util {
 //------------------------------------------------------------------------------
 //---  template implementation
 //------------------------------------------------------------------------------
-namespace util {
-  namespace details {
-    
-    /// Default-constructed object, or `T(0)` if numerical.
-    template <typename T, typename = void>
-    struct DefaultValueType { static const T value; };
-    
-    template <typename T, typename E /* = void */>
-    const T DefaultValueType<T, E>::value;
-    
-    template <typename T>
-    struct DefaultValueType<T, std::enable_if_t<std::is_arithmetic<T>::value>>
-      { static constexpr T value { 0 }; };
-    
-    template <typename T>
-    auto const& DefaultValue_v = DefaultValueType<T>::value;
-    
-    
-    
-  } // namespace details
-} // namespace util
+template <typename T, typename A /* = std::vector<T>::allocator_type */>
+typename util::LazyVector<T,A>::value_type const
+util::LazyVector<T,A>::fDefaultDefaultValue{};
 
 
 //------------------------------------------------------------------------------
@@ -562,13 +549,6 @@ void util::LazyVector<T,A>::clear() {
   data_clear();
   fNominalSize = 0U;
 } // util::LazyVector<T,A>::clear()
-
-
-//------------------------------------------------------------------------------
-template <typename T, typename A /* = std::vector<T>::allocator_type */>
-typename util::LazyVector<T,A>::value_type
-util::LazyVector<T,A>::defaultValueType()
-  { return util::details::DefaultValue_v<T>; }
 
 
 //------------------------------------------------------------------------------
