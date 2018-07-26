@@ -49,7 +49,8 @@ namespace sim
 
     // Define the types for the private members below. 
     using Length_t = float;
-    using Point_t = ROOT::Math::PositionVector3D< ROOT::Math::Cartesian3D<Length_t> >;
+    //using Point_t = ROOT::Math::PositionVector3D< ROOT::Math::Cartesian3D<Length_t> >;
+    using Point_t = geo::Point_t;
 
     // Since we're using LArSoft geometry types, the typical way to
     // construct a SimEnergyDeposit might be:
