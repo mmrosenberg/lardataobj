@@ -31,9 +31,9 @@ namespace sim {
    * The provided information is currently:
    * * index of the generated particle within the generator record; the particle
    *   itself can be obtained as:
-   *     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
-   *     mctruthPtr->GetParticle(genParticleInfo.generatedParticleIndex());
-   *     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   *   @code{.cpp}
+   *   mctruthPtr->GetParticle(genParticleInfo.generatedParticleIndex());
+   *   @endcode
    * 
    */
   class GeneratedParticleInfo {
