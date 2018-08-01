@@ -11,34 +11,48 @@
 
 
 #include <iosfwd>
-#include <vector>
-
+#include "lardataobj/RecoBase/TrackingTypes.h"
 
 namespace recob {
-
+  
   class Slice  {
+
+    using Point_t = tracking::Point_t;
+    using Vector_t  = tracking::Vector_t;
 
   public:
     Slice(); // Needed to hide constexpr from GCCXML.
 
-  private:
+    Slice(int id, Point_t center, Vector_t direction, Point_t end0Pos, Point_t end1Pos, float aspectratio, float charge)
+    : fID(id), fCenter(center), fDirection(direction), fEnd0Pos(end0Pos), fEnd1Pos(end1Pos), fAspectRatio(aspectratio), fCharge(charge)
+    {}
 
-    int                  fID;           ///< id for this slice
-    float                fAspectRatio;  ///< absolute value of the linear correlation coefficient (0 = round blob, 1 = line)
+    int       ID() const { return fID; }
+    Point_t   Center() const { return fCenter; }
+    Vector_t  Direction() const { return fDirection; }
+    Point_t   End0Pos() const { return fEnd0Pos; }
+    Point_t   End1Pos() const { return fEnd1Pos; }
+    float     AspectRatio() const { return fAspectRatio; }
+    float     Charge() const { return fCharge; }
 
-  public:
-    explicit Slice(int id, float aspectratio);
-
-    int                  ID()            const;
-    float                AspectRatio()   const;
     void                 SetID(const int id) { fID = id;}
+    void                 SetCenter(const Point_t center) { fCenter = center;}
+    void                 SetDirection(const Vector_t direction) { fDirection = direction;}
+    void                 SetEnd0Pos(const Point_t endpos) {fEnd0Pos = endpos;}
+    void                 SetEnd1Pos(const Point_t endpos) {fEnd1Pos = endpos;}
     void                 SetAspectRatio(const float aspectratio) {fAspectRatio = aspectratio;}
+    void                 SetCharge(const float charge) {fCharge = charge;}
+
+  private:
+    
+    int       fID;           ///< id for this slice
+    Point_t   fCenter;       ///< Center of the slice for flash matching
+    Vector_t  fDirection;    ///< direction from a linear fit 
+    Point_t   fEnd0Pos;      ///< Position of a SpacePoint at one end of the slice
+    Point_t   fEnd1Pos;      ///< Position of the other end
+    float     fAspectRatio;  ///< absolute value of the linear correlation coefficient (0 = round blob, 1 = line)
+    float     fCharge;
 
   };
 }
-
-
-inline int   recob::Slice::ID()          const { return fID; }
-inline float recob::Slice::AspectRatio() const { return fAspectRatio; }
-
 #endif // RB_SLICE_H

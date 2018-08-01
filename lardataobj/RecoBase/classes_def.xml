@@ -101,7 +101,8 @@
   <version ClassVersion="13" checksum="1229739518"/>
   <version ClassVersion="12" checksum="1317803878"/>
  </class>
- <class name="recob::Slice"            ClassVersion="12"                   >
+ <class name="recob::Slice"            ClassVersion="13"                   >
+  <version ClassVersion="13" checksum="2291287429"/>
   <version ClassVersion="12" checksum="2320421270"/>
  </class>
  <class name="recob::Event"            ClassVersion="11"                   >
@@ -174,11 +175,13 @@
  <class name="std::pair< art::Ptr<recob::EndPoint2D>, art::Ptr<recob::Cluster>    >" />
  <class name="std::pair< art::Ptr<recob::EndPoint2D>, art::Ptr<recob::Hit>        >" />
  <class name="std::pair< art::Ptr<recob::Slice>,      art::Ptr<recob::Hit>        >" />
+ <class name="std::pair< art::Ptr<recob::Slice>,      art::Ptr<recob::SpacePoint> >" />
  <class name="std::pair< art::Ptr<recob::Event>,      art::Ptr<recob::Hit>        >" />
  <class name="std::pair< art::Ptr<recob::Event>,      art::Ptr<recob::Vertex>     >" />
  <class name="std::pair< art::Ptr<recob::Hit>,        art::Ptr<recob::Cluster>    >" />
  <class name="std::pair< art::Ptr<recob::Hit>,        art::Ptr<recob::EndPoint2D> >" />
  <class name="std::pair< art::Ptr<recob::Hit>,        art::Ptr<recob::Slice>      >" />
+ <class name="std::pair< art::Ptr<recob::SpacePoint>, art::Ptr<recob::Slice>      >" />
  <class name="std::pair< art::Ptr<recob::Hit>,        art::Ptr<recob::Event>      >" />
  <class name="std::pair< art::Ptr<recob::Hit>,        art::Ptr<recob::Seed>       >" />
  <class name="std::pair< art::Ptr<recob::Hit>,        art::Ptr<recob::Shower>     >" />
@@ -229,12 +232,14 @@
  <class name="art::Assns<recob::EndPoint2D, recob::Cluster,    void>"           />
  <class name="art::Assns<recob::EndPoint2D, recob::Cluster,    unsigned short>" />
  <class name="art::Assns<recob::Slice,      recob::Hit,        void          >" />
+ <class name="art::Assns<recob::Slice,      recob::SpacePoint, void          >" />
  <class name="art::Assns<recob::Event,      recob::Hit,        void          >" />
  <class name="art::Assns<recob::Event,      recob::Vertex,     void          >" />
  <class name="art::Assns<recob::Hit,        raw::RawDigit,     void          >" />
  <class name="art::Assns<recob::Hit,        recob::Cluster,    void          >" />
  <class name="art::Assns<recob::Hit,        recob::EndPoint2D, void          >" />
  <class name="art::Assns<recob::Hit,        recob::Slice,      void          >" />
+ <class name="art::Assns<recob::SpacePoint, recob::Slice,      void          >" />
  <class name="art::Assns<recob::Hit,        recob::Event,      void          >" />
  <class name="art::Assns<recob::Hit,        recob::Seed,       void          >" />
  <class name="art::Assns<recob::Hit,        recob::Shower,     void          >" />
@@ -340,12 +345,14 @@
  <class name="art::Wrapper< art::Assns<recob::EndPoint2D, recob::Cluster,    void          > >" />
  <class name="art::Wrapper< art::Assns<recob::EndPoint2D, recob::Cluster,    unsigned short> >" />
  <class name="art::Wrapper< art::Assns<recob::Slice,      recob::Hit,        void          > >" />
+ <class name="art::Wrapper< art::Assns<recob::Slice,      recob::SpacePoint, void          > >" />
  <class name="art::Wrapper< art::Assns<recob::Event,      recob::Hit,        void          > >" />
  <class name="art::Wrapper< art::Assns<recob::Event,      recob::Vertex,     void          > >" />
  <class name="art::Wrapper< art::Assns<recob::Hit,        raw::RawDigit,     void          > >" />
  <class name="art::Wrapper< art::Assns<recob::Hit,        recob::Cluster,    void          > >" />
  <class name="art::Wrapper< art::Assns<recob::Hit,        recob::EndPoint2D, void          > >" />
  <class name="art::Wrapper< art::Assns<recob::Hit,        recob::Slice,      void          > >" />
+ <class name="art::Wrapper< art::Assns<recob::SpacePoint, recob::Slice,      void          > >" />
  <class name="art::Wrapper< art::Assns<recob::Hit,        recob::Event,      void          > >" />
  <class name="art::Wrapper< art::Assns<recob::Hit,        recob::Seed,       void          > >" />
  <class name="art::Wrapper< art::Assns<recob::Hit,        recob::Shower,     void          > >" />
