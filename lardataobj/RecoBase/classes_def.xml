@@ -196,6 +196,7 @@
  <class name="std::pair< art::Ptr<recob::PFParticle>, art::Ptr<recob::Shower>     >" />
  <class name="std::pair< art::Ptr<recob::PFParticle>, art::Ptr<recob::SpacePoint> >" />
  <class name="std::pair< art::Ptr<recob::PFParticle>, art::Ptr<recob::Vertex>     >" />
+ <class name="std::pair< art::Ptr<recob::PFParticle>, art::Ptr<recob::Slice>      >" />
  <class name="std::pair< art::Ptr<recob::Seed>,       art::Ptr<recob::Hit>        >" />
  <class name="std::pair< art::Ptr<recob::Seed>,       art::Ptr<recob::PFParticle> >" />
  <class name="std::pair< art::Ptr<recob::Shower>,     art::Ptr<recob::Cluster>    >" />
@@ -255,6 +256,7 @@
  <class name="art::Assns<recob::PFParticle, recob::Shower,     void          >" />
  <class name="art::Assns<recob::PFParticle, recob::SpacePoint, void          >" />
  <class name="art::Assns<recob::PFParticle, recob::Vertex,     void          >" />
+ <class name="art::Assns<recob::PFParticle, recob::Slice,      void          >" />
  <class name="art::Assns<recob::Seed,       recob::Hit,        void          >" />
  <class name="art::Assns<recob::Seed,       recob::PFParticle, void          >" />
  <class name="art::Assns<recob::Shower,     recob::Cluster,    void          >" />
@@ -368,6 +370,7 @@
  <class name="art::Wrapper< art::Assns<recob::PFParticle, recob::Shower,     void          > >" />
  <class name="art::Wrapper< art::Assns<recob::PFParticle, recob::SpacePoint, void          > >" />
  <class name="art::Wrapper< art::Assns<recob::PFParticle, recob::Vertex,     void          > >" />
+ <class name="art::Wrapper< art::Assns<recob::PFParticle, recob::Slice,      void          > >" />
  <class name="art::Wrapper< art::Assns<recob::Seed,       recob::Hit,        void          > >" />
  <class name="art::Wrapper< art::Assns<recob::Seed,       recob::PFParticle, void          > >" />
  <class name="art::Wrapper< art::Assns<recob::Shower,     recob::Cluster,    void          > >" />
