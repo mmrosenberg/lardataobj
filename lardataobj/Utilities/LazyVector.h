@@ -332,6 +332,7 @@ namespace util {
     /**
      * @brief Allocates enough memory in storage to store `n` elements.
      * @param n number of elements to have storage for
+     * @see `data_prepare()`
      * 
      * Storage allocation is resized to be able to host at least `n` elements
      * (it is not reduced).
@@ -340,6 +341,9 @@ namespace util {
      * when extending the vector. In this case, after a call to `reserve(n)` the
      * reallocation is avoided only as long as only the elements from
      * `data_begin_index()` to `data_begin_index() + n` (excluded) are written.
+     *
+     * Note that `data_prepare()` has a similar purpose and might be more
+     * effective.
      */
     void reserve(size_type n) { storage().reserve(n); }
     
@@ -348,6 +352,76 @@ namespace util {
     
     /// Reduces memory usage to the amount needed by the elements with storage.
     void shrink_to_fit() { storage().shrink_to_fit(); }
+   
+    /**
+     * @brief Prepares the vector to store elements in the specified range.
+     * @param startIndex index of the first element to be stored
+     * @param endIndex index after the last element to be stored
+     * @see `data_prepare(size_type)`
+     *
+     * This method sets the lower index to `startIndex`, and allocates enough
+     * storage to store the whole requested range.
+     * The elements are not initialized or constructed, but 
+     * Following access to elements in the specified range will not cause
+     * memory reallocation, and that holds until an access outside that range
+     * happens, after which all bets are off.
+     *
+     * **Old data is lost.**
+     *
+     * @note The nominal size of the vector is not changed, therefore the
+     *       specified range might be not honored. If used in combination with
+     *       `resize()`, `resize()` should be called first.
+     */
+    void data_prepare(size_type startIndex, size_type endIndex);
+
+    /**
+     * @brief Prepares the vector to store `n` elements from `0`.
+     * @param n number of elements to prepare storage for
+     * @see `data_prepare(size_type, size_type)`
+     *
+     * This method reserves storage for `n` elements starting with the element
+     * #0. 
+     *
+     * **Old data is lost.**
+     *
+     * See `data_prepare(size_type, size_type)` for more information.
+     */
+    void data_prepare(size_type n) { data_prepare(0U, n); }
+    
+    /**
+     * @brief Allocates the specified range and stores default values for it.
+     * @param startIndex index of the first element to be initialized
+     * @param endIndex index after the last element to be initialized
+     *
+     * Each element in the range from `startIndex` to `endIndex` is stored and
+     * the default value is assigned to it.
+     *
+     * **Old data is lost.**
+     *
+     * @note The nominal size of the vector is not changed, therefore the
+     *       specified range might be not honored. If used in combination with
+     *       `resize()`, `resize()` should be called first.
+     */
+    void data_init(size_type startIndex, size_type endIndex);
+    
+    /**
+     * @brief Allocates and initializes `n` elements starting from index 0.
+     * @param n number of elements to be initialized
+     *
+     * Each element in the range from `0` to `n` is stored and
+     * the default value is assigned to it.
+     * This is semantically similar to `std::vector::resize(n, data_defvalue()`,
+     * except that this method does not change the nominal size of the vector.
+     *
+     * **Old data is lost.**
+     *
+     * @note The nominal size of the vector is not changed, therefore the
+     *       specified range might be not honored. If used in combination with
+     *       `resize()`, `resize()` should be called first.
+     */
+    void data_init(size_type n) { data_init(0U, n); }
+
+
     
     /// @}
     // --- END Container operations --------------------------------------------
@@ -549,6 +623,38 @@ void util::LazyVector<T,A>::clear() {
   data_clear();
   fNominalSize = 0U;
 } // util::LazyVector<T,A>::clear()
+
+
+//------------------------------------------------------------------------------
+template <typename T, typename A /* = std::vector<T>::allocator_type */>
+void util::LazyVector<T,A>::data_prepare
+  (size_type startIndex, size_type endIndex)
+{
+  // we do not go beyond the declared size of the vector:
+  size_type const e = std::min(endIndex, size()); 
+  if (startIndex >= e) return;
+  
+  data_clear(); // remove the old data
+  storage().reserve(e - startIndex);
+  fFirstIndex = startIndex;
+  
+} // util::LazyVector<T,A>::data_prepare(size_type, size_type)
+
+
+//------------------------------------------------------------------------------
+template <typename T, typename A /* = std::vector<T>::allocator_type */>
+void util::LazyVector<T,A>::data_init
+  (size_type startIndex, size_type endIndex)
+{
+  // we do not go beyond the declared size of the vector:
+  size_type const e = std::min(endIndex, size()); 
+  if (startIndex >= e) return;
+  
+  data_clear(); // remove the old data
+  storage().resize(e - startIndex, data_defvalue());
+  fFirstIndex = startIndex;
+  
+} // util::LazyVector<T,A>::data_init(size_type, size_type)
 
 
 //------------------------------------------------------------------------------
