@@ -13,12 +13,15 @@
   <version ClassVersion="12" checksum="124883757"/>
   <version ClassVersion="11" checksum="1948463887"/>
  </class>
- <class name="sim::SimEnergyDeposit"         ClassVersion="16">
+ <class name="sim::SimEnergyDeposit"         ClassVersion="17">
+  <version ClassVersion="17" checksum="51950964"/>
   <version ClassVersion="16" checksum="2652853768"/>
   <version ClassVersion="15" checksum="2953985021"/>
   <version ClassVersion="14" checksum="933111578"/>
   <version ClassVersion="13" checksum="671029830"/>
  </class>
+ <class name="std::vector< sim::SimEnergyDeposit >"/>
+ <class name="art::Wrapper< std::vector< sim::SimEnergyDeposit> >"/>
  <class name="sim::SimPhotonsLite"           ClassVersion="10">
   <version ClassVersion="10" checksum="4093907155"/>
  </class>

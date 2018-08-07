@@ -22,58 +22,58 @@
 namespace util {
   
   /**
-  * @brief A contiguous data container expanded on write.
-  * @tparam T type of contained data
-  * @tparam A allocator for the data (default: STL vector's default allocator)
-  * 
-  * This container class represents a number of data elements contiguously
-  * allocated in memory.
-  * It mimics the behaviour and interface of STL vector, but the actual data
-  * allocation is lazy, that is it happens only when writing to an element is
-  * requested. The internal allocation is always contiguous, including as little
-  * data as it can accommodate elements from the first to the last index written
-  * at any point.
-  * 
-  * The interface is also a partial replica of STL vector, with the addition of
-  * members specific to this class, whose names start with `data_`.
-  * Among the relevant features missing from this object there is iterators.
-  * 
-  * For some internal resizing operations, a default value is used to construct
-  * the new values. This default value can be specified in some constructors,
-  * Otherwise, a value equivalent to `0` (i.e. `value_type(0)`) is used for
-  * arithmetic value types, and the default-constructed value is used for all
-  * other types.
-  * 
-  * Example of usage:
-  * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
-  * // start with a lazy vector of nominal size 6 elements and no actual data:
-  * util::LazyVector<double> v(6U);
-  * 
-  * // add a value `-4.0` at the previous-to-last element `4`:
-  * // the vector will look like: { ... [4] -4.0 ... }
-  * // (nominal size: 6, 1 stored datum)
-  * v[4] = -4.0;
-  * 
-  * // add a value `-2.0` at the third element:
-  * // the vector will look like: { ... [2] -2.0, [3] def, [4] -4.0 ... }
-  * // (nominal size still 6, 3 stored data, the default value "def" is 0.0)
-  * v[2] = -2.0;
-  * 
-  * // we want to set element #6 to -6.0: we need to expand the vector first.
-  * v.resize(7U); // barely enough for element #6
-  * // the vector will look like: { ... [2] -2.0, [3] def, [4] -4.0 [5] def [6] -6.0 }
-  * // (nominal size 7, 5 stored data, the default value "def" is 0.0)
-  * v[6] = -6.0;
-  * 
-  * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  * 
-  * @note Special care needs to be used when accessing a non-const `LazyVector`,
-  *       since every access will create storage for the specified element
-  *       (like in STL map `operator[]`).
-  *       For this reason, the special methods `const_at(size_type)` and
-  *       `const_get(size_type)` are provided, which never create storage.
-  * 
-  */
+   * @brief A contiguous data container expanded on write.
+   * @tparam T type of contained data
+   * @tparam A allocator for the data (default: STL vector's default allocator)
+   * 
+   * This container class represents a number of data elements contiguously
+   * allocated in memory.
+   * It mimics the behaviour and interface of STL vector, but the actual data
+   * allocation is lazy, that is it happens only when writing to an element is
+   * requested. The internal allocation is always contiguous, including as little
+   * data as it can accommodate elements from the first to the last index written
+   * at any point.
+   * 
+   * The interface is also a partial replica of STL vector, with the addition of
+   * members specific to this class, whose names start with `data_`.
+   * Among the relevant features missing from this object there is iterators.
+   * 
+   * For some internal resizing operations, a default value is used to construct
+   * the new values. This default value can be specified in some constructors,
+   * Otherwise, a value equivalent to `0` (i.e. `value_type(0)`) is used for
+   * arithmetic value types, and the default-constructed value is used for all
+   * other types.
+   * 
+   * Example of usage:
+   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+   * // start with a lazy vector of nominal size 6 elements and no actual data:
+   * util::LazyVector<double> v(6U);
+   * 
+   * // add a value `-4.0` at the previous-to-last element `4`:
+   * // the vector will look like: { ... [4] -4.0 ... }
+   * // (nominal size: 6, 1 stored datum)
+   * v[4] = -4.0;
+   * 
+   * // add a value `-2.0` at the third element:
+   * // the vector will look like: { ... [2] -2.0, [3] def, [4] -4.0 ... }
+   * // (nominal size still 6, 3 stored data, the default value "def" is 0.0)
+   * v[2] = -2.0;
+   * 
+   * // we want to set element #6 to -6.0: we need to expand the vector first.
+   * v.resize(7U); // barely enough for element #6
+   * // the vector will look like: { ... [2] -2.0, [3] def, [4] -4.0 [5] def [6] -6.0 }
+   * // (nominal size 7, 5 stored data, the default value "def" is 0.0)
+   * v[6] = -6.0;
+   * 
+   * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   * 
+   * @note Special care needs to be used when accessing a non-const `LazyVector`,
+   *       since every access will create storage for the specified element
+   *       (like in STL map `operator[]`).
+   *       For this reason, the special methods `const_at(size_type)` and
+   *       `const_get(size_type)` are provided, which never create storage.
+   * 
+   */
   template <typename T, typename A = typename std::vector<T>::allocator_type>
   class LazyVector {
     
@@ -104,7 +104,21 @@ namespace util {
     
     /// Constructor: like default, but using the specified allocator.
     LazyVector(allocator_type const& a);
-    
+   
+     
+    /**
+     * @brief Constructor: a lazy vector with a specified maximum size.
+     * @param n the initial maximum size of the vector
+     * 
+     * @note This constructor is essentially different from the one of STL
+     *       vector with the same signature.
+     *
+     * The vector is set to a nominal size of `n`, with _no stored data_.
+     *
+     * The default value of vector elements is the default-constructed `T`
+     * value, as returned by `defaultValueType()`.
+     */
+    LazyVector(size_type n);
     
     /**
      * @brief Constructor: a lazy vector with a specified maximum size.
@@ -127,7 +141,8 @@ namespace util {
      * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
      * will print something like: "Default element [1]: 5".
      */
-    LazyVector(size_type n, value_type const& defValue = defaultValueType());
+    LazyVector(size_type n, value_type const& defValue);
+
     
     /// --- END Constructors -------------------------------------------------
     
@@ -317,6 +332,7 @@ namespace util {
     /**
      * @brief Allocates enough memory in storage to store `n` elements.
      * @param n number of elements to have storage for
+     * @see `data_prepare()`
      * 
      * Storage allocation is resized to be able to host at least `n` elements
      * (it is not reduced).
@@ -325,6 +341,9 @@ namespace util {
      * when extending the vector. In this case, after a call to `reserve(n)` the
      * reallocation is avoided only as long as only the elements from
      * `data_begin_index()` to `data_begin_index() + n` (excluded) are written.
+     *
+     * Note that `data_prepare()` has a similar purpose and might be more
+     * effective.
      */
     void reserve(size_type n) { storage().reserve(n); }
     
@@ -333,6 +352,76 @@ namespace util {
     
     /// Reduces memory usage to the amount needed by the elements with storage.
     void shrink_to_fit() { storage().shrink_to_fit(); }
+   
+    /**
+     * @brief Prepares the vector to store elements in the specified range.
+     * @param startIndex index of the first element to be stored
+     * @param endIndex index after the last element to be stored
+     * @see `data_prepare(size_type)`
+     *
+     * This method sets the lower index to `startIndex`, and allocates enough
+     * storage to store the whole requested range.
+     * The elements are not initialized or constructed, but 
+     * Following access to elements in the specified range will not cause
+     * memory reallocation, and that holds until an access outside that range
+     * happens, after which all bets are off.
+     *
+     * **Old data is lost.**
+     *
+     * @note The nominal size of the vector is not changed, therefore the
+     *       specified range might be not honored. If used in combination with
+     *       `resize()`, `resize()` should be called first.
+     */
+    void data_prepare(size_type startIndex, size_type endIndex);
+
+    /**
+     * @brief Prepares the vector to store `n` elements from `0`.
+     * @param n number of elements to prepare storage for
+     * @see `data_prepare(size_type, size_type)`
+     *
+     * This method reserves storage for `n` elements starting with the element
+     * #0. 
+     *
+     * **Old data is lost.**
+     *
+     * See `data_prepare(size_type, size_type)` for more information.
+     */
+    void data_prepare(size_type n) { data_prepare(0U, n); }
+    
+    /**
+     * @brief Allocates the specified range and stores default values for it.
+     * @param startIndex index of the first element to be initialized
+     * @param endIndex index after the last element to be initialized
+     *
+     * Each element in the range from `startIndex` to `endIndex` is stored and
+     * the default value is assigned to it.
+     *
+     * **Old data is lost.**
+     *
+     * @note The nominal size of the vector is not changed, therefore the
+     *       specified range might be not honored. If used in combination with
+     *       `resize()`, `resize()` should be called first.
+     */
+    void data_init(size_type startIndex, size_type endIndex);
+    
+    /**
+     * @brief Allocates and initializes `n` elements starting from index 0.
+     * @param n number of elements to be initialized
+     *
+     * Each element in the range from `0` to `n` is stored and
+     * the default value is assigned to it.
+     * This is semantically similar to `std::vector::resize(n, data_defvalue()`,
+     * except that this method does not change the nominal size of the vector.
+     *
+     * **Old data is lost.**
+     *
+     * @note The nominal size of the vector is not changed, therefore the
+     *       specified range might be not honored. If used in combination with
+     *       `resize()`, `resize()` should be called first.
+     */
+    void data_init(size_type n) { data_init(0U, n); }
+
+
     
     /// @}
     // --- END Container operations --------------------------------------------
@@ -344,8 +433,8 @@ namespace util {
     size_type fFirstIndex = fData.max_size();  ///< First element currently stored.
     value_type fDefValue = defaultValueType(); ///< Default value.
     
-    /// Returns a default-initialised value of type `value_type`.
-    static value_type defaultValueType();
+    /// Default-initialised value of type `value_type` used as default fallback.
+    static value_type const fDefaultDefaultValue;
     
     //@{
     /// Returns the data storage.
@@ -377,6 +466,11 @@ namespace util {
     /// Throws `std::out_of_range` if `pos` is not contained in the vector.
     void check_range(size_type pos) const;
     
+    
+    /// Returns the class default value (used when user does not specify any).
+    static value_type const& defaultValueType() { return fDefaultDefaultValue; } 
+    
+    
   }; // LazyVector<>
 
 } // namespace util
@@ -385,27 +479,9 @@ namespace util {
 //------------------------------------------------------------------------------
 //---  template implementation
 //------------------------------------------------------------------------------
-namespace util {
-  namespace details {
-    
-    /// Default-constructed object, or `T(0)` if numerical.
-    template <typename T, typename = void>
-    struct DefaultValueType { static const T value; };
-    
-    template <typename T, typename E /* = void */>
-    const T DefaultValueType<T, E>::value;
-    
-    template <typename T>
-    struct DefaultValueType<T, std::enable_if_t<std::is_arithmetic<T>::value>>
-      { static constexpr T value { 0 }; };
-    
-    template <typename T>
-    const auto DefaultValue_v = DefaultValueType<T>::value;
-    
-    
-    
-  } // namespace details
-} // namespace util
+template <typename T, typename A /* = std::vector<T>::allocator_type */>
+typename util::LazyVector<T,A>::value_type const
+util::LazyVector<T,A>::fDefaultDefaultValue{};
 
 
 //------------------------------------------------------------------------------
@@ -417,8 +493,14 @@ util::LazyVector<T,A>::LazyVector(allocator_type const& a)
 
 //------------------------------------------------------------------------------
 template <typename T, typename A /* = std::vector<T>::allocator_type */>
-util::LazyVector<T,A>::LazyVector
-  (size_type n, value_type const& defValue /* = defaultValueType() */)
+util::LazyVector<T,A>::LazyVector(size_type n)
+  : LazyVector(n, defaultValueType())
+  {}
+
+
+//------------------------------------------------------------------------------
+template <typename T, typename A /* = std::vector<T>::allocator_type */>
+util::LazyVector<T,A>::LazyVector(size_type n, value_type const& defValue)
   : fNominalSize(n)
   , fDefValue(defValue)
   {}
@@ -545,9 +627,34 @@ void util::LazyVector<T,A>::clear() {
 
 //------------------------------------------------------------------------------
 template <typename T, typename A /* = std::vector<T>::allocator_type */>
-typename util::LazyVector<T,A>::value_type
-util::LazyVector<T,A>::defaultValueType()
-  { return util::details::DefaultValue_v<T>; }
+void util::LazyVector<T,A>::data_prepare
+  (size_type startIndex, size_type endIndex)
+{
+  // we do not go beyond the declared size of the vector:
+  size_type const e = std::min(endIndex, size()); 
+  if (startIndex >= e) return;
+  
+  data_clear(); // remove the old data
+  storage().reserve(e - startIndex);
+  fFirstIndex = startIndex;
+  
+} // util::LazyVector<T,A>::data_prepare(size_type, size_type)
+
+
+//------------------------------------------------------------------------------
+template <typename T, typename A /* = std::vector<T>::allocator_type */>
+void util::LazyVector<T,A>::data_init
+  (size_type startIndex, size_type endIndex)
+{
+  // we do not go beyond the declared size of the vector:
+  size_type const e = std::min(endIndex, size()); 
+  if (startIndex >= e) return;
+  
+  data_clear(); // remove the old data
+  storage().resize(e - startIndex, data_defvalue());
+  fFirstIndex = startIndex;
+  
+} // util::LazyVector<T,A>::data_init(size_type, size_type)
 
 
 //------------------------------------------------------------------------------
