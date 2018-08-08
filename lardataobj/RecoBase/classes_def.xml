@@ -176,6 +176,7 @@
  <class name="std::pair< art::Ptr<recob::EndPoint2D>, art::Ptr<recob::Hit>        >" />
  <class name="std::pair< art::Ptr<recob::Slice>,      art::Ptr<recob::Hit>        >" />
  <class name="std::pair< art::Ptr<recob::Slice>,      art::Ptr<recob::SpacePoint> >" />
+ <class name="std::pair< art::Ptr<recob::Slice>,      art::Ptr<recob::PFParticle> >" />
  <class name="std::pair< art::Ptr<recob::Event>,      art::Ptr<recob::Hit>        >" />
  <class name="std::pair< art::Ptr<recob::Event>,      art::Ptr<recob::Vertex>     >" />
  <class name="std::pair< art::Ptr<recob::Hit>,        art::Ptr<recob::Cluster>    >" />
@@ -234,6 +235,7 @@
  <class name="art::Assns<recob::EndPoint2D, recob::Cluster,    unsigned short>" />
  <class name="art::Assns<recob::Slice,      recob::Hit,        void          >" />
  <class name="art::Assns<recob::Slice,      recob::SpacePoint, void          >" />
+ <class name="art::Assns<recob::Slice,      recob::PFParticle, void          >" />
  <class name="art::Assns<recob::Event,      recob::Hit,        void          >" />
  <class name="art::Assns<recob::Event,      recob::Vertex,     void          >" />
  <class name="art::Assns<recob::Hit,        raw::RawDigit,     void          >" />
@@ -348,6 +350,7 @@
  <class name="art::Wrapper< art::Assns<recob::EndPoint2D, recob::Cluster,    unsigned short> >" />
  <class name="art::Wrapper< art::Assns<recob::Slice,      recob::Hit,        void          > >" />
  <class name="art::Wrapper< art::Assns<recob::Slice,      recob::SpacePoint, void          > >" />
+ <class name="art::Wrapper< art::Assns<recob::Slice,      recob::PFParticle, void          > >" />
  <class name="art::Wrapper< art::Assns<recob::Event,      recob::Hit,        void          > >" />
  <class name="art::Wrapper< art::Assns<recob::Event,      recob::Vertex,     void          > >" />
  <class name="art::Wrapper< art::Assns<recob::Hit,        raw::RawDigit,     void          > >" />
