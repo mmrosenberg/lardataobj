@@ -100,10 +100,11 @@ namespace sim {
     std::vector<sim::AuxDetIDE> const& AuxDetIDEs() const;
     ///@}
     
+    //typedef std::vector<AuxDetSimChannel> AuxDetSimChannelCollection;
 		
 		
   }; // class AuxDetSimChannel
-
+ typedef std::vector<AuxDetSimChannel> AuxDetSimChannelCollection;
 } // namespace sim
 
 
