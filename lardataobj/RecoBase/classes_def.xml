@@ -180,6 +180,7 @@
  <class name="std::pair< art::Ptr<recob::Slice>,      art::Ptr<recob::SpacePoint> >" />
  <class name="std::pair< art::Ptr<recob::Slice>,      art::Ptr<recob::PFParticle> >" />
  <class name="std::pair< art::Ptr<recob::Slice>,      art::Ptr<recob::Cluster>    >" />
+ <class name="std::pair< art::Ptr<recob::Slice>,      art::Ptr<recob::Shower>     >" />
  <class name="std::pair< art::Ptr<recob::Event>,      art::Ptr<recob::Hit>        >" />
  <class name="std::pair< art::Ptr<recob::Event>,      art::Ptr<recob::Vertex>     >" />
  <class name="std::pair< art::Ptr<recob::Hit>,        art::Ptr<recob::Cluster>    >" />
@@ -209,6 +210,7 @@
  <class name="std::pair< art::Ptr<recob::Shower>,     art::Ptr<recob::PFParticle> >" />
  <class name="std::pair< art::Ptr<recob::Shower>,     art::Ptr<recob::SpacePoint> >" />
  <class name="std::pair< art::Ptr<recob::Shower>,     art::Ptr<recob::Vertex>     >" />
+ <class name="std::pair< art::Ptr<recob::Shower>,     art::Ptr<recob::Slice>      >" />
  <class name="std::pair< art::Ptr<recob::SpacePoint>, art::Ptr<recob::Edge>       >" />
  <class name="std::pair< art::Ptr<recob::SpacePoint>, art::Ptr<recob::Hit>        >" />
  <class name="std::pair< art::Ptr<recob::SpacePoint>, art::Ptr<recob::Cluster>    >" />
@@ -241,6 +243,7 @@
  <class name="art::Assns<recob::Slice,      recob::SpacePoint, void          >" />
  <class name="art::Assns<recob::Slice,      recob::PFParticle, void          >" />
  <class name="art::Assns<recob::Slice,      recob::Cluster,    void          >" />
+ <class name="art::Assns<recob::Slice,      recob::Shower,     void          >" />
  <class name="art::Assns<recob::Event,      recob::Hit,        void          >" />
  <class name="art::Assns<recob::Event,      recob::Vertex,     void          >" />
  <class name="art::Assns<recob::Hit,        raw::RawDigit,     void          >" />
@@ -272,6 +275,7 @@
  <class name="art::Assns<recob::Shower,     recob::PFParticle, void          >" />
  <class name="art::Assns<recob::Shower,     recob::SpacePoint, void          >" />
  <class name="art::Assns<recob::Shower,     recob::Vertex,     void          >" />
+ <class name="art::Assns<recob::Shower,     recob::Slice,      void          >" />
  <class name="art::Assns<recob::SpacePoint, recob::Edge,       void          >" />
  <class name="art::Assns<recob::SpacePoint, recob::Hit,        void          >" />
  <class name="art::Assns<recob::SpacePoint, recob::Cluster,    void          >" />
@@ -349,7 +353,7 @@
  <class name="art::Wrapper< art::Assns<recob::Cluster,    recob::SpacePoint, void          > >" />
  <class name="art::Wrapper< art::Assns<recob::Cluster,    recob::Vertex,     void          > >" />
  <class name="art::Wrapper< art::Assns<recob::Cluster,    recob::Vertex,     unsigned short> >" />
- <class name="art::Wrapper< art::Assns<recob::Cluster,    recob::Slice,    void          > >" />
+ <class name="art::Wrapper< art::Assns<recob::Cluster,    recob::Slice,      void          > >" />
  <class name="art::Wrapper< art::Assns<recob::Edge,       recob::PFParticle, void          > >" />
  <class name="art::Wrapper< art::Assns<recob::Edge,       recob::SpacePoint, void          > >" />
  <class name="art::Wrapper< art::Assns<recob::EndPoint2D, recob::Cluster,    void          > >" />
@@ -358,6 +362,7 @@
  <class name="art::Wrapper< art::Assns<recob::Slice,      recob::SpacePoint, void          > >" />
  <class name="art::Wrapper< art::Assns<recob::Slice,      recob::PFParticle, void          > >" />
  <class name="art::Wrapper< art::Assns<recob::Slice,      recob::Cluster,    void          > >" />
+ <class name="art::Wrapper< art::Assns<recob::Slice,      recob::Shower,     void          > >" />
  <class name="art::Wrapper< art::Assns<recob::Event,      recob::Hit,        void          > >" />
  <class name="art::Wrapper< art::Assns<recob::Event,      recob::Vertex,     void          > >" />
  <class name="art::Wrapper< art::Assns<recob::Hit,        raw::RawDigit,     void          > >" />
@@ -389,6 +394,7 @@
  <class name="art::Wrapper< art::Assns<recob::Shower,     recob::PFParticle, void          > >" />
  <class name="art::Wrapper< art::Assns<recob::Shower,     recob::SpacePoint, void          > >" />
  <class name="art::Wrapper< art::Assns<recob::Shower,     recob::Vertex,     void          > >" />
+ <class name="art::Wrapper< art::Assns<recob::Shower,     recob::Slice,      void          > >" />
  <class name="art::Wrapper< art::Assns<recob::SpacePoint, recob::Edge,       void          > >" />
  <class name="art::Wrapper< art::Assns<recob::SpacePoint, recob::Hit,        void          > >" />
  <class name="art::Wrapper< art::Assns<recob::SpacePoint, recob::Cluster,    void          > >" />
