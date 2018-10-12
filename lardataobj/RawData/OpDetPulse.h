@@ -44,6 +44,7 @@ namespace raw {
     int Integral(unsigned short startbin=0, 
 		 unsigned short endbin=0);
 
+    const std::vector<short>&  Waveform()    const;
     std::vector<short>&  Waveform()    ;
     unsigned short       OpChannel()          const;
     unsigned short       Samples()            const;
@@ -56,6 +57,7 @@ namespace raw {
   };
 }
 
+inline const std::vector<short>&  raw::OpDetPulse::Waveform() const   { return fWaveform;        }
 inline std::vector<short>&  raw::OpDetPulse::Waveform()               { return fWaveform;        }
 inline unsigned short       raw::OpDetPulse::OpChannel() const     { return fOpChannel;    }
 inline unsigned short       raw::OpDetPulse::Samples()      const     { return fWaveform.size(); }
