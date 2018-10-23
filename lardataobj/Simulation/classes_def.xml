@@ -13,6 +13,9 @@
   <version ClassVersion="12" checksum="124883757"/>
   <version ClassVersion="11" checksum="1948463887"/>
  </class>
+<class name="sim::AuxDetHit"         ClassVersion="10">
+ <version ClassVersion="10" checksum="949448658"/>
+ </class>
  <class name="sim::SimEnergyDeposit"         ClassVersion="17">
   <version ClassVersion="17" checksum="51950964"/>
   <version ClassVersion="16" checksum="2652853768"/>
@@ -22,6 +25,8 @@
  </class>
  <class name="std::vector< sim::SimEnergyDeposit >"/>
  <class name="art::Wrapper< std::vector< sim::SimEnergyDeposit> >"/>
+ <class name="std::vector< sim::AuxDetHit >"/>
+ <class name="art::Wrapper< std::vector< sim::AuxDetHit> >"/>
  <class name="sim::SimPhotonsLite"           ClassVersion="10">
   <version ClassVersion="10" checksum="4093907155"/>
  </class>
@@ -71,6 +76,7 @@
  <class name="art::Assns<sim::SupernovaTruth, simb::MCTruth, void>" />
  <class name="art::Assns<simb::MCTruth, sim::SupernovaTruth, void>" />
  <class name="std::vector<sim::SimEnergyDeposit>"                  />
+ <class name="std::vector<sim::AuxDetHit>"                  />
  <class name="std::vector<sim::OnePhoton>"                         />
  <class name="std::vector<sim::SimPhotonsLite>"                    />
  <class name="std::vector<sim::SimPhotons  >" 		     		    	   />
@@ -92,6 +98,7 @@
  <class name="art::Wrapper< std::vector<sim::SimPhotonsLite>   >"  />
  <class name="art::Wrapper< std::vector<sim::SimChannel>   >"		   />
  <class name="art::Wrapper< std::vector<sim::SimEnergyDeposit>   >"		   />
+ <class name="art::Wrapper< std::vector<sim::AuxDetHit>   >"		   />
  <class name="art::Wrapper< std::vector<sim::BeamGateInfo> >"		   />
  <class name="art::Wrapper< std::vector<sim::AuxDetSimChannel>  >" />
  <class name="art::Wrapper< std::vector<sim::OpDetBacktrackerRecord> >"      />
