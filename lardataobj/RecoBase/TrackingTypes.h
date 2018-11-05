@@ -2,7 +2,7 @@
 #define TRACKINGTYPE_H
 
 // LArSoft libraries
-#include "larcoreobj/SimpleTypesAndConstants/geo_vectors.h"
+#include "larcorealg/Geometry/geo_vectors_utils.h"
 
 // ROOT libraries
 #include "Math/GenVector/Rotation3D.h"
@@ -14,13 +14,13 @@ namespace recob {
   namespace tracking {
 
     /// Type used for coordinates and values in general.
-    using Coord_t = double;
+    using Coord_t = Double32_t;
     
     /// Type for representation of position in physical 3D space.
-    using Point_t = geo::Point_t;
+    using Point_t = ROOT::Math::PositionVector3D<ROOT::Math::Cartesian3D<Coord_t>, ROOT::Math::GlobalCoordinateSystemTag>;
     
     /// Type for representation of momenta in 3D space.
-    using Vector_t = geo::Vector_t;
+    using Vector_t = ROOT::Math::DisplacementVector3D <ROOT::Math::Cartesian3D<Coord_t>, ROOT::Math::GlobalCoordinateSystemTag>;
     
     /// Type of trajectory point list.
     using Positions_t = std::vector<Point_t>;
@@ -30,6 +30,10 @@ namespace recob {
 
     /// Type for representation of space rotations.
     using Rotation_t = ROOT::Math::Rotation3D;
+
+    template <typename Point> Point_t toPoint(Point const& p) { return geo::vect::convertTo<Point_t>(p); }
+    template <typename Point> std::vector<Point_t> convertCollToPoint (std::vector<Point> const& coll)
+      { return geo::vect::convertCollTo<Point_t>(coll); }
 
     /// A point in the trajectory, with position and momentum.
     struct TrajectoryPoint_t {
@@ -52,18 +56,18 @@ namespace recob {
 
     /// @{
     /// SMatrix and SVector
-    using SMatrixSym22 = ROOT::Math::SMatrix<double,2,2,ROOT::Math::MatRepSym<double,2> >;
-    using SMatrixSym33 = ROOT::Math::SMatrix<double,3,3,ROOT::Math::MatRepSym<double,3> >;
-    using SMatrixSym55 = ROOT::Math::SMatrix<double,5,5,ROOT::Math::MatRepSym<double,5> >;
-    using SMatrixSym66 = ROOT::Math::SMatrix<double,6,6,ROOT::Math::MatRepSym<double,6> >;
-    using SMatrix65    = ROOT::Math::SMatrix<double,6,5>;
-    using SMatrix56    = ROOT::Math::SMatrix<double,5,6>;
-    using SMatrix55    = ROOT::Math::SMatrix<double,5,5>;
-    using SMatrix66    = ROOT::Math::SMatrix<double,6,6>;
-    using SVector6     = ROOT::Math::SVector<double,6>;
-    using SVector5     = ROOT::Math::SVector<double,5>;
-    using SVector3     = ROOT::Math::SVector<double,3>;
-    using SVector2     = ROOT::Math::SVector<double,2>;
+    using SMatrixSym22 = ROOT::Math::SMatrix<Double32_t,2,2,ROOT::Math::MatRepSym<Double32_t,2> >;
+    using SMatrixSym33 = ROOT::Math::SMatrix<Double32_t,3,3,ROOT::Math::MatRepSym<Double32_t,3> >;
+    using SMatrixSym55 = ROOT::Math::SMatrix<Double32_t,5,5,ROOT::Math::MatRepSym<Double32_t,5> >;
+    using SMatrixSym66 = ROOT::Math::SMatrix<Double32_t,6,6,ROOT::Math::MatRepSym<Double32_t,6> >;
+    using SMatrix65    = ROOT::Math::SMatrix<Double32_t,6,5>;
+    using SMatrix56    = ROOT::Math::SMatrix<Double32_t,5,6>;
+    using SMatrix55    = ROOT::Math::SMatrix<Double32_t,5,5>;
+    using SMatrix66    = ROOT::Math::SMatrix<Double32_t,6,6>;
+    using SVector6     = ROOT::Math::SVector<Double32_t,6>;
+    using SVector5     = ROOT::Math::SVector<Double32_t,5>;
+    using SVector3     = ROOT::Math::SVector<Double32_t,3>;
+    using SVector2     = ROOT::Math::SVector<Double32_t,2>;
     /// @}
     
   }

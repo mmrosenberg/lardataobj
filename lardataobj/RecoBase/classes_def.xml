@@ -20,6 +20,8 @@
    <!-- others -->
  <class name="std::vector<TVector3>"                                      />
  <class name="std::vector<TMatrixT<double> >"                             />
+ <class name="vector<ROOT::Math::PositionVector3D<ROOT::Math::Cartesian3D<Double32_t>,ROOT::Math::GlobalCoordinateSystemTag> >"/>
+ <class name="vector<ROOT::Math::DisplacementVector3D<ROOT::Math::Cartesian3D<Double32_t>,ROOT::Math::GlobalCoordinateSystemTag> >"/>
    <!-- LArSoft structures -->
  <class name="geo::CryostatID"             ClassVersion="18"                   >
   <version ClassVersion="18" checksum="1964936896"/>
@@ -96,12 +98,14 @@
  <class name="recob::SpacePoint"       ClassVersion="12"                   >
   <version ClassVersion="12" checksum="4256037352"/>
  </class>
- <class name="recob::Vertex"           ClassVersion="14"                   >
+ <class name="recob::Vertex"           ClassVersion="15"                   >
+  <version ClassVersion="15" checksum="2961210270"/>
   <version ClassVersion="14" checksum="2896315066"/>
   <version ClassVersion="13" checksum="1229739518"/>
   <version ClassVersion="12" checksum="1317803878"/>
  </class>
- <class name="recob::Slice"            ClassVersion="14"                   >
+ <class name="recob::Slice"            ClassVersion="15"                   >
+  <version ClassVersion="15" checksum="1252584213"/>
   <version ClassVersion="14" checksum="2291287429"/>
   <version ClassVersion="13" checksum="2291287429"/>
   <version ClassVersion="12" checksum="2320421270"/>
@@ -116,11 +120,13 @@
   <version ClassVersion="18" checksum="507533507"/>
   <version ClassVersion="17" checksum="1882235791"/>
  </class>
- <class name="recob::TrackFitHitInfo" ClassVersion="10"                   >
+ <class name="recob::TrackFitHitInfo" ClassVersion="11"                   >
+  <version ClassVersion="11" checksum="3489889540"/>
   <version ClassVersion="10" checksum="2600776094"/>
  </class>
 
- <class name="recob::MCSFitResult" ClassVersion="10"                   >
+ <class name="recob::MCSFitResult" ClassVersion="11"                   >
+  <version ClassVersion="11" checksum="2801205803"/>
   <version ClassVersion="10" checksum="1923850317"/>
  </class>
 
@@ -466,7 +472,8 @@
   <!-- recob::Trajectory -->
   
   <!--   class -->
-  <class name="recob::Trajectory" ClassVersion="11" >
+  <class name="recob::Trajectory" ClassVersion="12" >
+   <version ClassVersion="12" checksum="3480475097"/>
    <version ClassVersion="11" checksum="2541107521"/>
    <version ClassVersion="10" checksum="3286658271"/>
   </class>
@@ -580,7 +587,8 @@
   <class name="util::flags::FlagSet<32U, unsigned int>" />
   
   <!--   class -->
-  <class name="recob::TrackTrajectory" ClassVersion="10" >
+  <class name="recob::TrackTrajectory" ClassVersion="11" >
+   <version ClassVersion="11" checksum="239891311"/>
    <version ClassVersion="10" checksum="4198737063"/>
   </class>
   
@@ -654,7 +662,8 @@
     <!-- dependencies -->
   
     <!-- class -->
-  <class name="recob::Track"            ClassVersion="15"                   >
+  <class name="recob::Track"            ClassVersion="16"                   >
+   <version ClassVersion="16" checksum="1293628079"/>
    <version ClassVersion="15" checksum="2420564911"/>
     <version ClassVersion="14" checksum="2345363916"/>
   </class>
