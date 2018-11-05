@@ -23,9 +23,9 @@ namespace recob{
   }
 
   //----------------------------------------------------------------------
-  SpacePoint::SpacePoint(double const*xyz,
-       double const*err,
-       double  chisq,
+  SpacePoint::SpacePoint(Double32_t const*xyz,
+       Double32_t const*err,
+       Double32_t  chisq,
        int    id)
     : fID(id)
     , fChisq(chisq)
