@@ -77,6 +77,10 @@
   <version ClassVersion="12" checksum="1065754987"/>
   <version ClassVersion="11" checksum="1332843380"/>
  </class>
+ <class name="recob::PFParticleMetadata" ClassVersion="11"                 >
+  <version ClassVersion="11" checksum="42419696"/>
+	<version ClassVersion="10" checksum="2600776094"/>
+ </class>
  <class name="recob::Seed"             ClassVersion="12"                   >
   <version ClassVersion="12" checksum="435078304"/>
  </class>
@@ -306,6 +310,7 @@
  <class name="std::vector<recob::Hit>"        />
  <class name="std::vector<recob::PCAxis>"     />
  <class name="std::vector<recob::PFParticle>" />
+ <class name="std::vector<recob::PFParticleMetadata>" />
  <class name="std::vector<recob::Seed>"       />
  <class name="std::vector<recob::Shower>"     />
  <class name="std::vector<recob::EndPoint2D>" />
@@ -327,6 +332,7 @@
  <class name="art::Wrapper< std::vector< recob::Hit                         > >" />
  <class name="art::Wrapper< std::vector< recob::PCAxis                      > >" />
  <class name="art::Wrapper< std::vector< recob::PFParticle                  > >" />
+ <class name="art::Wrapper< std::vector< recob::PFParticleMetadata          > >" />
  <class name="art::Wrapper< std::vector< recob::Seed                        > >" />
  <class name="art::Wrapper< std::vector< recob::Shower                      > >" />
  <class name="art::Wrapper< std::vector< recob::EndPoint2D                  > >" />
@@ -386,6 +392,8 @@
  <class name="art::Wrapper< art::Assns<recob::PFParticle, recob::SpacePoint, void          > >" />
  <class name="art::Wrapper< art::Assns<recob::PFParticle, recob::Vertex,     void          > >" />
  <class name="art::Wrapper< art::Assns<recob::PFParticle, recob::Slice,      void          > >" />
+ <class name="art::Wrapper< art::Assns<recob::PFParticle, recob::PFParticleMetadata, void  > >" />
+ <class name="art::Wrapper< art::Assns<recob::PFParticleMetadata, recob::PFParticle, void  > >" />
  <class name="art::Wrapper< art::Assns<recob::Seed,       recob::Hit,        void          > >" />
  <class name="art::Wrapper< art::Assns<recob::Seed,       recob::PFParticle, void          > >" />
  <class name="art::Wrapper< art::Assns<recob::Shower,     recob::Cluster,    void          > >" />
@@ -867,25 +875,6 @@
   <class name="art::Wrapper<art::Assns<recob::Track, recob::PFParticle, void>>" />
       <!-- optical flash -->
     <!-- in recob::OpFlash -->
-  
-
-
-  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-  <!-- recob::TrackHitMeta (metadata) -->
-  
-    <!--   class -->
-  <class name="recob::TrackHitMeta" />
-  
-    <!-- art pointers and wrappers -->
-  <class name="std::vector<recob::TrackHitMeta>" />
-  <class name="art::Ptr<recob::TrackHitMeta>" />
-  
-    <!-- associations and wrappers -->
-      <!-- Hits <==> Tracks -->
-  <class name="art::Assns<recob::Hit, recob::Track, recob::TrackHitMeta>" />
-  <class name="art::Assns<recob::Track, recob::Hit, recob::TrackHitMeta>" />
-  <class name="art::Wrapper<art::Assns<recob::Hit, recob::Track, recob::TrackHitMeta>>" />
-  <class name="art::Wrapper<art::Assns<recob::Track, recob::Hit, recob::TrackHitMeta>>" />
   
   
   
