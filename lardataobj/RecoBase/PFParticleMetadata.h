@@ -10,6 +10,7 @@
 #define Recob_PFParticleMetadata_H
 
 #include <map>
+#include <string>
 
 namespace recob {
   
