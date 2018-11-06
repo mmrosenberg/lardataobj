@@ -35,6 +35,7 @@ namespace anab {
     float                fRange;           ///< total range of track
     std::vector<float>   fTrkPitch;        ///< track pitch on collection plane
     std::vector<Point_t> fXYZ;             ///< coordinates of space points
+    std::vector<size_t>  fTpIndices;       ///< indices of original trajectory points on track
 
   private:
     geo::PlaneID        fPlaneID;
@@ -69,6 +70,17 @@ namespace anab {
 		std::vector<Point_t> const& XYZ,
 		geo::PlaneID planeID);
 
+    Calorimetry(float KineticEnergy,
+		std::vector<float> const& dEdx,
+		std::vector<float> const& dQdx,
+		std::vector<float> const& resRange,
+		std::vector<float> const& deadwire,
+		float Range,
+		std::vector<float> const& TrkPitch,
+		std::vector<Point_t> const& XYZ,
+		std::vector<size_t> const& TpIndices,
+		geo::PlaneID planeID);
+
     friend std::ostream& operator << (std::ostream &o, Calorimetry const& a);
 
     const std::vector<float>& dEdx()          const;
@@ -80,6 +92,7 @@ namespace anab {
     float                     TrkPitchC()     const;
     const std::vector<float>& TrkPitchVec()   const;
     const std::vector<Point_t>& XYZ()         const;
+    const std::vector<size_t>& TpIndices()    const;
     const geo::PlaneID&        PlaneID()       const;
 
     
@@ -102,6 +115,7 @@ inline float                     anab::Calorimetry::TrkPitchC()     const
   else return 0;
 }
 inline const std::vector<anab::Point_t>& anab::Calorimetry::XYZ()         const { return fXYZ;      }
+inline const std::vector<size_t>&        anab::Calorimetry::TpIndices()   const { return fTpIndices;}
 inline const geo::PlaneID& anab::Calorimetry::PlaneID()              const { return fPlaneID; }
 
 #endif //ANAB_CALORIMETRY_H

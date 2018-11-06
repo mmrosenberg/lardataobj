@@ -8,6 +8,7 @@
 #include "Math/GenVector/Rotation3D.h"
 #include "Math/GenVector/AxisAngle.h"
 #include "Math/SMatrix.h"
+#include "TVector3.h"
 
 namespace recob {
 
@@ -31,6 +32,18 @@ namespace recob {
     /// Type for representation of space rotations.
     using Rotation_t = ROOT::Math::Rotation3D;
 
+    template <typename To, typename From> std::vector<To> convertVec(std::vector<From> const& in) {
+      std::vector<To> out;
+      out.reserve(in.size());
+      for (auto& i : in) out.push_back(To(i));
+      return out;
+    }
+    template <typename From> std::vector<TVector3> convertVecPointToTVec3(std::vector<From> const& in) {
+      std::vector<TVector3> out;
+      out.reserve(in.size());
+      for (auto& i : in) out.push_back(TVector3(i.X(),i.Y(),i.Z()));
+      return out;
+    }
     template <typename Point> Point_t toPoint(Point const& p) { return geo::vect::convertTo<Point_t>(p); }
     template <typename Point> std::vector<Point_t> convertCollToPoint (std::vector<Point> const& coll)
       { return geo::vect::convertCollTo<Point_t>(coll); }
