@@ -18,10 +18,9 @@
 #include <vector>
 #include <ostream>
 #include <iterator> // std::distance()
-#include <algorithm> // std::lower_bound(), std::max()
+#include <algorithm> // std::upper_bound(), std::max()
 #include <numeric> // std::accumulate
-
-#	include <type_traits> // std::is_integral
+#include <type_traits> // std::is_integral
 
 
 /// Namespace for generic larsoft
@@ -911,19 +910,20 @@ class sparse_vector {
 	
 	//@{
 	/**
-	   * @brief Returns an iterator to the range after `index`, or `end()` if none.
-	   * @param index the absolute index
-	   * @return iterator to the next range not including index, or ranges.end()
-	   *         if none
-	   */
+	 * @brief Returns an iterator to the range after `index`, or `end()` if none.
+	 * @param index the absolute index
+	 * @return iterator to the next range not including index, or ranges.end()
+	 *         if none
+	 */
 	range_iterator find_next_range_iter(size_type index)
 		{ return find_next_range_iter(index, ranges.begin()); }
 	range_const_iterator find_next_range_iter(size_type index) const
-		{ return find_next_range_iter(index, ranges.begin()); }
+		{ return find_next_range_iter(index, ranges.cbegin()); }
 	//@}
 	//@{
 	/**
-	 * @brief Returns an iterator to the range after `index`, or `end()` if none.
+	 * @brief Returns an iterator to the range after `index`,
+	 *        or `ranges.end()` if none.
 	 * @param index the absolute index
 	 * @param rbegin consider only from this range on
 	 * @return iterator to the next range not including index, or `ranges.end()`
@@ -1017,6 +1017,8 @@ class lar::sparse_vector<T>::datarange_t: public range_t<size_type> {
 	iterator get_iterator(size_type index)
 		{ return values.begin() + index - base_t::begin_index(); }
 	const_iterator get_iterator(size_type index) const
+		{ return get_const_iterator(index); }
+	const_iterator get_const_iterator(size_type index) const
 		{ return values.begin() + index - base_t::begin_index(); }
 	//@}
 	
@@ -1052,13 +1054,16 @@ class lar::sparse_vector<T>::datarange_t: public range_t<size_type> {
 //	vector_t& data() { return values; }
 	//@}
 	
-	/// Adds copies of the specified elements to this range
-	/// @param index the starting point
-	/// @param first iterator to the first object to copy
-	/// @param last iterator after the last object to copy
+	/**
+	 * @brief Appends the specified elements to this range.
+	 * @tparam ITER type of iterator of the range
+	 * @param index the starting point
+	 * @param first iterator to the first object to copy
+	 * @param last iterator after the last object to copy
+	 * @return the extended range
+	 */
 	template <typename ITER>
 	datarange_t& extend(size_type index, ITER first, ITER last);
-	
 	
 	/**
 	 * @brief Moves the begin of this range
@@ -1355,7 +1360,7 @@ class lar::sparse_vector<T>::iterator: public const_iterator {
 
 
 // -----------------------------------------------------------------------------
-// ---  implemetation  ---------------------------------------------------------
+// ---  implementation  --------------------------------------------------------
 // -----------------------------------------------------------------------------
 
 //------------------------------------------------------------------------------
@@ -1607,10 +1612,7 @@ const typename lar::sparse_vector<T>::datarange_t& lar::sparse_vector<T>::add_ra
   (size_type offset, ITER first, ITER last)
 {
 	// insert the new range before the existing range which starts after offset
-	range_iterator iInsert = std::upper_bound(
-		ranges.begin(), ranges.end(), offset,
-		typename datarange_t::less_int_range(datarange_t::less)
-		);
+	range_iterator iInsert = find_next_range_iter(offset);
 	
 	// is there a range before this, which includes the offset?
 	if ((iInsert != ranges.begin()) && (iInsert-1)->borders(offset)) {
