@@ -624,6 +624,47 @@ namespace actions {
   
   
   template <typename T>
+  class Add: public BaseAction<T> {
+      public:
+    using Base_t = BaseAction<T>;
+    using typename Base_t::TestClass_t;
+    using typename Base_t::Data_t;
+    using typename Base_t::Vector_t;
+    using typename Base_t::SparseVector_t;
+    
+    size_t position;
+    Vector_t data;
+    Data_t baseline = Data_t(0);
+    
+    Add(size_t pos, Vector_t new_data, Data_t baseline = Data_t(0))
+      : position(pos), data(new_data), baseline(baseline) {}
+    
+      protected:
+    virtual void actionOnVector(Vector_t& v) const override
+      {
+        size_t max_size = std::max(v.size(), position + data.size());
+        v.resize(max_size, 0);
+        // buggy: we have no way to recognise a void element from a 0 one
+        std::transform(data.cbegin(), data.cend(), v.cbegin() + position,
+          v.begin() + position,
+          [this](auto a, auto b){ return a + ((b == 0)? baseline: b); }
+          );
+      }
+    virtual void actionOnSparseVector(SparseVector_t& v) const override
+      { v.combine_range(position, data, std::plus<Data_t>(), baseline); }
+    
+    virtual void doDescribe(TestClass_t&, std::ostream& out) const override
+      {
+        out << "increment by data in ";
+        PrintVector(data, out);
+        out << " with baseline " << baseline
+          << " starting at position " << position;
+      } // describe()
+    
+  }; // Add<>
+  
+  
+  template <typename T>
   class Erase: public BaseAction<T> {
       public:
     using Base_t = BaseAction<T>;
@@ -867,6 +908,7 @@ namespace actions {
 } // namespace actions
 
 
+//------------------------------------------------------------------------------
 
 /// A simple test suite
 int main() {
@@ -968,6 +1010,19 @@ int main() {
   Test(actions::PrintNonVoid<Data_t>());
   
   Test(actions::Optimize<Data_t>(-1));
+  
+  // at this point:
+  // (31) [2] {
+  //      0     0    0 [  3    4    5    6 ]  0     0     0
+  //      0     0    0    0    0    0 [ 16   17    18    19
+  //     20    21   22   23   -1 ]  0    0    0     0     0
+  //      0
+  //   }
+
+  Test(actions::Add<Data_t>(5, { 7, 8, 7, 8 }, 10));
+  
+  Test(actions::Add<Data_t>
+    (5, { 20, 20, 20, 20, 8, 7, 8, 7, 8, 7, 8, 7 }, 30));
   
   Test(actions::Truncate<Data_t>(new_size -= 3));
   
