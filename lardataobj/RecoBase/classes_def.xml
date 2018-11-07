@@ -480,6 +480,38 @@
   </class>
   
     <!-- schema evolution rules -->
+      <!-- version 12 -->
+        <!-- * positions -->
+  <ioread
+    version="[11]"
+    sourceClass="recob::Trajectory"
+    source="std::vector<ROOT::Math::PositionVector3D<ROOT::Math::Cartesian3D<double>, ROOT::Math::GlobalCoordinateSystemTag>> fPositions;"
+    targetClass="recob::Trajectory"
+    target="fPositions"
+    include="Math/GenVector/CoordinateSystemTags.h;Math/GenVector/Cartesian3D.h;Math/GenVector/PositionVector3D.h">
+    <![CDATA[
+      fPositions.clear();
+      fPositions.reserve(onfile.fPositions.size());
+      for (auto const& point: onfile.fPositions)
+        fPositions.emplace_back(point.X(), point.Y(), point.Z());
+    ]]>
+  </ioread>
+        <!-- * momenta -->
+  <ioread
+    version="[11]"
+    sourceClass="recob::Trajectory"
+    source="std::vector<ROOT::Math::DisplacementVector3D<ROOT::Math::Cartesian3D<double>, ROOT::Math::GlobalCoordinateSystemTag>> fMomenta;"
+    targetClass="recob::Trajectory"
+    target="fMomenta"
+    include="Math/GenVector/CoordinateSystemTags.h;Math/GenVector/Cartesian3D.h;Math/GenVector/DisplacementVector3D.h">
+    <![CDATA[
+      fMomenta.clear();
+      fMomenta.reserve(onfile.fMomenta.size());
+      for (auto const& mom: onfile.fMomenta)
+        fMomenta.emplace_back(mom.X(), mom.Y(), mom.Z());
+    ]]>
+  </ioread>
+
       <!-- version 11 -->
         <!-- * positions -->
   <ioread 
@@ -670,6 +702,36 @@
   </class>
   
     <!-- schema evolution rules -->
+      <!-- version 16 -->
+        <!-- * covariance at start -->
+  <ioread
+    version="[15]"
+    sourceClass="recob::Track"
+    source="ROOT::Math::SMatrix<double,5,5,ROOT::Math::MatRepSym<double,5> > fCovVertex;"
+    targetClass="recob::Track"
+    target="fCovVertex"
+    include="lardataobj/RecoBase/Track.h">
+    <![CDATA[
+       for (size_t i=0; i<5; ++i)
+         for (size_t j=0; j<5; ++j)
+	   fCovVertex(i,j) = onfile.fCovVertex(i,j);
+    ]]>
+  </ioread>
+        <!-- * covariance at end -->
+  <ioread
+    version="[15]"
+    sourceClass="recob::Track"
+    source="ROOT::Math::SMatrix<double,5,5,ROOT::Math::MatRepSym<double,5> > fCovEnd;"
+    targetClass="recob::Track"
+    target="fCovEnd"
+    include="lardataobj/RecoBase/Track.h">
+    <![CDATA[
+       for (size_t i=0; i<5; ++i)
+         for (size_t j=0; j<5; ++j)
+	   fCovEnd(i,j) = onfile.fCovEnd(i,j);
+    ]]>
+  </ioread>
+
       <!-- version 15 -->
         <!-- * trajectory -->
   <ioread 
@@ -781,7 +843,71 @@
     ]]>
   </ioread> 
   
+  <!-- recob::SpacePoint: schema evolution rules -->
+      <!-- version 13 -->
+        <!-- * fXYZ -->
+  <ioread
+    version="[12]"
+    sourceClass="recob::SpacePoint"
+    source="double fXYZ[3];"
+    targetClass="recob::SpacePoint"
+    target="fXYZ">
+    <![CDATA[
+	 for (size_t i=0;i<3;++i) fXYZ[i] = Double32_t(onfile.fXYZ[i]);
+    ]]>
+  </ioread>
+        <!-- * fErrXYZ -->
+  <ioread
+    version="[12]"
+    sourceClass="recob::SpacePoint"
+    source="double fErrXYZ[6];"
+    targetClass="recob::SpacePoint"
+    target="fErrXYZ">
+    <![CDATA[
+	 for (size_t i=0;i<6;++i) fErrXYZ[i] = Double32_t(onfile.fErrXYZ[i]);
+    ]]>
+  </ioread>
+        <!-- * fChisq -->
+  <ioread
+    version="[12]"
+    sourceClass="recob::SpacePoint"
+    source="double fChisq;"
+    targetClass="recob::SpacePoint"
+    target="fChisq">
+    <![CDATA[
+	 fChisq = Double32_t(onfile.fChisq);
+    ]]>
+  </ioread>
+
   <!-- recob::Vertex: schema evolution rules -->
+      <!-- version 15 -->
+  <ioread
+    version="[14]"
+    sourceClass="recob::Vertex"
+    source="ROOT::Math::PositionVector3D<ROOT::Math::Cartesian3D<double>,ROOT::Math::GlobalCoordinateSystemTag> pos_;"
+    targetClass="recob::Vertex"
+    target="pos_"
+    include="lardataobj/RecoBase/Vertex.h"
+    >
+    <![CDATA[
+	 pos_ = recob::tracking::Point_t(onfile.pos_.X(), onfile.pos_.Y(), onfile.pos_.Z());
+    ]]>
+  </ioread>
+  <ioread
+    version="[13-14]"
+    sourceClass="recob::Vertex"
+    source="ROOT::Math::SMatrix<double,3,3,ROOT::Math::MatRepSym<double,3> > cov_;"
+    targetClass="recob::Vertex"
+    target="cov_"
+    include="lardataobj/RecoBase/Vertex.h"
+    >
+    <![CDATA[
+       for (size_t i=0; i<3; ++i)
+         for (size_t j=0; j<3; ++j)
+	   cov_(i,j) = onfile.cov_(i,j);
+    ]]>
+  </ioread>
+
       <!-- version 14 -->
         <!-- * position -->
   <ioread
@@ -822,6 +948,247 @@
     ]]>
   </ioread>
 
+  <!-- recob::Slice: schema evolution rules -->
+      <!-- version 15 -->
+
+        <!-- * fCenter -->
+  <ioread
+    version="[-14]"
+    sourceClass="recob::Slice"
+    source="ROOT::Math::PositionVector3D<ROOT::Math::Cartesian3D<double>,ROOT::Math::DefaultCoordinateSystemTag> fCenter;"
+    targetClass="recob::Slice"
+    target="fCenter"
+    include="lardataobj/RecoBase/Slice.h"
+    >
+    <![CDATA[
+	 fCenter = recob::tracking::Point_t(onfile.fCenter.X(), onfile.fCenter.Y(), onfile.fCenter.Z());
+    ]]>
+  </ioread>
+
+        <!-- * fEnd0Pos -->
+  <ioread
+    version="[-14]"
+    sourceClass="recob::Slice"
+    source="ROOT::Math::PositionVector3D<ROOT::Math::Cartesian3D<double>,ROOT::Math::DefaultCoordinateSystemTag> fEnd0Pos;"
+    targetClass="recob::Slice"
+    target="fEnd0Pos"
+    include="lardataobj/RecoBase/Slice.h"
+    >
+    <![CDATA[
+	 fEnd0Pos = recob::tracking::Point_t(onfile.fEnd0Pos.X(), onfile.fEnd0Pos.Y(), onfile.fEnd0Pos.Z());
+    ]]>
+  </ioread>
+
+        <!-- * fEnd1Pos -->
+  <ioread
+    version="[-14]"
+    sourceClass="recob::Slice"
+    source="ROOT::Math::PositionVector3D<ROOT::Math::Cartesian3D<double>,ROOT::Math::DefaultCoordinateSystemTag> fEnd1Pos;"
+    targetClass="recob::Slice"
+    target="fEnd1Pos"
+    include="lardataobj/RecoBase/Slice.h"
+    >
+    <![CDATA[
+	 fEnd1Pos = recob::tracking::Point_t(onfile.fEnd1Pos.X(), onfile.fEnd1Pos.Y(), onfile.fEnd1Pos.Z());
+    ]]>
+  </ioread>
+
+        <!-- * fDirection -->
+  <ioread
+    version="[-14]"
+    sourceClass="recob::Slice"
+    source="ROOT::Math::DisplacementVector3D<ROOT::Math::Cartesian3D<double>,ROOT::Math::DefaultCoordinateSystemTag> fDirection;"
+    targetClass="recob::Slice"
+    target="fDirection"
+    include="lardataobj/RecoBase/Slice.h"
+    >
+    <![CDATA[
+	 fDirection = recob::tracking::Vector_t(onfile.fDirection.X(), onfile.fDirection.Y(), onfile.fDirection.Z());
+    ]]>
+  </ioread>
+
+  <!-- recob::TrackFitHitInfo: schema evolution rules -->
+      <!-- version 11 -->
+
+        <!-- * fHitMeas -->
+  <ioread
+    version="[10]"
+    sourceClass="recob::TrackFitHitInfo"
+    source="double fHitMeas;"
+    targetClass="recob::TrackFitHitInfo"
+    target="fHitMeas"
+    include="lardataobj/RecoBase/TrackFitHitInfo.h"
+    >
+    <![CDATA[
+	 fHitMeas = float(onfile.fHitMeas);
+    ]]>
+  </ioread>
+
+        <!-- * fHitMeasErr2 -->
+  <ioread
+    version="[10]"
+    sourceClass="recob::TrackFitHitInfo"
+    source="double fHitMeasErr2;"
+    targetClass="recob::TrackFitHitInfo"
+    target="fHitMeasErr2"
+    include="lardataobj/RecoBase/TrackFitHitInfo.h"
+    >
+    <![CDATA[
+	 fHitMeasErr2 = float(onfile.fHitMeasErr2);
+    ]]>
+  </ioread>
+
+        <!-- * fTrackStatePar -->
+  <ioread
+    version="[10]"
+    sourceClass="recob::TrackFitHitInfo"
+    source="ROOT::Math::SVector<double,5> fTrackStatePar;"
+    targetClass="recob::TrackFitHitInfo"
+    target="fTrackStatePar"
+    include="lardataobj/RecoBase/TrackFitHitInfo.h"
+    >
+    <![CDATA[
+       for (size_t i=0; i<5; ++i) fTrackStatePar(i) = onfile.fTrackStatePar(i);
+    ]]>
+  </ioread>
+
+        <!-- * fTrackStateCov -->
+  <ioread
+    version="[10]"
+    sourceClass="recob::TrackFitHitInfo"
+    source="ROOT::Math::SMatrix<double,5,5,ROOT::Math::MatRepSym<double,5> > fTrackStateCov;"
+    targetClass="recob::TrackFitHitInfo"
+    target="fTrackStateCov"
+    include="lardataobj/RecoBase/TrackFitHitInfo.h"
+    >
+    <![CDATA[
+       for (size_t i=0; i<5; ++i)
+         for (size_t j=0; j<5; ++j)
+	   fTrackStateCov(i,j) = onfile.fTrackStateCov(i,j);
+    ]]>
+  </ioread>
+
+  <!-- recob::MCSFitResult: schema evolution rules -->
+      <!-- version 11 -->
+
+        <!-- * pid_ -->
+  <ioread
+    version="[10]"
+    sourceClass="recob::MCSFitResult"
+    source="double pid_;"
+    targetClass="recob::MCSFitResult"
+    target="pid_"
+    include="lardataobj/RecoBase/MCSFitResult.h">
+    <![CDATA[
+	 pid_ = int(onfile.pid_);
+    ]]>
+  </ioread>
+
+        <!-- * momFwd_ -->
+  <ioread
+    version="[10]"
+    sourceClass="recob::MCSFitResult"
+    source="double momFwd_;"
+    targetClass="recob::MCSFitResult"
+    target="momFwd_"
+    include="lardataobj/RecoBase/MCSFitResult.h">
+    <![CDATA[
+	 momFwd_ = float(onfile.momFwd_);
+    ]]>
+  </ioread>
+
+        <!-- * momFwdUnc_ -->
+  <ioread
+    version="[10]"
+    sourceClass="recob::MCSFitResult"
+    source="double momFwdUnc_;"
+    targetClass="recob::MCSFitResult"
+    target="momFwdUnc_"
+    include="lardataobj/RecoBase/MCSFitResult.h">
+    <![CDATA[
+	 momFwdUnc_ = float(onfile.momFwdUnc_);
+    ]]>
+  </ioread>
+
+        <!-- * llhdFwd_ -->
+  <ioread
+    version="[10]"
+    sourceClass="recob::MCSFitResult"
+    source="double llhdFwd_;"
+    targetClass="recob::MCSFitResult"
+    target="llhdFwd_"
+    include="lardataobj/RecoBase/MCSFitResult.h">
+    <![CDATA[
+	 llhdFwd_ = float(onfile.llhdFwd_);
+    ]]>
+  </ioread>
+
+        <!-- * momBwd_ -->
+  <ioread
+    version="[10]"
+    sourceClass="recob::MCSFitResult"
+    source="double momBwd_;"
+    targetClass="recob::MCSFitResult"
+    target="momBwd_"
+    include="lardataobj/RecoBase/MCSFitResult.h">
+    <![CDATA[
+	 momBwd_ = float(onfile.momBwd_);
+    ]]>
+  </ioread>
+
+        <!-- * momBwdUnc_ -->
+  <ioread
+    version="[10]"
+    sourceClass="recob::MCSFitResult"
+    source="double momBwdUnc_;"
+    targetClass="recob::MCSFitResult"
+    target="momBwdUnc_"
+    include="lardataobj/RecoBase/MCSFitResult.h">
+    <![CDATA[
+	 momBwdUnc_ = float(onfile.momBwdUnc_);
+    ]]>
+  </ioread>
+
+        <!-- * llhdBwd_ -->
+  <ioread
+    version="[10]"
+    sourceClass="recob::MCSFitResult"
+    source="double llhdBwd_;"
+    targetClass="recob::MCSFitResult"
+    target="llhdBwd_"
+    include="lardataobj/RecoBase/MCSFitResult.h">
+    <![CDATA[
+	 llhdBwd_ = float(onfile.llhdBwd_);
+    ]]>
+  </ioread>
+
+        <!-- * radlengths_ -->
+  <ioread
+    version="[10]"
+    sourceClass="recob::MCSFitResult"
+    source="std::vector<double> radlengths_;"
+    targetClass="recob::MCSFitResult"
+    target="radlengths_"
+    include="lardataobj/RecoBase/MCSFitResult.h">
+    <![CDATA[
+	 radlengths_.clear();
+         for (const auto& i : onfile.radlengths_) radlengths_.push_back(float(i));
+    ]]>
+  </ioread>
+
+        <!-- * angles_ -->
+  <ioread
+    version="[10]"
+    sourceClass="recob::MCSFitResult"
+    source="std::vector<double> angles_;"
+    targetClass="recob::MCSFitResult"
+    target="angles_"
+    include="lardataobj/RecoBase/MCSFitResult.h">
+    <![CDATA[
+	 angles_.clear();
+         for (const auto& i : onfile.angles_) angles_.push_back(float(i));
+    ]]>
+  </ioread>
   
     <!-- art pointers and wrappers -->
   <class name="art::Ptr<recob::Track>" />
