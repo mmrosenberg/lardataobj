@@ -19,6 +19,7 @@
 #include <vector>
 #include <algorithm>
 #include <string>
+#include <utility> // std::make_pair()
 #include <sstream>
 #include <stdexcept> // std::out_of_range
 
@@ -228,7 +229,7 @@ class TestManagerClass {
   void recover() { sv.assign(v); sv.optimize(); }
   
   /// Set the vector as a copy of the sparse vector
-  void mirror() { v.assign(sv.begin(), sv.end()); }
+  void mirror() { v.assign(sv.cbegin(), sv.cend()); }
   
   /// Print a summary of the failures
   int summary() const
@@ -308,12 +309,47 @@ namespace actions {
     void operator() (SparseVector_t& v) const { actionOnSparseVector(v); }
     
       protected:
+    using v_citer_t = typename Vector_t::const_iterator;
     
     virtual void doDescribe(TestClass_t&, std::ostream& out) const
       { out << "no action"; }
     
     virtual void actionOnVector(Vector_t&) const {}
     virtual void actionOnSparseVector(SparseVector_t&) const {}
+    
+    template <typename ITER>
+    static ITER skipRange(ITER start, ITER const end); 
+    template <typename ITER>
+    static ITER skipVoid(ITER start, ITER const end); 
+    template <typename ITER>
+    static ITER rangeStart(ITER const begin, ITER last);
+    template <typename ITER>
+    static ITER voidStart(ITER const begin, ITER last);
+    template <typename Vector>
+    static auto findRangeBorders(Vector& v, std::size_t pos)
+      {
+        if ((pos>= v.size()) || isVoid(v[pos]))
+          return std::make_pair(v.end(), v.end());
+        auto rbegin = rangeStart(v.begin(), v.begin() + pos);
+        auto rend = skipRange(rbegin, v.end());
+        return std::make_pair(rbegin, rend);
+      }
+
+    
+    /// Returns iterator to the first element of the i-th range after start.
+    template <typename ITER>
+    static ITER findRangeStart
+      (Vector_t const& v, std::size_t i, ITER start);
+    template <typename ITER>
+    static ITER findRangeStart(Vector_t const& v, std::size_t i)
+      { return findRangeStart(v, i, v.cbegin()); }
+    
+    /// Returns iterator to the first void element of the i-th void area
+    /// after start.
+    template <typename ITER>
+    static ITER findVoidStart(Vector_t const& v, std::size_t i, ITER start);
+    
+    static bool isVoid(Data_t value) { return SparseVector_t::is_zero(value); }
     
   }; // BaseAction<>
   
@@ -700,6 +736,12 @@ namespace actions {
   
   template <typename T>
   class EraseRangeAt: public BaseAction<T> {
+    /*
+     * Note: `EraseRangeAt<>` prediction might be less than perfect since
+     * std::vector does not have information about the ranges.
+     * In that case, `set_expected_errors(1)` should be called before testing,
+     * and `mirror()` after the test.
+     */
       public:
     using Base_t = BaseAction<T>;
     using typename Base_t::TestClass_t;
@@ -709,16 +751,94 @@ namespace actions {
     
     size_t position;
     
-    EraseRangeAt(size_t pos): Base_t(1), position(pos) {}
+    EraseRangeAt(size_t pos): position(pos) {}
     
       protected:
+    virtual void actionOnVector(Vector_t& v) const override
+      {
+        auto&& [rstart, rend] = Base_t::findRangeBorders(v, position);
+        std::fill(rstart, rend, SparseVector_t::value_zero);
+      }
+    
     virtual void actionOnSparseVector(SparseVector_t& v) const override
       { v.make_void_around(position); }
     
     virtual void doDescribe(TestClass_t&, std::ostream& out) const override
       { out << "void range containing position " << position; }
     
-  }; // Erase<>
+  }; // EraseRangeAt<>
+  
+  
+  template <typename T>
+  class Scale: public BaseAction<T> {
+      public:
+    using Base_t = BaseAction<T>;
+    using typename Base_t::TestClass_t;
+    using typename Base_t::Data_t;
+    using typename Base_t::Vector_t;
+    using typename Base_t::SparseVector_t;
+    
+    size_t position;
+    Data_t factor;
+    
+    Scale(size_t pos, Data_t factor): position(pos), factor(factor) {}
+    
+      protected:
+    virtual void actionOnVector(Vector_t& v) const override
+      {
+        auto&& [rstart, rend] = Base_t::findRangeBorders(v, position);
+        while (rstart < rend) *(rstart++) *= factor;
+      }
+    virtual void actionOnSparseVector(SparseVector_t& v) const override
+      {
+        auto i = v.find_range_number(position);
+        if (i >= v.n_ranges()) return;
+        for (auto& value: v.range_data(i)) value *= factor;
+      }
+    
+    virtual void doDescribe(TestClass_t&, std::ostream& out) const override
+      {
+        out << "scale data by a factor " << factor
+          << " starting at position " << position;
+      } // describe()
+    
+  }; // Scale<>
+  
+  // fun with C++17:
+  template <typename T>
+  explicit Scale(size_t pos, T factor) -> Scale<T>;
+  
+  
+  template <typename T>
+  class ScaleAll: public BaseAction<T> {
+      public:
+    using Base_t = BaseAction<T>;
+    using typename Base_t::TestClass_t;
+    using typename Base_t::Data_t;
+    using typename Base_t::Vector_t;
+    using typename Base_t::SparseVector_t;
+    
+    Data_t factor;
+    
+    ScaleAll(Data_t factor): factor(factor) {}
+    
+      protected:
+    virtual void actionOnVector(Vector_t& v) const override
+      { for (auto& value: v) value *= factor; }
+    virtual void actionOnSparseVector(SparseVector_t& v) const override
+      {
+        for (auto& r: v.iterate_ranges()) {
+          for (auto& value: r) value *= factor;
+        }
+        
+      }
+    
+    virtual void doDescribe(TestClass_t&, std::ostream& out) const override
+      { out << "scale all data by a factor " << factor; }
+    
+  }; // ScaleAll<>
+  
+  template <typename T> explicit ScaleAll(T factor) -> ScaleAll<T>;
   
   
   template <typename T>
@@ -909,6 +1029,76 @@ namespace actions {
 
 
 //------------------------------------------------------------------------------
+//---  Template implementation
+//------------------------------------------------------------------------------
+
+template <typename T> 
+template <typename ITER>
+ITER actions::BaseAction<T>::skipRange(ITER start, ITER const end) {
+  for (; start != end; ++start) if (isVoid(*start)) break;
+  return start;
+} // actions::BaseAction::skipRange()
+
+template <typename T>
+template <typename ITER>
+ITER actions::BaseAction<T>::skipVoid(ITER start, ITER const end) {
+  for (; start != end; ++start) if (!isVoid(*start)) break;
+  return start;
+} // actions::BaseAction::skipVoid()
+
+
+template <typename T>
+template <typename ITER>
+ITER actions::BaseAction<T>::rangeStart(ITER const begin, ITER last)
+{
+  if (last == begin) return begin;
+  while (--last != begin) if (isVoid(*last)) break;
+  return std::next(last);
+} // actions::BaseAction::rangeStart()
+
+template <typename T>
+template <typename ITER>
+ITER actions::BaseAction<T>::voidStart(ITER const begin, ITER last) {
+  if (last == begin) return begin;
+  while (--last != begin) if (!isVoid(*last)) break;
+  return std::next(last);
+} // actions::BaseAction::voidStart()
+
+
+template <typename T>
+template <typename ITER>
+ITER actions::BaseAction<T>::findRangeStart
+  (Vector_t const& v, std::size_t i, ITER start)
+{
+  auto const end = v.cend();
+  
+  start = skipVoid(start, end);
+  while (start != end) {
+    if (i-- == 0) break;
+    start = skipRange(start, end);
+    start = skipVoid(start, end);
+  } // while
+  return start;
+} // actions::BaseAction::findRangeStart()
+
+template <typename T>
+template <typename ITER>
+ITER actions::BaseAction<T>::findVoidStart
+  (Vector_t const& v, std::size_t i, ITER start)
+{
+  auto const end = v.cend();
+  
+  start = skipRange(start, end);
+  while (start != end) {
+    if (i-- == 0) break;
+    start = skipVoid(start, end);
+    start = skipRange(start, end);
+  } // while
+  return start;
+} // actions::BaseAction::findVoidStart()
+
+
+//------------------------------------------------------------------------------
 
 /// A simple test suite
 int main() {
@@ -981,14 +1171,9 @@ int main() {
   
   Test(actions::Insert<Data_t>(9, { 9, 10 }));
   
-  // EraseRangeAt is not implemented for the vectors;
-  // when the position is on the void, nothing happens and we are ok:
-  Test(actions::EraseRangeAt<Data_t>(11).set_expected_errors(0));
+  Test(actions::EraseRangeAt<Data_t>(11));
   
-  // when the position is valid, range is deleted only in the sparse vector
-  // and we expect mismatch...
-  Test(actions::EraseRangeAt<Data_t>(10).set_expected_errors(1));
-  Test.mirror(); // ... which we fix afterwards
+  Test(actions::EraseRangeAt<Data_t>(10));
   
   Test(actions::SetValue<Data_t>(15, -15.));
   
@@ -996,6 +1181,14 @@ int main() {
   
   for (size_t i = 13; i < 16; ++i)
     Test(actions::SetElement<Data_t>(i, i));
+  
+  Test(actions::Scale(15U, 4.0F));
+  
+  Test(actions::Scale(15U, 0.25F));
+  
+  Test(actions::ScaleAll(2.0F));
+  
+  Test(actions::ScaleAll(0.5F));
   
   Test(actions::UnsetElement<Data_t>(14));
   
@@ -1041,7 +1234,6 @@ int main() {
   Test(actions::FailTest<Data_t>());
   Test.recover();
 #endif // SPARSE_VECTOR_TEST_FAIL  
-  
   
   return Test.summary();
 } // main()

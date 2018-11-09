@@ -25,7 +25,7 @@
 
 /// Namespace for generic larsoft
 namespace lar {
-
+ 
 // -----------------------------------------------------------------------------
 // ---  utility classes for sparse_vector
 // ---
@@ -285,6 +285,16 @@ class range_t {
 // ---  lar::sparse_vector<T>
 // ---
 
+// the price of having used subclasses extensively:
+template <typename T> class sparse_vector;
+
+namespace details {
+  template <typename T>
+  decltype(auto) make_const_datarange_t
+    (typename sparse_vector<T>::datarange_t& r);
+} // namespace details
+
+
 /** ****************************************************************************
  * @brief A sparse vector
  * @tparam T type of data stored in the vector
@@ -478,6 +488,7 @@ class sparse_vector {
 	class const_iterator;
 	
 	class datarange_t;
+	class const_datarange_t;
 	// --- ----------------- ---
 	
 	typedef std::vector<datarange_t> range_list_t;
@@ -679,21 +690,68 @@ class sparse_vector {
 	///@}
 	
 	
-	///@{ @name Ranges
-	///
-	/// A range is a region of the sparse vector which contains all non-void
-	/// values.
+	// --- BEGIN Ranges ---------------------------------------------------------
+	/**
+	 * @name Ranges
+	 * 
+	 * A range is a contiguous region of the sparse vector which contains all
+	 * non-void values.
+	 * 
+	 * A sparse vector is effectively a sorted collection of ranges.
+	 * This interface allows:
+	 * * iteration through all ranges (read only)
+	 * * random access to a range by index (read only)
+	 * * access to the data of a selected range (read/write)
+	 * * look-up of the range containing a specified index
+	 *     (read/write; use write with care!)
+	 * * addition (and more generically, combination with existing data) of a new
+	 *     range
+	 * * extension of the sparse vector by appending a range at the end of it
+	 * * remove the data of a range, making it void
+	 */
+	/// @{
 	
 	// --- range location
 	
 	/// Returns the internal list of non-void ranges
 	const range_list_t& get_ranges() const { return ranges; }
+	auto iterate_ranges() -> decltype(auto);
 	
 	/// Returns the internal list of non-void ranges
 	size_type n_ranges() const { return ranges.size(); }
 	
 	/// Returns the i-th non-void range (zero-based)
 	const datarange_t& range(size_t i) const { return ranges[i]; }
+	
+	//@{
+	/**
+	 * @brief Provides direct access to data of i-th non-void range (zero-based)
+	 * @param i index of the range
+	 * @return an object suitable for ranged-for iteration
+	 * 
+	 * No information about the positioning of the range itself is provided,
+	 * which can be obtained with other means (e.g. `range(i).begin_index()`).
+	 * The returned object can be used in a ranged-for loop:
+	 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+	 * for (std::size_t iRange = 0; iRange < sv.n_ranges(); ++iRange) {
+	 *   for (auto& value: sv.range_data(iRange)) {
+	 *     v *= 2.0;
+	 *   }
+	 * }
+	 * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	 * (with `sv` a `lar::sparse_vector` instance).
+	 * 
+	 * While this is a somehow clumsier interface than `get_ranges()`, it allows,
+	 * using the non-`const` version, write access to the data elements.
+	 * It intentionally provides no write access to the location of each range,
+	 * though.
+	 */
+	auto range_data(std::size_t i);
+	auto range_data(std::size_t const i) const { return range_const_data(i); }
+	//@}
+	
+	/// Like `range_data()` but with explicitly read-only access to data.
+	auto range_const_data(std::size_t i) const;
 	
 	/// Returns a constant iterator to the first data range
 	range_const_iterator begin_range() const { return ranges.begin(); }
@@ -705,19 +763,30 @@ class sparse_vector {
 	//@{
 	/**
 	 * @brief Returns an iterator to the range containing the specified index
-	 * @param index absolute index of the element to be seeked
+	 * @param index absolute index of the element to be sought
 	 * @return iterator to containing range, or get_ranges().end() if in void
 	 * @throw std::out_of_range if index is not in the vector
 	 * @see is_void()
 	 */
 	range_const_iterator find_range_iterator(size_type index) const;
-	range_iterator find_range_iterator(size_type index);
+	range_iterator find_range_iterator(size_type index)
+		{ return ranges.begin() + find_range_number(index); }
 	//@}
 	
+	/**
+	 * @brief Returns the number (0-based) of range containing `index`.
+	 * @param index absolute index of the element to be sought
+	 * @return index of containing range, or `n_ranges()` if in void
+	 * @throw std::out_of_range if index is not in the vector
+	 * @see is_void()
+	 */
+	std::size_t find_range_number(size_type index) const
+		{ return find_range_iterator(index) - begin_range(); }
+  
 	//@{
 	/**
 	 * @brief Returns the range containing the specified index
-	 * @param index absolute index of the element to be seeked
+	 * @param index absolute index of the element to be sought
 	 * @return the containing range
 	 * @throw std::out_of_range if index is in no range (how appropriate!)
 	 * @see is_void()
@@ -729,10 +798,11 @@ class sparse_vector {
 	/**
 	 * @brief Casts the whole range with the specified item into the void
 	 * @param index absolute index of the element whose range is cast to void
+	 * @return the range just voided
 	 * @throw std::out_of_range if index is not in the vector
 	 * @see unset(), make_void()
 	 */
-	void make_void_around(size_type index);
+	datarange_t make_void_around(size_type index);
 	
 	//@{
 	/**
@@ -889,10 +959,19 @@ class sparse_vector {
 	/**
 	 * @brief Turns the specified range into void
 	 * @param iRange iterator or index of range to be deleted
+	 * @return the range just voided
 	 * @see make_void(), unset_at()
+	 * 
+	 * The range is effectively removed from the sparse vector, rendering void
+	 * the interval it previously covered.
+	 * The range object itself is returned (no copy is performed).
+	 * 
+	 * The specified range must be valid. Trying to void an invalid range
+	 * (including `end_range()`) yields undefined behavior.
 	 */
-	void void_range(range_iterator iRange) { ranges.erase(iRange); }
-	void void_range(size_t iRange) { ranges.erase(ranges.begin() + iRange); }
+	datarange_t void_range(range_iterator const iRange);
+	datarange_t void_range(std::size_t const iRange)
+		{ return void_range(ranges.begin() + iRange); }
 	//@}
 	///@}
 	
@@ -1044,6 +1123,10 @@ class sparse_vector {
 		{ return data.empty()? iInsert: ranges.insert(iInsert, std::move(data)); }
 	//@}
 	
+	/// Implementation detail of `add_range()`, with where to add the range.
+	const datarange_t& add_range_before
+	  (size_type offset, vector_t&& new_data, range_iterator nextRange);
+	
 	/// Voids the starting elements up to index (excluded) of a given range
 	range_iterator eat_range_head(range_iterator iRange, size_t index);
 	
@@ -1057,6 +1140,7 @@ class sparse_vector {
 
 
 } // namespace lar
+
 
 /**
  * @brief Prints a sparse vector into a stream
@@ -1178,6 +1262,20 @@ class lar::sparse_vector<T>::datarange_t: public range_t<size_type> {
 	void move_tail(size_type to_index, value_type def_value = value_zero)
 		{ resize(base_t::relative_index(to_index), def_value); }
 	
+	/**
+	 * @brief Dumps the content of this data range into a stream.
+	 * @tparam Stream type of stream to sent the dump to
+	 * @param out stream to sent the dump to
+	 *
+	 * The output format is:
+	 *     
+	 *     [min - max] (size) { values... }
+	 *     
+	 * Output is on a single line, which is not terminated.
+	 */
+	template <typename Stream>
+	void dump(Stream&& out) const;
+	
 	
 		protected:
 	vector_t values; ///< data in the range
@@ -1186,6 +1284,63 @@ class lar::sparse_vector<T>::datarange_t: public range_t<size_type> {
 	
 }; // class datarange_t
 
+
+/**
+ * @brief A constant reference to a data range.
+ * 
+ * Values in the range can be modified, but their position and number can not.
+ */
+template <typename T>
+class lar::sparse_vector<T>::const_datarange_t: private datarange_t {
+    public:
+  using iterator = typename datarange_t::iterator;
+  using const_iterator = typename datarange_t::const_iterator;
+  
+  // `range_t` interface
+  using datarange_t::offset;
+  using datarange_t::last;
+  using datarange_t::begin_index;
+  using datarange_t::end_index;
+  using datarange_t::relative_index;
+  using datarange_t::size;
+  using datarange_t::empty;
+  using datarange_t::includes;
+  using datarange_t::overlap;
+  using datarange_t::separate;
+  using datarange_t::borders;
+  using datarange_t::operator<;
+  using datarange_t::operator==;
+  using datarange_t::is_valid;
+  using datarange_t::less;
+  using less_int_range = typename datarange_t::less_int_range;
+  
+  // `datarange_t` interface
+  using datarange_t::get_iterator;
+  decltype(auto) begin() { return datarange_t::begin(); }
+  decltype(auto) end() { return datarange_t::end(); }
+//   using datarange_t::begin;
+//   using datarange_t::end;
+//   using datarange_t::cbegin;
+//   using datarange_t::cend;
+  using datarange_t::operator[];
+  using datarange_t::dump;
+  
+  /// Return the vector of data values (only constant access).
+  const vector_t& data() const { return base().values; }
+  
+  ~const_datarange_t() = delete; // can't destroy; can cast into it though
+  
+    protected:
+  friend decltype(auto) details::make_const_datarange_t<T>(datarange_t&);
+  
+  datarange_t const& base() const
+    { return static_cast<datarange_t const&>(*this); }
+  datarange_t& base() { return static_cast<datarange_t&>(*this); }
+  
+  static void static_check()
+    { static_assert(sizeof(const_datarange_t) == sizeof(datarange_t)); }
+  
+}; // lar::sparse_vector<T>::const_datarange_t
 
 
 // -----------------------------------------------------------------------------
@@ -1462,6 +1617,7 @@ class lar::sparse_vector<T>::iterator: public const_iterator {
 // -----------------------------------------------------------------------------
 namespace lar::details {
   
+  // --------------------------------------------------------------------------
   /// Enclosure to use two iterators representing a range in a range-for loop.
   template <typename BITER, typename EITER>
   class iteratorRange {
@@ -1471,7 +1627,37 @@ namespace lar::details {
     iteratorRange(BITER const& b, EITER const& e): b(b), e(e) {}
     auto const& begin() const { return b; }
     auto const& end() const { return e; }
+    auto const& size() const { return std::distance(begin(), end()); }
   }; // iteratorRange()
+  
+  
+  // --------------------------------------------------------------------------
+  template <typename T>
+  decltype(auto) make_const_datarange_t
+    (typename sparse_vector<T>::datarange_t& r)
+    { return static_cast<typename sparse_vector<T>::const_datarange_t&>(r); }
+  
+
+  // --------------------------------------------------------------------------
+  template <typename T>
+  class const_datarange_iterator {
+    using const_datarange_t = typename sparse_vector<T>::const_datarange_t;
+    using base_iterator = typename sparse_vector<T>::range_iterator;
+    base_iterator it;
+      public:
+    // minimal set of features for ranged-for loops
+    const_datarange_iterator() = default;
+    const_datarange_iterator(base_iterator it): it(it) {}
+    
+    const_datarange_iterator& operator++() { ++it; return *this; }
+    const_datarange_t& operator*() const
+      { return make_const_datarange_t<T>(*it); }
+    bool operator!=(const_datarange_iterator const& other) const
+      { return it != other.it; }
+    
+  };
+  
+  // --------------------------------------------------------------------------
   
 } // namespace lar::details
 
@@ -1483,6 +1669,13 @@ template <typename T>
 constexpr typename lar::sparse_vector<T>::value_type
 	lar::sparse_vector<T>::value_zero;
 
+template <typename T> 
+decltype(auto) lar::sparse_vector<T>::iterate_ranges() {
+  return details::iteratorRange(
+    details::const_datarange_iterator<T>(ranges.begin()),
+    details::const_datarange_iterator<T>(ranges.end())
+    );
+} // lar::sparse_vector<T>::iterate_ranges()
 
 template <typename T> 
 void lar::sparse_vector<T>::resize(size_type new_size) {
@@ -1604,7 +1797,7 @@ inline typename lar::sparse_vector<T>::size_type lar::sparse_vector<T>::count()
 
 template <typename T>
 typename lar::sparse_vector<T>::value_type& lar::sparse_vector<T>::set_at
-	(size_type index, value_type value)
+  (size_type const index, value_type value)
 {
 	// first range not including the index
 	range_iterator iNextRange = find_next_range_iter(index);
@@ -1616,7 +1809,7 @@ typename lar::sparse_vector<T>::value_type& lar::sparse_vector<T>::set_at
 		// if it includes the index, we set the existing value;
 		// or it precedes it, and our index is in the void, add the value as a
 		// range
-		datarange_t& range(*--iNextRange);
+		datarange_t& range(*std::prev(iNextRange));
 		if (index < range.end_index()) return range[index] = value;
 	}
 	// so we are in the void; add the value as a new range
@@ -1662,6 +1855,15 @@ void lar::sparse_vector<T>::unset_at(size_type index) {
 
 
 template <typename T>
+auto lar::sparse_vector<T>::range_data(std::size_t const i)
+  { auto& r = ranges[i]; return details::iteratorRange(r.begin(), r.end()); }
+
+template <typename T>
+auto lar::sparse_vector<T>::range_const_data(std::size_t const i) const
+  { auto& r = ranges[i]; return details::iteratorRange(r.cbegin(), r.cend()); }
+
+
+template <typename T>
 typename lar::sparse_vector<T>::range_const_iterator
 	lar::sparse_vector<T>::find_range_iterator(size_type index) const
 {
@@ -1672,16 +1874,6 @@ typename lar::sparse_vector<T>::range_const_iterator
 		|| (index >= (--iNextRange)->end_index()))?
 		ranges.end(): iNextRange;
 } // lar::sparse_vector<T>::find_range_iterator() const
-
-
-template <typename T>
-inline typename lar::sparse_vector<T>::range_iterator 
-	lar::sparse_vector<T>::find_range_iterator(size_type index)
-{
-	return ranges.begin() + (
-		(const_cast<const this_t*>(this)->find_range_iterator(index))
-		- ranges.begin());
-} // lar::sparse_vector<T>::find_range_iterator()
 
 
 template <typename T>
@@ -1706,7 +1898,7 @@ inline typename lar::sparse_vector<T>::datarange_t&
 
 
 template <typename T>
-void lar::sparse_vector<T>::make_void_around(size_type index) {
+auto lar::sparse_vector<T>::make_void_around(size_type index) -> datarange_t {
 	if (ranges.empty() || (index >= size()))
 		throw std::out_of_range("empty sparse vector");
 	// range after the index:
@@ -1714,9 +1906,9 @@ void lar::sparse_vector<T>::make_void_around(size_type index) {
 	if ((iNextRange == ranges.begin()) 
 		|| ((--iNextRange)->end_index() <= index))
 	{
-		return;
+		return {};
 	}
-	ranges.erase(iNextRange);
+	return void_range(iNextRange);
 } // lar::sparse_vector<T>::make_void_around()
 
 
@@ -1728,7 +1920,7 @@ const typename lar::sparse_vector<T>::datarange_t& lar::sparse_vector<T>::add_ra
 	range_iterator iInsert = find_next_range_iter(offset);
 	
 	// is there a range before this, which includes the offset?
-	if ((iInsert != ranges.begin()) && (iInsert-1)->borders(offset)) {
+	if ((iInsert != ranges.begin()) && std::prev(iInsert)->borders(offset)) {
 		// then we should extend it
 		(--iInsert)->extend(offset, first, last);
 	}
@@ -1746,25 +1938,13 @@ const typename lar::sparse_vector<T>::datarange_t& lar::sparse_vector<T>::add_ra
   (size_type offset, vector_t&& new_data)
 {
 	// insert the new range before the existing range which starts after offset
-	range_iterator iInsert = std::upper_bound(
-		ranges.begin(), ranges.end(), offset,
-		typename datarange_t::less_int_range(datarange_t::less)
-		);
+	return add_range_before(offset, std::move(new_data),
+	  std::upper_bound(
+	    ranges.begin(), ranges.end(), offset,
+	    typename datarange_t::less_int_range(datarange_t::less)
+	  )
+	  );
 	
-	// is there a range before this, which includes the offset?
-	if ((iInsert != ranges.begin()) && (iInsert-1)->borders(offset)) {
-		// then we should extend it
-		(--iInsert)->extend(offset, new_data.begin(), new_data.end());
-	}
-	else {
-		// no range before the insertion one includes the offset of the new range;
-		// ... we need to add it as a new range;
-		// it is not really clear to me [GP] why I need a std::move here, since
-		// new_data is a rvalue already; in doubt, I have painted all this kind
-		// of constructs with move()s, just in case
-		iInsert = insert_range(iInsert, { offset, std::move(new_data) });
-	}
-	return merge_ranges(iInsert);
 } // lar::sparse_vector<T>::add_range(vector)
 
 
@@ -1900,6 +2080,14 @@ void lar::sparse_vector<T>::make_void(iterator first, iterator last) {
 
 
 template <typename T>
+auto lar::sparse_vector<T>::void_range(range_iterator iRange) -> datarange_t {
+	auto r { std::move(*iRange) }; // triggering move constructor
+	ranges.erase(iRange);          // the emptied range is removed from vector
+	return r;                      // returning it as a temporary avoids copies
+} // lar::sparse_vector<T>::void_range()
+
+
+template <typename T>
 bool lar::sparse_vector<T>::is_valid() const {
 	// a sparse vector with no non-null elements can't be detected invalid
 	if (ranges.empty()) return true;
@@ -1970,6 +2158,30 @@ typename lar::sparse_vector<T>::range_const_iterator
 	// if so, the previus range is the one we want
 	return ((it != rbegin) && std::prev(it)->borders(index))? std::prev(it): it;
 } // lar::sparse_vector<T>::find_extending_range_iter() const
+
+
+template <typename T>
+const typename lar::sparse_vector<T>::datarange_t& lar::sparse_vector<T>::add_range_before
+  (size_type offset, vector_t&& new_data, range_iterator nextRange)
+{
+	// insert the new range before the existing range which starts after offset
+	range_iterator iInsert = nextRange;
+	
+	// is there a range before this, which includes the offset?
+	if ((iInsert != ranges.begin()) && (iInsert-1)->borders(offset)) {
+		// then we should extend it
+		(--iInsert)->extend(offset, new_data.begin(), new_data.end());
+	}
+	else {
+		// no range before the insertion one includes the offset of the new range;
+		// ... we need to add it as a new range;
+		// it is not really clear to me [GP] why I need a std::move here, since
+		// new_data is a rvalue already; in doubt, I have painted all this kind
+		// of constructs with move()s, just in case
+		iInsert = insert_range(iInsert, { offset, std::move(new_data) });
+	}
+	return merge_ranges(iInsert);
+} // lar::sparse_vector<T>::add_range_before(vector, iterator)
 
 
 template <typename T> 
@@ -2057,11 +2269,15 @@ std::ostream& operator<< (std::ostream& out, const lar::sparse_vector<T>& v) {
 	typename lar::sparse_vector<T>::range_const_iterator
 		iRange = v.begin_range(), rend = v.end_range();
 	while (iRange != rend) {
+		out << "\n  ";
+		iRange->dump(out);
+		/*
 		out << "\n  [" << iRange->begin_index() << " - " << iRange->end_index()
 			<< "] (" << iRange->size() << "):";
 		typename lar::sparse_vector<T>::datarange_t::const_iterator
 			iValue = iRange->begin(), vend = iRange->end();
 		while (iValue != vend) out << " " << (*(iValue++));
+		*/
 		++iRange;
 	} // for
 	return out << std::endl;
@@ -2102,6 +2318,16 @@ void lar::sparse_vector<T>::datarange_t::move_head
 			);
 	}
 } // lar::sparse_vector<T>::datarange_t::move_head()
+
+
+template <typename T>
+template <typename Stream>
+void lar::sparse_vector<T>::datarange_t::dump(Stream&& out) const {
+  out << "[" << this->begin_index() << " - " << this->end_index() << "] ("
+    << this->size() << "): {";
+  for (auto const& v: this->values) out << " " << v;
+  out << " }";
+} // lar::sparse_vector<T>::datarange_t::dump()
 
 
 // -----------------------------------------------------------------------------
