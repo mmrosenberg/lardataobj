@@ -97,8 +97,8 @@ namespace recob {
     //double dcoss[3];
     //double dcose[3];
     //a.Direction(dcoss,dcose);
-    TVector3 const& start = a.VertexDirection();
-    TVector3 const& end   = a.EndDirection();
+    auto const& start = a.VertexDirection();
+    auto const& end   = a.EndDirection();
     stream << std::setiosflags(std::ios::fixed) << std::setprecision(3)
            << "\n Track ID "       << std::setw(4) << std::right << a.ID()
            << " Theta = "            << std::setw(6) << std::right << a.Theta()
@@ -128,27 +128,6 @@ namespace recob {
   }
 
   //----------------------------------------------------------------------------
-  TMatrixD Track::VertexCovariance() const {
-    TMatrixD result = TMatrixD(5,5);
-    for (unsigned int i=0; i<5; i++) {
-      for (unsigned int j=0; j<5; j++) {
-	result(i,j) = fCovVertex.At(i,j);
-      }
-    }
-    return result;
-  }
-
-  //----------------------------------------------------------------------------
-  TMatrixD Track::EndCovariance() const {
-    TMatrixD result = TMatrixD(5,5);
-    for (unsigned int i=0; i<5; i++) {
-      for (unsigned int j=0; j<5; j++) {
-	result(i,j) = fCovEnd.At(i,j);
-      }
-    }
-    return result;
-  }
-  //----------------------------------------------------------------------------
   void Track::Extent(std::vector<double>& start, std::vector<double>& end) const
     { details::legacy::FillTwoVectors(Vertex(), End(), start, end); }
 
@@ -156,23 +135,23 @@ namespace recob {
   //----------------------------------------------------------------------------
   Track::SVector6 Track::VertexParametersGlobal6D() const {
     Track::SVector6 result;
-    result[0] = Vertex()[0];
-    result[1] = Vertex()[1];
-    result[2] = Vertex()[2];
-    result[3] = VertexDirection()[0];
-    result[4] = VertexDirection()[1];
-    result[5] = VertexDirection()[2];
+    result[0] = Vertex().X();
+    result[1] = Vertex().Y();
+    result[2] = Vertex().Z();
+    result[3] = VertexDirection().X();
+    result[4] = VertexDirection().Y();
+    result[5] = VertexDirection().Z();
     return result;
   }
 
   Track::SVector6 Track::EndParametersGlobal6D() const {
     Track::SVector6 result;
-    result[0] = End()[0];
-    result[1] = End()[1];
-    result[2] = End()[2];
-    result[3] = EndDirection()[0];
-    result[4] = EndDirection()[1];
-    result[5] = EndDirection()[2];
+    result[0] = End().X();
+    result[1] = End().Y();
+    result[2] = End().Z();
+    result[3] = EndDirection().X();
+    result[4] = EndDirection().Y();
+    result[5] = EndDirection().Z();
     return result;
   }
 
