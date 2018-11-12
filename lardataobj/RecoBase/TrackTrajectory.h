@@ -36,7 +36,7 @@ namespace recob {
    * The track trajectory class contains a trajectory in 6D space representing
    * the path walked by a particle. A trajectory point is made of a 3D position
    * component (measured in centimeters) and a momentum component (measured in
-   * GeV/c).
+   * GeV/c); for a discussion on the object type for coordinates see recob::tracking::Coord_t.
    * The associated hits are integral part of the track trajectory.
    * To store additional point-by-point information, the track trajectory
    * augments `recob::Trajectory`, of which it presents most of the interface,

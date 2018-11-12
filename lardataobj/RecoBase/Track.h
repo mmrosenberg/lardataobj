@@ -32,7 +32,8 @@ namespace recob {
    * * particle ID hypothesis used in the fit (if any)
    * * covariance matrices at start (vertex) and end positions.
    * 
-   * Please refer to the `recob::TrackTrajectory` documentation for more information about it.
+   * Please refer to the `recob::TrackTrajectory` documentation for more information about it;
+   * for a discussion on the object type for coordinates see recob::tracking::Coord_t.
    *
    * In terms of interface, `recob::Track` extends `recob::TrackTrajectory`, so that methods of the stored `recob::TrackTrajectory` can be called directly from the `recob::Track interface`,
    * e.g.:
