@@ -14,13 +14,18 @@ namespace recob {
 
   namespace tracking {
 
-    /// Type used for coordinates and values in general.
+    /**
+     * Type used for coordinates and values in general.
+     * Double32_t is type that matches a 64-bits double when in memory, but is converted to a 32-bit float when written to disk.
+     * Given the size and resolution of LArTPC detectors, single-precision floats are sufficient to store the results of tracking
+     * algorithms, but it's safer to perform calculations in double precision.
+     */
     using Coord_t = Double32_t;
     
-    /// Type for representation of position in physical 3D space.
+    /// Type for representation of position in physical 3D space. See recob::tracking::Coord_t for more details on the actual type used.
     using Point_t = ROOT::Math::PositionVector3D<ROOT::Math::Cartesian3D<Coord_t>, ROOT::Math::GlobalCoordinateSystemTag>;
     
-    /// Type for representation of momenta in 3D space.
+    /// Type for representation of momenta in 3D space. See recob::tracking::Coord_t for more details on the actual type used.
     using Vector_t = ROOT::Math::DisplacementVector3D <ROOT::Math::Cartesian3D<Coord_t>, ROOT::Math::GlobalCoordinateSystemTag>;
     
     /// Type of trajectory point list.
@@ -32,6 +37,8 @@ namespace recob {
     /// Type for representation of space rotations.
     using Rotation_t = ROOT::Math::Rotation3D;
 
+    /// @{
+    /// Tools to aide the conversion from TVector3 to Point_t and Vector_t
     template <typename To, typename From> std::vector<To> convertVec(std::vector<From> const& in) {
       std::vector<To> out;
       out.reserve(in.size());
@@ -50,6 +57,7 @@ namespace recob {
     template <typename Vector> Vector_t toVector(Vector const& p) { return geo::vect::convertTo<Vector_t>(p); }
     template <typename Vector> std::vector<Vector_t> convertCollToVector (std::vector<Vector> const& coll)
       { return geo::vect::convertCollTo<Vector_t>(coll); }
+    /// @}
 
     /// A point in the trajectory, with position and momentum.
     struct TrajectoryPoint_t {

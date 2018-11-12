@@ -39,7 +39,8 @@ namespace recob {
    * The trajectory class contains a trajectory in 6D space representing the
    * path
    * walked by a particle. A trajectory point is made of a 3D position component
-   * (measured in centimeters) and a momentum component (measured in GeV/c).
+   * (measured in centimeters) and a momentum component (measured in GeV/c);
+   * for a discussion on the object type for coordinates see: recob::tracking::Coord_t.
    * 
    * The object contains information about the trajectory, and no
    * uncertainty, as that is considered a fit result (see `recob::Track`).
