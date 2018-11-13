@@ -12,7 +12,7 @@
 #include <map>
 #include <string>
 
-namespace recob {
+namespace larpandoraobj {
   
    /**
    * @brief Metadata associated to PFParticles 

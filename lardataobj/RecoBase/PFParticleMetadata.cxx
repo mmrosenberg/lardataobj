@@ -8,7 +8,7 @@
 
 #include "lardataobj/RecoBase/PFParticleMetadata.h"
 
-namespace recob{
+namespace larpandoraobj{
     
     PFParticleMetadata::PFParticleMetadata() 
 	{}
