@@ -95,7 +95,8 @@
  <class name="art::Wrapper< std::vector< anab::MVADescription<5> > >" />
 
 
- <class name="anab::Calorimetry"           ClassVersion="16"                           >
+ <class name="anab::Calorimetry"           ClassVersion="17"                           >
+  <version ClassVersion="17" checksum="836686545"/>
   <version ClassVersion="16" checksum="2995599306"/>
   <version ClassVersion="15" checksum="2095251371"/>
   <version ClassVersion="14" checksum="1421274164"/>
@@ -295,5 +296,19 @@
  <class name="art::Wrapper< art::Assns< simb::MCParticle, recob::PFParticle,      anab::BackTrackerMatchingData > >"  />
  <class name="art::Wrapper< art::Assns< recob::PFParticle,     simb::MCParticle,  void > >"  />
  <class name="art::Wrapper< art::Assns< recob::PFParticle,     simb::MCParticle,  anab::BackTrackerMatchingData > >"  />
+
+  <ioread
+    version="[-16]"
+    sourceClass="anab::Calorimetry"
+    source="std::vector<TVector3> fXYZ"
+    targetClass="anab::Calorimetry"
+    target="fXYZ"
+    include="TVector3.h;Math/GenVector/CoordinateSystemTags.h;Math/GenVector/Cartesian3D.h;Math/GenVector/PositionVector3D.h">
+    <![CDATA[
+      fXYZ.clear();
+      for (auto const& p: onfile.fXYZ)
+        fXYZ.emplace_back(p.X(), p.Y(), p.Z());
+    ]]>
+  </ioread>
 
 </lcgdict>

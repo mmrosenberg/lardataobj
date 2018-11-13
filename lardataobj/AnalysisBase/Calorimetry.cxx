@@ -22,17 +22,18 @@ namespace anab{
     fDeadWireResR.clear();
     fTrkPitch.clear();
     fXYZ.clear();
+    fTpIndices.clear();
   }
 
 
  //----------------------------------------------------------------------
-  Calorimetry::Calorimetry(double KineticEnergy,
-			   std::vector<double> const& dEdx,
-			   std::vector<double> const& dQdx,
-			   std::vector<double> const& resRange,
-			   std::vector<double> const& deadwire,
-			   double Range,
-			   double TrkPitch,
+  Calorimetry::Calorimetry(float KineticEnergy,
+			   std::vector<float> const& dEdx,
+			   std::vector<float> const& dQdx,
+			   std::vector<float> const& resRange,
+			   std::vector<float> const& deadwire,
+			   float Range,
+			   float TrkPitch,
 			   geo::PlaneID planeID) 
   {
  
@@ -40,8 +41,7 @@ namespace anab{
     fRange = Range;
     for(size_t i=0; i!=dQdx.size(); ++i){
       fTrkPitch.push_back(TrkPitch);
-      TVector3 v(-999,-999,-999);
-      fXYZ.push_back(v);
+      fXYZ.push_back({-999.,-999.,-999.});
     }
     if(dEdx.size() != resRange.size())
       throw cet::exception("anab::Calorimetry") << "dE/dx and residual range vectors "
@@ -65,13 +65,13 @@ namespace anab{
 
 
   //----------------------------------------------------------------------
-  Calorimetry::Calorimetry(double KineticEnergy,
-			   std::vector<double> const& dEdx,
-			   std::vector<double> const& dQdx,
-			   std::vector<double> const& resRange,
-			   std::vector<double> const& deadwire,
-			   double Range,
-			   std::vector<double> const& TrkPitch,
+  Calorimetry::Calorimetry(float KineticEnergy,
+			   std::vector<float> const& dEdx,
+			   std::vector<float> const& dQdx,
+			   std::vector<float> const& resRange,
+			   std::vector<float> const& deadwire,
+			   float Range,
+			   std::vector<float> const& TrkPitch,
 			   geo::PlaneID planeID) 
   {
     
@@ -83,8 +83,7 @@ namespace anab{
       throw cet::exception("anab::Calorimetry") << "dE/dx and residual range vectors "
 						<< "have different sizes, this is a problem.\n";
     for(size_t i=0; i!=dQdx.size(); ++i){
-      TVector3 v(-999,-999,-999);
-      fXYZ.push_back(v);
+      fXYZ.push_back({-999.,-999.,-999.});
     }
     fdEdx.resize(dEdx.size());
     fdQdx.resize(dQdx.size());
@@ -103,43 +102,46 @@ namespace anab{
   }
 
   //----------------------------------------------------------------------
-  Calorimetry::Calorimetry(double KineticEnergy,
-			   std::vector<double> const& dEdx,
-			   std::vector<double> const& dQdx,
-			   std::vector<double> const& resRange,
-			   std::vector<double> const& deadwire,
-			   double Range,
-			   std::vector<double> const& TrkPitch,
-			   std::vector<TVector3> const& XYZ,
+  Calorimetry::Calorimetry(float KineticEnergy,
+			   std::vector<float> const& dEdx,
+			   std::vector<float> const& dQdx,
+			   std::vector<float> const& resRange,
+			   std::vector<float> const& deadwire,
+			   float Range,
+			   std::vector<float> const& TrkPitch,
+			   std::vector<anab::Point_t> const& XYZ,
 			   geo::PlaneID planeID) 
+    : Calorimetry(KineticEnergy, dEdx, dQdx, resRange, deadwire, Range, TrkPitch, XYZ, std::vector<size_t>(),planeID) { }
+  //----------------------------------------------------------------------
+  Calorimetry::Calorimetry(float KineticEnergy,
+			   std::vector<float> const& dEdx,
+			   std::vector<float> const& dQdx,
+			   std::vector<float> const& resRange,
+			   std::vector<float> const& deadwire,
+			   float Range,
+			   std::vector<float> const& TrkPitch,
+			   std::vector<anab::Point_t> const& XYZ,
+			   std::vector<size_t> const& TpIndices,
+			   geo::PlaneID planeID)
   {
     
+    if( dEdx.size() != resRange.size() ||
+        dEdx.size() != dQdx.size()     ||
+        dEdx.size() != TrkPitch.size() ||
+        dEdx.size() != XYZ.size()      ||
+        (TpIndices.size()>0 && dEdx.size() != TpIndices.size()) )
+      throw cet::exception("anab::Calorimetry") << "Input vectors "
+						<< "have different sizes, this is a problem.\n";
     fPlaneID = planeID;
     fKineticEnergy = KineticEnergy;
     fRange = Range;
     fTrkPitch = TrkPitch;
-    if(dEdx.size() != resRange.size())
-      throw cet::exception("anab::Calorimetry") << "dE/dx and residual range vectors "
-						<< "have different sizes, this is a problem.\n";
-    for(size_t i=0; i!=dQdx.size(); ++i){
-      fXYZ.push_back(TVector3(-999,-999,-999));
-    }
-    fdEdx.resize(dEdx.size());
-    fdQdx.resize(dQdx.size());
-    fResidualRange.resize(resRange.size());
-    fXYZ.resize(XYZ.size());
-    for(size_t i = 0; i < dEdx.size(); ++i){
-      fdEdx[i]          = dEdx[i];
-      fdQdx[i]          = dQdx[i];
-      fResidualRange[i] = resRange[i];
-      fXYZ[i]           = XYZ[i];
-    }
-    
-    fDeadWireResR.resize(deadwire.size());
-    for(size_t i = 0; i<deadwire.size(); ++i){
-      fDeadWireResR[i] = deadwire[i];
-    }
-
+    fdEdx = dEdx;
+    fdQdx = dQdx;
+    fResidualRange = resRange;
+    fXYZ = XYZ;
+    fTpIndices = TpIndices;
+    fDeadWireResR = deadwire;
   }
 
   //----------------------------------------------------------------------

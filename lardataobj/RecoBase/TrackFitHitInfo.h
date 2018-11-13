@@ -49,8 +49,8 @@ namespace recob {
     geo::WireID WireId() const { return geo::WireID(fCryostatId,fTpcId,fPlaneId,fWireId); }
     
   private:
-    double            fHitMeas;       ///< hit position measurement
-    double            fHitMeasErr2;   ///< squared uncertainty of the hit position measurement
+    float             fHitMeas;       ///< hit position measurement
+    float             fHitMeasErr2;   ///< squared uncertainty of the hit position measurement
     SVector5          fTrackStatePar; ///< track parameters
     SMatrixSym55      fTrackStateCov; ///< covariance matrix
     unsigned int      fWireId;        ///< wire id where the hit is located

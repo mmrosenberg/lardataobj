@@ -43,6 +43,7 @@ cet_report_compiler_flags()
 # these are minimum required versions, not the actual product versions
 find_ups_product( canvas )
 find_ups_product( larcoreobj )
+find_ups_product( larcorealg )
 find_ups_product( nusimdata )
 find_ups_boost( )
 find_ups_root( )

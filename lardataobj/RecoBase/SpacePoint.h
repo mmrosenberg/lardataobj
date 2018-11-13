@@ -15,6 +15,7 @@
 #include <iosfwd>
 
 #include "larcoreobj/SimpleTypesAndConstants/PhysicalConstants.h"
+#include <Rtypes.h>
 
 namespace recob {
 
@@ -31,20 +32,20 @@ namespace recob {
 
   private:
     ID_t                       fID;        ///< SpacePoint ID
-    double                     fXYZ[3];    ///< position of SpacePoint in xyz
-    double                     fErrXYZ[6]; ///< Error matrix (triangular).
-    double                     fChisq;     ///< Chisquare.
+    Double32_t                 fXYZ[3];    ///< position of SpacePoint in xyz
+    Double32_t                 fErrXYZ[6]; ///< Error matrix (triangular).
+    Double32_t                 fChisq;     ///< Chisquare.
 
   public:
-    SpacePoint(double const*xyz,
-	       double const*err,
-	       double  chisq,
+    SpacePoint(Double32_t const*xyz,
+	       Double32_t const*err,
+	       Double32_t  chisq,
 	       int     id=InvalidID);
 
     ID_t                       ID()      const;
-    const double*              XYZ()     const;
-    const double*              ErrXYZ()  const;
-    double                     Chisq()   const;
+    const Double32_t*              XYZ()     const;
+    const Double32_t*              ErrXYZ()  const;
+    Double32_t                     Chisq()   const;
 
     friend std::ostream& operator << (std::ostream& o, const SpacePoint & a);
     friend bool          operator <  (const SpacePoint & a, const SpacePoint & b);
@@ -61,8 +62,8 @@ namespace recob {
 
 
 inline recob::SpacePoint::ID_t recob::SpacePoint::ID() const { return fID; }
-inline const double* recob::SpacePoint::XYZ()     const { return fXYZ;    }
-inline const double* recob::SpacePoint::ErrXYZ()  const { return fErrXYZ; }
-inline double        recob::SpacePoint::Chisq()   const { return fChisq;  }
+inline const Double32_t* recob::SpacePoint::XYZ()     const { return fXYZ;    }
+inline const Double32_t* recob::SpacePoint::ErrXYZ()  const { return fErrXYZ; }
+inline Double32_t        recob::SpacePoint::Chisq()   const { return fChisq;  }
 
 #endif //SPACEPOINT_H

@@ -17,10 +17,11 @@ namespace recob {
   
   class Slice  {
 
+  public:
+
     using Point_t = tracking::Point_t;
     using Vector_t  = tracking::Vector_t;
 
-  public:
     Slice(); // Needed to hide constexpr from GCCXML.
 
     Slice(int id, Point_t center, Vector_t direction, Point_t end0Pos, Point_t end1Pos, float aspectratio, float charge)
