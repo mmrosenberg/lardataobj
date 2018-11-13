@@ -34,7 +34,7 @@ namespace anab {
     std::vector<float>   fDeadWireResR;    ///< dead wire residual range, collection plane
     float                fRange;           ///< total range of track
     std::vector<float>   fTrkPitch;        ///< track pitch on collection plane
-    std::vector<Point_t> fXYZ;             ///< coordinates of space points
+    std::vector<Point_t> fXYZ;             ///< coordinates of space points; for a discussion on the object type for coordinates see recob::tracking::Coord_t.
     std::vector<size_t>  fTpIndices;       ///< indices of original trajectory points on track
 
   private:
