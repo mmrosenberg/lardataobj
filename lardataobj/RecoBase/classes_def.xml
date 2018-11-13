@@ -139,7 +139,7 @@
  <class name="art::Ptr<recob::Cluster>"                         />
  <class name="art::Ptr<recob::PCAxis>"                          />
  <class name="art::Ptr<recob::PFParticle>"                      />
- <class name="art::Ptr<larpandoraobj::PFParticleMetadata>"              />
+ <class name="art::Ptr<larpandoraobj::PFParticleMetadata>"      />
  <class name="art::Ptr<recob::Seed>"                            />
  <class name="art::Ptr<recob::Shower>"                          />
  <class name="art::Ptr<recob::SpacePoint>"                      />
@@ -338,7 +338,7 @@
  <class name="art::Wrapper< std::vector< recob::Hit                         > >" />
  <class name="art::Wrapper< std::vector< recob::PCAxis                      > >" />
  <class name="art::Wrapper< std::vector< recob::PFParticle                  > >" />
- <class name="art::Wrapper< std::vector< larpandoraobj::PFParticleMetadata          > >" />
+ <class name="art::Wrapper< std::vector< larpandoraobj::PFParticleMetadata  > >" />
  <class name="art::Wrapper< std::vector< recob::Seed                        > >" />
  <class name="art::Wrapper< std::vector< recob::Shower                      > >" />
  <class name="art::Wrapper< std::vector< recob::EndPoint2D                  > >" />
