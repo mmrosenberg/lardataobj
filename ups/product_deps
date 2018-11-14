@@ -7,7 +7,7 @@ fcldir product_dir job
 #
 product         version
 larcoreobj	v07_00_01
-larcoreobj	v07_03_00
+larcorealg	v07_03_00
 nusimdata	v1_14_01
 
 cetbuildtools	v7_04_00	-	only_for_build
