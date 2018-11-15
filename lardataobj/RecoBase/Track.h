@@ -191,8 +191,6 @@ namespace recob {
     // The local w-axis points along the track direction.
     inline Rotation_t GlobalToLocalRotationAtPoint(size_t p) const { return fTraj.GlobalToLocalRotationAtPoint(p); }
     inline Rotation_t LocalToGlobalRotationAtPoint(size_t p) const { return fTraj.LocalToGlobalRotationAtPoint(p); }
-    template<typename T> inline T GlobalToLocalRotationAtPoint(unsigned int p) const { return fTraj.GlobalToLocalRotationAtPoint<T>(p); }
-    template<typename T> inline T LocalToGlobalRotationAtPoint(unsigned int p) const { return fTraj.LocalToGlobalRotationAtPoint<T>(p); }
     //@}
 
     //@{
@@ -268,6 +266,12 @@ namespace recob {
 
     /// Direction at start and end points. Use e.g. as: @code{.cpp} TVector3 startdir, enddir; std::tie(startdir, enddir) = track.Direction<TVector3>(); @endcode.
     template<typename T> inline std::pair<T, T>  Direction()   const { return fTraj.Direction<T>(); }
+
+    /// Returns a rotation matrix that brings trajectory direction along _z_. Use e.g. as: @code{.cpp} TMatrixD rot = track.GlobalToLocalRotationAtPoint<TMatrixD>(p); @endcode.
+    template<typename T> inline T GlobalToLocalRotationAtPoint(unsigned int p) const { return fTraj.GlobalToLocalRotationAtPoint<T>(p); }
+
+    /// Returns a rotation matrix bringing relative directions to global. Use e.g. as: @code{.cpp} TMatrixD rot = track.LocalToGlobalRotationAtPoint<TMatrixD>(p); @endcode.
+    template<typename T> inline T LocalToGlobalRotationAtPoint(unsigned int p) const { return fTraj.LocalToGlobalRotationAtPoint<T>(p); }
     /// @}
 
 

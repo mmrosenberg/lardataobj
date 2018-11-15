@@ -525,18 +525,6 @@ namespace recob {
     Rotation_t GlobalToLocalRotationAtPoint(size_t p) const;
     
     /**
-     * @brief Fills a rotation matrix that brings trajectory direction along
-     *        _z_.
-     * @param p index of the trajectory point where to apply the rotation
-     * @param rot (_output_) the rotation matrix to be filled
-     */
-    template<typename T> inline T GlobalToLocalRotationAtPoint(unsigned int p) const {
-      T rot(3,3);
-      GlobalToLocalRotationAtPoint(p).GetRotationMatrix(rot);
-      return rot;
-    }
-    
-    /**
      * @brief Returns a rotation matrix bringing relative directions to global.
      * @param p index of the trajectory point where to apply the rotation
      * @return a rotation matrix suitable to convert directions to global
@@ -551,18 +539,6 @@ namespace recob {
      * defined.
      */
     Rotation_t LocalToGlobalRotationAtPoint(size_t p) const;
-    
-    /**
-     * @brief Fills a rotation matrix bringing relative directions to global.
-     * @param p index of the trajectory point where to apply the rotation
-     * @param rot (_output_) the rotation matrix to be filled
-     */
-    void LocalToGlobalRotationAtPoint(unsigned int p, TMatrixD &rot) const;
-    template<typename T> inline T LocalToGlobalRotationAtPoint(unsigned int p) const {
-      T rot(3,3);
-      LocalToGlobalRotationAtPoint(p).GetRotationMatrix(rot);
-      return rot;
-    }
     /// @}
     
     /// @{
@@ -603,6 +579,20 @@ namespace recob {
 
     /// Momentum vector at point p. Use e.g. as: @code{.cpp} TVector3 mom = traj.MomentumVectorAtPoint<TVector3>(p); @endcode.
     template<typename T> inline T MomentumVectorAtPoint(unsigned int p) const { auto mom = MomentumVectorAtPoint(p); return T(mom.X(),mom.Y(),mom.Z()); }
+
+    /// Returns a rotation matrix that brings trajectory direction along _z_. Use e.g. as: @code{.cpp} TMatrixD rot = traj.GlobalToLocalRotationAtPoint<TMatrixD>(p); @endcode.
+    template<typename T> inline T GlobalToLocalRotationAtPoint(unsigned int p) const {
+      T rot(3,3);
+      GlobalToLocalRotationAtPoint(p).GetRotationMatrix(rot);
+      return rot;
+    }
+
+    /// Returns a rotation matrix bringing relative directions to global. Use e.g. as: @code{.cpp} TMatrixD rot = traj.LocalToGlobalRotationAtPoint<TMatrixD>(p); @endcode.
+    template<typename T> inline T LocalToGlobalRotationAtPoint(unsigned int p) const {
+      T rot(3,3);
+      LocalToGlobalRotationAtPoint(p).GetRotationMatrix(rot);
+      return rot;
+    }
     /// @}
     
     /**

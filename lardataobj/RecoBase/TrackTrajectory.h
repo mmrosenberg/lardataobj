@@ -569,6 +569,20 @@ namespace recob {
 
     /// Momentum vector at point p. Use e.g. as: @code{.cpp} TVector3 mom = tracktraj.MomentumVectorAtPoint<TVector3>(p); @endcode.
     template<typename T> inline T MomentumVectorAtPoint(unsigned int p) const { auto mom = MomentumVectorAtPoint(p); return T(mom.X(),mom.Y(),mom.Z()); }
+
+    /// Returns a rotation matrix that brings trajectory direction along _z_. Use e.g. as: @code{.cpp} TMatrixD rot = tracktraj.GlobalToLocalRotationAtPoint<TMatrixD>(p); @endcode.
+    template<typename T> inline T GlobalToLocalRotationAtPoint(unsigned int p) const {
+      T rot(3,3);
+      GlobalToLocalRotationAtPoint(p).GetRotationMatrix(rot);
+      return rot;
+    }
+
+    /// Returns a rotation matrix bringing relative directions to global. Use e.g. as: @code{.cpp} TMatrixD rot = tracktraj.LocalToGlobalRotationAtPoint<TMatrixD>(p); @endcode.
+    template<typename T> inline T LocalToGlobalRotationAtPoint(unsigned int p) const {
+      T rot(3,3);
+      LocalToGlobalRotationAtPoint(p).GetRotationMatrix(rot);
+      return rot;
+    }
     /// @}
     
     /**
