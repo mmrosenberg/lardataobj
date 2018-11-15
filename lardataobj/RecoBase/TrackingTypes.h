@@ -47,6 +47,9 @@ namespace recob {
     template <typename Point> Point_t toPoint(Point const& p) { return geo::vect::convertTo<Point_t>(p); }
     template <typename Point> std::vector<Point_t> convertCollToPoint (std::vector<Point> const& coll)
       { return geo::vect::convertCollTo<Point_t>(coll); }
+    template <typename Vector> Vector_t toVector(Vector const& p) { return geo::vect::convertTo<Vector_t>(p); }
+    template <typename Vector> std::vector<Vector_t> convertCollToVector (std::vector<Vector> const& coll)
+      { return geo::vect::convertCollTo<Vector_t>(coll); }
 
     /// A point in the trajectory, with position and momentum.
     struct TrajectoryPoint_t {

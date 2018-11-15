@@ -695,7 +695,8 @@
     <!-- dependencies -->
   
     <!-- class -->
-  <class name="recob::Track"            ClassVersion="16"                   >
+  <class name="recob::Track"            ClassVersion="17"                   >
+   <version ClassVersion="17" checksum="738708267"/>
    <version ClassVersion="16" checksum="1293628079"/>
    <version ClassVersion="15" checksum="2420564911"/>
     <version ClassVersion="14" checksum="2345363916"/>

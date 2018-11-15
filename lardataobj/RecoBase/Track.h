@@ -79,11 +79,6 @@ namespace recob {
     SMatrixSym55 fCovEnd;                          ///< Covariance matrix (local 5D representation) at end point
     int              fID    = -1;                  ///< track's ID
 
-    //deprecated:
-    std::vector< std::vector <double> > fdQdx;          ///< charge deposition per unit length at points
-                                                        ///< along track outer vector index is over view
-
-
   public:
 
     //Default constructor
@@ -91,15 +86,15 @@ namespace recob {
 
     Track(TrackTrajectory const& Traj,
 	  int PId, float Chi2, int Ndof, SMatrixSym55 const& CovVertex, SMatrixSym55 const& CovEnd, int tkID)
-      : fTraj(Traj), fPId(PId), fChi2(Chi2), fNdof(Ndof), fCovVertex(CovVertex), fCovEnd(CovEnd),fID(tkID),fdQdx(0) { };
+      : fTraj(Traj), fPId(PId), fChi2(Chi2), fNdof(Ndof), fCovVertex(CovVertex), fCovEnd(CovEnd),fID(tkID) { };
 
     Track(TrackTrajectory&& Traj,
 	  int PId, float Chi2, int Ndof, SMatrixSym55&& CovVertex, SMatrixSym55&& CovEnd, int tkID)
-      : fTraj(std::move(Traj)), fPId(PId), fChi2(Chi2), fNdof(Ndof), fCovVertex(std::move(CovVertex)), fCovEnd(std::move(CovEnd)),fID(tkID),fdQdx(0) { };
+      : fTraj(std::move(Traj)), fPId(PId), fChi2(Chi2), fNdof(Ndof), fCovVertex(std::move(CovVertex)), fCovEnd(std::move(CovEnd)),fID(tkID) { };
 
     Track(Positions_t&& positions, Momenta_t&& momenta, Flags_t&& flags, bool hasMomenta,
 	  int PId, float Chi2, int Ndof, SMatrixSym55&& CovVertex, SMatrixSym55&& CovEnd, int tkID)
-      : fTraj(std::move(positions),std::move(momenta),std::move(flags),hasMomenta), fPId(PId), fChi2(Chi2), fNdof(Ndof), fCovVertex(std::move(CovVertex)), fCovEnd(std::move(CovEnd)),fID(tkID),fdQdx(0) { };
+      : fTraj(std::move(positions),std::move(momenta),std::move(flags),hasMomenta), fPId(PId), fChi2(Chi2), fNdof(Ndof), fCovVertex(std::move(CovVertex)), fCovEnd(std::move(CovEnd)),fID(tkID) { };
 
     /// Access to the stored recob::TrackTrajectory
     inline const recob::TrackTrajectory& Trajectory()  const { return fTraj; }
@@ -131,9 +126,6 @@ namespace recob {
     inline Point_t const& Vertex() const { return fTraj.Vertex(); }
     inline Point_t const& End()    const { return fTraj.End(); }
     inline Point_t const& LocationAtPoint(size_t i) const { return fTraj.LocationAtPoint(i); }
-    template<typename T> inline T Vertex()                        const { auto& loc = fTraj.Vertex(); return T(loc.X(),loc.Y(),loc.Z()); }
-    template<typename T> inline T End()                           const { auto& loc = fTraj.End(); return T(loc.X(),loc.Y(),loc.Z()); }
-    template<typename T> inline T LocationAtPoint(unsigned int p) const { auto& loc = fTraj.LocationAtPoint(p); return T(loc.X(),loc.Y(),loc.Z()); }
     //@}
 
     //@{
@@ -142,9 +134,6 @@ namespace recob {
     inline Vector_t VertexDirection() const { return fTraj.VertexDirection(); }
     inline Vector_t EndDirection()    const { return fTraj.EndDirection(); }
     inline Vector_t const DirectionAtPoint(size_t i) const { return fTraj.DirectionAtPoint(i); }
-    template<typename T> inline T VertexDirection()                const { auto dir = fTraj.VertexDirection(); return T(dir.X(),dir.Y(),dir.Z()); }
-    template<typename T> inline T EndDirection()                   const { auto dir = fTraj.EndDirection(); return T(dir.X(),dir.Y(),dir.Z()); }
-    template<typename T> inline T DirectionAtPoint(unsigned int p) const { auto dir = fTraj.DirectionAtPoint(p); return T(dir.X(),dir.Y(),dir.Z()); }
     //@}
 
     //@{
@@ -166,9 +155,6 @@ namespace recob {
     const SMatrixSym55& StartCovariance() const { return fCovVertex; }
     const SMatrixSym55& VertexCovariance() const { return fCovVertex; }
     const SMatrixSym55& EndCovariance()    const { return fCovEnd; }
-    template<typename T> inline T CovarianceAtPoint(unsigned int p) const { return (p==0 ? this->VertexCovariance<T>() : this->EndCovariance<T>()); }
-    template<typename T> inline T VertexCovariance() const;
-    template<typename T> inline T EndCovariance() const;
     //@}
 
     //@{
@@ -205,6 +191,8 @@ namespace recob {
     // The local w-axis points along the track direction.
     inline Rotation_t GlobalToLocalRotationAtPoint(size_t p) const { return fTraj.GlobalToLocalRotationAtPoint(p); }
     inline Rotation_t LocalToGlobalRotationAtPoint(size_t p) const { return fTraj.LocalToGlobalRotationAtPoint(p); }
+    template<typename T> inline T GlobalToLocalRotationAtPoint(unsigned int p) const { return fTraj.GlobalToLocalRotationAtPoint<T>(p); }
+    template<typename T> inline T LocalToGlobalRotationAtPoint(unsigned int p) const { return fTraj.LocalToGlobalRotationAtPoint<T>(p); }
     //@}
 
     //@{
@@ -226,38 +214,62 @@ namespace recob {
     SMatrixSym66        VertexCovarianceGlobal6D() const;
     SMatrixSym66        EndCovarianceGlobal6D()    const;
     //@}
-    
-    /// --- BEGIN Deprecated methods -------------------------------------------
-    /// @name Deprecated methods
-    /// 
-    /// Temporarily kept for backward compatibility but soon to be removed.
-    /// @deprecated All these `recob::Track` methods are deprecated.
+
     /// @{
-    Track(std::vector<TVector3>               const& xyz,
-    	  std::vector<TVector3>               const& dxdydz,
-    	  std::vector< std::vector <double> > dQdx = std::vector< std::vector<double> >(0),
-    	  std::vector<double>                 fitMomentum = std::vector<double>(2, util::kBogusD),
-    	  int                                 ID = -1)
-      : Track(xyz,dxdydz,std::vector<TMatrixT<double> >(),dQdx,fitMomentum,ID) { };
-    Track(std::vector<TVector3>        const& xyz,
-	  std::vector<TVector3>        const& dxdydz,
-	  std::vector<TMatrixD >       const& cov,
-	  std::vector< std::vector <double> > dQdx = std::vector< std::vector<double> >(0),
-	  std::vector<double>                 fitMomentum = std::vector<double>(2, util::kBogusD),
-	  int                                 ID = -1);
-    inline size_t   NumberCovariance()                                                 const { if (fCovVertex==SMatrixSym55() || fCovEnd==SMatrixSym55()) return 0; else return 2; } ///< Covariance matrices are either set or not
-    [[deprecated("Use NumberTrajectoryPoints() instead")]]
-    inline size_t   NumberFitMomentum()                                                const { return HasMomentum()? NPoints(): 0U; }
-    inline void     TrajectoryAtPoint(unsigned int p, TVector3& pos, TVector3& dir)    const { fTraj.TrajectoryAtPoint(p,pos,dir); }
-    [[deprecated("Use Extent() (with point interface) instead")]]
-    void     Extent(std::vector<double> &xyzStart, std::vector<double> &xyzEnd) const;
-    inline void     Direction(double *dcosStart, double *dcosEnd)                      const { return fTraj.Direction(dcosStart, dcosEnd); }
-           size_t   NumberdQdx(geo::View_t view=geo::kUnknown)                         const;
-    const double&   DQdxAtPoint(unsigned int p, geo::View_t view=geo::kUnknown)        const;
-    inline void     GlobalToLocalRotationAtPoint(unsigned int p, TMatrixD& rot)        const { return fTraj.GlobalToLocalRotationAtPoint(p,rot); }
-    inline void     LocalToGlobalRotationAtPoint(unsigned int p, TMatrixD& rot)        const { return fTraj.LocalToGlobalRotationAtPoint(p,rot); }
+    /// @name Templated version of homonymous functions to access to position, direction, momentum information, and covariances. 
+
+    /// Start position. Use e.g. as: @code{.cpp} TVector3 start = track.Start<TVector3>(); @endcode.
+    template<typename T> inline T Start()                         const { return fTraj.Start<T>(); }
+
+    /// Start position. Use e.g. as: @code{.cpp} TVector3 vertex = track.Vertex<TVector3>(); @endcode.
+    template<typename T> inline T Vertex()                        const { return fTraj.Vertex<T>(); }
+
+    /// End position. Use e.g. as: @code{.cpp} TVector3 end = track.End<TVector3>(); @endcode.
+    template<typename T> inline T End()                           const { return fTraj.End<T>(); }
+
+    /// Position at point p. Use e.g. as: @code{.cpp} TVector3 pos = track.LocationAtPoint<TVector3>(p); @endcode.
+    template<typename T> inline T LocationAtPoint(unsigned int p) const { return fTraj.LocationAtPoint<T>(p); }
+
+    /// Start direction. Use e.g. as: @code{.cpp} TVector3 startdir = track.StartDirection<TVector3>(); @endcode.
+    template<typename T> inline T StartDirection()                 const { return fTraj.StartDirection<T>(); }
+
+    /// Start direction. Use e.g. as: @code{.cpp} TVector3 vertexdir = track.VertexDirection<TVector3>(); @endcode.
+    template<typename T> inline T VertexDirection()                const { return fTraj.VertexDirection<T>(); }
+
+    /// End direction. Use e.g. as: @code{.cpp} TVector3 enddir = track.EndDirection<TVector3>(); @endcode.
+    template<typename T> inline T EndDirection()                   const { return fTraj.EndDirection<T>(); }
+
+    /// Direction at point p. Use e.g. as: @code{.cpp} TVector3 dir = track.DirectionAtPoint<TVector3>(p); @endcode.
+    template<typename T> inline T DirectionAtPoint(unsigned int p) const { return fTraj.DirectionAtPoint<T>(p); }
+
+    /// Momentum vector at start point. Use e.g. as: @code{.cpp} TVector3 startmom = track.StartMomentumVector<TVector3>(); @endcode.
+    template<typename T> inline T StartMomentumVector()                 const { return fTraj.StartMomentumVector<T>(); }
+
+    /// Momentum vector at start point. Use e.g. as: @code{.cpp} TVector3 vertexmom = track.VertexMomentumVector<TVector3>(); @endcode.
+    template<typename T> inline T VertexMomentumVector()                const { return fTraj.VertexMomentumVector<T>(); }
+
+    /// Momentum vector at end point. Use e.g. as: @code{.cpp} TVector3 endmom = track.EndMomentumVector<TVector3>(); @endcode.
+    template<typename T> inline T EndMomentumVector()                   const { return fTraj.EndMomentumVector<T>(); }
+
+    /// Momentum vector at point p. Use e.g. as: @code{.cpp} TVector3 mom = track.MomentumVectorAtPoint<TVector3>(p); @endcode.
+    template<typename T> inline T MomentumVectorAtPoint(unsigned int p) const { return fTraj.MomentumVectorAtPoint<T>(p); }
+
+    /// Covariance matrix at start point. Use e.g. as: @code{.cpp} TMatrixD startcov = track.StartCovariance<TMatrixD>(); @endcode.
+    template<typename T> inline T StartCovariance() const;
+
+    /// Covariance matrix at start point. Use e.g. as: @code{.cpp} TMatrixD vertexcov = track.VertexCovariance<TMatrixD>(); @endcode.
+    template<typename T> inline T VertexCovariance() const { return StartCovariance<T>(); }
+
+    /// Covariance matrix at end point. Use e.g. as: @code{.cpp} TMatrixD endcov = track.EndCovariance<TMatrixD>(); @endcode.
+    template<typename T> inline T EndCovariance() const;
+
+    /// Position at start and end points. Use e.g. as: @code{.cpp} TVector3 start, end; std::tie(start, end) = track.Extent<TVector3>(); @endcode.
+    template<typename T> inline std::pair<T, T>  Extent()      const { return fTraj.Extent<T>(); }
+
+    /// Direction at start and end points. Use e.g. as: @code{.cpp} TVector3 startdir, enddir; std::tie(startdir, enddir) = track.Direction<TVector3>(); @endcode.
+    template<typename T> inline std::pair<T, T>  Direction()   const { return fTraj.Direction<T>(); }
     /// @}
-    /// --- END Deprecated methods ---------------------------------------------
+
 
   protected:
 
@@ -266,7 +278,7 @@ namespace recob {
   };
 }
 
-template<typename T> inline T recob::Track::VertexCovariance() const {
+template<typename T> inline T recob::Track::StartCovariance() const {
   T result = T(5,5);
   for (unsigned int i=0; i<5; i++) {
     for (unsigned int j=0; j<5; j++) {

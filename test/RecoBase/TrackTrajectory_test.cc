@@ -100,14 +100,8 @@ void TestTrackTrajectory(
   
   //----------------------------------------------------------------------------
   const size_t NPoints = expected.positions.size();
-  const size_t NMomenta = expected.hasMomenta? NPoints: 0;
   BOOST_CHECK_EQUAL(traj.NPoints(), NPoints);
   BOOST_CHECK_EQUAL(traj.NumberTrajectoryPoints(), NPoints);
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-  // this is legacy, deprecated code; while we still test it, it should not be used
-  BOOST_CHECK_EQUAL(traj.NumberFitMomentum(), NMomenta);
-#pragma GCC diagnostic pop
   
   for (size_t i = 0; i <= NPoints + 1; ++i) {
     BOOST_TEST_MESSAGE("HasPoint() position #" << i);
@@ -172,18 +166,6 @@ void TestTrackTrajectory(
   BOOST_CHECK_EQUAL(traj.CountValidPoints(), validPoints.size());
   
   //----------------------------------------------------------------------------
-  TVector3 Tpos, Tdir;
-  for (size_t i = 0; i < NPoints; ++i) {
-    traj.TrajectoryAtPoint(i, Tpos, Tdir);
-    
-    BOOST_TEST_MESSAGE("TrajectoryAtPoint() position #" << i);
-    CheckVectorsEqual(Tpos, expected.positions[i]);
-    BOOST_TEST_MESSAGE("TrajectoryAtPoint() direction #" << i);
-    CheckVectorsClose(Tdir, expected.momenta[i].Unit());
-    
-  } // for
-  
-  //----------------------------------------------------------------------------
   BOOST_TEST_MESSAGE("Vertex()");
   CheckVectorsEqual(traj.Vertex(), expected.positions[firstValidPoint]);
   
@@ -203,12 +185,8 @@ void TestTrackTrajectory(
   
   
   //----------------------------------------------------------------------------
-  std::vector<double> Vstart, Vend;
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-  // this is legacy, deprecated code; while we still test it, it should not be used
-  traj.Extent(Vstart, Vend);
-#pragma GCC diagnostic pop
+  TVector3 Vstart, Vend;
+  std::tie(Vstart, Vend) = traj.Extent<TVector3>();
   BOOST_CHECK_EQUAL(Vstart[0], expected.positions[firstValidPoint].X());
   BOOST_CHECK_EQUAL(Vstart[1], expected.positions[firstValidPoint].Y());
   BOOST_CHECK_EQUAL(Vstart[2], expected.positions[firstValidPoint].Z());
@@ -325,8 +303,8 @@ void TestTrackTrajectory(
   
   
   //----------------------------------------------------------------------------
-  double AstartDir[3], AendDir[3];
-  traj.Direction(AstartDir, AendDir);
+  TVector3 AstartDir, AendDir;
+  std::tie(AstartDir, AendDir) = traj.Direction<TVector3>();
   BOOST_CHECK_CLOSE
     (AstartDir[0], expected.momenta[firstValidPoint].Unit().X(), 0.01);
   BOOST_CHECK_CLOSE
@@ -376,14 +354,12 @@ void TestTrackTrajectory(
     recob::Trajectory::Vector_t localDir(0., 0., dir.R());
     
     BOOST_TEST_MESSAGE("Test legacy transformation to local at point #" << i);
-    TMatrixD TtoLocal;
-    traj.GlobalToLocalRotationAtPoint(i, TtoLocal);
+    TMatrixD TtoLocal = traj.GlobalToLocalRotationAtPoint<TMatrixD>(i);
     auto toLocal = makeRotationMatrix(TtoLocal);
     CheckVectorsClose(toLocal * dir, localDir);
     
     BOOST_TEST_MESSAGE("Test legacy transformation to global at point #" << i);
-    TMatrixD TtoGlobal;
-    traj.LocalToGlobalRotationAtPoint(i, TtoGlobal);
+    TMatrixD TtoGlobal = traj.LocalToGlobalRotationAtPoint<TMatrixD>(i);
     auto toGlobal = makeRotationMatrix(TtoGlobal);
     CheckVectorsClose(toGlobal * localDir, dir);
     
