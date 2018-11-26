@@ -133,7 +133,7 @@ namespace recob {
     inline Vector_t StartDirection()  const { return fTraj.StartDirection(); }
     inline Vector_t VertexDirection() const { return fTraj.VertexDirection(); }
     inline Vector_t EndDirection()    const { return fTraj.EndDirection(); }
-    inline Vector_t const DirectionAtPoint(size_t i) const { return fTraj.DirectionAtPoint(i); }
+    inline Vector_t DirectionAtPoint(size_t i) const { return fTraj.DirectionAtPoint(i); }
     //@}
 
     //@{
