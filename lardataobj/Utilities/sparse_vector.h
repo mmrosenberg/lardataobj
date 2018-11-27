@@ -18,10 +18,9 @@
 #include <vector>
 #include <ostream>
 #include <iterator> // std::distance()
-#include <algorithm> // std::lower_bound(), std::max()
+#include <algorithm> // std::upper_bound(), std::max()
 #include <numeric> // std::accumulate
-
-#	include <type_traits> // std::is_integral
+#include <type_traits> // std::is_integral
 
 
 /// Namespace for generic larsoft
@@ -784,6 +783,65 @@ class sparse_vector {
 	const datarange_t& add_range(size_type offset, vector_t&& new_data);
 	//@}
 	
+	/// @{
+	/**
+	 * @brief Combines a sequence of elements as a range with data at `offset`.
+	 * @tparam ITER type of iterator
+	 * @tparam OP combination operation
+	 * @param offset where to add the elements
+	 * @param first iterator to the first element to be added
+	 * @param last iterator after the last element to be added
+	 * @param op operation to be executed element by element
+	 * @param void_value (default: `value_zero`) the value to use for void cells
+	 * @return the range where the new data landed
+	 * 
+	 * This is a more generic version of `add_range()`, where instead of
+	 * replacing the target data with the data in [ `first`, `last` [, the
+	 * existing data is combined with the one in that interval.
+	 * The operation `op` is a binary operation with signature equivalent to
+	 * `Data_t op(Data_t, Data_t)`, and the operation is equivalent to
+	 * `v[i + offset] = op(v[i + offset], *(first + offset))`: `op` is a binary
+	 * operation whose first operand is the existing value and the second one
+	 * is the one being provided.
+	 * If the cell `i + offset` is currently void, it will be created and the
+	 * value used in the combination will be `void_value`.
+	 * 
+	 * If the offset is beyond the current end of the sparse vector, void is
+	 * added before the new range.
+	 * 
+	 * Existing ranges can be merged with the new data if they overlap.
+	 */
+	template <typename ITER, typename OP>
+	const datarange_t& combine_range(
+	  size_type offset, ITER first, ITER last, OP&& op,
+	  value_type void_value = value_zero
+	  );
+	
+	/**
+	 * @brief Combines the elements in container with the data at `offset`.
+	 * @tparam CONT type of container supporting the standard begin/end interface
+	 * @tparam OP combination operation
+	 * @param offset where to add the elements
+	 * @param other container holding the data to be combined
+	 * @param op operation to be executed element by element
+	 * @param void_value (default: `value_zero`) the value to use for void cells
+	 * @return the range where the new data was added
+	 * @see `combine_range()`
+	 * 
+	 * This is equivalent to `combine_range(size_type, ITER, ITER, OP, Data_t)`
+	 * using as the new data range the full content of `other` container.
+	 */
+	template <typename CONT, typename OP>
+	const datarange_t& combine_range(
+	  size_type offset, const CONT& other, OP&& op,
+	  value_type void_value = value_zero
+	  )
+		{
+			return combine_range(offset, other.begin(), other.end(),
+			  std::forward<OP>(op), void_value);
+		}
+	/// @}
+	
 	//@{
 	/**
 	 * @brief Adds a sequence of elements as a range at the end of the vector.
@@ -911,16 +969,55 @@ class sparse_vector {
 	
 	//@{
 	/**
-	   * @brief Returns an iterator to the range after `index`, or `end()` if none.
-	   * @param index the absolute index
-	   * @return iterator to the next range not including index, or ranges.end()
-	   *         if none
-	   */
+	 * @brief Returns an iterator to the range after `index`, or `end()` if none.
+	 * @param index the absolute index
+	 * @return iterator to the next range not including index, or ranges.end()
+	 *         if none
+	 */
 	range_iterator find_next_range_iter(size_type index)
 		{ return find_next_range_iter(index, ranges.begin()); }
 	range_const_iterator find_next_range_iter(size_type index) const
-		{ return find_next_range_iter(index, ranges.begin()); }
+		{ return find_next_range_iter(index, ranges.cbegin()); }
 	//@}
+	//@{
+	/**
+	 * @brief Returns an iterator to the range after `index`,
+	 *        or `ranges.end()` if none.
+	 * @param index the absolute index
+	 * @param rbegin consider only from this range on
+	 * @return iterator to the next range not including index, or `ranges.end()`
+	 *         if none
+	 */
+	range_iterator find_next_range_iter(size_type index, range_iterator rbegin);
+	range_const_iterator find_next_range_iter
+		(size_type index, range_const_iterator rbegin) const;
+	//@}
+	
+	//@{
+	/**
+	 * @brief Returns an iterator to the range no earlier than `index`,
+	          or `end()` if none.
+	 * @param index the absolute index
+	 * @return iterator to the range including index, or the next range if none
+	 * 
+	 * The returned iterator points to a range that "borders" the specified index,
+	 * meaning that teh cell at `index` is either within the range, or it is the
+	 * one immediately after that range.
+	 * If `index` is in the middle of the void, though (i.e. if the previous cell
+	 * is void), the next range is returned instead.
+	 * Finally, if there is no next range, `end_range()` is returned.
+	 * 
+	 * The result may be also interpreted as follow: if the start of the returned
+	 * range is lower than `index`, then the cell at `index` belongs to that
+	 * range. Otherwise, it initiates its own range (but that range might end up
+	 * being contiguous to the next(.
+	 */
+	range_iterator find_extending_range_iter(size_type index)
+		{ return find_extending_range_iter(index, ranges.begin()); }
+	range_const_iterator find_extending_range_iter(size_type index) const
+		{ return find_extending_range_iter(index, ranges.cbegin()); }
+	//@}
+	
 	//@{
 	/**
 	 * @brief Returns an iterator to the range after `index`, or `end()` if none.
@@ -929,8 +1026,9 @@ class sparse_vector {
 	 * @return iterator to the next range not including index, or `ranges.end()`
 	 *         if none
 	 */
-	range_iterator find_next_range_iter(size_type index, range_iterator rbegin);
-	range_const_iterator find_next_range_iter
+	range_iterator find_extending_range_iter
+	  (size_type index, range_iterator rbegin);
+	range_const_iterator find_extending_range_iter
 		(size_type index, range_const_iterator rbegin) const;
 	//@}
 	
@@ -1017,6 +1115,8 @@ class lar::sparse_vector<T>::datarange_t: public range_t<size_type> {
 	iterator get_iterator(size_type index)
 		{ return values.begin() + index - base_t::begin_index(); }
 	const_iterator get_iterator(size_type index) const
+		{ return get_const_iterator(index); }
+	const_iterator get_const_iterator(size_type index) const
 		{ return values.begin() + index - base_t::begin_index(); }
 	//@}
 	
@@ -1052,13 +1152,16 @@ class lar::sparse_vector<T>::datarange_t: public range_t<size_type> {
 //	vector_t& data() { return values; }
 	//@}
 	
-	/// Adds copies of the specified elements to this range
-	/// @param index the starting point
-	/// @param first iterator to the first object to copy
-	/// @param last iterator after the last object to copy
+	/**
+	 * @brief Appends the specified elements to this range.
+	 * @tparam ITER type of iterator of the range
+	 * @param index the starting point
+	 * @param first iterator to the first object to copy
+	 * @param last iterator after the last object to copy
+	 * @return the extended range
+	 */
 	template <typename ITER>
 	datarange_t& extend(size_type index, ITER first, ITER last);
-	
 	
 	/**
 	 * @brief Moves the begin of this range
@@ -1355,8 +1458,23 @@ class lar::sparse_vector<T>::iterator: public const_iterator {
 
 
 // -----------------------------------------------------------------------------
-// ---  implemetation  ---------------------------------------------------------
+// ---  implementation  --------------------------------------------------------
 // -----------------------------------------------------------------------------
+namespace lar::details {
+  
+  /// Enclosure to use two iterators representing a range in a range-for loop.
+  template <typename BITER, typename EITER>
+  class iteratorRange {
+    BITER b;
+    EITER e;
+      public:
+    iteratorRange(BITER const& b, EITER const& e): b(b), e(e) {}
+    auto const& begin() const { return b; }
+    auto const& end() const { return e; }
+  }; // iteratorRange()
+  
+} // namespace lar::details
+
 
 //------------------------------------------------------------------------------
 //--- sparse_vector implementation
@@ -1607,10 +1725,7 @@ const typename lar::sparse_vector<T>::datarange_t& lar::sparse_vector<T>::add_ra
   (size_type offset, ITER first, ITER last)
 {
 	// insert the new range before the existing range which starts after offset
-	range_iterator iInsert = std::upper_bound(
-		ranges.begin(), ranges.end(), offset,
-		typename datarange_t::less_int_range(datarange_t::less)
-		);
+	range_iterator iInsert = find_next_range_iter(offset);
 	
 	// is there a range before this, which includes the offset?
 	if ((iInsert != ranges.begin()) && (iInsert-1)->borders(offset)) {
@@ -1651,6 +1766,88 @@ const typename lar::sparse_vector<T>::datarange_t& lar::sparse_vector<T>::add_ra
 	}
 	return merge_ranges(iInsert);
 } // lar::sparse_vector<T>::add_range(vector)
+
+
+template <typename T>
+template <typename ITER, typename OP>
+auto lar::sparse_vector<T>::combine_range(
+  size_type offset, ITER first, ITER last, OP&& op,
+  value_type void_value /* = value_zero */
+  )
+  -> const datarange_t&
+{
+	/*
+	 * This is a complicate enough task, that we go brute force:
+	 * 1) combine all the input elements within the datarange where offset falls
+	 *    in
+	 * 2) create a new datarange combining void with the remaining input elements
+	 * 3) if the void area is over before the input elements are, repeat steps
+	 *    (1) and (2) with the updated offset
+	 * 4) at this point we'll have a train of contiguous ranges, result of
+	 *    combination of the input elements alternating with existing elements
+	 *    and with void cells: apply the regular merge algorithm
+	 *
+	 */
+	
+	auto src = first;
+	auto const insertionPoint = offset; // saved for later
+	auto destRange = find_extending_range_iter(offset, ranges.begin());
+	while (src != last) {
+		
+		//
+		// (1) combine all the input elements within the datarange including offset
+		// 
+		if ((destRange != end_range()) && (offset < destRange->end_index())) {
+			// this means `destRange` contains offset:
+			// combine input data until this range is over (or input data is over)
+			auto dest = destRange->get_iterator(offset);
+			
+			auto const end = destRange->end();
+			while (src != last) {
+				*dest = op(*dest, *src);
+				++src;
+				++offset;
+				if (++dest == end) break;
+			} // while
+			if (src == last) break;
+			offset = destRange->end_index();
+		} // if
+		
+		//
+		// (2) create a new datarange combining void with input elements
+		//
+		// at this point, offset is in the void, and we do have more input data;
+		// we fill as much void as we can with data, creating a new range.
+		// When to stop? at the beginning of the next range, or when data is over
+		++destRange;
+		size_type const newRangeSize = (destRange == end_range())
+		  ? std::distance(src, last): (destRange->begin_index() - offset);
+		
+		// prepare the data (we'll plug it in directly)
+		vector_t combinedData;
+		combinedData.reserve(newRangeSize);
+		size_type i = 0;
+		while (i++ < newRangeSize) {
+			combinedData.push_back(op(void_value, *src));
+			if (++src == last) break; // no more data
+		}
+		// move the data as a new range inserted before the next range we just found
+		// return value is the iterator to the inserted range
+		destRange = insert_range(destRange, { offset, std::move(combinedData) });
+		
+		//
+		// (3) if there is more input, repeat steps (1) and (2) with updated offset
+		//
+		offset = destRange->end_index();
+		++destRange;
+	} // while
+	
+	//
+	// (4) apply the regular merge algorithm
+	//
+	return merge_ranges(find_extending_range_iter(insertionPoint));
+	
+} // lar::sparse_vector<T>::combine_range<ITER>()
 
 
 template <typename T> 
@@ -1747,6 +1944,32 @@ typename lar::sparse_vector<T>::range_const_iterator
 		typename datarange_t::less_int_range(datarange_t::less)
 		);
 } // lar::sparse_vector<T>::find_next_range_iter() const
+
+
+template <typename T> 
+typename lar::sparse_vector<T>::range_iterator
+	lar::sparse_vector<T>::find_extending_range_iter
+	(size_type index, range_iterator rbegin)
+{
+	// this range has the offset (first index) above the index argument:
+	auto it = find_next_range_iter(index, rbegin);
+	// if index were not void, would it belong to the previous range?
+	// if so, the previus range is the one we want
+	return ((it != rbegin) && std::prev(it)->borders(index))? std::prev(it): it;
+} // lar::sparse_vector<T>::find_extending_range_iter()
+
+
+template <typename T> 
+typename lar::sparse_vector<T>::range_const_iterator
+	lar::sparse_vector<T>::find_extending_range_iter
+	(size_type index, range_const_iterator rbegin) const
+{
+	// this range has the offset (first index) above the index argument:
+	auto it = find_next_range_iter(index, rbegin);
+	// if index were not void, would it belong to the previous range?
+	// if so, the previus range is the one we want
+	return ((it != rbegin) && std::prev(it)->borders(index))? std::prev(it): it;
+} // lar::sparse_vector<T>::find_extending_range_iter() const
 
 
 template <typename T> 
