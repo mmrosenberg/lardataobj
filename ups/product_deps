@@ -1,6 +1,6 @@
 # The parent line must be the first non-comment line in the file
 # This line defines the product name and version
-parent	lardataobj	v07_05_00
+parent	lardataobj	v07_06_00
 defaultqual	e17
 #
 fcldir product_dir job
