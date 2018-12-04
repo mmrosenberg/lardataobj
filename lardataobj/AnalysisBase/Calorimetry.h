@@ -16,67 +16,83 @@
 #include <TVector3.h>
 
 #include "larcoreobj/SimpleTypesAndConstants/geo_types.h"
+#include "lardataobj/RecoBase/TrackingTypes.h"
 
 namespace anab {
+
+  using Point_t = recob::tracking::Point_t;
 
   class Calorimetry{
   public:
     
     Calorimetry();
 
-    double              fKineticEnergy;   ///< determined kinetic energy
-    std::vector<double> fdEdx;            ///< dE/dx, should be same size as fResidualRange
-    std::vector<double> fdQdx;            ///< dQ/dx
-    std::vector<double> fResidualRange;   ///< range from end of track    
-    std::vector<double> fDeadWireResR;    ///< dead wire residual range, collection plane
-    double              fRange;           ///< total range of track
-    std::vector<double> fTrkPitch;        ///< track pitch on collection plane
-    std::vector<TVector3> fXYZ;           ///< coordinates of space points
+    float                fKineticEnergy;   ///< determined kinetic energy
+    std::vector<float>   fdEdx;            ///< dE/dx, should be same size as fResidualRange
+    std::vector<float>   fdQdx;            ///< dQ/dx
+    std::vector<float>   fResidualRange;   ///< range from end of track    
+    std::vector<float>   fDeadWireResR;    ///< dead wire residual range, collection plane
+    float                fRange;           ///< total range of track
+    std::vector<float>   fTrkPitch;        ///< track pitch on collection plane
+    std::vector<Point_t> fXYZ;             ///< coordinates of space points; for a discussion on the object type for coordinates see recob::tracking::Coord_t.
+    std::vector<size_t>  fTpIndices;       ///< indices of original trajectory points on track
 
   private:
     geo::PlaneID        fPlaneID;
 
   public:
 
-    Calorimetry(double KinematicEnergy,
-		std::vector<double> const& dEdx,
-		std::vector<double> const& dQdx,
-		std::vector<double> const& resRange,
-		std::vector<double> const& deadwire,
-		double Range,
-		double TrkPitch,
+    Calorimetry(float KinematicEnergy,
+		std::vector<float> const& dEdx,
+		std::vector<float> const& dQdx,
+		std::vector<float> const& resRange,
+		std::vector<float> const& deadwire,
+		float Range,
+		float TrkPitch,
 		geo::PlaneID planeID);
 
-    Calorimetry(double KineticEnergy,
-		std::vector<double> const& dEdx,
-		std::vector<double> const& dQdx,
-		std::vector<double> const& resRange,
-		std::vector<double> const& deadwire,
-		double Range,
-		std::vector<double> const& TrkPitch,
+    Calorimetry(float KineticEnergy,
+		std::vector<float> const& dEdx,
+		std::vector<float> const& dQdx,
+		std::vector<float> const& resRange,
+		std::vector<float> const& deadwire,
+		float Range,
+		std::vector<float> const& TrkPitch,
 		geo::PlaneID planeID);
 
-    Calorimetry(double KineticEnergy,
-		std::vector<double> const& dEdx,
-		std::vector<double> const& dQdx,
-		std::vector<double> const& resRange,
-		std::vector<double> const& deadwire,
-		double Range,
-		std::vector<double> const& TrkPitch,
-		std::vector<TVector3> const& XYZ,
+    Calorimetry(float KineticEnergy,
+		std::vector<float> const& dEdx,
+		std::vector<float> const& dQdx,
+		std::vector<float> const& resRange,
+		std::vector<float> const& deadwire,
+		float Range,
+		std::vector<float> const& TrkPitch,
+		std::vector<Point_t> const& XYZ,
+		geo::PlaneID planeID);
+
+    Calorimetry(float KineticEnergy,
+		std::vector<float> const& dEdx,
+		std::vector<float> const& dQdx,
+		std::vector<float> const& resRange,
+		std::vector<float> const& deadwire,
+		float Range,
+		std::vector<float> const& TrkPitch,
+		std::vector<Point_t> const& XYZ,
+		std::vector<size_t> const& TpIndices,
 		geo::PlaneID planeID);
 
     friend std::ostream& operator << (std::ostream &o, Calorimetry const& a);
 
-    const std::vector<double>& dEdx()          const; 
-    const std::vector<double>& dQdx()          const; 
-    const std::vector<double>& ResidualRange() const; 
-    const std::vector<double>& DeadWireResRC() const; 
-    const double&              KineticEnergy() const; 
-    const double&              Range()         const; 
-    double                     TrkPitchC()     const; 
-    const std::vector<double>& TrkPitchVec()   const;
-    const std::vector<TVector3>& XYZ()         const;
+    const std::vector<float>& dEdx()          const;
+    const std::vector<float>& dQdx()          const;
+    const std::vector<float>& ResidualRange() const;
+    const std::vector<float>& DeadWireResRC() const;
+    const float&              KineticEnergy() const;
+    const float&              Range()         const;
+    float                     TrkPitchC()     const;
+    const std::vector<float>& TrkPitchVec()   const;
+    const std::vector<Point_t>& XYZ()         const;
+    const std::vector<size_t>& TpIndices()    const;
     const geo::PlaneID&        PlaneID()       const;
 
     
@@ -85,20 +101,21 @@ namespace anab {
 }
 
 
-inline const std::vector<double>& anab::Calorimetry::dEdx()          const { return fdEdx;          }
-inline const std::vector<double>& anab::Calorimetry::dQdx()          const { return fdQdx;          }
-inline const std::vector<double>& anab::Calorimetry::ResidualRange() const { return fResidualRange; }
-inline const std::vector<double>& anab::Calorimetry::DeadWireResRC() const { return fDeadWireResR;  }
-inline const double&              anab::Calorimetry::KineticEnergy() const { return fKineticEnergy; } 
-inline const double&              anab::Calorimetry::Range()         const { return fRange;         }
-inline const std::vector<double>& anab::Calorimetry::TrkPitchVec()   const { return fTrkPitch;      }
-inline double                     anab::Calorimetry::TrkPitchC()     const 
-{ 
-  if (fTrkPitch.size()) 
+inline const std::vector<float>& anab::Calorimetry::dEdx()          const { return fdEdx;          }
+inline const std::vector<float>& anab::Calorimetry::dQdx()          const { return fdQdx;          }
+inline const std::vector<float>& anab::Calorimetry::ResidualRange() const { return fResidualRange; }
+inline const std::vector<float>& anab::Calorimetry::DeadWireResRC() const { return fDeadWireResR;  }
+inline const float&              anab::Calorimetry::KineticEnergy() const { return fKineticEnergy; }
+inline const float&              anab::Calorimetry::Range()         const { return fRange;         }
+inline const std::vector<float>& anab::Calorimetry::TrkPitchVec()   const { return fTrkPitch;      }
+inline float                     anab::Calorimetry::TrkPitchC()     const
+{
+  if (fTrkPitch.size())
     return fTrkPitch[0];
   else return 0;
 }
-inline const std::vector<TVector3>& anab::Calorimetry::XYZ()         const { return fXYZ;      }
+inline const std::vector<anab::Point_t>& anab::Calorimetry::XYZ()         const { return fXYZ;      }
+inline const std::vector<size_t>&        anab::Calorimetry::TpIndices()   const { return fTpIndices;}
 inline const geo::PlaneID& anab::Calorimetry::PlaneID()              const { return fPlaneID; }
 
 #endif //ANAB_CALORIMETRY_H

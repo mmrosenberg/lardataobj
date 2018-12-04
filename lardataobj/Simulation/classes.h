@@ -15,6 +15,7 @@
 
 // Simulation includes
 #include "lardataobj/Simulation/SimEnergyDeposit.h"
+#include "lardataobj/Simulation/AuxDetHit.h"
 #include "lardataobj/Simulation/SimChannel.h"
 #include "lardataobj/Simulation/OpDetBacktrackerRecord.h"
 #include "lardataobj/Simulation/SimPhotons.h"
@@ -25,4 +26,4 @@
 #include "lardataobj/Simulation/SimDriftedElectronCluster.h"
 // Template the wrapper for the vector (typedef okay)
 template class art::Wrapper< sim::SimEnergyDepositCollection >;
-
+template class art::Wrapper< sim::AuxDetHitCollection >;

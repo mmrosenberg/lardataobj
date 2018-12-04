@@ -36,7 +36,7 @@ namespace recob {
    * The track trajectory class contains a trajectory in 6D space representing
    * the path walked by a particle. A trajectory point is made of a 3D position
    * component (measured in centimeters) and a momentum component (measured in
-   * GeV/c).
+   * GeV/c); for a discussion on the object type for coordinates see recob::tracking::Coord_t.
    * The associated hits are integral part of the track trajectory.
    * To store additional point-by-point information, the track trajectory
    * augments `recob::Trajectory`, of which it presents most of the interface,
@@ -131,7 +131,7 @@ namespace recob {
 
 
     /**
-     * @brief Constructor: copies positions and momenta from an existing Trajecotry, adds the flags.
+     * @brief Constructor: copies positions and momenta from an existing Trajectory, adds the flags.
      * @param traj existing Trajectory
      * @param flags (_moved_) flag sets, one flag set per point
      * @throw std::runtime_error if the invariants are violated
@@ -154,8 +154,6 @@ namespace recob {
     using Trajectory_t::LastPoint;
     
     using Trajectory_t::HasPoint;
-    
-    using Trajectory_t::TrajectoryAtPoint;
     
     /**
      * @brief Returns the flags for the specified trajectory point.
@@ -245,7 +243,6 @@ namespace recob {
      */
     unsigned int CountValidPoints() const;
     
-    
     using Trajectory_t::TrajectoryPoint;
     
     /// Returns the position of the first valid point of the trajectory [cm].
@@ -269,12 +266,9 @@ namespace recob {
      * 
      * The labelling of start and end is consistent within the trajectory but is
      * not guaranteed to be physically correct.
-     * 
-     * @deprecated Use physics vectors instead (see `Extent()`)
      */
-    [[deprecated("Use point interface instead")]]
-    void Extent(std::vector<double>& start, std::vector<double>& end) const;
-    
+    template<typename T> std::pair<T,T> Extent( ) const { return { Vertex<T>(), End<T>() }; }
+
     /**
      * @brief Returns a copy of the first and last valid point in the
      *        trajectory.
@@ -314,11 +308,6 @@ namespace recob {
      * This operation is slow, and the result should be stored in a variable.
      */
     double Length (size_t startAt = 0) const;
-    
-    
-    [[deprecated("Use NumberTrajectoryPoints() instead")]]
-    size_t NumberFitMomentum() const
-      { return HasMomentum()? NPoints(): 0U; }
     
     /// Returns the direction of the trajectory at the first point.
     Vector_t VertexDirection() const
@@ -513,10 +502,8 @@ namespace recob {
      * 
      * The labelling of start and end is consistent within the trajectory but is
      * not guaranteed to be physically correct.
-     * 
-     * @deprecated Use physics vectors instead (see `Direction()`)
      */
-    void Direction(double* start, double* end) const;
+    template<typename T> std::pair<T,T> Direction() const { return { VertexDirection<T>(), EndDirection<T>() }; }
     
     
     /**
@@ -544,6 +531,59 @@ namespace recob {
     
     using Trajectory_t::LocalToGlobalRotationAtPoint;
     
+    /// @{
+    /// @name Templated version of homonymous functions to access to position, direction, and momentum information. 
+
+    /// Start position. Use e.g. as: @code{.cpp} TVector3 start = tracktraj.Start<TVector3>(); @endcode.
+    template<typename T> inline T Start()                         const { auto& loc = Start(); return T(loc.X(),loc.Y(),loc.Z()); }
+
+    /// Start position. Use e.g. as: @code{.cpp} TVector3 vertex = tracktraj.Vertex<TVector3>(); @endcode.
+    template<typename T> inline T Vertex()                        const { auto& loc = Vertex(); return T(loc.X(),loc.Y(),loc.Z()); }
+
+    /// End position. Use e.g. as: @code{.cpp} TVector3 end = tracktraj.End<TVector3>(); @endcode.
+    template<typename T> inline T End()                           const { auto& loc = End(); return T(loc.X(),loc.Y(),loc.Z()); }
+
+    /// Position at point p. Use e.g. as: @code{.cpp} TVector3 pos = tracktraj.LocationAtPoint<TVector3>(p); @endcode.
+    template<typename T> inline T LocationAtPoint(unsigned int p) const { auto& loc = LocationAtPoint(p); return T(loc.X(),loc.Y(),loc.Z()); }
+
+    /// Start direction. Use e.g. as: @code{.cpp} TVector3 startdir = tracktraj.StartDirection<TVector3>(); @endcode.
+    template<typename T> inline T StartDirection()                 const { auto dir = StartDirection(); return T(dir.X(),dir.Y(),dir.Z()); }
+
+    /// Start direction. Use e.g. as: @code{.cpp} TVector3 vertexdir = tracktraj.VertexDirection<TVector3>(); @endcode.
+    template<typename T> inline T VertexDirection()                const { auto dir = VertexDirection(); return T(dir.X(),dir.Y(),dir.Z()); }
+
+    /// End direction. Use e.g. as: @code{.cpp} TVector3 enddir = tracktraj.EndDirection<TVector3>(); @endcode.
+    template<typename T> inline T EndDirection()                   const { auto dir = EndDirection(); return T(dir.X(),dir.Y(),dir.Z()); }
+
+    /// Direction at point p. Use e.g. as: @code{.cpp} TVector3 dir = tracktraj.DirectionAtPoint<TVector3>(p); @endcode.
+    template<typename T> inline T DirectionAtPoint(unsigned int p) const { auto dir = DirectionAtPoint(p); return T(dir.X(),dir.Y(),dir.Z()); }
+
+    /// Momentum vector at start point. Use e.g. as: @code{.cpp} TVector3 startmom = tracktraj.StartMomentumVector<TVector3>(); @endcode.
+    template<typename T> inline T StartMomentumVector()                 const { auto mom = StartMomentumVector(); return T(mom.X(),mom.Y(),mom.Z()); }
+
+    /// Momentum vector at start point. Use e.g. as: @code{.cpp} TVector3 vertexmom = tracktraj.VertexMomentumVector<TVector3>(); @endcode.
+    template<typename T> inline T VertexMomentumVector()                const { auto mom = VertexMomentumVector(); return T(mom.X(),mom.Y(),mom.Z()); }
+
+    /// Momentum vector at end point. Use e.g. as: @code{.cpp} TVector3 endmom = tracktraj.EndMomentumVector<TVector3>(); @endcode.
+    template<typename T> inline T EndMomentumVector()                   const { auto mom = EndMomentumVector(); return T(mom.X(),mom.Y(),mom.Z()); }
+
+    /// Momentum vector at point p. Use e.g. as: @code{.cpp} TVector3 mom = tracktraj.MomentumVectorAtPoint<TVector3>(p); @endcode.
+    template<typename T> inline T MomentumVectorAtPoint(unsigned int p) const { auto mom = MomentumVectorAtPoint(p); return T(mom.X(),mom.Y(),mom.Z()); }
+
+    /// Returns a rotation matrix that brings trajectory direction along _z_. Use e.g. as: @code{.cpp} TMatrixD rot = tracktraj.GlobalToLocalRotationAtPoint<TMatrixD>(p); @endcode.
+    template<typename T> inline T GlobalToLocalRotationAtPoint(unsigned int p) const {
+      T rot(3,3);
+      GlobalToLocalRotationAtPoint(p).GetRotationMatrix(rot);
+      return rot;
+    }
+
+    /// Returns a rotation matrix bringing relative directions to global. Use e.g. as: @code{.cpp} TMatrixD rot = tracktraj.LocalToGlobalRotationAtPoint<TMatrixD>(p); @endcode.
+    template<typename T> inline T LocalToGlobalRotationAtPoint(unsigned int p) const {
+      T rot(3,3);
+      LocalToGlobalRotationAtPoint(p).GetRotationMatrix(rot);
+      return rot;
+    }
+    /// @}
     
     /**
      * @brief Prints trajectory content into a stream.

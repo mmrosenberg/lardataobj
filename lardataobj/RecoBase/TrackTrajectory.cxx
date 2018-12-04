@@ -54,12 +54,6 @@ unsigned int recob::TrackTrajectory::CountValidPoints() const {
 
 
 //------------------------------------------------------------------------------
-void recob::TrackTrajectory::Extent
-  (std::vector<double>& start, std::vector<double>& end) const
-  { details::legacy::FillTwoVectors(Start(), End(), start, end); }
-
-
-//------------------------------------------------------------------------------
 /**
  * @brief Returns the approximate length of the trajectory.
  * @param startAt (_default: 0, from beginning_) point to start from
@@ -94,12 +88,6 @@ double recob::TrackTrajectory::Length(size_t startAt /* = 0 */) const {
   } // while
   return length;
 } // recob::TrackTrajectory::Length()
-
-
-//------------------------------------------------------------------------------
-void recob::TrackTrajectory::Direction(double* start, double* end) const {
-  details::legacy::FillTwoVectors(StartDirection(), EndDirection(), start, end); 
-} // recob::TrackTrajectory::Direction()
 
 
 //------------------------------------------------------------------------------

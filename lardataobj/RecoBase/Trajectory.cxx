@@ -13,29 +13,12 @@
 // LArSoft libraries
 #include "larcoreobj/SimpleTypesAndConstants/PhysicalConstants.h" // util::pi()
 
-// ROOT libraries
-#include "TVector3.h" // legacy interface
-#include "TMatrixD.h" // legacy interface
-
 // C/C++ standard libraries
 #include <ostream>
 #include <utility> // std::move()
 #include <string> // std::to_string()
 #include <stdexcept> // std::runtime_error
 
-
-//------------------------------------------------------------------------------
-namespace {
-  
-  template <typename Matrix>
-  TMatrixD fillTMatrixD(Matrix const& mat, TMatrixD& Tmat) {
-    ROOT::Math::Rotation3D asMat(mat);
-    Tmat.ResizeTo(3, 3);
-    asMat.GetRotationMatrix(Tmat);
-    return Tmat;
-  } // fillTMatrixD()
-  
-} // local namespace
 
 //------------------------------------------------------------------------------
 recob::Trajectory::Trajectory
@@ -59,28 +42,6 @@ recob::Trajectory::Trajectory
       );
   }
 } // recob::Trajectory::Trajectory()
-
-
-//------------------------------------------------------------------------------
-bool recob::Trajectory::TrajectoryAtPoint
-  (size_t i, TVector3& pos, TVector3& dir) const
-{
-  if (!HasPoint(i)) return false;
-  
-  auto const& origPos = LocationAtPoint(i);
-  decltype(auto) origDir = DirectionAtPoint(i);
-  
-  pos.SetXYZ(origPos.X(), origPos.Y(), origPos.Z());
-  dir.SetXYZ(origDir.X(), origDir.Y(), origDir.Z());
-  return true;
-} // recob::Trajectory::TrajectoryAtPoint(TVector&)
-
-
-//------------------------------------------------------------------------------
-void recob::Trajectory::Extent
-  (std::vector<double>& start, std::vector<double>& end) const
-  { details::legacy::FillTwoVectors(Start(), End(), start, end); }
-
 
 
 //------------------------------------------------------------------------------
@@ -164,11 +125,6 @@ recob::Trajectory::Vector_t recob::Trajectory::DirectionAtPoint(size_t i) const
 
 
 //------------------------------------------------------------------------------
-void recob::Trajectory::Direction(double* start, double* end) const
-  { details::legacy::FillTwoVectors(StartDirection(), EndDirection(), start, end); }
-
-
-//------------------------------------------------------------------------------
 recob::Trajectory::Rotation_t recob::Trajectory::GlobalToLocalRotationAtPoint
   (size_t p) const
 {
@@ -177,29 +133,11 @@ recob::Trajectory::Rotation_t recob::Trajectory::GlobalToLocalRotationAtPoint
 
 
 //------------------------------------------------------------------------------
-void recob::Trajectory::GlobalToLocalRotationAtPoint
-  (unsigned int p, TMatrixD& rot) const
-{
-  auto trackRot = GlobalToLocalRotationAtPoint(p);
-  fillTMatrixD(trackRot, rot);
-} // recob::Trajectory::GlobalToLocalRotationAtPoint(TMatrixD)
-
-
-//------------------------------------------------------------------------------
 recob::Trajectory::Rotation_t recob::Trajectory::LocalToGlobalRotationAtPoint
   (size_t p) const
 {
   return recob::tracking::Plane::Local3DToGlobal3DRotation(DirectionAtPoint(p));
 } // recob::Trajectory::GlobalToLocalRotationAtPoint()
-
-
-//------------------------------------------------------------------------------
-void recob::Trajectory::LocalToGlobalRotationAtPoint
-  (unsigned int p, TMatrixD &rot) const
-{
-  auto trackRot = LocalToGlobalRotationAtPoint(p);
-  fillTMatrixD(trackRot, rot);
-} // recob::Trajectory::LocalToGlobalRotationAtPoint(TMatrixD)
 
 
 //------------------------------------------------------------------------------

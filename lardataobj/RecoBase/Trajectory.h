@@ -39,7 +39,8 @@ namespace recob {
    * The trajectory class contains a trajectory in 6D space representing the
    * path
    * walked by a particle. A trajectory point is made of a 3D position component
-   * (measured in centimeters) and a momentum component (measured in GeV/c).
+   * (measured in centimeters) and a momentum component (measured in GeV/c);
+   * for a discussion on the object type for coordinates see: recob::tracking::Coord_t.
    * 
    * The object contains information about the trajectory, and no
    * uncertainty, as that is considered a fit result (see `recob::Track`).
@@ -153,7 +154,7 @@ namespace recob {
     /**
      * @brief Returns the number of stored trajectory points.
      * @return the number of stored trajectory points
-     * @see TrajectoryAtPoint(), PositionAtPoint(), MomentumVectorAtPoint(),
+     * @see PositionAtPoint(), MomentumVectorAtPoint(),
      *      DirectionAtPoint()
      * 
      * For each point, both position and momentum are available.
@@ -164,7 +165,7 @@ namespace recob {
     /**
      * @brief Returns the number of stored trajectory points.
      * @return the number of stored trajectory points
-     * @see TrajectoryAtPoint(), PositionAtPoint(), MomentumVectorAtPoint(),
+     * @see PositionAtPoint(), MomentumVectorAtPoint(),
      *      DirectionAtPoint()
      * 
      * For each point, both position and momentum are available.
@@ -201,19 +202,6 @@ namespace recob {
     const Momenta_t& Momenta() const { return fMomenta; }
     
     /**
-     * @brief Fills position and direction at the specified trajectory point.
-     * @param i index of the trajectory point
-     * @param pos (output) filled with the position at the given point [cm]
-     * @param dir (output) filled with the direction at the given point
-     * @return false if the specified point was invalid
-     * @deprecated Use TrajectoryPoint() instead (and note that it returns
-     *   momentum, not direction!)
-     * 
-     */
-    bool TrajectoryAtPoint(size_t i, TVector3& pos, TVector3& dir) const;
-    
-    
-    /**
      * @brief Returns position and momentum at the specified trajectory point.
      * @param i index of the trajectory point
      * @return the information at the specified trajectory point
@@ -244,7 +232,6 @@ namespace recob {
     Point_t const& End() const
       { return LocationAtPoint(LastPoint()); }
     
-    
     /**
      * @brief Returns the position at the specified trajectory point.
      * @param i index of the point in the trajectory
@@ -263,11 +250,8 @@ namespace recob {
      * 
      * The labelling of start and end is consistent within the trajectory but is
      * not guaranteed to be physically correct.
-     * 
-     * @deprecated Use physics vectors instead (see `Extent()`)
      */
-    [[deprecated("Use point interface instead")]]
-    void Extent(std::vector<double>& start, std::vector<double>& end) const;
+    template<typename T> std::pair<T,T> Extent() const { return { Vertex<T>(),End<T>() }; }
     
     /**
      * @brief Returns a copy of the first and last point in the trajectory.
@@ -312,19 +296,6 @@ namespace recob {
     
     /// @{
     /// @name Access to direction and momentum information
-    
-    /**
-     * @brief Returns the number of stored momenta.
-     * 
-     * It's the same as trajectory points, unless there is no momentum
-     * (then it's 0).
-     * 
-     * @deprecated Use NumberTrajectoryPoints() instead
-     */
-    [[deprecated("Use NumberTrajectoryPoints() instead")]]
-    size_t NumberFitMomentum() const
-      { return HasMomentum()? NPoints(): 0U; }
-    
     
     /// Returns the direction of the trajectory at the first point.
     Vector_t VertexDirection() const
@@ -503,10 +474,8 @@ namespace recob {
      * 
      * The labelling of start and end is consistent within the trajectory but is
      * not guaranteed to be physically correct.
-     * 
-     * @deprecated Use physics vectors instead (see `Direction()`)
      */
-    void Direction(double* start, double* end) const;
+    template<typename T> std::pair<T,T> Direction() const { return { VertexDirection<T>(),EndDirection<T>() }; }
     
     
     /**
@@ -557,16 +526,6 @@ namespace recob {
     Rotation_t GlobalToLocalRotationAtPoint(size_t p) const;
     
     /**
-     * @brief Fills a rotation matrix that brings trajectory direction along
-     *        _z_.
-     * @param p index of the trajectory point where to apply the rotation
-     * @param rot (_output_) the rotation matrix to be filled
-     * 
-     * @deprecated Use GlobalToLocalRotationAtPoint(size_t) instead.
-     */
-    void GlobalToLocalRotationAtPoint(unsigned int p, TMatrixD &rot) const;
-    
-    /**
      * @brief Returns a rotation matrix bringing relative directions to global.
      * @param p index of the trajectory point where to apply the rotation
      * @return a rotation matrix suitable to convert directions to global
@@ -581,18 +540,61 @@ namespace recob {
      * defined.
      */
     Rotation_t LocalToGlobalRotationAtPoint(size_t p) const;
-    
-    /**
-     * @brief Fills a rotation matrix bringing relative directions to global.
-     * @param p index of the trajectory point where to apply the rotation
-     * @param rot (_output_) the rotation matrix to be filled
-     * 
-     * @deprecated Use LocalToGlobalRotationAtPoint(size_t) instead.
-     */
-    void LocalToGlobalRotationAtPoint(unsigned int p, TMatrixD &rot) const;
-    
     /// @}
     
+    /// @{
+    /// @name Templated version of homonymous functions to access to position, direction, and momentum information. 
+
+    /// Start position. Use e.g. as: @code{.cpp} TVector3 start = traj.Start<TVector3>(); @endcode.
+    template<typename T> inline T Start()                         const { auto& loc = Start(); return T(loc.X(),loc.Y(),loc.Z()); }
+
+    /// Start position. Use e.g. as: @code{.cpp} TVector3 vertex = traj.Vertex<TVector3>(); @endcode.
+    template<typename T> inline T Vertex()                        const { auto& loc = Vertex(); return T(loc.X(),loc.Y(),loc.Z()); }
+
+    /// End position. Use e.g. as: @code{.cpp} TVector3 end = traj.End<TVector3>(); @endcode.
+    template<typename T> inline T End()                           const { auto& loc = End(); return T(loc.X(),loc.Y(),loc.Z()); }
+
+    /// Position at point p. Use e.g. as: @code{.cpp} TVector3 pos = traj.LocationAtPoint<TVector3>(p); @endcode.
+    template<typename T> inline T LocationAtPoint(unsigned int p) const { auto& loc = LocationAtPoint(p); return T(loc.X(),loc.Y(),loc.Z()); }
+
+    /// Start direction. Use e.g. as: @code{.cpp} TVector3 startdir = traj.StartDirection<TVector3>(); @endcode.
+    template<typename T> inline T StartDirection()                 const { auto dir = StartDirection(); return T(dir.X(),dir.Y(),dir.Z()); }
+
+    /// Start direction. Use e.g. as: @code{.cpp} TVector3 vertexdir = traj.VertexDirection<TVector3>(); @endcode.
+    template<typename T> inline T VertexDirection()                const { auto dir = VertexDirection(); return T(dir.X(),dir.Y(),dir.Z()); }
+
+    /// End direction. Use e.g. as: @code{.cpp} TVector3 enddir = traj.EndDirection<TVector3>(); @endcode.
+    template<typename T> inline T EndDirection()                   const { auto dir = EndDirection(); return T(dir.X(),dir.Y(),dir.Z()); }
+
+    /// Direction at point p. Use e.g. as: @code{.cpp} TVector3 dir = traj.DirectionAtPoint<TVector3>(p); @endcode.
+    template<typename T> inline T DirectionAtPoint(unsigned int p) const { auto dir = DirectionAtPoint(p); return T(dir.X(),dir.Y(),dir.Z()); }
+
+    /// Momentum vector at start point. Use e.g. as: @code{.cpp} TVector3 startmom = traj.StartMomentumVector<TVector3>(); @endcode.
+    template<typename T> inline T StartMomentumVector()                 const { auto mom = StartMomentumVector(); return T(mom.X(),mom.Y(),mom.Z()); }
+
+    /// Momentum vector at start point. Use e.g. as: @code{.cpp} TVector3 vertexmom = traj.VertexMomentumVector<TVector3>(); @endcode.
+    template<typename T> inline T VertexMomentumVector()                const { auto mom = VertexMomentumVector(); return T(mom.X(),mom.Y(),mom.Z()); }
+
+    /// Momentum vector at end point. Use e.g. as: @code{.cpp} TVector3 endmom = traj.EndMomentumVector<TVector3>(); @endcode.
+    template<typename T> inline T EndMomentumVector()                   const { auto mom = EndMomentumVector(); return T(mom.X(),mom.Y(),mom.Z()); }
+
+    /// Momentum vector at point p. Use e.g. as: @code{.cpp} TVector3 mom = traj.MomentumVectorAtPoint<TVector3>(p); @endcode.
+    template<typename T> inline T MomentumVectorAtPoint(unsigned int p) const { auto mom = MomentumVectorAtPoint(p); return T(mom.X(),mom.Y(),mom.Z()); }
+
+    /// Returns a rotation matrix that brings trajectory direction along _z_. Use e.g. as: @code{.cpp} TMatrixD rot = traj.GlobalToLocalRotationAtPoint<TMatrixD>(p); @endcode.
+    template<typename T> inline T GlobalToLocalRotationAtPoint(unsigned int p) const {
+      T rot(3,3);
+      GlobalToLocalRotationAtPoint(p).GetRotationMatrix(rot);
+      return rot;
+    }
+
+    /// Returns a rotation matrix bringing relative directions to global. Use e.g. as: @code{.cpp} TMatrixD rot = traj.LocalToGlobalRotationAtPoint<TMatrixD>(p); @endcode.
+    template<typename T> inline T LocalToGlobalRotationAtPoint(unsigned int p) const {
+      T rot(3,3);
+      LocalToGlobalRotationAtPoint(p).GetRotationMatrix(rot);
+      return rot;
+    }
+    /// @}
     
     /**
      * @brief Prints trajectory content into a stream.

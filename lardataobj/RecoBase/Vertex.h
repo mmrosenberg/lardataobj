@@ -63,7 +63,7 @@ namespace recob {
     // Return vertex fit chi2.
     double chi2() const { return chi2_; }
     // Return vertex fit ndof.
-    double ndof() const { return ndof_; }
+    int ndof() const { return ndof_; }
     // Return vertex fit chi2 per ndof.
     double chi2PerNdof() const { return (ndof_>0. ? chi2_/ndof_ : util::kBogusD); }
     //
