@@ -310,5 +310,98 @@
         fXYZ.emplace_back(p.X(), p.Y(), p.Z());
     ]]>
   </ioread>
+ 
+  <ioread
+     version="[-13]"
+     sourceClass="anab::ParticleID"
+     source="const double Chi2Proton; const double Chi2Muon; const double Chi2Pion; const double Chi2Kaon; const double PIDA; const geo::PlaneID PlaneID; const int Ndf; const double MinChi2; const double DeltaChi2; const double MissingE; const double MissingEavg;"
+     targetClass="anab::ParticleID"
+     target="std::vector<anab::sParticleIDAlgScores>"
+     include="">
+     <![CDATA[
+        std::cout << "[classes_def] Reading an old version of anab::ParticleID. Constructing new class" << std::endl;
+
+        // create object to store new PID objects
+        std::vector<anab::sParticleIDAlgScores> AlgScoresVec;
+
+        std::bitset<5> bs;
+        bs.set(PlaneID.deepestIndex()-PlaneID.Plane);
+
+        // and individual algScores
+        anab::sParticleIDAlgScores chi2_proton;
+        chi2_proton.fAlgName = "Chi2";
+        chi2_proton.fVariableType = anab::kGOF;
+        chi2_proton.fAssumedPdg = 2212;
+        chi2_proton.fTrackDir = anab::kForward;
+        chi2_proton.fValue = Chi2Proton;
+        chi2_proton.fNdf = Ndf;
+        chi2_proton.fPlaneID = bs;
+
+        anab::sParticleIDAlgScores chi2_muon;
+        chi2_muon.fAlgName = "Chi2";
+        chi2_muon.fVariableType = anab::kGOF;
+        chi2_muon.fAssumedPdg = 13;
+        chi2_muon.fTrackDir = anab::kForward;
+        chi2_muon.fValue = Chi2Muon;
+        chi2_muon.fNdf = Ndf;
+        chi2_muon.fPlaneID = bs;
+
+        anab::sParticleIDAlgScores chi2_pion;
+        chi2_pion.fAlgName = "Chi2";
+        chi2_pion.fVariableType = anab::kGOF;
+        chi2_pion.fAssumedPdg = 211;
+        chi2_pion.fTrackDir = anab::kForward;
+        chi2_pion.fValue = Chi2Pion;
+        chi2_pion.fNdf = Ndf;
+        chi2_pion.fPlaneID = bs;
+
+        anab::sParticleIDAlgScores chi2_kaon;
+        chi2_kaon.fAlgName = "Chi2";
+        chi2_kaon.fVariableType = anab::kGOF;
+        chi2_kaon.fAssumedPdg = 211;
+        chi2_kaon.fTrackDir = anab::kForward;
+        chi2_kaon.fValue = Chi2Pion;
+        chi2_kaon.fNdf = Ndf;
+        chi2_kaon.fPlaneID = bs;
+
+        anab::sParticleIDAlgScores pida;
+        pida.fAlgName = "PIDA";
+        pida.fVariableType = anab::kGOF;
+        pida.fAssumedPdg = 321;
+        pida.fTrackDir = anab::kForward;
+        pida.fValue = PIDA;
+        pida.fNdf = Ndf;
+        pida.fPlaneID = bs;
+
+        anab::sParticleIDAlgScores deltachi2;
+        deltachi2.fAlgName = "DeltaChi2";
+        deltachi2.fValue = DeltaChi2;
+        deltachi2.fPlaneID = bs;
+
+        anab::sParticleIDAlgScores minchi2;
+        minchi2.fAlgName = "MinChi2";
+        minchi2.fValue = MinChi2;
+        minchi2.fPlaneID = bs;
+
+        anab::sParticleIDAlgScores missinge;
+        missinge.fAlgName = "MissingE";
+        missinge.fValue = MissingE;
+        missinge.fPlaneID = bs;
+
+        anab::sParticleIDAlgScores avgmissinge;
+        avgmissinge.fAlgName = "MissingEavg";
+        avgmissinge.fValue = MissingEavg;
+        avgmissinge.fPlaneID = bs;
+
+        AlgScoresVec.push_back(chi2_proton);
+        AlgScoresVec.push_back(chi2_muon);
+        AlgScoresVec.push_back(chi2_pion);
+        AlgScoresVec.push_back(chi2_kaon);
+        AlgScoresVec.push_back(pida); 
+
+        onfile.fParticleIDAlgScores = AlgScoresVec;
+     ]]>
+ </ioread>
+
 
 </lcgdict>
