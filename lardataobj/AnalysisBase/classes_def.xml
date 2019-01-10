@@ -1,4 +1,5 @@
 <!--                                                                                  -->
+<!--  $Id: classes_def.xml,v 1.10 2010/04/12 18:12:28  Exp $                          -->
 <!--  $Author:  $                                                                     -->
 <!--  $Date: 2010/04/12 18:12:28 $                                                    -->
 <!--                                                                                  -->
@@ -11,6 +12,8 @@
 <!-- support classes (e.g., elements of data product classes) -->
  <class name="std::map<std::basic_string<char>,double > " />
  <class name="std::vector<std::map<std::basic_string<char>,double > >" />
+ <class name="_Base_bitset<1>" />
+ <class name="bitset<5>" />
 
 <!-- Feature vectors, length 1-5                                        -->
  <class name="anab::FeatureVector<1>" ClassVersion="10"               >
@@ -52,7 +55,7 @@
  <class name="std::vector< anab::FeatureVector<5> >"                  />
  <class name="art::Ptr< anab::FeatureVector<5> >"                     />
  <class name="art::Wrapper< std::vector< anab::FeatureVector<5> > >"  />
- 
+
  <!-- MVA output metadata, length 1-5                                -->
  <class name="anab::MVADescription<1>" ClassVersion="10"              >
   <version ClassVersion="10" checksum="835494112"/>
@@ -94,9 +97,10 @@
  <class name="art::Ptr< anab::MVADescription<5> >"                    />
  <class name="art::Wrapper< std::vector< anab::MVADescription<5> > >" />
 
+ <enum name="anab::kVariableType"/>
+ <enum name="anab::kTrackDir"/>
 
- <class name="anab::Calorimetry"           ClassVersion="17"                           >
-  <version ClassVersion="17" checksum="836686545"/>
+ <class name="anab::Calorimetry"           ClassVersion="16"                           >
   <version ClassVersion="16" checksum="2995599306"/>
   <version ClassVersion="15" checksum="2095251371"/>
   <version ClassVersion="14" checksum="1421274164"/>
@@ -104,9 +108,14 @@
   <version ClassVersion="12" checksum="1421274164"/>
   <version ClassVersion="11" checksum="495386863"/>
  </class>
- <class name="anab::ParticleID"            ClassVersion="13"                           >
+ <class name="anab::ParticleID"            ClassVersion="14"                           >
+  <version ClassVersion="14" checksum="2286758712"/>
   <version ClassVersion="13" checksum="3664244500"/>
   <version ClassVersion="12" checksum="1769449101"/>
+ </class>
+ <class name="anab::sParticleIDAlgScores"      ClassVersion="11"                 >
+  <version ClassVersion="11" checksum="3455956848"/>
+  <version ClassVersion="10" checksum="646537151"/>
  </class>
  <class name="anab::MVAPIDResult"/>
  <class name="anab::FlashMatch"            ClassVersion="13"                           >
@@ -136,6 +145,7 @@
  <enum name="anab::cosmic_tag_id"                                                      />
  <class name="std::vector<anab::Calorimetry>"                                          />
  <class name="std::vector<anab::ParticleID>"                                           />
+ <class name="std::vector<anab::sParticleIDAlgScores>"                                 />
  <class name="std::vector<anab::MVAPIDResult>"                                         />
  <class name="std::vector<anab::FlashMatch>"                                           />
  <class name="std::vector<anab::CosmicTag>"                                            />
@@ -153,35 +163,30 @@
  <class name="std::pair< art::Ptr<recob::Track>,      art::Ptr<anab::Calorimetry> >"   />
  <class name="std::pair< art::Ptr<anab::Calorimetry>, art::Ptr<recob::Track>      >"   />
  <class name="std::pair< art::Ptr<recob::Shower>,      art::Ptr<anab::Calorimetry> >"   />
- <class name="std::pair< art::Ptr<anab::Calorimetry>, art::Ptr<recob::Shower>      >"   /> 
+ <class name="std::pair< art::Ptr<anab::Calorimetry>, art::Ptr<recob::Shower>      >"   />
  <class name="std::pair< art::Ptr<recob::Track>,      art::Ptr<anab::ParticleID> >"    />
  <class name="std::pair< art::Ptr<anab::ParticleID>, art::Ptr<recob::Track>      >"    />
- <class name="std::pair< art::Ptr<recob::Track>,     art::Ptr<anab::MVAPIDResult>   >" /> 
- <class name="std::pair< art::Ptr<recob::Shower>,     art::Ptr<anab::MVAPIDResult>   >" /> 
- <class name="std::pair< art::Ptr<anab::FlashMatch>, art::Ptr<recob::Track>      >"    />  
- <class name="std::pair< art::Ptr<anab::FlashMatch>, art::Ptr<recob::OpFlash>      >"    />  
- <class name="std::pair< art::Ptr<recob::OpFlash>, art::Ptr<anab::FlashMatch>      >"    />  
- <class name="std::pair< art::Ptr<recob::Track>, art::Ptr<anab::FlashMatch>      >"    /> 
+ <class name="std::pair< art::Ptr<recob::Track>,     art::Ptr<anab::MVAPIDResult>   >" />
+ <class name="std::pair< art::Ptr<recob::Shower>,     art::Ptr<anab::MVAPIDResult>   >" />
+ <class name="std::pair< art::Ptr<anab::FlashMatch>, art::Ptr<recob::Track>      >"    />
+ <class name="std::pair< art::Ptr<anab::FlashMatch>, art::Ptr<recob::OpFlash>      >"    />
+ <class name="std::pair< art::Ptr<recob::OpFlash>, art::Ptr<anab::FlashMatch>      >"    />
+ <class name="std::pair< art::Ptr<recob::Track>, art::Ptr<anab::FlashMatch>      >"    />
  <class name="std::pair< art::Ptr<recob::PFParticle>, art::Ptr<anab::CosmicTag>  >"    />
  <class name="std::pair< art::Ptr<recob::Track>,      art::Ptr<anab::CosmicTag>  >"    />
  <class name="std::pair< art::Ptr<recob::PCAxis>,     art::Ptr<anab::CosmicTag>  >"    />
  <class name="std::pair< art::Ptr<recob::Cluster>,    art::Ptr<anab::CosmicTag>  >"    />
- <class name="std::pair< art::Ptr<recob::Hit>,        art::Ptr<anab::CosmicTag>  >"    />    
+ <class name="std::pair< art::Ptr<recob::Hit>,        art::Ptr<anab::CosmicTag>  >"    />
  <class name="std::pair< art::Ptr<anab::CosmicTag>, art::Ptr<recob::PFParticle>    >"    />
  <class name="std::pair< art::Ptr<anab::CosmicTag>, art::Ptr<recob::Track>    >"    />
  <class name="std::pair< art::Ptr<anab::CosmicTag>, art::Ptr<recob::PCAxis>    >"    />
  <class name="std::pair< art::Ptr<anab::CosmicTag>, art::Ptr<recob::Cluster>  >"    />
- <class name="std::pair< art::Ptr<anab::CosmicTag>, art::Ptr<recob::Hit>      >"    />     
- <class name="std::pair< art::Ptr<anab::CosmicTag>,  art::Ptr<anab::FlashMatch> >"    />    
- <class name="std::pair< art::Ptr<anab::FlashMatch>, art::Ptr<anab::CosmicTag>  >"    />    
- <class name="std::pair< art::Ptr<recob::Cluster>,   art::Ptr<anab::FlashMatch> >"    />    
- <class name="std::pair< art::Ptr<anab::FlashMatch>, art::Ptr<recob::Cluster>   >"    />    
- <class name="std::pair< art::Ptr<simb::MCParticle>, art::Ptr<recob::Hit> >"    />
- <class name="std::pair< art::Ptr<recob::Hit>, art::Ptr<simb::MCParticle> >"    />
- <class name="std::pair< art::Ptr<simb::MCParticle>, art::Ptr<recob::Track> >"    />
+ <class name="std::pair< art::Ptr<anab::CosmicTag>, art::Ptr<recob::Hit>      >"    />
+ <class name="std::pair< art::Ptr<anab::CosmicTag>,  art::Ptr<anab::FlashMatch> >"    />
+ <class name="std::pair< art::Ptr<anab::FlashMatch>, art::Ptr<anab::CosmicTag>  >"    />
+ <class name="std::pair< art::Ptr<recob::Cluster>,   art::Ptr<anab::FlashMatch> >"    />
+ <class name="std::pair< art::Ptr<anab::FlashMatch>, art::Ptr<recob::Cluster>   >"    />
  <class name="std::pair< art::Ptr<recob::Track>, art::Ptr<simb::MCParticle> >"    />
- <class name="std::vector<std::pair< art::Ptr<simb::MCParticle>, art::Ptr<recob::Hit> > >" />
- <class name="std::vector<std::pair< art::Ptr<recob::Hit>, art::Ptr<simb::MCParticle> > >" />
  <class name="art::Assns<recob::Track,      anab::Calorimetry,  void>"	               />
  <class name="art::Assns<anab::Calorimetry, recob::Track,       void>"	               />
  <class name="art::Assns<recob::Shower,      anab::Calorimetry,  void>"	               />
@@ -286,15 +291,10 @@
  <class name="art::Wrapper< art::Assns< recob::Hit,       simb::MCParticle,  anab::BackTrackerHitMatchingData > >"  />
  <class name="art::Wrapper< art::Assns< simb::MCParticle, recob::Track,      void > >"  />
  <class name="art::Wrapper< art::Assns< simb::MCParticle, recob::Track,      anab::BackTrackerMatchingData > >"  />
- <class name="art::Wrapper< art::Assns< recob::Track,     simb::MCParticle,  void > >"  />
  <class name="art::Wrapper< art::Assns< recob::Track,     simb::MCParticle,  anab::BackTrackerMatchingData > >"  />
- <class name="art::Wrapper< art::Assns< simb::MCParticle, recob::Shower,      void > >"  />
  <class name="art::Wrapper< art::Assns< simb::MCParticle, recob::Shower,      anab::BackTrackerMatchingData > >"  />
- <class name="art::Wrapper< art::Assns< recob::Shower,     simb::MCParticle,  void > >"  />
  <class name="art::Wrapper< art::Assns< recob::Shower,     simb::MCParticle,  anab::BackTrackerMatchingData > >"  />
- <class name="art::Wrapper< art::Assns< simb::MCParticle, recob::PFParticle,      void > >"  />
  <class name="art::Wrapper< art::Assns< simb::MCParticle, recob::PFParticle,      anab::BackTrackerMatchingData > >"  />
- <class name="art::Wrapper< art::Assns< recob::PFParticle,     simb::MCParticle,  void > >"  />
  <class name="art::Wrapper< art::Assns< recob::PFParticle,     simb::MCParticle,  anab::BackTrackerMatchingData > >"  />
 
   <ioread
