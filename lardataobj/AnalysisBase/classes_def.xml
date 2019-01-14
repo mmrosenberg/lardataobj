@@ -327,7 +327,7 @@
         std::vector<anab::sParticleIDAlgScores> AlgScoresVec;
 
         std::bitset<5> bs;
-        bs.set(onfile.fPlaneID.deepestIndex()-onfile.fPlaneID.Plane);
+        bs.set(4-(onfile.fPlaneID.deepestIndex()-onfile.fPlaneID.Plane));
 
         // and individual algScores
         anab::sParticleIDAlgScores chi2_proton;
