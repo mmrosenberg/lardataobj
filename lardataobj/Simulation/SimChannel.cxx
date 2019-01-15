@@ -64,7 +64,7 @@ namespace sim{
       || (energy <= std::numeric_limits<double>::epsilon()))
     {
       // will throw
-      LOG_ERROR("SimChannel")
+      MF_LOG_ERROR("SimChannel")
       << "AddIonizationElectrons() trying to add to TDC #"
       << tdc
       << " "

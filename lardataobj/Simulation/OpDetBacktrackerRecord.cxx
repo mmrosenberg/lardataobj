@@ -70,7 +70,7 @@ namespace sim{
         || ( energy<=std::numeric_limits<double>::epsilon()      ))
     {
       // will throw
-      LOG_ERROR("OpDetBacktrackerRecord")
+      MF_LOG_ERROR("OpDetBacktrackerRecord")
       << "AddTrackPhotons() trying to add to iTimePDclock #"
       << iTimePDclock
       << " "
