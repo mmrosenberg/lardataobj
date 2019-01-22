@@ -34,7 +34,7 @@ namespace anab{
 	<< "\n -- Assuming PDG: " << a.fParticleIDAlgScores.at(i).fAssumedPdg
   << "\n -- Number of degrees of freedom: " << a.fParticleIDAlgScores.at(i).fNdf
 	<< "\n -- Value: " << a.fParticleIDAlgScores.at(i).fValue
-	<< "\n -- Using planeID: " << a.fParticleIDAlgScores.at(i).fPlaneID;
+	<< "\n -- Using planeMask: " << a.fParticleIDAlgScores.at(i).fPlaneMask;
     }
     o <<std::endl;
 

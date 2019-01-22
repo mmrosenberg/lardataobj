@@ -26,7 +26,7 @@ struct sParticleIDAlgScores { ///< determined particle ID
   int fNdf; ///< Number of degrees of freedom used by algorithm, if applicable. Set to -9999 by default.
   int fAssumedPdg; ///< PDG of particle hypothesis assumed by algorithm, if applicable. Set to 0 by default.
   float fValue; ///< Result of Particle ID algorithm/test
-  std::bitset<5> fPlaneID; ///< Bitset for PlaneID used by algorithm, allowing for multiple planes and up to 5 total planes. Set to "00000" by default. Convention for bitset and helper functions defined in PlaneIDBitsetHelperFunctions.h
+  std::bitset<8> fPlaneMask; ///< Bitset for PlaneID used by algorithm, allowing for multiple planes and up to 8 total planes. Set to all 0s by default. Convention for bitset is that fPlaneMask[0] (i.e. bit 0) represents the collection plane, and then other planes work outwards from there.
 
   sParticleIDAlgScores(){
   fAlgName = "AlgNameNotSet";
@@ -35,7 +35,7 @@ struct sParticleIDAlgScores { ///< determined particle ID
   fAssumedPdg = 0;
   fNdf = -9999;
   fValue = -9999.;
-  // fPlaneID will use default constructor: sets all values to 0
+  // fPlaneMask will use default constructor: sets all values to 0
   }
 };
 
@@ -46,24 +46,18 @@ struct sParticleIDAlgScores { ///< determined particle ID
     
     std::vector<sParticleIDAlgScores> fParticleIDAlgScores; ///< Vector of structs to hold outputs from generic PID algorithms
 
-#ifndef __GCCXML__
   public:
 
     ParticleID(std::vector<anab::sParticleIDAlgScores> &ParticleIDAlgScores);
-
 
     friend std::ostream& operator << (std::ostream &o, ParticleID const& a);
 
     const std::vector<anab::sParticleIDAlgScores> ParticleIDAlgScores() const;
 
-#endif
   };
 
 }
 
-#ifndef __GCCXML__
-
 inline const std::vector<anab::sParticleIDAlgScores> anab::ParticleID::ParticleIDAlgScores() const { return fParticleIDAlgScores; }
-#endif
 
 #endif //ANAB_PARTICLEID_H
