@@ -52,12 +52,12 @@ struct sParticleIDAlgScores { ///< determined particle ID
 
     friend std::ostream& operator << (std::ostream &o, ParticleID const& a);
 
-    const std::vector<anab::sParticleIDAlgScores> ParticleIDAlgScores() const;
+    const std::vector<anab::sParticleIDAlgScores> & ParticleIDAlgScores() const;
 
   };
 
 }
 
-inline const std::vector<anab::sParticleIDAlgScores> anab::ParticleID::ParticleIDAlgScores() const { return fParticleIDAlgScores; }
+inline const std::vector<anab::sParticleIDAlgScores> & anab::ParticleID::ParticleIDAlgScores() const { return fParticleIDAlgScores; }
 
 #endif //ANAB_PARTICLEID_H
