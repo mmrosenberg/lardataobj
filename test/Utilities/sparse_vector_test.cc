@@ -1260,6 +1260,15 @@ int main() {
   //      0
   //   }
   
+  Test(actions::Add<Data_t>(26, { 16, 0 }, 10.0));
+  // at this point:
+  // (31) [2] {
+  //      0     0 [  2    3    4   32   33   37    38    38
+  //     37    38   37   38   37   38   23   17    18    19
+  //     20    21   22   23   -1   25   26   27    28 ]   0
+  //      0
+  //   }
+  
   Test(actions::Truncate<Data_t>(new_size -= 3));
   
   Test(actions::Truncate<Data_t>(16));

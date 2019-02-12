@@ -1074,6 +1074,23 @@ class sparse_vector {
   
   //@{
   /**
+   * @brief Returns an iterator to the range at or after `index`.
+   * @param index the absolute index
+   * @return iterator to the next range including index or after it,
+   *         or ranges.end() if none
+   * @see `find_next_range_iter()`
+   * 
+   * If `index` is in a range, an iterator to that range is returned.
+   * If `index` is in the void, an iterator to the next range after `index` is
+   * returned. If there is no such range after `index`, `ranges.end()` is
+   * returned.
+   */
+  range_iterator find_range_iter_at_or_after(size_type index);
+  range_const_iterator find_range_iter_at_or_after(size_type index) const;
+  //@}
+  
+  //@{
+  /**
    * @brief Returns an iterator to the range no earlier than `index`,
             or `end()` if none.
    * @param index the absolute index
@@ -1985,11 +2002,12 @@ auto lar::sparse_vector<T>::combine_range(
   
   auto src = first;
   auto const insertionPoint = offset; // saved for later
-  auto destRange = find_extending_range_iter(offset, ranges.begin());
+  auto destRange = find_range_iter_at_or_after(offset);
   while (src != last) {
     
     //
     // (1) combine all the input elements within the datarange including offset
+    //     (NOT extending the range)
     // 
     if ((destRange != end_range()) && destRange->includes(offset)) {
       // combine input data until this range is over (or input data is over)
@@ -2038,9 +2056,13 @@ auto lar::sparse_vector<T>::combine_range(
   } // while
   
   //
-  // (4) apply the regular merge algorithm
+  // (4) apply the regular merge algorithm;
+  //     since we did not extend existing ranges, it may happen that we have
+  //     created a new range at `insertionPoint` contiguous to the previous one;
+  //     so we take care of checking that too
   //
-  return merge_ranges(find_extending_range_iter(insertionPoint));
+  return merge_ranges
+    (find_extending_range_iter(insertionPoint == 0? 0: insertionPoint - 1));
   
 } // lar::sparse_vector<T>::combine_range<ITER>()
 
@@ -2147,6 +2169,30 @@ typename lar::sparse_vector<T>::range_const_iterator
     typename datarange_t::less_int_range(datarange_t::less)
     );
 } // lar::sparse_vector<T>::find_next_range_iter() const
+
+
+template <typename T> 
+typename lar::sparse_vector<T>::range_const_iterator
+  lar::sparse_vector<T>::find_range_iter_at_or_after(size_type index) const
+{
+  // this range has the offset (first index) above the index argument:
+  auto after = find_next_range_iter(index);
+  // if the previous range exists and contains index, that's the one we want
+  return ((after != ranges.begin()) && (index < std::prev(after)->end_index()))
+    ? std::prev(after): after;
+} // lar::sparse_vector<T>::find_range_iter_at_or_after() const
+
+
+template <typename T> 
+typename lar::sparse_vector<T>::range_iterator
+  lar::sparse_vector<T>::find_range_iter_at_or_after(size_type index)
+{
+  // this range has the offset (first index) above the index argument:
+  auto after = find_next_range_iter(index);
+  // if the previous range exists and contains index, that's the one we want
+  return ((after != ranges.begin()) && (index < std::prev(after)->end_index()))
+    ? std::prev(after): after;
+} // lar::sparse_vector<T>::find_range_iter_at_or_after()
 
 
 template <typename T> 
