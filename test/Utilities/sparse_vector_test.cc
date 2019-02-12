@@ -1213,9 +1213,52 @@ int main() {
   //   }
 
   Test(actions::Add<Data_t>(5, { 7, 8, 7, 8 }, 10));
+  // at this point:
+  // (31) [2] {
+  //      0     0    0 [  3    4   12   13   17    18 ]   0
+  //      0     0    0    0    0    0 [ 16   17    18    19
+  //     20    21   22   23   -1 ]  0    0    0     0     0
+  //      0
+  //   }
   
   Test(actions::Add<Data_t>
     (5, { 20, 20, 20, 20, 8, 7, 8, 7, 8, 7, 8, 7 }, 30));
+  // at this point:
+  // (31) [2] {
+  //      0     0    0 [  3    4   32   33   37    38    38
+  //     37    38   37   38   37   38   23   17    18    19
+  //     20    21   22   23   -1 ]  0    0    0     0     0
+  //      0
+  //   }
+  
+  Test(actions::Add<Data_t>(27, { 7, 8, }, 20));
+  // at this point:
+  // (31) [2] {
+  //      0     0    0 [  3    4   32   33   37    38    38
+  //     37    38   37   38   37   38   23   17    18    19
+  //     20    21   22   23   -1 ]  0    0 [ 27    28 ]   0
+  //      0
+  //   }
+  
+  Test(actions::Add<Data_t>
+    (4, TestManagerClass<Data_t>::Vector_t(22, 10.0), 15.0));
+  // at this point:
+  // (31) [2] {
+  //      0     0    0 [  3   14   42   43   47    48    48
+  //     47    48   47   48   47   48   33   27    28    29
+  //     30    31   32   33    9   25 ]  0 [ 27    28 ]   0
+  //      0
+  //   }
+  
+  Test(actions::Add<Data_t>
+    (2, TestManagerClass<Data_t>::Vector_t(22, -10.0), 12.0));
+  // at this point:
+  // (31) [2] {
+  //      0     0 [  2    3    4   32   33   37    38    38
+  //     37    38   37   38   37   38   23   17    18    19
+  //     20    21   22   23   -1   25 ]  0 [ 27    28 ]   0
+  //      0
+  //   }
   
   Test(actions::Truncate<Data_t>(new_size -= 3));
   
@@ -1228,6 +1271,8 @@ int main() {
   Test(actions::Truncate<Data_t>(9));
   
   Test(actions::Truncate<Data_t>(3));
+  
+  Test(actions::Truncate<Data_t>(2));
   
 #ifdef SPARSE_VECTOR_TEST_FAIL
   // enable this to verify that the error detection works

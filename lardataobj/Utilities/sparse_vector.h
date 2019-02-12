@@ -1980,8 +1980,7 @@ auto lar::sparse_vector<T>::combine_range(
     //
     // (1) combine all the input elements within the datarange including offset
     // 
-    if ((destRange != end_range()) && (offset < destRange->end_index())) {
-      // this means `destRange` contains offset:
+    if ((destRange != end_range()) && destRange->includes(offset)) {
       // combine input data until this range is over (or input data is over)
       auto dest = destRange->get_iterator(offset);
       
@@ -1994,15 +1993,17 @@ auto lar::sparse_vector<T>::combine_range(
       } // while
       if (src == last) break;
       offset = destRange->end_index();
+      ++destRange;
     } // if
     
     //
     // (2) create a new datarange combining void with input elements
     //
-    // at this point, offset is in the void, and we do have more input data;
+    // at this point, offset is in the void, we do have more input data,
+    // and `destRange` does _not_ contain the current insertion offset;
     // we fill as much void as we can with data, creating a new range.
     // When to stop? at the beginning of the next range, or when data is over
-    ++destRange;
+    // 
     size_type const newRangeSize = (destRange == end_range())
       ? std::distance(src, last): (destRange->begin_index() - offset);
     
