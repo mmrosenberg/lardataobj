@@ -23,7 +23,7 @@
 #include <type_traits> // std::is_integral
 
 
-/// Namespace for generic larsoft
+/// Namespace for generic LArSoft-related utilities.
 namespace lar {
  
 // -----------------------------------------------------------------------------
@@ -1048,7 +1048,7 @@ class sparse_vector {
   
   //@{
   /**
-   * @brief Returns an iterator to the range after `index`, or `end()` if none.
+   * @brief Returns an iterator to the range after `index`.
    * @param index the absolute index
    * @return iterator to the next range not including index, or ranges.end()
    *         if none
@@ -1133,7 +1133,18 @@ class sparse_vector {
   /// Voids the starting elements up to index (excluded) of a given range
   range_iterator eat_range_head(range_iterator iRange, size_t index);
   
-  /// Merges all the following ranges
+  /**
+   * @brief Merges all the following contiguous ranges.
+   * @param iRange iterator to the range to merge the following ones into
+   * @return iterator to the merged range
+   * 
+   * Starting from the range next to `iRange`, if that range is contiguous to
+   * `iRange` the two are merged. The merging continues while there are
+   * ranges contiguous to `iRange`. In the end, an iterator is returned pointing
+   * to a range that has the same starting point that `iRange` had, and that is
+   * not followed by a contiuguous range, since all contiguous ranges have been
+   * merged into it.
+   */
   datarange_t& merge_ranges(range_iterator iRange);
   
   /// Extends the vector size according to the last range
