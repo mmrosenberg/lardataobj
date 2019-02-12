@@ -1080,7 +1080,7 @@ class sparse_vector {
    * @return iterator to the range including index, or the next range if none
    * 
    * The returned iterator points to a range that "borders" the specified index,
-   * meaning that teh cell at `index` is either within the range, or it is the
+   * meaning that the cell at `index` is either within the range, or it is the
    * one immediately after that range.
    * If `index` is in the middle of the void, though (i.e. if the previous cell
    * is void), the next range is returned instead.
@@ -1099,11 +1099,14 @@ class sparse_vector {
   
   //@{
   /**
-   * @brief Returns an iterator to the range after `index`, or `end()` if none.
+   * @brief Returns an iterator to the range that contains the first non-void
+   *        element after `index`, or `end()` if none.
    * @param index the absolute index
    * @param rbegin consider only from this range on
    * @return iterator to the next range not including index, or `ranges.end()`
    *         if none
+   * 
+   * Note that the returned range can contain `index` as well.
    */
   range_iterator find_extending_range_iter
     (size_type index, range_iterator rbegin);
@@ -2142,7 +2145,7 @@ typename lar::sparse_vector<T>::range_iterator
   // this range has the offset (first index) above the index argument:
   auto it = find_next_range_iter(index, rbegin);
   // if index were not void, would it belong to the previous range?
-  // if so, the previus range is the one we want
+  // if so, the previous range is the one we want
   return ((it != rbegin) && std::prev(it)->borders(index))? std::prev(it): it;
 } // lar::sparse_vector<T>::find_extending_range_iter()
 
