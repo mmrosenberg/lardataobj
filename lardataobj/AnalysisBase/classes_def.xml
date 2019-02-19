@@ -314,7 +314,7 @@
     ]]>
   </ioread>
  
-  <ioread
+<!--  <ioread
      version="[-13]"
      sourceClass="anab::ParticleID"
      source="geo::PlaneID fPlaneID; int fNdf; double fMinChi2; double fDeltaChi2; double fChi2Proton; double fChi2Kaon; double fChi2Pion; double fChi2Muon; double fMissingE; double fMissingEavg; double fPIDA"
@@ -427,7 +427,6 @@ std::cout << "fPIDA = " << oldObj->fPIDA << std::endl;*/
 
         fParticleIDAlgScores = AlgScoresVec;
      ]]>
- </ioread>
-
+ </ioread> -->
 
 </lcgdict>
