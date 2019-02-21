@@ -12,7 +12,7 @@
 <!-- support classes (e.g., elements of data product classes) -->
  <class name="std::map<std::basic_string<char>,double > " />
  <class name="std::vector<std::map<std::basic_string<char>,double > >" />
- <!--<class name="std::bitset<8>" />-->
+ <class name="bitset<8>" />
 
 <!-- Feature vectors, length 1-5                                        -->
  <class name="anab::FeatureVector<1>" ClassVersion="10"               >
@@ -114,9 +114,7 @@
   <version ClassVersion="13" checksum="3664244500"/>
   <version ClassVersion="12" checksum="1769449101"/>
  </class>
- <class name="anab::sParticleIDAlgScores"      ClassVersion="15"                 >
-  <version ClassVersion="15" checksum="3648328938"/>
-  <version ClassVersion="14" checksum="2355052063"/>
+ <class name="anab::sParticleIDAlgScores"      ClassVersion="13"                 >
   <version ClassVersion="13" checksum="1047022744"/>
   <version ClassVersion="12" checksum="3455956857"/>
   <version ClassVersion="11" checksum="3455956848"/>
