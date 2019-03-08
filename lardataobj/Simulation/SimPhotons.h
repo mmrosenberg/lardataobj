@@ -17,8 +17,7 @@
 // chain.
 //
 // OnePhoton, SimPhotons and SimPhotonsCollection are all persistent under
-// ROOT I/O.  For compilation to succeed, the relevant pragma lines
-// must be present in LinkDef.h.
+// ROOT I/O.
 //
 // The current implementation resembles that of an STL container in 
 // some respects but needs more work before it is polished product.
@@ -84,7 +83,6 @@ namespace sim
 
       int  fOpChannel;  /// volume number for the OpDet
 
-#ifndef __GCCXML__
     public:
 
       typedef std::vector<OnePhoton>             list_type;
@@ -106,8 +104,6 @@ namespace sim
       int       OpChannel() const;
       void      SetChannel(int ch);
 
-#endif
-      
     };
  
 
@@ -122,8 +118,6 @@ namespace sim
 
   private:
     std::string fTheSDName;
-    
-#ifndef __GCCXML__
     
   public:
     typedef std::map<int,SimPhotons>           list_type;
@@ -151,12 +145,9 @@ namespace sim
     void SetSDName(std::string TheSDName);
     std::string GetSDName();
     
-#endif
   };
   
 }
-
-#ifndef __GCCXML__
 
 inline int         sim::SimPhotons::OpChannel()       const                     { return fOpChannel;      }
 inline void        sim::SimPhotons::SetChannel(int ch)                          { fOpChannel = ch;        }
@@ -165,7 +156,5 @@ inline void        sim::SimPhotonsCollection::SetSDName(std::string TheSDName)  
 
 inline bool sim::SimPhotons::operator==(const sim::SimPhotons& other) const          { return fOpChannel == other.OpChannel(); }
 inline bool sim::SimPhotonsLite::operator==(const sim::SimPhotonsLite& other) const  { return OpChannel == other.OpChannel; }
-
-#endif
 
 #endif

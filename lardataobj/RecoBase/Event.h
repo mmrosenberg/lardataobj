@@ -21,7 +21,7 @@ namespace recob {
   class Event  {
 
   public:
-    Event(); // Needed to hide constexpr from GCCXML.
+    Event(); // Needed for ROOT persistency.
 
   private:
 

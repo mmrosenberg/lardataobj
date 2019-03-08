@@ -85,8 +85,6 @@ namespace sim
     {}
 
 
-#ifndef __GCCXML__
-    // Accessors, hidden from the ROOT dictionary generation.
     // Note that even if we store a value as float, we return
     // it as double so the user doesn't have to think about
     // precision issues. 
@@ -154,8 +152,6 @@ namespace sim
 	&& edep > rhs.edep; // sort by _decreasing_ energy
     }
 
-#endif // __GCCXML__
-
   private:
     // While the accessors above return all values in double
     // precision, store whatever we can in single precision to save
@@ -191,7 +187,6 @@ namespace sim
     int           pdgCode;      //< pdg code of particle to avoid lookup by particle type later
   };
   /*
-#ifndef __GCCXML__
   // Class utility functions. 
 
   // The format of the sim::SimEnergyDeposit output. I'm using a
@@ -223,7 +218,6 @@ namespace sim
   { 
     return (*lhs) < (*rhs); 
   }
-#endif // __GCCXML__
   */
   typedef std::vector<SimEnergyDeposit> SimEnergyDepositCollection;
 } // namespace sim

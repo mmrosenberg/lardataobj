@@ -25,9 +25,6 @@ namespace sim {
 
     ~BeamGateInfo() {};
 
-    // The sections bracketed with GCCXML tests handle a problem ART
-    // with generating its data dictionaries.
-
     // No "setters" for beam-gate start or width; you have to assign
     // them when you create a BeamGateInfo object.
     double Start() const { return fm_start; }

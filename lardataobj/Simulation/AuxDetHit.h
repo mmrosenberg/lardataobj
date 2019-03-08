@@ -35,7 +35,6 @@ namespace sim {
         bool operator<(const AuxDetHit& other) const;
         bool operator==(const AuxDetHit& other) const;
         // Hide the following from Root    
-#ifndef __GCCXML__
 
         AuxDetHit(unsigned int ID,
                 unsigned int trackID,
@@ -179,7 +178,6 @@ namespace sim {
             return ID;
         }
 
-#endif
     };
     
     typedef std::vector<AuxDetHit> AuxDetHitCollection;
@@ -187,4 +185,3 @@ namespace sim {
     inline bool sim::AuxDetHit::operator==(const AuxDetHit& other) const {    return other.trackID == trackID;}
 } // namespace sim
 #endif /* AUXDETHIT_H */
-

@@ -66,9 +66,6 @@ namespace raw {
 
         static_assert(sizeof(unsigned long long)==8,"unsigned long long is not 8 bytes");
         
-        // The sections bracketed with GCCXML tests handle a problem ART
-        // with generating its data dictionaries.
-
         Channel_t   ChannelNumber() const            { return fChannel; }
         TimeStamp_t TimeStamp() const                { return fTimeStamp; }
         void        SetChannelNumber(Channel_t chan) { fChannel = chan; }

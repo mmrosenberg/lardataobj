@@ -22,7 +22,7 @@ namespace recob {
     using Point_t = tracking::Point_t;
     using Vector_t  = tracking::Vector_t;
 
-    Slice(); // Needed to hide constexpr from GCCXML.
+    Slice(); // Needed for ROOT persistency.
 
     Slice(int id, Point_t center, Vector_t direction, Point_t end0Pos, Point_t end1Pos, float aspectratio, float charge)
     : fID(id), fCenter(center), fDirection(direction), fEnd0Pos(end0Pos), fEnd1Pos(end1Pos), fAspectRatio(aspectratio), fCharge(charge)

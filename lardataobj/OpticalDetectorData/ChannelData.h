@@ -34,9 +34,6 @@ namespace optdata {
 
     ~ChannelData() {};
 
-    // The sections bracketed with GCCXML tests handle a problem ART
-    // with generating its data dictionaries.
-
     // No "setter" for the channel number; you have to assign it when
     // you create a ChannelData object.
     Channel_t ChannelNumber() const { return fm_optDetChannel; }
