@@ -1,8 +1,7 @@
-
-cet_make( LIBRARIES nusimdata_SimulationBase
-		    ${ROOT_BASIC_LIB_LIST}
-                    ${ROOT_EG}
-                    NO_DICTIONARY )
+cet_make(LIBRARIES nusimdata_SimulationBase
+                   ${ROOT_CORE}
+                   ${ROOT_PHYSICS}
+                   NO_DICTIONARY)
 
 art_dictionary( DICTIONARY_LIBRARIES lardataobj_MCBase )
 

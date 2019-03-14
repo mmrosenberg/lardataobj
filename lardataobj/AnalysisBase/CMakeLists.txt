@@ -1,9 +1,6 @@
-
 cet_make( LIBRARIES canvas
-		    MF_MessageLogger
-		    
-		    cetlib cetlib_except
-		    ${ROOT_BASIC_LIB_LIST}
+                   cetlib_except
+                   ${ROOT_CORE}
                     NO_DICTIONARY )
 
 art_dictionary( DICTIONARY_LIBRARIES lardataobj_AnalysisBase  nusimdata_SimulationBase)

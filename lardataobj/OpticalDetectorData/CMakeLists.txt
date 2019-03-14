@@ -1,7 +1,4 @@
-
-cet_make( NO_DICTIONARY )
-
-art_dictionary( DICTIONARY_LIBRARIES lardataobj_OpticalDetectorData )
+art_dictionary()
 
 install_headers()
 install_fhicl()

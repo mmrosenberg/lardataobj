@@ -13,7 +13,6 @@
 #include <iosfwd>
 #include <iostream>
 #include <iomanip>
-#include <TVector3.h>
 
 #include "larcoreobj/SimpleTypesAndConstants/geo_types.h"
 #include "lardataobj/RecoBase/TrackingTypes.h"
