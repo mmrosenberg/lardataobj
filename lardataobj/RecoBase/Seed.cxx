@@ -7,7 +7,6 @@
 //         bjpjones@mit.edu
 //
 ////////////////////////////////////////////////////////////////////////////
-#include "messagefacility/MessageLogger/MessageLogger.h"
 #include "lardataobj/RecoBase/Seed.h"
 #include "lardataobj/RecoBase/SpacePoint.h"
 #include "TMath.h"

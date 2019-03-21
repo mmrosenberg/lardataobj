@@ -6,7 +6,6 @@
 ////////////////////////////////////////////////////////////////////////
 
 #include "lardataobj/AnalysisBase/FlashMatch.h"
-#include "messagefacility/MessageLogger/MessageLogger.h"
 
 namespace anab{
 

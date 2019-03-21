@@ -6,7 +6,6 @@
 ////////////////////////////////////////////////////////////////////////
 
 #include "lardataobj/AnalysisBase/ParticleID.h"
-#include "messagefacility/MessageLogger/MessageLogger.h"
 
 namespace anab{
 

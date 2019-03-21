@@ -6,7 +6,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-#include "messagefacility/MessageLogger/MessageLogger.h"
 
 #include "lardataobj/RecoBase/Track.h"
 #include "lardataobj/RecoBase/TrackingPlane.h"

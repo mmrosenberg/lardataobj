@@ -8,7 +8,6 @@
 ////////////////////////////////////////////////////////////////////////
 
 #include "lardataobj/RecoBase/OpHit.h"
-#include "messagefacility/MessageLogger/MessageLogger.h"
 
 namespace recob{
 

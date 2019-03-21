@@ -5,7 +5,6 @@
 // \author brebel@fnal.gov
 //
 ////////////////////////////////////////////////////////////////////////////
-#include "messagefacility/MessageLogger/MessageLogger.h"
 
 #include "lardataobj/RecoBase/Vertex.h"
 
