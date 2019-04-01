@@ -1,6 +1,6 @@
 #ifndef MCWIRE_CXX
 #define MCWIRE_CXX
 
-#include "MCWire.h"
+#include "lardataobj/MCBase/MCWire.h"
 
 #endif

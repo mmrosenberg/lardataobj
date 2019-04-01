@@ -18,7 +18,7 @@
 #include <vector>
 #include <TLorentzVector.h>
 #include <string>
-#include "MCLimits.h"
+#include "lardataobj/MCBase/MCLimits.h"
 
 namespace sim{
 

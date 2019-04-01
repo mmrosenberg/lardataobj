@@ -16,7 +16,7 @@
 #define MCTRACK_H
 
 #include <vector>
-#include "MCStep.h"
+#include "lardataobj/MCBase/MCStep.h"
 #include "nusimdata/SimulationBase/MCTruth.h"
 
 namespace sim{

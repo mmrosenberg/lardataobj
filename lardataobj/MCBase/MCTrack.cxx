@@ -1,7 +1,7 @@
 #ifndef MCTRACK_CXX
 #define MCTRACK_CXX
 
-#include "MCTrack.h"
+#include "lardataobj/MCBase/MCTrack.h"
 
 namespace sim {
 

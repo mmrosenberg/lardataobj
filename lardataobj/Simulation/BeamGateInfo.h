@@ -1,23 +1,23 @@
 // Simulation/BeamGateInfo.h
 // William Seligman <seligman@nevis.columbia.edu>
 
-// A simple model of a single beam gate signal. 
+// A simple model of a single beam gate signal.
 
 #ifndef Simulation_BeamGateInfo_h
 #define Simulation_BeamGateInfo_h
 
-#include "BeamTypes.h"
+#include "lardataobj/Simulation/BeamTypes.h"
 
 namespace sim {
 
-  class BeamGateInfo 
+  class BeamGateInfo
   {
   public:
 
-    // Simple constructors/destructors. 
+    // Simple constructors/destructors.
     // Units are nanoseconds (ns).
     // The default values are those of the BNB beam gate.
-    BeamGateInfo( double start = 0, double width = 1600., BeamType_t type = kBNB ) 
+    BeamGateInfo( double start = 0, double width = 1600., BeamType_t type = kBNB )
       : fm_start(start)
       , fm_width(width)
       , fm_beam_type(type)
@@ -31,12 +31,12 @@ namespace sim {
     double Width() const { return fm_width; }
     BeamType_t BeamType() const { return fm_beam_type; }
 
-    
+
   private:
     double fm_start; // Start of the beam gate relative to the t0 of the initial simulated event window, in ns.
     double fm_width; // Width of the beam gate.
     BeamType_t fm_beam_type; ///< Type of beam
-    
+
   };
 
   // In case we want to sort a collection of BeamGateInfos (e.g.,
@@ -58,7 +58,7 @@ namespace sim {
 // For no extra charge, include how to sort BeamGateInfo*, just in
 // case we want (for example) a std::set<BeamGateInfo*>.
 namespace std {
-  template <> 
+  template <>
   class less<sim::BeamGateInfo*>
   {
   public:

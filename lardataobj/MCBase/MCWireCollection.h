@@ -3,7 +3,7 @@
 #define MCWIRECOLLECTION_H
 
 // C++ includes
-#include "MCWire.h"
+#include "lardataobj/MCBase/MCWire.h"
 
 namespace sim {
   
