@@ -1,6 +1,3 @@
-#ifndef TRIGGERDATA_CXX
-#define TRIGGERDATA_CXX
-
 #include "TriggerData.h"
 
 namespace raw {
@@ -20,5 +17,3 @@ namespace raw {
   }
 
 }
-
-#endif

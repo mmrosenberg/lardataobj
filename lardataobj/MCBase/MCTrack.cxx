@@ -1,6 +1,3 @@
-#ifndef MCTRACK_CXX
-#define MCTRACK_CXX
-
 #include "lardataobj/MCBase/MCTrack.h"
 
 namespace sim {
@@ -43,5 +40,3 @@ namespace sim {
 
   }
 }
-#endif
-  
