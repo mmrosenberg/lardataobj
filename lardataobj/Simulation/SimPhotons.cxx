@@ -10,7 +10,6 @@
 
 
 #include "lardataobj/Simulation/SimPhotons.h"
-#include <iostream>
 
 namespace sim
 {

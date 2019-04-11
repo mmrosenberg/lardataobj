@@ -8,7 +8,6 @@
 
 #include "lardataobj/RawData/DAQHeader.h"
 #include <string>
-#include <iostream>
 
 namespace raw{
 

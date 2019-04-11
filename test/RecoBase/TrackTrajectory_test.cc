@@ -38,7 +38,6 @@
 #include "TMatrixD.h"
 
 // C/C++ standard libraries
-#include <vector>
 #include <set>
 #include <iterator> // std::prev(), std::next()
 #include <algorithm> // std::equal(), std::accumulate()

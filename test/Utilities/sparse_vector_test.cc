@@ -16,7 +16,6 @@
 
 // C/C++ standard libraries
 #include <iostream>
-#include <vector>
 #include <algorithm>
 #include <string>
 #include <utility> // std::make_pair()

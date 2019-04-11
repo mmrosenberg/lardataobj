@@ -37,7 +37,6 @@
 #include "TMatrixD.h"
 
 // C/C++ standard libraries
-#include <vector>
 #include <algorithm> // std::equal(), std::accumulate()
 #include <tuple> // std::tie()
 #include <iostream>

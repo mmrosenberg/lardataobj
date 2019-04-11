@@ -9,7 +9,6 @@
 #include "lardataobj/RecoBase/EndPoint2D.h"
 
 #include <iomanip>
-#include <iostream>
 
 namespace recob{
 

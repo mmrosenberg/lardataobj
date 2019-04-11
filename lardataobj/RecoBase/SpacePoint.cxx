@@ -9,7 +9,6 @@
 #include "lardataobj/RecoBase/SpacePoint.h"
 
 #include <iomanip>
-#include <iostream>
 
 namespace recob{
 
