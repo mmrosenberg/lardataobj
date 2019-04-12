@@ -3,7 +3,7 @@
  * @brief  Contains data associated to particles from detector simulation.
  * @author Gianluca Petrillo (petrillo@fnal.gov)
  * @date   January 10, 2018
- * 
+ *
  */
 
 #ifndef LARDATAOBJ_SIMULATION_GENERATEDPARTICLEINFO_H
@@ -14,10 +14,10 @@
 
 
 namespace sim {
-  
+
   /**
    * @brief Contains information about a generated particle.
-   * 
+   *
    * This information is designed to be added as metadata to an association
    * between a `simb::MCParticle` produced by the simulation of particle
    * propagation through the detector (e.g. `LArG4`) with the generator truth
@@ -25,7 +25,7 @@ namespace sim {
    * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
    * art::Assns<simb::MCParticle, simb::MCTruth, sim::GeneratedParticleInfo>
    * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   * 
+   *
    * The associated `simb::MCParticle` is expected to be the generated particle
    * of the generator truth record, as processed by the simulation.
    * The provided information is currently:
@@ -34,42 +34,42 @@ namespace sim {
    *   @code{.cpp}
    *   mctruthPtr->GetParticle(genParticleInfo.generatedParticleIndex());
    *   @endcode
-   * 
+   *
    */
   class GeneratedParticleInfo {
-    
+
       public:
-    
+
     //--- BEGIN Generated particle index ---------------------------------------
     /// @{
     /// @name Generated particle index
-    
+
     /// Type of particle index in the generator truth record (`simb::MCTruth`).
     using GeneratedParticleIndex_t = simb::GeneratedParticleIndex_t;
-    
+
     /// Constant representing the absence of generator truth information.
     static constexpr GeneratedParticleIndex_t NoGeneratedParticleIndex
       = simb::NoGeneratedParticleIndex;
-    
+
     /**
      * @brief  Returns the generated particle index.
      * @return generated particle index (`NoGeneratedParticleIndex` if none)
      */
     GeneratedParticleIndex_t generatedParticleIndex() const
       { return fGeneratedParticleIndex; }
-    
+
     /// Returns whether the specified one is an acceptable generator index.
     bool hasGeneratedParticleIndex() const
       { return simb::isGeneratedParticleIndex(fGeneratedParticleIndex); }
-    
+
     /// @}
     //--- END Generated particle index -----------------------------------------
-    
-    
+
+
     //--- BEGIN Constructors ---------------------------------------------------
     /// Default constructor (for ROOT I/O only).
     GeneratedParticleInfo() = default;
-    
+
     /**
      * @brief Constructor: assigns all the values.
      * @param index generated particle index (`NoGeneratedParticleIndex` if none)
@@ -78,17 +78,17 @@ namespace sim {
       : fGeneratedParticleIndex(index)
       {}
     //--- END Constructors ---------------------------------------------------
-    
-    
+
+
       private:
-    
+
     /// Index of the generated particle in its `simb::MCTruth` record.
     GeneratedParticleIndex_t fGeneratedParticleIndex = NoGeneratedParticleIndex;
-    
+
   }; // class GeneratedParticleInfo
-  
-  
-  
+
+
+
 } // namespace sim
 
 #endif // LARDATAOBJ_SIMULATION_GENERATEDPARTICLEINFO_H

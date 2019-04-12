@@ -3,7 +3,7 @@
  * @brief   Data product for reconstructed trajectory in space
  * @date    December 9, 2016
  * @see     Trajectory.h
- * 
+ *
  */
 
 
@@ -48,23 +48,23 @@ recob::Trajectory::Trajectory
  * @brief Returns the approximate length of the trajectory.
  * @param startAt (_default: 0, from beginning_) point to start from
  * @return the approximate length of the trajectory [cm]
- * 
+ *
  * The residual length from the trajectory point startAt to the end of the
  * trajectory is computed and returned. By default, the whole trajectory
  * length is returned.
  * If a non-existing point is specified, 0 is returned.
- * 
+ *
  * The length approximation is just the sum of Euclidean distances between
  * all consecutive trajectory points (starting from the one with index
  * `startAt`).
- * 
+ *
  * This operation is slow, and the result should be stored in a variable.
  */
 double recob::Trajectory::Length(size_t startAt /* = 0 */) const {
-  
+
   // sanity check
   if (startAt >= LastPoint()) return 0.;
-  
+
   // just sum the distance between all locations in the trajectory
   Point_t const* curr = &(LocationAtPoint(startAt));
   Point_t const* next = curr;
@@ -80,15 +80,15 @@ double recob::Trajectory::Length(size_t startAt /* = 0 */) const {
 
 //------------------------------------------------------------------------------
 double recob::Trajectory::ZenithAngle(size_t p /* = 0 */) const {
-  
+
   // The zenith angle is defined by the angle between the track starting
   // direction and the y axis.
   // The y component of the starting direction is in fact the cosine of that
   // angle (and std::acos() conveniently returns a value in [0;pi]).
   // Our convention has the zenith angle the supplemental of the standard one.
-  
+
   return util::pi<Coord_t>() - std::acos(DirectionAtPoint(p).Y());
-  
+
 } // recob::Trajectory::ZenithAngle()
 
 
@@ -109,17 +109,17 @@ double recob::Trajectory::AzimuthAngle(size_t p /* = 0 */) const {
  * @brief Computes and returns the direction of the trajectory at a point
  * @param i index of the point in the trajectory
  * @return the direction at that point
- * 
+ *
  * The direction is computed as unit vector parallel to the momentum at that
  * trajectory point.
  * If the index is not contained in the trajectory, the result is undefined.
  */
 recob::Trajectory::Vector_t recob::Trajectory::DirectionAtPoint(size_t i) const
 {
-  
+
   auto const& mom = MomentumVectorAtPoint(i);
   return HasMomentum()? (mom / mom.R()): mom;
-  
+
 } // recob::Trajectory::DirectionAtPoint()
 
 

@@ -31,7 +31,7 @@ namespace raw {
 
 
       public:
-        // Simple constructors/destructors. 
+        // Simple constructors/destructors.
         // Just in case the user forgets to supply the default channel, use
         // a garbage value to indicate that there's a problem.
         // To save on memory reallocations, offer an option to specify the
@@ -45,7 +45,7 @@ namespace raw {
             this->reserve(len);
         };
 
-        
+
         OpDetWaveform( TimeStamp_t time,
                        Channel_t   chan,
                        std::vector< uint16_t > rhs )
@@ -57,7 +57,7 @@ namespace raw {
                 this->push_back(rhs[i]);
         };
 
-        
+
         ~OpDetWaveform() {};
 
         // Functions included for backwards compatability with previous data types
@@ -65,12 +65,12 @@ namespace raw {
 
 
         static_assert(sizeof(unsigned long long)==8,"unsigned long long is not 8 bytes");
-        
+
         Channel_t   ChannelNumber() const            { return fChannel; }
         TimeStamp_t TimeStamp() const                { return fTimeStamp; }
         void        SetChannelNumber(Channel_t chan) { fChannel = chan; }
         void        SetTimeStamp(TimeStamp_t time)   { fTimeStamp = time; }
-    
+
     };
 }
 
@@ -92,7 +92,7 @@ namespace raw {
 // For no extra charge, include how to sort ChannelData*, just in
 // case we want (for example) a std::set<ChannelData*>.
 namespace std {
-  template <> 
+  template <>
   class less<raw::OpDetWaveform*>
   {
   public:

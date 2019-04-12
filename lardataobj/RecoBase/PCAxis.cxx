@@ -43,7 +43,7 @@ PCAxis::PCAxis(bool                               ok,
     fAvePosition[1]     = avePos[1];
     fAvePosition[2]     = avePos[2];
 }
-  
+
 //----------------------------------------------------------------------
 // ostream operator.
 //
@@ -63,7 +63,7 @@ std::ostream& operator<< (std::ostream & o, const PCAxis & a)
     }
     else
         o << " Principal Components Axis is not valid" << std::endl;
-    
+
     return o;
 }
 

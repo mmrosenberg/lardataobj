@@ -4,8 +4,8 @@
 //
 // brebel@fnal.gov
 //
-// -modified DAQHeader class to save all information available in 
-//  binary version of DAQ480 software.  - Mitch Soderberg 2/19/09  
+// -modified DAQHeader class to save all information available in
+//  binary version of DAQ480 software.  - Mitch Soderberg 2/19/09
 //
 ////////////////////////////////////////////////////////////////////////
 
@@ -83,7 +83,7 @@ namespace raw {
       time_t           GetTimeStamp()       const;
       short            GetSpareWord()       const;
       uint32_t         GetNChannels()       const;
-     
+
     };
 }
 
@@ -98,16 +98,16 @@ inline void           raw::DAQHeader::SetEvent(unsigned short i)            { fE
 inline void           raw::DAQHeader::SetTimeStamp(time_t t)                { fTime = t;        }
 inline void           raw::DAQHeader::SetSpareWord(short s)                 { fSpare = s;       }
 inline void           raw::DAQHeader::SetNChannels(uint32_t i)              { fNchan = i;       }
-inline unsigned int   raw::DAQHeader::GetStatus()          const            { return fStatus;   }  
-inline int            raw::DAQHeader::GetFixedWord()       const 	    { return fFixed;    }   
-inline unsigned short raw::DAQHeader::GetFileFormat()      const 	    { return fFormat;   }  
+inline unsigned int   raw::DAQHeader::GetStatus()          const            { return fStatus;   }
+inline int            raw::DAQHeader::GetFixedWord()       const 	    { return fFixed;    }
+inline unsigned short raw::DAQHeader::GetFileFormat()      const 	    { return fFormat;   }
 inline unsigned short raw::DAQHeader::GetSoftwareVersion() const 	    { return fSoftware; }
-inline unsigned short raw::DAQHeader::GetRun()             const 	    { return fRun;      }     
-inline unsigned short raw::DAQHeader::GetSubRun()          const 	    { return fSubRun;   }     
-inline unsigned short raw::DAQHeader::GetEvent()           const 	    { return fEvent;    }   
-inline time_t         raw::DAQHeader::GetTimeStamp()       const 	    { return fTime;     }    
-inline short          raw::DAQHeader::GetSpareWord()       const 	    { return fSpare;    }   
-inline uint32_t       raw::DAQHeader::GetNChannels()       const 	    { return fNchan;    }   
+inline unsigned short raw::DAQHeader::GetRun()             const 	    { return fRun;      }
+inline unsigned short raw::DAQHeader::GetSubRun()          const 	    { return fSubRun;   }
+inline unsigned short raw::DAQHeader::GetEvent()           const 	    { return fEvent;    }
+inline time_t         raw::DAQHeader::GetTimeStamp()       const 	    { return fTime;     }
+inline short          raw::DAQHeader::GetSpareWord()       const 	    { return fSpare;    }
+inline uint32_t       raw::DAQHeader::GetNChannels()       const 	    { return fNchan;    }
 
 
 #endif // DAQHEADER_H

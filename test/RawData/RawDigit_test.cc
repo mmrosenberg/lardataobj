@@ -9,7 +9,7 @@
  * it can access are the right ones.
  *
  * See http://www.boost.org/libs/test for the Boost test library home page.
- * 
+ *
  * Timing:
  * version 1.0: <1" (debug mode)
  */
@@ -52,40 +52,40 @@ void CheckRawDigit(
   raw::RawDigit::ADCvector_t const& uncompressed_adclist,
   raw::Compress_t compression
 ) {
-  
+
   // this is a parameters validation check
   BOOST_CHECK_EQUAL(samples, uncompressed_adclist.size());
-  
+
   // verify that the values are as expected
   // - channel ID
   BOOST_CHECK_EQUAL(digits.Channel(), channel);
-  
+
   // - compression mode
   BOOST_CHECK_EQUAL(digits.Compression(), compression);
-  
+
   // - uncompressed size
   BOOST_CHECK_EQUAL(digits.Samples(), samples);
   BOOST_CHECK_EQUAL(digits.Samples(), uncompressed_adclist.size());
-  
+
   // - digits
-  
+
   // decompress (on an already allocated buffer)
   raw::RawDigit::ADCvector_t ADCs(digits.Samples());
   raw::Uncompress(digits.ADCs(), ADCs, digits.Compression());
-  
+
   BOOST_WARN(digits.NADC() <= samples); // is this always the case?
   BOOST_CHECK
     (std::equal(ADCs.begin(), ADCs.end(), uncompressed_adclist.begin()));
-  
+
   // - others
   BOOST_CHECK_EQUAL(digits.GetPedestal(), 0.);
   BOOST_CHECK_EQUAL(digits.GetSigma(), 0.);
-  
+
 } // CheckRawDigit()
 
 
 void RawDigitTestDefaultConstructor() {
-  
+
   //
   // Part I: initialization of wire inputs
   //
@@ -95,22 +95,22 @@ void RawDigitTestDefaultConstructor() {
   raw::RawDigit::ADCvector_t adclist;
   const raw::Compress_t compression = raw::kNone;
 // raw::RawDigit::Flags_t flags;
-  
+
   //
   // Part II: default constructor
   //
   // step II.1: create a wire with the signal-copying constructor
   raw::RawDigit digits;
-  
-  
+
+
   // step II.2: verify that the values are as expected
   CheckRawDigit(digits, channel, samples, adclist, compression);
-  
+
 } // RawDigitTestDefaultConstructor()
 
 
 void RawDigitTestCustomConstructors() {
-  
+
   //
   // Part I: initialization of wire inputs
   //
@@ -121,22 +121,22 @@ void RawDigitTestCustomConstructors() {
     adclist[i] = (i % 3)? 0: i;
   const raw::Compress_t compression = raw::kHuffman;
 // raw::RawDigit::Flags_t flags;
-  
+
   // working a copy of the original data:
   std::vector<short> buffer(adclist);
   raw::Compress(buffer, compression); // compression happens in place
-  
-  
+
+
   //
   // Part II: constructor with signal copy
   //
   // step II.1: create a wire with the signal-copying constructor
   raw::RawDigit digits1(channel, samples, buffer, compression /*, flags */);
-  
+
   // step II.2: verify that the values are as expected
   CheckRawDigit(digits1, channel, samples, adclist, compression);
-  
-  
+
+
   //
   // Part III: constructor with signal move
   //
@@ -144,13 +144,13 @@ void RawDigitTestCustomConstructors() {
   std::vector<short> buffer_copy(buffer);
   raw::RawDigit digits2
     (channel, samples, std::move(buffer_copy), compression /*, flags */);
-  
+
   // step III.2: verify that the values are as expected
   CheckRawDigit(digits2, channel, samples, adclist, compression);
-  
+
   // step III.3: verify that the data was actually moved
   BOOST_CHECK(buffer_copy.empty());
-  
+
 } // RawDigitTestCustomConstructors()
 
 

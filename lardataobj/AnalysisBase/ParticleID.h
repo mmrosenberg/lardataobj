@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////
-// \version 
+// \version
 //
 // \brief Definition of data product to hold ParticleID information
 //
@@ -19,7 +19,7 @@ namespace anab {
 
   class ParticleID{
   public:
-    
+
     ParticleID();
 
     int    fPdg;             ///< determined particle ID
@@ -52,7 +52,7 @@ namespace anab {
 
     friend std::ostream& operator << (std::ostream &o, ParticleID const& a);
 
-    const int&    Pdg()         const; 
+    const int&    Pdg()         const;
     const int&    Ndf()         const;
     const double& MinChi2()     const;
     const double& DeltaChi2()   const;
@@ -69,7 +69,7 @@ namespace anab {
 }
 
 
-inline const int&    anab::ParticleID::Pdg()         const { return fPdg;         } 
+inline const int&    anab::ParticleID::Pdg()         const { return fPdg;         }
 inline const int&    anab::ParticleID::Ndf()         const { return fNdf;         }
 inline const double& anab::ParticleID::MinChi2()     const { return fMinChi2;     }
 inline const double& anab::ParticleID::DeltaChi2()   const { return fDeltaChi2;   }

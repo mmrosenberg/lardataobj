@@ -22,11 +22,11 @@ namespace optdata {
   public:
 
     // Simple constructor/destructor.
-    FIFOChannel ( Optical_Category_t category = kUndefined, 
+    FIFOChannel ( Optical_Category_t category = kUndefined,
 		  TimeSlice_t time = 0,
 		  Frame_t frame = 0,
 		  Channel_t channel = std::numeric_limits<Channel_t>::max(),
-		  size_type len = 0 ) 
+		  size_type len = 0 )
       : ChannelData(channel,len)
       , fm_category(category)
       , fm_timeSlice(time)
@@ -75,7 +75,7 @@ namespace optdata {
 // For no extra charge, include how to sort FIFOChannel*, just in
 // case we want (for example) a std::set<FIFOChannel*>.
 namespace std {
-  template <> 
+  template <>
   class less<optdata::FIFOChannel*>
   {
   public:

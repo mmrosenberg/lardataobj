@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   AuxDetHit.h
  * Author: wenzel
  *
@@ -14,7 +14,7 @@ namespace sim {
 
     class AuxDetHit {
     private:
-        unsigned int ID; ///< Geant4 copy ID 
+        unsigned int ID; ///< Geant4 copy ID
         unsigned int trackID; ///< Geant4 supplied track ID
         float energyDeposited; ///< total energy deposited for this track ID and time
         float entryX; ///< Entry position X of particle
@@ -34,7 +34,7 @@ namespace sim {
         AuxDetHit() {}
         bool operator<(const AuxDetHit& other) const;
         bool operator==(const AuxDetHit& other) const;
-        // Hide the following from Root    
+        // Hide the following from Root
 
         AuxDetHit(unsigned int ID,
                 unsigned int trackID,
@@ -179,7 +179,7 @@ namespace sim {
         }
 
     };
-    
+
     typedef std::vector<AuxDetHit> AuxDetHitCollection;
     inline bool sim::AuxDetHit::operator<(const AuxDetHit& other) const {    return trackID < other.trackID;}
     inline bool sim::AuxDetHit::operator==(const AuxDetHit& other) const {    return other.trackID == trackID;}

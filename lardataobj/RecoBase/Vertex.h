@@ -79,7 +79,7 @@ namespace recob {
     int       ID()             const;
 
     /// Set vertex id.
-    void setID(int newID) { id_ = newID; } 
+    void setID(int newID) { id_ = newID; }
 
     friend bool          operator <   (const Vertex & a, const Vertex & b);
     friend std::ostream& operator <<  (std::ostream& o,  const Vertex & a);

@@ -24,31 +24,31 @@ namespace raw{
    * The uncompressed buffer *must* be already allocated with enough space
    * to store the full inflated adc data. Uncompressing raw::RawDigit can
    * be done as follows:
-   *     
+   *
    *     std::vector<ADC_t> uncompressed(digit.Samples(), 0);
    *     raw::Uncompress(digit.ADC(), uncompressed, digit.ADC());
-   *     
    *
-   */ 
-  void Uncompress(const std::vector<short>& adc, 
-                  std::vector<short>      &uncompressed, 
+   *
+   */
+  void Uncompress(const std::vector<short>& adc,
+                  std::vector<short>      &uncompressed,
                   raw::Compress_t          compress);
 
-  void Uncompress(const std::vector<short>& adc, 
-                  std::vector<short>      &uncompressed, 
+  void Uncompress(const std::vector<short>& adc,
+                  std::vector<short>      &uncompressed,
 		  int       pedestal,
                   raw::Compress_t          compress);
 
-  void Compress(std::vector<short> &adc, 
-                raw::Compress_t     compress, 
+  void Compress(std::vector<short> &adc,
+                raw::Compress_t     compress,
                 int                &nearestneighbor);
-  void Compress(std::vector<short> &adc, 
-                raw::Compress_t     compress, 
-                unsigned int       &zerothreshold, 
+  void Compress(std::vector<short> &adc,
+                raw::Compress_t     compress,
+                unsigned int       &zerothreshold,
                 int &nearestneighbor);
-  void Compress(std::vector<short> &adc, 
-                raw::Compress_t     compress, 
-                unsigned int       &zerothreshold, 
+  void Compress(std::vector<short> &adc,
+                raw::Compress_t     compress,
+                unsigned int       &zerothreshold,
 	        int       pedestal,
                 int &nearestneighbor,
 		bool fADCStickyCodeFeature=false);
@@ -64,22 +64,22 @@ namespace raw{
    * Compression is expected to reduce the size of the data, so that there is
    * in principle no need for reallocation of the input buffer, adc, to store
    * the result.
-   */ 
-  void Compress(std::vector<short> &adc, 
+   */
+  void Compress(std::vector<short> &adc,
                 raw::Compress_t     compress);
-  void Compress(std::vector<short> &adc, 
-                raw::Compress_t     compress, 
+  void Compress(std::vector<short> &adc,
+                raw::Compress_t     compress,
                 unsigned int       &zerothreshold);
 
   void Compress(const boost::circular_buffer<std::vector<short>> &adcvec_neighbors,
-		std::vector<short> &adc, 
-                raw::Compress_t     compress, 
-                unsigned int       &zerothreshold, 
+		std::vector<short> &adc,
+                raw::Compress_t     compress,
+                unsigned int       &zerothreshold,
                 int &nearestneighbor);
 
   void Compress(const boost::circular_buffer<std::vector<short>> &adcvec_neighbors,
-		std::vector<short> &adc, 
-                raw::Compress_t     compress, 
+		std::vector<short> &adc,
+                raw::Compress_t     compress,
                 unsigned int       &zerothreshold,
 		int       pedestal,
                 int &nearestneighbor,
@@ -87,40 +87,40 @@ namespace raw{
 
   void CompressHuffman(std::vector<short> &adc);
 
-  void UncompressHuffman(const std::vector<short>& adc, 
+  void UncompressHuffman(const std::vector<short>& adc,
                          std::vector<short>      &uncompressed);
 
-  void ZeroSuppression(std::vector<short> &adc, 
-                       unsigned int       &zerothreshold, 
+  void ZeroSuppression(std::vector<short> &adc,
+                       unsigned int       &zerothreshold,
                        int                &nearestneighbor);
 
-  void ZeroSuppression(std::vector<short> &adc, 
+  void ZeroSuppression(std::vector<short> &adc,
                        unsigned int       &zerothreshold,
 		       int       pedestal,
                        int                &nearestneighbor,
 		       bool fADCStickyCodeFeature=false);
 
 
-  void ZeroSuppression(std::vector<short> &adc, 
+  void ZeroSuppression(std::vector<short> &adc,
                        unsigned int       &zerothreshold);
 
   void ZeroSuppression(const boost::circular_buffer<std::vector<short>> &adcvec_neighbors,
 		       std::vector<short> &adc,
-                       unsigned int       &zerothreshold, 
+                       unsigned int       &zerothreshold,
                        int                &nearestneighbor);
 
   void ZeroSuppression(const boost::circular_buffer<std::vector<short>> &adcvec_neighbors,
 		       std::vector<short> &adc,
-                       unsigned int       &zerothreshold, 
+                       unsigned int       &zerothreshold,
 		       int       pedestal,
                        int                &nearestneighbor,
 		       bool fADCStickyCodeFeature=false);
 
 
-  void ZeroUnsuppression(const std::vector<short>& adc, 
+  void ZeroUnsuppression(const std::vector<short>& adc,
                          std::vector<short>      &uncompressed);
 
-  void ZeroUnsuppression(const std::vector<short>& adc, 
+  void ZeroUnsuppression(const std::vector<short>& adc,
                          std::vector<short>      &uncompressed,
 			 int       pedestal);
 

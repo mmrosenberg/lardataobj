@@ -18,7 +18,7 @@
 #include "TRandom3.h"
 
 ///Monte Carlo Simulation
-namespace sim{ 
+namespace sim{
 
   unsigned int GetRandomNumberSeed();
 
@@ -26,7 +26,7 @@ namespace sim{
   // associated particle was too low-energy to be written by the
   // detector Monte Carlo.
   static const int NoParticleId = std::numeric_limits<int>::min();
-  
+
 }
 
 inline unsigned int sim::GetRandomNumberSeed(){

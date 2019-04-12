@@ -25,7 +25,7 @@ namespace anab{
     float       numElectrons; // Number of electrons collected at the readout wire
     float       energy;       // energy deposited by ionization by this track ID [MeV]
   };
-  
+
 }
 
 #endif //BACKTRACKERMATCHINGDATA_FLASHMATCH

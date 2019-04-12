@@ -25,9 +25,9 @@ namespace optdata {
   public:
 
     // Simple constructor/destructor.
-    ChannelDataGroup ( Optical_Category_t category = kUndefined, 
+    ChannelDataGroup ( Optical_Category_t category = kUndefined,
 		       TimeSlice_t time = 0,
-		       Frame_t frame = 0 ) 
+		       Frame_t frame = 0 )
       : fm_category(category)
       , fm_timeSlice(time)
       , fm_frame(frame)

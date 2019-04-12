@@ -12,18 +12,18 @@
 #include <iomanip>
 
 namespace recob{
-    
+
     PFParticle::PFParticle() :
         fPdgCode(0), fSelf(0), fParent(PFParticle::kPFParticlePrimary)
     {}
-    
+
     PFParticle::PFParticle(int pdgCode, size_t self, size_t parent, const std::vector<size_t>& daughters) :
         fPdgCode(pdgCode),
         fSelf(self),
         fParent(parent),
         fDaughters(daughters)
     {}
-    
+
     PFParticle::PFParticle(int pdgCode, size_t self, size_t parent, std::vector<size_t>&& daughters) :
         fPdgCode(pdgCode),
         fSelf(self),

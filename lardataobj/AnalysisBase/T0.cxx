@@ -10,7 +10,7 @@
 namespace anab{
 
   //----------------------------------------------------------------------
-  T0::T0() 
+  T0::T0()
     : fTime(0)
     , fTriggerType(0)
     , fTriggerBits(0)
@@ -35,7 +35,7 @@ namespace anab{
   }
 
   //----------------------------------------------------------------------
-  // ostream operator.  
+  // ostream operator.
   //
   std::ostream& operator<< (std::ostream & o, T0 const& a)
   {
@@ -44,9 +44,9 @@ namespace anab{
       << "\n with bits: "           << a.fTriggerBits       /// An identifier for the Muon track / Flash / MCParticle used in matching.
       << "\n with ID: "             << a.fID                /// Current size of T0 data product.
       << "\n with confidence: "     << a.fTriggerConfidence /// Confidence with which this T0 is known.
-      <<std::endl; 
+      <<std::endl;
 
     return o;
   }
-  
+
 }

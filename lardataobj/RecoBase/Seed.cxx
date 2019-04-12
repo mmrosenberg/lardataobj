@@ -56,10 +56,10 @@ namespace recob{
   //----------------------------------------------------------------------------
   void Seed::Print() const
   {
-    std::cout<<"Printing seed contents : " 
-	     << fSeedPoint[0]<<" " 
-	     <<fSeedPoint[1]<< " " 
-	     <<fSeedPoint[2]<<", " 
+    std::cout<<"Printing seed contents : "
+	     << fSeedPoint[0]<<" "
+	     <<fSeedPoint[1]<< " "
+	     <<fSeedPoint[2]<<", "
 	     << fSeedDirection[0]
 	     <<" " <<fSeedDirection[1]
 	     <<" " << fSeedDirection[2]
@@ -167,7 +167,7 @@ namespace recob{
   {
     double OtherPt[3];
     double OtherPtErr[3];
-    
+
     AnotherSeed.GetPoint(     OtherPt,  OtherPtErr  );
 
     TVector3 OtherPtV(  OtherPt[0],  OtherPt[1],  OtherPt[2]  );
@@ -232,7 +232,7 @@ namespace recob{
     TVector3 ThisDirV(  fSeedDirection[0], fSeedDirection[1], fSeedDirection[2] );
     TVector3 ThisPtV(   fSeedPoint[0],     fSeedPoint[1],     fSeedPoint[2]     );
 
-    
+
     return ((OtherPtV-ThisPtV) - ThisDirV.Unit()*(ThisDirV.Unit().Dot(OtherPtV-ThisPtV))).Mag();
   }
 
@@ -272,7 +272,7 @@ namespace recob{
 	fSeedDirection[1] * ( SPxyz[1] - fSeedPoint[1] ) +
 	fSeedDirection[2] * ( SPxyz[2] - fSeedPoint[2] ) )
       / ThisSeedLength;
-    
+
     // std::cout<<"proj : " <<SPProjOnSeed<<std::endl;
     // std::cout<<"Seed len :" << ThisSeedLength<<std::endl;
 
@@ -291,7 +291,7 @@ namespace recob{
 	  pow(pow(fSeedPoint[0] - fSeedDirection[0] - SPxyz[0], 2) +
 	      pow(fSeedPoint[1] - fSeedDirection[1] - SPxyz[1], 2) +
 	      pow(fSeedPoint[2] - fSeedDirection[2] - SPxyz[2], 2), 0.5);
-	
+
       }
     else
       {
@@ -304,7 +304,7 @@ namespace recob{
 		   SPxyz[1]-fSeedPoint[1],
 		   SPxyz[2]-fSeedPoint[2],
 		   crossprod[0], crossprod[1], crossprod[2]);
-	
+
 	return
 	  pow( pow(crossprod[0],2) +
 	       pow(crossprod[1],2) +
@@ -312,7 +312,7 @@ namespace recob{
 	  pow( pow(fSeedDirection[0],2) +
 	       pow(fSeedDirection[1],2) +
 	       pow(fSeedDirection[2],2), 0.5);
-	
+
       }
   }
 
@@ -321,7 +321,7 @@ namespace recob{
   {
     double OtherPos[3], OtherErr[3];
     AnotherSeed.GetPoint(OtherPos,OtherErr);
-    double DotProd = 
+    double DotProd =
       (OtherPos[0]-fSeedPoint[0])*fSeedDirection[0]+
       (OtherPos[1]-fSeedPoint[1])*fSeedDirection[1]+
       (OtherPos[2]-fSeedPoint[2])*fSeedDirection[2];
@@ -342,10 +342,10 @@ namespace recob{
   //----------------------------------------------------------------------
   std::ostream& operator<< (std::ostream& o, Seed const& a)
   {
-    o << "Printing seed contents : " 
-      << a.fSeedPoint[0] << " " 
-      << a.fSeedPoint[1] << " " 
-      << a.fSeedPoint[2] << ", " 
+    o << "Printing seed contents : "
+      << a.fSeedPoint[0] << " "
+      << a.fSeedPoint[1] << " "
+      << a.fSeedPoint[2] << ", "
       << a.fSeedDirection[0] << " "
       << a.fSeedDirection[1] << " "
       << a.fSeedDirection[2];

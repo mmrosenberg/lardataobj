@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////
 //
-// 
+//
 //
 //
 ////////////////////////////////////////////////////////////////////////
@@ -38,7 +38,7 @@ namespace raw {
       // Get Methods
       unsigned int       GetTrigID()   const;
       TriggerTimeStamp_t GetTrigTime() const;
-     
+
     };
 
 }
@@ -47,7 +47,7 @@ namespace raw {
 namespace raw{
   inline void               ExternalTrigger::SetTrigID(unsigned int i)         { fTrigID = i;      }
   inline void               ExternalTrigger::SetTrigTime(TriggerTimeStamp_t i) { fTrigTime = i;    }
-  inline unsigned int       ExternalTrigger::GetTrigID()    const  { return fTrigID;   }  
+  inline unsigned int       ExternalTrigger::GetTrigID()    const  { return fTrigID;   }
   inline TriggerTimeStamp_t ExternalTrigger::GetTrigTime()  const  { return fTrigTime; }
 }
 

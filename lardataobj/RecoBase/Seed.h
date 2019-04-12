@@ -29,13 +29,13 @@ namespace recob {
     double fSeedPointError[3];
     double fSeedDirectionError[3];
     bool   fIsValid;
-    
+
 
   public:
 
-    Seed(double* Pt, 
-	 double * Dir, 
-	 double* PtErr, 
+    Seed(double* Pt,
+	 double * Dir,
+	 double* PtErr,
 	 double* DirErr);
 
 

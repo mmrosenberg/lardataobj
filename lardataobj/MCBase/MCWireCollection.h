@@ -6,13 +6,13 @@
 #include "lardataobj/MCBase/MCWire.h"
 
 namespace sim {
-  
+
   class MCWireCollection : public std::vector<sim::MCWire> {
 
   public:
 
     /// Default ctor
-    MCWireCollection(const unsigned int ch=sim::kINVALID_UINT) 
+    MCWireCollection(const unsigned int ch=sim::kINVALID_UINT)
     {
       Reset();
       fChannel    = ch;
@@ -44,9 +44,9 @@ namespace sim {
       bool sort = (!empty() && wire < (*rbegin()));
 
       std::vector<sim::MCWire>::push_back(wire);
-      
+
       if(sort) std::sort(begin(),end());
-      
+
     }
   };
 }
@@ -62,4 +62,4 @@ namespace std {
   };
 }
 
-#endif 
+#endif

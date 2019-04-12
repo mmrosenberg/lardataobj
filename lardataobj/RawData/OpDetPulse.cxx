@@ -7,7 +7,7 @@
 //
 // Christie Chiu
 //  cschiu@mit.edu
-// 
+//
 ////////////////////////////////////////////////////////////////////////
 
 #include "lardataobj/RawData/OpDetPulse.h"
@@ -25,7 +25,7 @@ namespace raw{
   }
 
   //----------------------------------------------------------------------
-  OpDetPulse::OpDetPulse(unsigned short OpChannel, 
+  OpDetPulse::OpDetPulse(unsigned short OpChannel,
 			 std::vector<short> Waveform,
 			 unsigned int PMTFrame,
 			 unsigned int FirstSample)
@@ -33,7 +33,7 @@ namespace raw{
     fWaveform    = Waveform;
     fOpChannel   = OpChannel;
     fPMTFrame    = PMTFrame;
-    fFirstSample = FirstSample; 
+    fFirstSample = FirstSample;
   }
 
   //----------------------------------------------------------------------
@@ -51,7 +51,7 @@ namespace raw{
     if(endbin==0) endbin=Samples();
 
     // Some error trapping for stupid integration limits
-    if(endbin < startbin) 
+    if(endbin < startbin)
       throw cet::exception("OpDetPulse")
 	<<" Trying to integrate between illegal limits : " <<startbin<<" " <<endbin << "\n";
     if(endbin > Samples())

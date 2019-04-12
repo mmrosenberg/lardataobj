@@ -10,7 +10,7 @@
 namespace anab{
 
   //----------------------------------------------------------------------
-  ParticleID::ParticleID() 
+  ParticleID::ParticleID()
     : fPdg(0)
     , fNdf(0)
     , fMinChi2(0.)
@@ -54,12 +54,12 @@ namespace anab{
   }
 
   //----------------------------------------------------------------------
-  // ostream operator.  
+  // ostream operator.
   //
   std::ostream& operator<< (std::ostream & o, ParticleID const& a)
   {
-    o << "Determined particle PDG code: " << a.fPdg 
-      << "\n NDF: "                       << a.fNdf 
+    o << "Determined particle PDG code: " << a.fPdg
+      << "\n NDF: "                       << a.fNdf
       << "\n Minimal chi2: "              << a.fMinChi2
       << "\n Delta chi2: "                << a.fDeltaChi2
       << "\n chi2 with proton template: " << a.fChi2Proton
@@ -69,9 +69,9 @@ namespace anab{
       << "\n PIDA:                    "   << a.fPIDA
       << "\n planeID=(" << a.fPlaneID.Cryostat << "," << a.fPlaneID.TPC << "," << a.fPlaneID.Plane << ")"
       <<std::endl;
-    
+
 
     return o;
   }
-  
+
 }

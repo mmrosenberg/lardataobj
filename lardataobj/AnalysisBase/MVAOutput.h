@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// \version 
+// \version
 //
 // \brief Data products to hold feature vectors and their metadata, see MVAReader/MVAWriter wrappers for convenient usage.
 //
@@ -56,7 +56,7 @@ public:
     {
         o << "FeatureVector values:";
         for (size_t i = 0; i < N; ++i) { o << " " << a.fData[i]; }
-        o << std::endl; 
+        o << std::endl;
         return o;
     }
 

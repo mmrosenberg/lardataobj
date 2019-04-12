@@ -62,14 +62,14 @@ void recob::TrajectoryPointFlagTraits::initDefaultFlagRangeNames(
 ) {
   if (EndFlags <= BeginFlags) return;
   unsigned int const NFlags = EndFlags - BeginFlags;
-  
+
   // the first flag will have name with index NFlags, the last with name "1"
   for (unsigned int dFlag = 0; dFlag < NFlags; ++dFlag) {
     FlagIndex_t const flag = BeginFlags + dFlag;
-    
+
     flagNames[flag] = decorateFlagName(baseName, NFlags - dFlag);
   } // for
-  
+
 } // recob::TrajectoryPointFlagTraits::initDefaultFlagRangeNames()
 
 
@@ -77,7 +77,7 @@ void recob::TrajectoryPointFlagTraits::initDefaultFlagRangeNames(
 void recob::TrajectoryPointFlagTraits::initDefaultFlagsNames
   (NameMap_t& flagNames)
 {
-  
+
   initDefaultFlagRangeNames(
     flagNames, BeginTrajectoryFlags, EndTrajectoryFlags,
     "TrajectoryReserved"
@@ -94,17 +94,17 @@ void recob::TrajectoryPointFlagTraits::initDefaultFlagsNames
     flagNames, BeginUserReservedFlags, EndUserReservedFlags,
     "UserFlag"
     );
-  
+
 } // recob::TrajectoryPointFlagTraits::initDefaultFlagsNames()
 
 
 //------------------------------------------------------------------------------
 void recob::TrajectoryPointFlagTraits::setFlagNames(NameMap_t& flagNames) {
-  
+
   //
   // set the names of the new flags here
   //
-  
+
   // trajectory flags
   std::get<HitIgnored.index()   >(flagNames) = "HitIgnored"   ;
   std::get<NoPoint.index()      >(flagNames) = "NoPoint"      ;
@@ -113,30 +113,30 @@ void recob::TrajectoryPointFlagTraits::setFlagNames(NameMap_t& flagNames) {
   std::get<DeltaRay.index()     >(flagNames) = "DeltaRay"     ;
   std::get<DetectorIssue.index()>(flagNames) = "DetectorIssue";
   std::get<Shared.index()       >(flagNames) = "Shared"       ;
-  
+
   // track flags
   std::get<ExcludedFromFit.index()>(flagNames) = "ExcludedFromFit";
   std::get<Rejected.index()       >(flagNames) = "Rejected"       ;
   std::get<Reinterpreted.index()  >(flagNames) = "Reinterpreted"  ;
-  
+
 } // recob::TrajectoryPointFlagTraits::initNames()
 
 
 //------------------------------------------------------------------------------
 recob::TrajectoryPointFlagTraits::NameMap_t
 recob::TrajectoryPointFlagTraits::initNames() {
-  
+
   NameMap_t flagNames; // not initialized
-  
+
   // initialize with default names
   initDefaultFlagsNames(flagNames);
-  
+
   // overwrite custom names
   setFlagNames(flagNames);
-  
+
   // done!
   return flagNames;
-  
+
 } // recob::TrajectoryPointFlagTraits::initNames()
 
 

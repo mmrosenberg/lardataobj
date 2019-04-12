@@ -7,13 +7,13 @@
 #include "lardataobj/MCBase/MCHit.h"
 
 namespace sim {
-  
+
   class MCHitCollection : public std::vector<sim::MCHit> {
 
   public:
 
     /// Default ctor
-    MCHitCollection(const unsigned int ch= ::sim::kINVALID_UINT) 
+    MCHitCollection(const unsigned int ch= ::sim::kINVALID_UINT)
     {
       Reset();
       fChannel    = ch;
@@ -46,9 +46,9 @@ namespace sim {
       bool sort = (!empty() && hit < (*rbegin()));
 
       std::vector<sim::MCHit>::push_back(hit);
-      
+
       if(sort) std::sort(begin(),end());
-      
+
     }
   };
 }
@@ -64,4 +64,4 @@ namespace std {
   };
 }
 
-#endif 
+#endif

@@ -3,7 +3,7 @@
  * @brief Definition of signal hit object.
  * @author mitchell.soderberg@yale.edu
  * @see  lardataobj/RecoBase/Hit.h
- * 
+ *
  * ****************************************************************************/
 
 // Hit header
@@ -16,7 +16,7 @@
 
 
 namespace recob {
-  
+
   //----------------------------------------------------------------------
   Hit::Hit()
     : fChannel(raw::InvalidChannelID)
@@ -38,7 +38,7 @@ namespace recob {
     , fSignalType(geo::kMysteryType)
     , fWireID() // invalid
     {}
-  
+
   //----------------------------------------------------------------------
   Hit::Hit(
     raw::ChannelID_t        channel,
@@ -79,8 +79,8 @@ namespace recob {
     , fSignalType(signal_type)
     , fWireID(wireID)
   {}
-  
-  
+
+
   //----------------------------------------------------------------------
   // ostream operator.
   //
@@ -106,8 +106,8 @@ namespace recob {
       << std::endl;
     return o;
   } // operator<< (std::ostream, Hit)
-  
-  
+
+
   //----------------------------------------------------------------------
   // < operator.
   //
@@ -122,7 +122,7 @@ namespace recob {
 
     return false; //They are equal
   } // operator< (Hit, Hit)
-  
-  
+
+
   //----------------------------------------------------------------------
 } // namespace recob

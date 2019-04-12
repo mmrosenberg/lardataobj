@@ -9,7 +9,7 @@ namespace sim {
   enum BeamType_t {
     kUnknown=0,  ///< Unknown beam type
     kBNB,        ///< BNB
-    kNuMI,       ///< NuMI 
+    kNuMI,       ///< NuMI
     kBeamTypeMax ///< Max value of enum for iteration
   };
 }

@@ -3,7 +3,7 @@
  * @brief   Data product for reconstructed trajectory in space
  * @date    December 9, 2016
  * @see     TrackTrajectory.h
- * 
+ *
  */
 
 
@@ -42,13 +42,13 @@ recob::TrackTrajectory::TrackTrajectory(
 
 //------------------------------------------------------------------------------
 unsigned int recob::TrackTrajectory::CountValidPoints() const {
-  
+
   unsigned int count = 0;
   for (size_t index = 0; index < NPoints(); ++index) {
     if (HasValidPoint(index)) ++count;
   } // for
   return count;
-  
+
 } // recob::TrackTrajectory::CountValidPoints()
 
 
@@ -57,23 +57,23 @@ unsigned int recob::TrackTrajectory::CountValidPoints() const {
  * @brief Returns the approximate length of the trajectory.
  * @param startAt (_default: 0, from beginning_) point to start from
  * @return the approximate length of the trajectory [cm]
- * 
+ *
  * The residual length from the trajectory point startAt to the end of the
  * trajectory is computed and returned. By default, the whole trajectory
  * length is returned.
  * If a non-existing point is specified, 0 is returned.
- * 
+ *
  * The length approximation is just the sum of Euclidean distances between
  * all consecutive trajectory points (starting from the one with index
  * `startAt`).
- * 
+ *
  * This operation is slow, and the result should be stored in a variable.
  */
 double recob::TrackTrajectory::Length(size_t startAt /* = 0 */) const {
-  
+
   // sanity check
   if (startAt >= LastPoint()) return 0.;
-  
+
   // just sum the distance between all locations in the trajectory
   size_t iCurr = ToValidPoint<+1>(startAt);
   size_t iNext = iCurr;
@@ -100,7 +100,7 @@ bool recob::TrackTrajectory::AtLeastValidTrajectoryPoints
     if (--left == 0) return true;
   } // for
   return false;
-  
+
 } // moreThanTwoValidTrajectoryPoints()
 
 //------------------------------------------------------------------------------

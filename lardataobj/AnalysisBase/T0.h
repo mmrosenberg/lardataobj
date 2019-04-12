@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////
-// \version 
+// \version
 //
 // \brief Definition of data product to hold T0 information
 //
@@ -18,9 +18,9 @@ namespace anab {
 
   class T0{
   public:
-    
+
     T0();
-    
+
     double       fTime;              ///< Time in ns
     unsigned int fTriggerType;       ///< Type of trigger used. 0 - Muon Counters, 1 - Photon Detectors, 2 - Monte Carlo Truth
     int          fTriggerBits;       ///< An identifier for the Muon track / Flash / MCParticle used in matching.
@@ -33,12 +33,12 @@ namespace anab {
 
     friend std::ostream& operator << (std::ostream &o, T0 const& a);
 
-    const double&          Time()              const; 
+    const double&          Time()              const;
     const unsigned int&    TriggerType()       const;
     const int&             TriggerBits()       const;
     const int&             ID()                const;
     const double&          TriggerConfidence() const;
-    
+
   };
 
 }

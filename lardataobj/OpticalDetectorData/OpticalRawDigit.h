@@ -24,11 +24,11 @@ namespace optdata {
   public:
 
     // Simple constructor/destructor.
-    OpticalRawDigit ( Optical_Category_t category = kUndefined, 
+    OpticalRawDigit ( Optical_Category_t category = kUndefined,
 		      TimeSlice_t time = 0,
 		      Frame_t frame = 0,
 		      Channel_t channel = std::numeric_limits<Channel_t>::max(),
-		      size_type len = 0 ) 
+		      size_type len = 0 )
       : FIFOChannel(category,time,frame,channel,len)
     {};
 
@@ -53,7 +53,7 @@ namespace optdata {
 // For no extra charge, include how to sort OpticalRawDigit*, just in
 // case we want (for example) a std::set<OpticalRawDigit*>.
 namespace std {
-  template <> 
+  template <>
   class less<optdata::OpticalRawDigit*>
   {
   public:

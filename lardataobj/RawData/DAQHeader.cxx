@@ -11,7 +11,7 @@
 namespace raw{
 
   //----------------------------------------------------------------------
-  DAQHeader::DAQHeader() 
+  DAQHeader::DAQHeader()
     : fStatus(0)
     , fFixed(0)
     , fFormat(0)
@@ -27,7 +27,7 @@ namespace raw{
   }
 
   //----------------------------------------------------------------------
-  DAQHeader::DAQHeader(unsigned int status) 
+  DAQHeader::DAQHeader(unsigned int status)
     : fStatus(status)
     , fFixed(0)
     , fFormat(0)
@@ -52,7 +52,7 @@ namespace raw{
 		       unsigned short event,
 		       time_t time,
 		       short spare,
-		       uint32_t nchan) 
+		       uint32_t nchan)
     : fStatus(status)
     , fFixed(fixed)
     , fFormat(format)
@@ -63,8 +63,8 @@ namespace raw{
     , fTime(time)
     , fSpare(spare)
     , fNchan(nchan)
-  { 
-  
+  {
+
   }
 
 
@@ -77,7 +77,7 @@ namespace raw{
 		       unsigned short event,
 		       time_t time,
 		       short spare,
-		       uint32_t nchan) 
+		       uint32_t nchan)
     : fStatus(status)
     , fFixed(fixed)
     , fFormat(format)
@@ -88,8 +88,8 @@ namespace raw{
     , fTime(time)
     , fSpare(spare)
     , fNchan(nchan)
-  { 
-  
+  {
+
   }
 
 }

@@ -24,14 +24,14 @@ struct MVAPIDResult {
 
   friend bool           operator <  (const MVAPIDResult & a, const MVAPIDResult & b);
 
-  std::map<std::string,double> mvaOutput; 
+  std::map<std::string,double> mvaOutput;
 
 };
 
 bool operator < (const MVAPIDResult & a, const MVAPIDResult & b)
   {
     return a.nSpacePoints<b.nSpacePoints;
-  } 
+  }
 
 
 }

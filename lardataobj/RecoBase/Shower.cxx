@@ -12,7 +12,7 @@
 #include <iomanip>
 
 namespace recob{
-  
+
   // the value is assigned in the class definition:
   constexpr double Shower::InvalidOpeningAngle;
 
@@ -47,7 +47,7 @@ namespace recob{
     , fLength(length)
     , fOpenAngle(openAngle)
   {
-   
+
   }
 
   //----------------------------------------------------------------------

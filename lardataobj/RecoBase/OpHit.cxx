@@ -12,7 +12,7 @@
 namespace recob{
 
   //----------------------------------------------------------------------
-  OpHit::OpHit()  
+  OpHit::OpHit()
     : fOpChannel     (-1)
     , fFrame         (0 )
     , fPeakTime      (0 )
@@ -27,13 +27,13 @@ namespace recob{
   }
 
   //----------------------------------------------------------------------
-  OpHit::OpHit(int opchannel, 
-	       double peaktime, 
+  OpHit::OpHit(int opchannel,
+	       double peaktime,
 	       double peaktimeabs,
-	       unsigned short frame, 
-	       double width, 
-	       double area, 
-	       double amplitude, 
+	       unsigned short frame,
+	       double width,
+	       double area,
+	       double amplitude,
 	       double pe,
 	       double fasttototal)
     : fOpChannel     (opchannel     )
@@ -44,9 +44,9 @@ namespace recob{
     , fArea          (area          )
     , fAmplitude     (amplitude     )
     , fPE            (pe            )
-    , fFastToTotal   (fasttototal   ) 
+    , fFastToTotal   (fasttototal   )
   {
-    
+
   }
 
   //----------------------------------------------------------------------

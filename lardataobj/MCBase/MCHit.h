@@ -10,14 +10,14 @@
 #include "lardataobj/MCBase/MCLimits.h"
 
 namespace sim {
-  
+
   class MCHit {
 
   public:
 
     /// Default ctor
     MCHit()
-    { 
+    {
       Reset();
     }
 
@@ -43,7 +43,7 @@ namespace sim {
     float fPeakAmp;        ///< Peak amplitude (ADC)
     float fCharge;         ///< Charge sum (ADC integral over MCWire)
 
-    // 
+    //
     // Particle information that caused this MCHit
     //
 
@@ -53,7 +53,7 @@ namespace sim {
 
 
   public:
-    
+
     /// Setter function for charge/amplitude
     void SetCharge(float qsum, float amp) { fCharge=qsum; fPeakAmp=amp; }
 
@@ -65,7 +65,7 @@ namespace sim {
     }
 
     /// Setter function for partile info
-    void SetParticleInfo(const float vtx[], 
+    void SetParticleInfo(const float vtx[],
 			 const float energy,
 			 const int trackId)
     {
@@ -114,4 +114,4 @@ namespace std {
   };
 }
 
-#endif 
+#endif

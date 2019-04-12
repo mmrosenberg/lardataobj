@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////
 /// \file  AuxDetSimChannel.h
 ///
-/// \brief object containing MC truth information necessary for making RawDigits 
+/// \brief object containing MC truth information necessary for making RawDigits
 /// and doing back tracking
 ///
 /// \author  miceli@fnal.gov
@@ -19,7 +19,7 @@
 
 
 namespace sim {
-  
+
   /**
    * @brief MC truth information to make RawDigits and do back tracking
    *
@@ -28,10 +28,10 @@ namespace sim {
    * scintillator detector.
    */
   class AuxDetIDE {
-    
+
   public:
     AuxDetIDE();
-    
+
     //constructor for IDEs applying G4 offset...
     AuxDetIDE(AuxDetIDE const&, int);
 
@@ -61,32 +61,32 @@ namespace sim {
    * particles crossing a single auxiliary detector cell (channel).
    */
   class AuxDetSimChannel {
-    
+
   public:
     /// Default constructor (invalid, empty data)
     AuxDetSimChannel();
 
   private:
-    uint32_t                    fAuxDetID;          ///< geo->AuxDet(auxDetID), integer used to retrieve AuxDetGeo objec   
+    uint32_t                    fAuxDetID;          ///< geo->AuxDet(auxDetID), integer used to retrieve AuxDetGeo objec
     uint32_t                    fAuxDetSensitiveID; ///< integer used to retrieve AuxDetSensitiveGeo object
     std::vector<sim::AuxDetIDE> fAuxDetIDEs;        ///< one sim::AuxDetIDE for each G4 track id
 
   public:
 
-    AuxDetSimChannel(uint32_t inputAuxDetID, 
+    AuxDetSimChannel(uint32_t inputAuxDetID,
 		     uint32_t inputAuxDetSensitiveID);
-    
+
     /// Constructor: copies from the specified IDE vector
-    AuxDetSimChannel(uint32_t inputAuxDetID, 
+    AuxDetSimChannel(uint32_t inputAuxDetID,
 		     const std::vector<sim::AuxDetIDE>& inputAuxDetIDEs,
 		     uint32_t inputAuxDetSensitiveID=0);
-    
+
     /// Constructor: moves data from the specified IDE vector
-    AuxDetSimChannel(uint32_t inputAuxDetID, 
+    AuxDetSimChannel(uint32_t inputAuxDetID,
 		     std::vector<sim::AuxDetIDE>&& inputAuxDetIDEs,
 		     uint32_t inputAuxDetSensitiveID=0);
 
-    std::pair<int,int> MergeAuxDetSimChannel(const AuxDetSimChannel&, 
+    std::pair<int,int> MergeAuxDetSimChannel(const AuxDetSimChannel&,
 					     int);
 
     ///@name Getters
@@ -99,10 +99,10 @@ namespace sim {
 
     std::vector<sim::AuxDetIDE> const& AuxDetIDEs() const;
     ///@}
-    
+
     //typedef std::vector<AuxDetSimChannel> AuxDetSimChannelCollection;
-		
-		
+
+
   }; // class AuxDetSimChannel
  typedef std::vector<AuxDetSimChannel> AuxDetSimChannelCollection;
 } // namespace sim

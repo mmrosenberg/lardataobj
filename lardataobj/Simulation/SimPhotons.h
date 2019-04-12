@@ -7,19 +7,19 @@
 // This file contains the definitions of the classes which
 // are stored in the event representing OpDet hits.
 //
-// A OpDet Hit stores data for each photon which steps inside the OpDet 
+// A OpDet Hit stores data for each photon which steps inside the OpDet
 // volume.  Currently the quantities stored are 4 potition, 4 momentum
 // and TrackID.  A SimPhotonsCollection is a set of SimPhotonss, one per OpDet
-// in the collection. 
-// 
-// The SimPhotons is filled in by the OpDetSensitiveDetector class in LArG4 
+// in the collection.
+//
+// The SimPhotons is filled in by the OpDetSensitiveDetector class in LArG4
 // and will be used to generate the OpDet response later in the simulation
 // chain.
 //
 // OnePhoton, SimPhotons and SimPhotonsCollection are all persistent under
 // ROOT I/O.
 //
-// The current implementation resembles that of an STL container in 
+// The current implementation resembles that of an STL container in
 // some respects but needs more work before it is polished product.
 //
 // Ben Jones, MIT, 06/04/2010
@@ -39,7 +39,7 @@ namespace sim
   // This structure contains all the information per photon
   // which entered the sensitive OpDet volume.
 
-  class OnePhoton 
+  class OnePhoton
   {
   public:
     OnePhoton();
@@ -51,7 +51,7 @@ namespace sim
     float          Energy;
     int            MotherTrackID;
   };
-  
+
   class SimPhotonsLite
   {
     public:
@@ -59,7 +59,7 @@ namespace sim
       SimPhotonsLite(int chan)
 	: OpChannel(chan)
       {}
-      
+
       int   OpChannel;
       std::map<int, int> DetectedPhotons;
 
@@ -73,7 +73,7 @@ namespace sim
   // Define a OpDet Hit as a list of OpDet photons which were
   // recorded in the OpDet volume.
 
-  class SimPhotons : public std::vector<OnePhoton> 
+  class SimPhotons : public std::vector<OnePhoton>
     {
     public:
       SimPhotons();
@@ -100,16 +100,16 @@ namespace sim
       const SimPhotons operator+(const SimPhotons &rhs) const;
 
       bool operator== (const SimPhotons &other) const;
-      
+
       int       OpChannel() const;
       void      SetChannel(int ch);
 
     };
- 
+
 
 
   // The OpDet Hit collection is the set of all OpDet Hits indexed
-  // by OpDet ID 
+  // by OpDet ID
 
   class SimPhotonsCollection : public std::map<int, SimPhotons>{
   public:
@@ -118,7 +118,7 @@ namespace sim
 
   private:
     std::string fTheSDName;
-    
+
   public:
     typedef std::map<int,SimPhotons>           list_type;
     typedef list_type::key_type                key_type;
@@ -132,21 +132,21 @@ namespace sim
     typedef list_type::difference_type         difference_type;
     typedef list_type::key_compare             key_compare;
     typedef list_type::allocator_type          allocator_type;
-    
+
     //SimPhotons&  GetHit(int);
     //SimPhotons  GetHit(int);
-    
+
     // define addition operators for combining hit collections
     //   (add each hit in the collection)
     //SimPhotonsCollection& operator+=(const SimPhotonsCollection &rhs);
-    //const SimPhotonsCollection operator+(const SimPhotonsCollection &rhs) const; 
-    
+    //const SimPhotonsCollection operator+(const SimPhotonsCollection &rhs) const;
+
   public:
     void SetSDName(std::string TheSDName);
     std::string GetSDName();
-    
+
   };
-  
+
 }
 
 inline int         sim::SimPhotons::OpChannel()       const                     { return fOpChannel;      }

@@ -20,14 +20,14 @@ namespace optdata {
   {
   public:
 
-    // Simple constructors/destructors. 
+    // Simple constructors/destructors.
     // Just in case the user forgets to supply the default channel, use
     // a garbage value to indicate that there's a problem.
     // To save on memory reallocations, offer an option to specify the
     // the initial memory allocation of the channel vector.
-    ChannelData( Channel_t chan = std::numeric_limits<Channel_t>::max(), 
+    ChannelData( Channel_t chan = std::numeric_limits<Channel_t>::max(),
 		 size_type len = 0 )
-      : fm_optDetChannel(chan) 
+      : fm_optDetChannel(chan)
     {
       this->reserve(len);
     };
@@ -38,7 +38,7 @@ namespace optdata {
     // you create a ChannelData object.
     Channel_t ChannelNumber() const { return fm_optDetChannel; }
 
-    
+
   private:
     unsigned int fm_optDetChannel;
   };
@@ -59,7 +59,7 @@ namespace optdata {
 // For no extra charge, include how to sort ChannelData*, just in
 // case we want (for example) a std::set<ChannelData*>.
 namespace std {
-  template <> 
+  template <>
   class less<optdata::ChannelData*>
   {
   public:

@@ -20,7 +20,7 @@ namespace recob {
 /**
  * \brief Data related to `recob::Hit` associated with `recob::Track`.
  * \ingroup DataProductRecoBase
- * 
+ *
  * The purpose is to collect several variables that do not work well alone inside
  * track class and are related to 2D hits along the 3D trajectory. So in the first
  * place it is the hit index along the trajectory.
@@ -29,7 +29,7 @@ namespace recob {
  * Please, add other variables that may fit here. One candidate is 3D position.
  *
  * PLEASE, remember to add **errors on values** whenever this is possible to calculate.
- * 
+ *
  * The expected association takes the form of:
  * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
  * art::Assns<recob::Track, recob::Hit, recob::TrackHitMeta>
@@ -38,7 +38,7 @@ namespace recob {
  * sorted by track, as in the
  * @ref LArSoftProxyDefinitionOneToManySeqAssn "one-to-many sequential association"
  * definition.
- * 
+ *
  */
 class TrackHitMeta
 {
@@ -57,7 +57,7 @@ public:
 	/**
 	 * \brief Length of the track segments associated with the 2D hit.
 	 * \return lenth of the track segments [cm]
-	 * 
+	 *
 	 * The length is the sum of lengths of the two segments: half-distance to the
 	 * next hit in the same plane and half-distance to the preceding hit in the
 	 * same plane.

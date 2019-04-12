@@ -8,7 +8,7 @@
 namespace sim {
 
   class MCEnDep {
-    
+
   public:
 
     MCEnDep() { Reset(); }
@@ -41,7 +41,7 @@ namespace sim {
     void SetTrackId(unsigned int id) { fTrackId = id; }
 
     const std::array<float,3>& Vertex() const { return fVertex; }
-    
+
     float Energy() const { return fEnergy; }
 
     unsigned int TrackId() const { return fTrackId; }
@@ -67,7 +67,7 @@ namespace sim {
     }
   };
 }
-  
+
 namespace std {
   template <>
   class less<sim::MCEnDep*>

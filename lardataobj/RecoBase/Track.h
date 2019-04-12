@@ -24,14 +24,14 @@ namespace recob {
   /**
    * @brief Track from a non-cascading particle.
    * @ingroup DataProductRecoBase
-   * 
+   *
    * A `recob::Track` consists of a `recob::TrackTrajectory`, plus additional members relevant for a "fitted" track:
-   * 
+   *
    * * fit &chi;&sup2;
    * * number of degrees of freedom
    * * particle ID hypothesis used in the fit (if any)
    * * covariance matrices at start (vertex) and end positions.
-   * 
+   *
    * Please refer to the `recob::TrackTrajectory` documentation for more information about it;
    * for a discussion on the object type for coordinates see recob::tracking::Coord_t.
    *
@@ -42,7 +42,7 @@ namespace recob {
    * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    *
    * Two different parameter conventions are used in a `recob::Track`, and functions to convert from one to the other are provided:
-   * 
+   *
    * 1. Trajectory points and momenta (or directions) are in form of 3-vectors, corresponding to a global Cartesian 6D representation
    * 2. Covariance matrices are stored in a Local 5D representation (so that the covariance matrix is invertible),
    *    where the parameters are defined on the plane orthogonal to the track direction at a given track point.
@@ -215,7 +215,7 @@ namespace recob {
     //@}
 
     /// @{
-    /// @name Templated version of homonymous functions to access to position, direction, momentum information, and covariances. 
+    /// @name Templated version of homonymous functions to access to position, direction, momentum information, and covariances.
 
     /// Start position. Use e.g. as: @code{.cpp} TVector3 start = track.Start<TVector3>(); @endcode.
     template<typename T> inline T Start()                         const { return fTraj.Start<T>(); }

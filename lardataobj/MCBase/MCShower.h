@@ -2,7 +2,7 @@
  * \file MCShower.h
  *
  * \ingroup MCBase
- * 
+ *
  * \brief Class def header for MCShower data container
  *
  * @author Kazu - Nevis 2014
@@ -32,7 +32,7 @@
 namespace sim {
 
   class MCShower {
-    
+
   public:
 
     /// Default constructor; clears the local data
@@ -50,7 +50,7 @@ namespace sim {
     simb::Origin_t     Origin  () const { return fOrigin;  }
 
     int                PdgCode () const { return fPDGCode; }
-    unsigned int       TrackID () const { return fTrackID; } 
+    unsigned int       TrackID () const { return fTrackID; }
     const std::string& Process () const { return fProcess; }
     const MCStep&      Start   () const { return fStart;   }
     const MCStep&      End     () const { return fEnd;     }
@@ -68,13 +68,13 @@ namespace sim {
     const MCStep&      AncestorEnd     () const { return fAncestorEnd;     }
 
     const MCStep& DetProfile () const { return fDetProfile; }
-    
+
     const std::vector<unsigned int>&  DaughterTrackID() const { return fDaughterTrackID; }
 
     double Charge(size_t plane) const;
     double dQdx(size_t plane) const;
 
-    const std::vector<double>& Charge() const { return fPlaneCharge; } 
+    const std::vector<double>& Charge() const { return fPlaneCharge; }
     const std::vector<double>& dQdx() const { return fdQdx; }
 
 
@@ -116,12 +116,12 @@ namespace sim {
     void dQdx (const std::vector<double>& dqdx) { fdQdx = dqdx; }
     /// Moves the specified dQ/dx vector (one entry per plane) into this object
     void dQdx (std::vector<double>&& dqdx) { fdQdx = std::move(dqdx); }
-    
+
     void dEdx    (double dedx) {fdEdx = dedx;}
     void dEdxRAD (double dedx) {fdEdx_radial = dedx;}
-    
 
-    
+
+
 
   protected:
 
@@ -143,7 +143,7 @@ namespace sim {
 
     /// @{
     /// @name Mother's particle info
-    int          fMotherPDGCode; ///< Shower's mother PDG code   
+    int          fMotherPDGCode; ///< Shower's mother PDG code
     unsigned int fMotherTrackID; ///< Shower's mother G4 track ID
     std::string  fMotherProcess; ///< Shower's mother creation process
     MCStep       fMotherStart;   ///< Shower's mother G4 start point
@@ -152,7 +152,7 @@ namespace sim {
 
     /// @{
     /// @name Ancestor's particle info
-    int          fAncestorPDGCode; ///< Shower's ancestor PDG code   
+    int          fAncestorPDGCode; ///< Shower's ancestor PDG code
     unsigned int fAncestorTrackID; ///< Shower's ancestor G4 track ID
     std::string  fAncestorProcess; ///< Shower's ancestor creation process
     MCStep       fAncestorStart;   ///< Shower's ancestor G4 start point
@@ -163,24 +163,24 @@ namespace sim {
     /// @name Energy deposition info
     std::vector<unsigned int>  fDaughterTrackID; ///< Daughters' track ID
     MCStep                     fDetProfile;      ///< Combined energy deposition information
-    double                     fdEdx;            ///< Shower True dEdx 
-    double                     fdEdx_radial;     ///< Shower True dEdx, with a radial requirement  
+    double                     fdEdx;            ///< Shower True dEdx
+    double                     fdEdx_radial;     ///< Shower True dEdx, with a radial requirement
     /// @}
-  
+
 
     /// @{
     /// @name Charge per plane
     std::vector<double> fPlaneCharge; ///< Charge deposit per plane
     std::vector<double> fdQdx; ///< Charge deposit per plane
     /// @}
-    
-    
+
+
     /// Clears the fields of this class
     void ClearData();
-    
+
   }; // class MCShower
 
 } // namespace sim
 
 #endif // MCSHOWER_H
-/** @} */ // end of doxygen group 
+/** @} */ // end of doxygen group

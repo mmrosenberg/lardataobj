@@ -27,7 +27,7 @@ namespace sim
       (*this)[key] = new SimPhotons();
      return (*this)[key];
   }
-  */ 
+  */
   //----------------------------------------------------------------------------
   /*
   SimPhotonsCollection & SimPhotonsCollection::operator+=(const SimPhotonsCollection &rhs)
@@ -83,7 +83,7 @@ namespace sim
 
     for(auto const& phot : rhs.DetectedPhotons)
       this->DetectedPhotons[phot.first] += phot.second;
-	
+
     return *this;
   }
 

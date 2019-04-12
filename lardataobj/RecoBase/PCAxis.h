@@ -25,13 +25,13 @@ namespace recob
     class PCAxis
     {
     public:
-    
+
         typedef std::vector<std::vector<double> > EigenVectors;
-    
+
         PCAxis();
-    
+
     private:
-    
+
         bool         fSvdOK;            ///< SVD Decomposition was successful
         int          fNumHitsUsed;      ///< Number of hits in the decomposition
         double       fEigenValues[3];   ///< Eigen values from SVD decomposition
@@ -39,11 +39,11 @@ namespace recob
         double       fAvePosition[3];   ///< Average position of hits fed to PCA
         double       fAveHitDoca;       ///< Average doca of hits used in PCA
         size_t       fID;               ///< axis ID
-    
+
     public:
-    
+
         PCAxis(bool ok, int nHits, const double* eigenValues, const EigenVectors& eigenVecs, const double* avePos, const double aveHitDoca = 9999., size_t id=0);
-    
+
         bool                getSvdOK()        const;
         int                 getNumHitsUsed()  const;
         const double*       getEigenValues()  const;
@@ -51,12 +51,12 @@ namespace recob
         const double*       getAvePosition()  const;
         double              getAveHitDoca()   const;
         size_t              getID()           const;
-    
+
         friend std::ostream&  operator << (std::ostream & o, const PCAxis& a);
         friend bool operator < (const PCAxis& a, const PCAxis& b);
-    
+
     };
-    
+
 }
 
 

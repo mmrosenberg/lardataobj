@@ -14,17 +14,17 @@
 namespace recob{
 
   //----------------------------------------------------------------------
-  OpFlash::OpFlash()  
+  OpFlash::OpFlash()
     : fTime(            0.      )
   {
-    
+
   }
 
   //----------------------------------------------------------------------
   OpFlash::OpFlash(double time, double timewidth, double abstime, unsigned int frame,
-		   std::vector<double> PEperOpDet, 
+		   std::vector<double> PEperOpDet,
 		   bool InBeamFrame, int onBeamTime, double FastToTotal,
-		   double yCenter, double yWidth, 
+		   double yCenter, double yWidth,
 		   double zCenter, double zWidth,
 		   std::vector<double> WireCenters,
 		   std::vector<double> WireWidths)
@@ -60,7 +60,7 @@ namespace recob{
       theTotalPE+=fPEperOpDet.at(i);
     return theTotalPE;
   }
-  
+
 
 
 }

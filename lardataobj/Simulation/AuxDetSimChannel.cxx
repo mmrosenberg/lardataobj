@@ -68,9 +68,9 @@ namespace sim{
       : fAuxDetID(inputAuxDetID)
       , fAuxDetSensitiveID(inputAuxDetSensitiveID)
     {}
-  
+
   //----------------------------------------------------------------------------
-  AuxDetSimChannel::AuxDetSimChannel(uint32_t inputAuxDetID, 
+  AuxDetSimChannel::AuxDetSimChannel(uint32_t inputAuxDetID,
 				     const std::vector<sim::AuxDetIDE>& inputAuxDetIDEs,
 				     uint32_t inputAuxDetSensitiveID)
       : fAuxDetID(inputAuxDetID)
@@ -79,7 +79,7 @@ namespace sim{
   {}
 
   //----------------------------------------------------------------------------
-  AuxDetSimChannel::AuxDetSimChannel(uint32_t inputAuxDetID, 
+  AuxDetSimChannel::AuxDetSimChannel(uint32_t inputAuxDetID,
 				     std::vector<sim::AuxDetIDE>&& inputAuxDetIDEs,
 				     uint32_t inputAuxDetSensitiveID)
     : fAuxDetID(inputAuxDetID)
@@ -88,7 +88,7 @@ namespace sim{
   {}
 
   //----------------------------------------------------------------------------
-  std::pair<int,int> AuxDetSimChannel::MergeAuxDetSimChannel(const AuxDetSimChannel& chan, 
+  std::pair<int,int> AuxDetSimChannel::MergeAuxDetSimChannel(const AuxDetSimChannel& chan,
 							     int offset)
   {
     if(this->fAuxDetID != chan.AuxDetID() && this->fAuxDetSensitiveID != chan.AuxDetSensitiveID())
@@ -110,18 +110,18 @@ namespace sim{
   }
 
   //----------------------------------------------------------------------------
-  bool AuxDetSimChannel::operator<  (const sim::AuxDetSimChannel& other) const 
-  { 
+  bool AuxDetSimChannel::operator<  (const sim::AuxDetSimChannel& other) const
+  {
     if(fAuxDetID < other.AuxDetID() ) return true;
 
-    return fAuxDetSensitiveID < other.AuxDetSensitiveID(); 
+    return fAuxDetSensitiveID < other.AuxDetSensitiveID();
   }
 
   //----------------------------------------------------------------------------
-  bool AuxDetSimChannel::operator== (const sim::AuxDetSimChannel& other) const 
-  { 
-    return (fAuxDetID == other.AuxDetID() && fAuxDetSensitiveID == other.AuxDetSensitiveID()); 
+  bool AuxDetSimChannel::operator== (const sim::AuxDetSimChannel& other) const
+  {
+    return (fAuxDetID == other.AuxDetID() && fAuxDetSensitiveID == other.AuxDetSensitiveID());
   }
 
-  
+
 }//namespace sim

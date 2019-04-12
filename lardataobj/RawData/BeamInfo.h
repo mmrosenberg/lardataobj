@@ -11,27 +11,27 @@
 #include <vector>
 
 namespace raw {
-  
-  
+
+
   class BeamInfo  {
-    
+
   public:
     BeamInfo();
     ~BeamInfo();
-    
+
   private:
-    
+
     double        tor101;
     double        tortgt;
     double        trtgtd;
     long long int t_ms;
     uint8_t       fRecordType;
-    uint32_t      fSeconds; // GPS clock. Since Jan 1, 2012. 
+    uint32_t      fSeconds; // GPS clock. Since Jan 1, 2012.
     uint16_t      fMilliSeconds;
     uint16_t      fNumberOfDevices;
     std::map<std::string, std::vector<double> > fDataMap;
 
-    
+
   public:
 
     BeamInfo(double tor101,double tortgt, double trtgtd,long long int t_ms);
@@ -40,8 +40,8 @@ namespace raw {
     double        get_tortgt() const;
     double        get_trtgtd() const;
     long long int get_t_ms()   const;
-        
-    void SetTOR101(double val);      
+
+    void SetTOR101(double val);
     void SetTORTGT(double val);
     void SetTRTGTD(double val);
     void SetT_MS( long long int val);
@@ -53,20 +53,20 @@ namespace raw {
 
     void Set(std::string device_name, double val);
     void Set(std::string device_name, std::vector<double> val);
-    
+
     uint8_t  GetRecordType()      const {return fRecordType;};
     uint32_t GetSeconds()         const {return fSeconds;};
     uint16_t GetMilliSeconds()    const {return fMilliSeconds;};
     uint16_t GetNumberOfDevices() const {return fNumberOfDevices;};
-   
+
     std::vector<double> Get(std::string device_name);
     std::map<std::string, std::vector<double> > GetDataMap() const {return fDataMap;};
 
     friend std::ostream& operator<<(std::ostream& , const BeamInfo& );
-    
+
   };
-  
-  
+
+
 }
 
 ////////////////////////////////////////////////////////////////////////

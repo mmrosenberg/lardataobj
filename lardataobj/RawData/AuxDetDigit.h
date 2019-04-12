@@ -15,12 +15,12 @@
 
 ///Raw data description
 namespace raw {
-  
+
   class AuxDetDigit {
 
   public:
     AuxDetDigit(); // Default constructor
-    
+
   private:
 
     std::vector<short> fADC;        ///< vector of adc counts
@@ -29,18 +29,18 @@ namespace raw {
     unsigned long long fTimeStamp;  ///< timestamp, upper 32 bits
                                     ///< for the seconds since 1970
                                     ///< lower 32 for nanoseconds
-    
+
 
 static_assert(sizeof(unsigned long long)==8,"unsigned long long is not 8 bytes");
 
   public:
-    
+
     AuxDetDigit(unsigned short     channel,
 		std::vector<short> adclist,
 		std::string        name="UknownAuxDet",
 		unsigned long long           timeStamp=UINT64_MAX);
-    
-    
+
+
     // Get Methods
     size_t             NADC()        const;
     short              ADC(size_t i) const;

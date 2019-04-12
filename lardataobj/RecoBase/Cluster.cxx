@@ -3,11 +3,11 @@
  * @brief  Declaration of cluster object.
  * @author mitchell.soderberg@yale.edu
  * @see    Cluster.h
- * 
+ *
  * Changes:
  * 20141212 Gianluca Petrillo (petrillo@fnal.gov)
  *   data architecture revision changes
- * 
+ *
  * ****************************************************************************/
 
 
@@ -27,10 +27,10 @@ namespace {
 
 
 namespace recob{
-  
+
   const Cluster::SentryArgument_t Cluster::Sentry;
-  
-  
+
+
   //----------------------------------------------------------------------
   Cluster::Cluster()
     : fNHits(0)
@@ -50,8 +50,8 @@ namespace recob{
     , fView(geo::kUnknown)
     , fPlaneID()
   {} // Cluster::Cluster()
-  
-  
+
+
   //----------------------------------------------------------------------
   Cluster::Cluster(
     float start_wire,
@@ -97,13 +97,13 @@ namespace recob{
     , fView(view)
     , fPlaneID(plane)
   {
-    
+
     for (unsigned int mode = cmFirstMode; mode < NChargeModes; ++mode)
       fChargeAverage[mode] = (fNHits > 0)? fChargeSum[mode] / fNHits: 0.;
-    
+
   } // Cluster::Cluster(float...)
-  
-  
+
+
 #if 0
   // FIXME DELME
   //----------------------------------------------------------------------
@@ -114,31 +114,31 @@ namespace recob{
   // other's plane. If both are invalid, sum will also have an invalid plane.
   //
   Cluster Cluster::operator + (Cluster const& other) const {
-    
+
     // throw exception if the clusters are not from the same view
     if (other.View() != View()) return {};
-    
+
     if (other.hasPlane() && hasPlane() && (other.Plane() != Plane())) return {};
-    
+
     const unsigned int n_hits = NHits() + other.NHits();
     double charge_stddev[2];
     for (unsigned int mode = cmFirstMode; mode < NChargeModes; ++mode) {
-      
+
       // this assumes that the definition of the std dev is unbiased...
       const double this_variance = sqr(ChargeStdDev(mode)) * (NHits()-1.)/NHits();
       const double other_variance
         = sqr(other.ChargeStdDev(mode)) * (other.NHits()-1.) / other.NHits();
-      
+
       const double e2 = (
         (sqr(NHits()) + sqr(other.NHits())) / sqr(n_hits)
           * sqr(ChargeAverage(mode) - other.ChargeAverage(mode))
         + NHits() * this_variance
         + other.NHits() * other_variance
         ) / (n_hits - 1.); // unbiased
-      
+
       charge_stddev[mode] = std::sqrt(e2);
     } // for charge mode
-    
+
     return Cluster (
       std::min(StartWire(), other.StartWire()), // start_wire
       std::min(StartTick(), other.StartTick()), // start_tick
@@ -161,12 +161,12 @@ namespace recob{
       View(),                                   // view
       hasPlane()? Plane(): other.Plane()        // plane
       );
-    
+
   } // Cluster::operator+ ()
-  
+
 #endif // 0
-  
-  
+
+
   //----------------------------------------------------------------------
   // ostream operator.
   //
@@ -176,7 +176,7 @@ namespace recob{
       << " : Cryo = "      << std::setw(3)  << std::right << c.Plane().Cryostat
       << " TPC = "         << std::setw(3)  << std::right << c.Plane().TPC
       << " Plane = "       << std::setw(3)  << std::right << c.Plane().Plane
-      << " View = "        << std::setw(3)  << std::right << c.View() 
+      << " View = "        << std::setw(3)  << std::right << c.View()
       << " StartWire = "   << std::setw(7)  << std::right << c.StartWire()
       << " EndWire = "     << std::setw(7)  << std::right << c.EndWire()
       << " StartTime = "   << std::setw(9)  << std::right << c.StartTick()
@@ -188,13 +188,13 @@ namespace recob{
       ;
     return o;
   } // operator<< (ostream, Cluster)
-  
-  
+
+
   //----------------------------------------------------------------------
   // < operator.
   //
   bool operator < (Cluster const& a, Cluster const& b) {
-    
+
     if (a.hasPlane() && b.hasPlane() && a.Plane() != b.Plane())
       return a.Plane() < b.Plane();
     if (a.View() != b.View())
@@ -205,9 +205,9 @@ namespace recob{
       return a.StartTick() < b.StartTick();
     if (a.EndTick() != b.EndTick())
       return a.EndTick() < b.EndTick();
-    
+
     return false; // they are equal enough
   } // operator < (Cluster, Cluster)
-  
+
 }// namespace
 

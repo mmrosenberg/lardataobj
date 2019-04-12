@@ -20,7 +20,7 @@ namespace optdata {
   public:
 
     // Simple constructor/destructor.
-    PMTTrigger ( Optical_Category_t category = kUndefined, 
+    PMTTrigger ( Optical_Category_t category = kUndefined,
 		 TimeSlice_t time = 0,
 		 Frame_t frame = 0 )
       : fm_category(category)
@@ -58,9 +58,9 @@ namespace optdata {
   bool operator<( const PMTTrigger& lhs, const PMTTrigger& rhs )
   {
     // Sort by channel, frame number, and time associated with the first bin.
-    if ( 
+    if (
 	 lhs.Frame()           < rhs.Frame()          &&
-	 lhs.TimeSlice()       < rhs.TimeSlice()      && 
+	 lhs.TimeSlice()       < rhs.TimeSlice()      &&
 	 lhs.Category()        < rhs.Category()         )
       return true;
     return false;
@@ -71,7 +71,7 @@ namespace optdata {
 // For no extra charge, include how to sort PMTTrigger*, just in
 // case we want (for example) a std::set<PMTTrigger*>.
 namespace std {
-  template <> 
+  template <>
   class less<optdata::PMTTrigger*>
   {
   public:

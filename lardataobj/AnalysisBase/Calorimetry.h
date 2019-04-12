@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////
-// \version 
+// \version
 //
 // \brief Definition of data product to hold Calorimetry information
 //
@@ -23,13 +23,13 @@ namespace anab {
 
   class Calorimetry{
   public:
-    
+
     Calorimetry();
 
     float                fKineticEnergy;   ///< determined kinetic energy
     std::vector<float>   fdEdx;            ///< dE/dx, should be same size as fResidualRange
     std::vector<float>   fdQdx;            ///< dQ/dx
-    std::vector<float>   fResidualRange;   ///< range from end of track    
+    std::vector<float>   fResidualRange;   ///< range from end of track
     std::vector<float>   fDeadWireResR;    ///< dead wire residual range, collection plane
     float                fRange;           ///< total range of track
     std::vector<float>   fTrkPitch;        ///< track pitch on collection plane
@@ -94,7 +94,7 @@ namespace anab {
     const std::vector<size_t>& TpIndices()    const;
     const geo::PlaneID&        PlaneID()       const;
 
-    
+
   };
 
 }

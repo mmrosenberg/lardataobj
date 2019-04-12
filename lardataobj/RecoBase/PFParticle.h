@@ -21,7 +21,7 @@ namespace recob {
    * The "Particle Flow" Particle is an object connecting to others of the
    * same type to define a hierarchy of a single parent generating multiple
    * daughter particles.
-   * 
+   *
    * This structure was originally proposed to accommodate the information
    * produced by Pandora. The PFParticle is a small entity that is expected
    * to be associated with `recob::Track`, `recob::Cluster`, `recob::Hit`,
@@ -56,45 +56,45 @@ namespace recob {
 
 
   public:
-      
+
     /// Define index to signify primary particle
     static constexpr size_t kPFParticlePrimary = std::numeric_limits<size_t>::max();
-      
+
     /// Primary constructor
     PFParticle(int pdgCode, size_t self, size_t parent, const std::vector<size_t>& daughters);
-    
+
     PFParticle(int pdgCode, size_t self, size_t parent, std::vector<size_t>&& daughters);
-      
+
     /// Destructor definition
      ~PFParticle() = default;
-      
+
     /// Copy constructor (using defaults)
     PFParticle(const PFParticle& other) = default;
     PFParticle(PFParticle&& other)      = default;
-      
+
     /// Copy assignment operator (using defaults)
     PFParticle& operator= (const PFParticle& other) = default;
     PFParticle& operator= (PFParticle&& other)      = default;
-    
+
     /// @name Accessors
     /// @{
-    
+
     /// Return the type of particle as a PDG ID.
     int                        PdgCode()            const {return fPdgCode;}
-    
+
     /// Returns whether the particle is the root of the flow.
     bool                       IsPrimary()          const {return fParent == PFParticle::kPFParticlePrimary;}
-    
+
     /// Returns the number of daughter particles flowing from this one.
     int                        NumDaughters()       const {return fDaughters.size();}
-    
+
     /// Returns the index of this particle.
     size_t                     Self()               const {return fSelf;}
-    
+
     /// Returns the index of the parent particle
     /// (`PFParticle::kPFParticlePrimary` if primary).
     size_t                     Parent()             const {return fParent;}
-    
+
     /**
      * @brief Returns the ID of the specified daughter.
      * @param idx index of the daughter to be queried (`0` to `NumDaughters()-1`)
@@ -109,15 +109,15 @@ namespace recob {
      * use `Daughters()[idx]` instead.
      */
     size_t                     Daughter(size_t idx) const {return Daughters().at(idx);}
-    
+
     /// Returns the collection of daughter particles.
     const std::vector<size_t>& Daughters()          const {return fDaughters;}
-    
+
     /// @}
 
     friend std::ostream& operator << (std::ostream& o, const PFParticle& c);
     friend bool          operator <  (const PFParticle& a, const PFParticle& b);
-    
+
   }; // class PFParticle
 } // namespace recob
 

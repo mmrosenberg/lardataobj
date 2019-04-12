@@ -32,25 +32,25 @@ private:
 
   public:
 
-      OpHit(int opchannel, 
-	    double peaktime, 
+      OpHit(int opchannel,
+	    double peaktime,
 	    double peaktimeabs,
 	    unsigned short frame,
-	    double width, 
-	    double area, 
-	    double peakheight, 
+	    double width,
+	    double area,
+	    double peakheight,
 	    double pe,
 	    double fasttototal);
 
       // Get Methods
-      int                   OpChannel()         const; 
-      double                PeakTimeAbs()       const; 
-      double                PeakTime()          const; 
-      unsigned short        Frame()             const; 
-      double                Width()             const; 
-      double                Area()              const; 
-      double                Amplitude()         const; 
-      double                PE()                const; 
+      int                   OpChannel()         const;
+      double                PeakTimeAbs()       const;
+      double                PeakTime()          const;
+      unsigned short        Frame()             const;
+      double                Width()             const;
+      double                Area()              const;
+      double                Amplitude()         const;
+      double                PE()                const;
       double                FastToTotal()       const;
       friend bool           operator <  (const OpHit & a, const OpHit & b);
 

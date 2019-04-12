@@ -1,11 +1,11 @@
 /**
  * @file RecoBase/classes.h
  * @brief Dictionary selection for RecoBase
- * 
+ *
  * Original author Rob Kutschke, modified by klg
  */
 
-#include "canvas/Persistency/Common/PtrVector.h" 
+#include "canvas/Persistency/Common/PtrVector.h"
 #include "canvas/Persistency/Common/Wrapper.h"
 #include "canvas/Persistency/Common/Assns.h"
 

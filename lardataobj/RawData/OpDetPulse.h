@@ -15,7 +15,7 @@
 
 ///Raw data description
 namespace raw {
-  
+
   class OpDetPulse {
 
   public:
@@ -24,24 +24,24 @@ namespace raw {
   private:
 
     unsigned short  fOpChannel;     ///< channel in the readout
-    // for c2: fSamples is not used 
+    // for c2: fSamples is not used
     //unsigned short  fSamples;          ///< number of ticks of the clock
     unsigned int    fPMTFrame;         ///< frame number where pulse begins
     unsigned int    fFirstSample;      ///< first sample number within pmt frame
 
-    std::vector<short> fWaveform; 
-    
+    std::vector<short> fWaveform;
+
 
   public:
 
-    OpDetPulse(unsigned short     OpChannel, 
+    OpDetPulse(unsigned short     OpChannel,
 	       std::vector<short> Waveform,
 	       unsigned int       PMTFrame,
 	       unsigned int       FirstSample);
 
     OpDetPulse(unsigned short OpChannel);
 
-    int Integral(unsigned short startbin=0, 
+    int Integral(unsigned short startbin=0,
 		 unsigned short endbin=0);
 
     const std::vector<short>&  Waveform()    const;
@@ -50,7 +50,7 @@ namespace raw {
     unsigned short       Samples()            const;
     unsigned int         PMTFrame()           const;
     unsigned int         FirstSample()        const;
-    
+
     void SetPMTFrame(    unsigned int Frame       );
     void SetFirstSample( unsigned int FirstSample );
 

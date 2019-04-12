@@ -21,7 +21,7 @@ namespace raw {
 
   public:
     RDTimeStamp(ULong64_t tstamp=0, uint16_t flags=0) {fTimeStamp = tstamp; fFlags=flags;} // Constructor
- 
+
     void SetTimeStamp(ULong64_t tstamp);
     void SetTimeStamp_Low(uint32_t tslow);
     void SetTimeStamp_High(uint32_t tshigh);

@@ -38,7 +38,7 @@ namespace sim {
     fAncestorEnd     = invalid_step;
 
     fDetProfile = invalid_step;
-    
+
     fDaughterTrackID.clear();
     fPlaneCharge.clear();
     fdEdx = kINVALID_DOUBLE;

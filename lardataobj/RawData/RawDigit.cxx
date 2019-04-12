@@ -3,9 +3,9 @@
  * @brief Definition of basic raw digits
  * @author brebel@fnal.gov
  * @see  RawDigit.h raw.h
- * 
+ *
  * Compression/uncompression utilities are declared in lardata/RawData/raw.h .
- * 
+ *
  * ****************************************************************************/
 
 #include "lardataobj/RawData/RawDigit.h"
@@ -15,19 +15,19 @@
 
 
 namespace raw{
-  
+
   //----------------------------------------------------------------------
   RawDigit::RawDigit()
     : fADC(0)
-    , fChannel(InvalidChannelID) 
-    , fSamples(0) 
-    , fPedestal(0.) 
+    , fChannel(InvalidChannelID)
+    , fSamples(0)
+    , fPedestal(0.)
     , fSigma(0.)
     , fCompression(kNone)
   //  , fFlags(DefaultFlags)
   {}
-  
-  
+
+
   //----------------------------------------------------------------------
   RawDigit::RawDigit(
     ChannelID_t                  channel,
@@ -44,8 +44,8 @@ namespace raw{
     , fCompression(compression)
   //  , fFlags(flags)
   {}
-  
-  
+
+
   //----------------------------------------------------------------------
   RawDigit::RawDigit(
     ChannelID_t             channel,
@@ -62,18 +62,18 @@ namespace raw{
     , fCompression(compression)
   //  , fFlags(flags)
   {}
-  
-  
+
+
   //----------------------------------------------------------------------
   void RawDigit::SetPedestal(float ped, float sigma /* = 1. */ )
   {
-    
+
     fPedestal = ped;
     fSigma = sigma;
-    
+
   } // RawDigit::SetPedestal()
-  
-  
+
+
 } // namespace raw
 ////////////////////////////////////////////////////////////////////////
 

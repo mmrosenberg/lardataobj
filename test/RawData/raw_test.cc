@@ -11,7 +11,7 @@
  * As such, it does not support lossy compression (like zero suppression).
  *
  * See http://www.boost.org/libs/test for the Boost test library home page.
- * 
+ *
  * Timing:
  * version 1.0 takes less than 3" on a 3 GHz machine
  */
@@ -62,22 +62,22 @@ constexpr unsigned int RandomSeed = 12345;
 class DataCreatorBase {
 		public:
 	typedef std::vector<short> InputData_t;
-	
+
 	/// Random engine shared by all the data creators
 	static std::default_random_engine random_engine;
-	
+
 	/// Constructor: just assigns a name to this data set
 	DataCreatorBase(std::string new_name): test_name(new_name) {}
-	
+
 	/// Returns the name of this set
 	std::string name() const { return test_name; }
-	
+
 	/// Virtual destructor
 	virtual ~DataCreatorBase() {}
-	
+
 	/// Creates and returns the data sample; pure virtual
 	virtual InputData_t create(size_t size) = 0;
-	
+
 		private:
 	std::string test_name; ///< internal storage for test name
 }; // class DataCreatorBase
@@ -92,14 +92,14 @@ class UniformNoiseCreator: public DataCreatorBase {
 		public:
 	float baseline; ///< pedestal
 	float width; ///< (half)width of the uniform distribution
-	
+
 	/// Constructor: assigns data set name and noise parameters
 	UniformNoiseCreator
 		(std::string name, float RMS, float pedestal = 0.):
 		DataCreatorBase(name),
 		baseline(pedestal), width(RMS * std::sqrt(12.))
 		{}
-	
+
 	/// Creates and returns the data sample
 	virtual InputData_t create(size_t size) override
 		{
@@ -110,7 +110,7 @@ class UniformNoiseCreator: public DataCreatorBase {
 				item = InputData_t::size_type(noise(random_engine));
 			return data;
 		} // create()
-	
+
 }; // class UniformNoiseCreator
 
 
@@ -119,14 +119,14 @@ class GaussianNoiseCreator: public DataCreatorBase {
 		public:
 	float mean; ///< mean of the noise Gaussian (pedestal)
 	float stdev; ///< standard deviation of the noise Gaussian (RMS)
-	
+
 	/// Constructor: assigns data set name and noise parameters
 	GaussianNoiseCreator
 		(std::string name, float sigma, float mu = 0.):
 		DataCreatorBase(name),
 		mean(mu), stdev(sigma)
 		{}
-	
+
 	/// Creates and returns the data sample
 	virtual InputData_t create(size_t size) override
 		{
@@ -136,7 +136,7 @@ class GaussianNoiseCreator: public DataCreatorBase {
 				item = InputData_t::size_type(noise(random_engine));
 			return data;
 		} // create()
-	
+
 }; // class GaussianNoiseCreator
 
 
@@ -145,14 +145,14 @@ class SineWaveCreator: public DataCreatorBase {
 		public:
 	float period; ///< period of the wave [ticks]
 	float amplitude; ///< amplitude of the wave [ADC counts]
-	
+
 	/// Constructor: assigns data set name and noise parameters
 	SineWaveCreator
 		(std::string name, float new_period, float new_amplitude):
 		DataCreatorBase(name),
 		period(new_period), amplitude(new_amplitude)
 		{}
-	
+
 	/// Creates and returns the data sample
 	virtual InputData_t create(size_t size) override
 		{
@@ -165,14 +165,14 @@ class SineWaveCreator: public DataCreatorBase {
 			  data.push_back(amplitude * std::sin(i / period * two_pi));
 			return data;
 		} // create()
-	
+
 }; // class SineWaveCreator
 
 
 /// Data creator: uniformly random data, full range
 class RandomDataCreator: public DataCreatorBase {
 		public:
-	
+
 	/// Creates and returns the data sample
 	virtual InputData_t create(size_t size) override
 		{
@@ -185,7 +185,7 @@ class RandomDataCreator: public DataCreatorBase {
 				item = InputData_t::value_type(uniform(random_engine));
 			return data;
 		} // create()
-	
+
 }; // class RandomDataCreator
 
 
@@ -207,7 +207,7 @@ class RandomDataCreator: public DataCreatorBase {
  *
  * The test consists in compressing and uncompressing back data.
  * The test fails if the uncompressed data does not match the original one.
- * 
+ *
  * This is actually a single step of the full test implemented in
  * RunDataCompressionTests.
  */
@@ -216,21 +216,21 @@ void RunDataCompressionTest
 {
 	// working a copy of the original data:
 	std::vector<short> buffer(data);
-	
+
 	// compress
 	raw::Compress(buffer, mode);
 	std::cout << id << ": compressed data size: " << buffer.size() << std::endl;
-	
+
 	// decompress (on an already allocated buffer)
 	std::vector<short> data_again(data.size());
 	raw::Uncompress(buffer, data_again, mode);
-	
+
 	// Boost provides facilities to compare data and print if it does not match:
 	BOOST_CHECK_EQUAL(data_again.size(), data.size());
-	
+
 	BOOST_CHECK_EQUAL_COLLECTIONS
 	  (data.begin(), data.end(), data_again.begin(), data_again.end());
-	
+
 } // RunDataCompressionTest()
 
 
@@ -245,7 +245,7 @@ void RunDataCompressionTest
  * This comprises the full test.
  */
 void RunDataCompressionTests(DataCreatorBase* pDataCreator) {
-	
+
 	// the compression modes we are going to use, with a human-readable label
 	std::map<raw::Compress_t, std::string> CompressionModes;
 	CompressionModes[raw::kNone] = "uncompressed";
@@ -253,28 +253,28 @@ void RunDataCompressionTests(DataCreatorBase* pDataCreator) {
 //	CompressionModes[raw::kZeroSuppression] = "zero suppression";
 //	CompressionModes[raw::kZeroHuffman] = "zero suppression plus Huffman";
 //	CompressionModes[raw::kDynamicDec] = "dynamic";
-	
+
 	// the data sizes we are going to try, with a human-confusing label
 	std::map<size_t, std::string> DataSizes;
 	DataSizes[64] = "small size";
 	DataSizes[9600] = "medium size";
 	DataSizes[1048576] = "large size";
-	
+
 	for (const auto size_info: DataSizes) {
 		// create the original data:
 		const std::vector<short> data(pDataCreator->create(size_info.first));
-		
+
 		// test the same data with different compression algorithms:
 		for (const auto test_info: CompressionModes) {
 			// a "nice" label to make output vaguely meaningful...
 			std::string test_id = pDataCreator->name()
 				+ " (" + size_info.second + " " + test_info.second + ")";
-			
+
 			// ... and run the test
 			RunDataCompressionTest(test_id, data, test_info.first);
 		} // for compression modes
 	} // for data sizes
-	
+
 	// that's it; Boost keeps records of successes and failures
 } // RunDataCompressionTests()
 

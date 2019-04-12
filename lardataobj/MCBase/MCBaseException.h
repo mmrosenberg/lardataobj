@@ -2,7 +2,7 @@
  * \file MCBaseException.h
  *
  * \ingroup MCBase
- * 
+ *
  * \brief Class def header for exception classes for MC data products
  *
  * @author kazuhiro
@@ -30,7 +30,7 @@ namespace sim {
     {}
 
     virtual ~MCBaseException() throw(){}
-    virtual const char* what() const throw() 
+    virtual const char* what() const throw()
     {return _msg.c_str(); }
 
   private:
@@ -40,5 +40,5 @@ namespace sim {
 
 }
 #endif
-/** @} */ // end of doxygen group 
+/** @} */ // end of doxygen group
 

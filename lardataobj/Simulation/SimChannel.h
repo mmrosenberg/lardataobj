@@ -4,7 +4,7 @@
  *         RawDigits and doing back tracking
  * @author seligman@nevis.columbia.edu
  * @see    SimChannel.cxx
- * 
+ *
  * This class uses only LArSoft libraries that are header only.
  */
 
@@ -23,7 +23,7 @@
 
 
 namespace sim {
-  
+
   /// Ionization energy from a Geant4 track
   struct TrackIDE{
     int trackID;      ///< Geant4 supplied trackID
@@ -32,23 +32,23 @@ namespace sim {
     float numElectrons; ///< number of electrons from the particle detected on the wires
 
     TrackIDE() {}
-    
-    
+
+
     TrackIDE(int id, float ef, float e, float ne ) : trackID(id), energyFrac(ef), energy (e), numElectrons (ne) {}
-    
+
 
   };
-  
-  
+
+
   /**
    * @brief Ionization at a point of the TPC sensitive volume
-   * 
+   *
    * This class stores information about the ionization from the simulation
    * of a small step of a track through the TPC active volume.
-   * 
+   *
    * Ionization information consists of both energy and number of electrons.
    * It is of paramount importance to understand what each field stores:
-   * 
+   *
    * - position: where the ionization occurred (from Geant4 simulation)
    * - track ID: Geant4 track ID of the ionizing particle
    * - energy: amount of energy released by ionization (from Geant4 simulation)
@@ -58,44 +58,44 @@ namespace sim {
    * it describes the electrons at the anode _after_ the drifting occurred,
    * while all the other quantities can be related to the moment the ionization
    * happened.
-   * 
+   *
    * The number of electrons typically includes inefficiencies and physics
    * effects that reduce and spread the electrons. In the simulation,
    * this yields a fractional number of electrons.
-   * 
+   *
    * Each IDE is also typically associated with a time (TDC) count, that is
    * the time at which the ionized electrons reached the readout channel, in
    * electronic ticks, as opposed as the time when ionization occurred.
    * The latter is not stored.
-   * 
+   *
    * At the time of writing this documentation (LArSoft 6.4.0), IDEs are
    * computed in larg4::LArVoxelReadout.
    * The energy and track ID come directly from Geant4 simulation.
    * The position is the mid point of the Geant4 step that produced ionization.
    * The electrons are
-   * 
+   *
    * 1. converted from that same energy (using a fundamental conversion factor
    *    stored in `larcoreobj/SimpleTypesAndConstants/PhysicalConstants.h`)
    * 2. applied recombination effect by larg4::IonizationAndScintillation::Reset()
    * 3. applied attenuation and diffusion in
    *    larg4::LArVoxelReadout::DriftIonizationElectrons()
-   * 
+   *
    * The latter also assembles the sim::IDE objects to be stored into
    * sim::SimChannel.
-   * 
+   *
    */
   struct IDE{
-    
+
     /// Type of track ID (the value comes from Geant4)
     typedef int TrackID_t;
-    
+
     /// Default constructor (sets "bogus" values)
     IDE();
-    
-    
+
+
     /// Constructor: copies an IDE, and applies the specified offset to track ID
     IDE(IDE const& ide, int offset);
-    
+
     /// Constructor: sets all data members
     IDE(TrackID_t tid,
         float nel,
@@ -110,8 +110,8 @@ namespace sim {
     , y           (ypos)
     , z           (zpos)
     {}
-    
-    
+
+
     TrackID_t trackID;  ///< Geant4 supplied track ID
     float numElectrons; ///< number of electrons at the readout for this track ID and time
     float energy;       ///< energy deposited by ionization by this track ID and time [MeV]
@@ -119,55 +119,55 @@ namespace sim {
     float y;            ///< y position of ionization [cm]
     float z;            ///< z position of ionization [cm]
   }; // struct IDE
-  
-  
+
+
   /// List of energy deposits at the same time (on this channel)
   typedef std::pair<unsigned short, std::vector<sim::IDE> > TDCIDE;
-  
+
   /**
    * @brief Energy deposited on a readout channel by simulated tracks
-   * 
+   *
    * This class stores the list of all energies deposited on a readout channel.
    * The number of electrons is stored as well.
-   * 
+   *
    * The information is organized by time: it is divided by TDC ticks, and
    * each TDC tick where some energy was deposited appears in a separate entry,
    * while the quiet TDC ticks are omitted.
    * For each TDC, the information is stored as a list of energy deposits;
    * each deposit comes from a single Geant4 track and stores the location where
    * the ionization happened according to the simulation (see `sim::IDE` class).
-   * 
+   *
    * Note that there can be multiple energy deposit records (that is `sim::IDE`)
    * for a single track in a single TDC tick.
    */
   class SimChannel
   {
   public:
-    /// Type for TDC tick used in the internal representation 
+    /// Type for TDC tick used in the internal representation
     typedef TDCIDE::first_type StoredTDC_t;
-  
+
     /// Type of list of energy deposits for each TDC with signal
     typedef std::vector<TDCIDE> TDCIDEs_t;
-    
+
   private:
     raw::ChannelID_t fChannel; ///< readout channel where electrons are collected
     TDCIDEs_t        fTDCIDEs; ///< list of energy deposits for each TDC with signal
-    
-    
+
+
   public:
 
     // Default constructor
     SimChannel();
-    
+
     /// Type for TDC tick used in the interface
     /// (different type than raw::TDCtick_t! and from internal representation!
     ///  but same meaning!)
     typedef unsigned int TDC_t;
-    
+
     /// Type of track ID (the value comes from Geant4)
     typedef IDE::TrackID_t TrackID_t;
-    
-    
+
+
     /// Constructor: immediately sets the channel number
     explicit SimChannel(raw::ChannelID_t channel);
 
@@ -178,7 +178,7 @@ namespace sim {
      * @param numberElectrons electrons created at this point by this track
      * @param xyz coordinates of original location of ionization (3D array) [cm]
      * @param energy energy deposited at this point by this track [MeV]
-     * 
+     *
      * The number of electrons can be fractional because of simulated
      * efficiency and physics effects.
      */
@@ -186,17 +186,17 @@ namespace sim {
                                 TDC_t tdc,
                                 double numberElectrons,
                                 double const* xyz,
-                                double energy); 
-    
+                                double energy);
+
     /// Returns the readout channel this object describes
     raw::ChannelID_t Channel() const;
-    
+
     /**
      * @brief Return all the recorded energy deposition within a time interval
      * @param startTDC TDC tick opening the time window
      * @param endTDC TDC tick closing the time window (included in the interval)
      * @return a collection of energy deposit information from all tracks
-     * 
+     *
      * This method returns the energy deposited on this channel by each track
      * ID active in the specified TDC time interval.
      *
@@ -205,30 +205,30 @@ namespace sim {
      * * energy and number of electrons, as the integral in the time interval
      * * position, as average weighted by the number of electrons
      * * the ID of the track depositing this energy
-     * 
+     *
      * Entries are sorted by track ID number.
      */
     std::vector<sim::IDE> TrackIDsAndEnergies(TDC_t startTDC,
                                               TDC_t endTDC) const;
-    
+
     /**
      * @brief Returns all the deposited energy information as stored
      * @return all the deposited energy information as stored in the object
-     * 
+     *
      * The returned list is organized in pairs. Each pair contains all
      * ionization information in a single TDC tick (collection of `sim::IDE`),
      * and the number of that tick. The information is sorted by increasing TDC
      * tick.
-     * 
+     *
      * See the class description for the details of the ionization information
      * content.
      */
     TDCIDEs_t const& TDCIDEMap() const;
-    
-    
+
+
     /// Returns the total number of ionization electrons on this channel in the specified TDC
     double Charge(TDC_t tdc) const;
-    
+
     /// Returns the total energy on this channel in the specified TDC [MeV]
     double Energy(TDC_t tdc) const;
 
@@ -238,7 +238,7 @@ namespace sim {
      * @param endTDC TDC tick closing the time window (included in the interval)
      * @return a collection of energy and fraction from each track in interval
      * @see TrackIDsAndEnergies()
-     * 
+     *
      * This method returns the energy deposited on this channel by each track
      * ID active in the specified TDC time interval.
      *
@@ -247,34 +247,34 @@ namespace sim {
      * * energy of the track, as the integral in the time interval [MeV]
      * * energy fraction respect to the total (see below)
      * * the ID of the track depositing this energy
-     * 
+     *
      * The energy fraction is the energy deposited by the track on this channel
      * in the specified time interval, divided by the total of the energy
      * deposited by all tracks on this channel in that same time interval.
-     * 
+     *
      * Entries are sorted by track ID number.
      */
     std::vector<sim::TrackIDE> TrackIDEs(TDC_t startTDC,
                                          TDC_t endTDC) const;
-    
+
     /// Comparison: sorts by channel ID
     bool operator<  (const SimChannel& other)     const;
-    
+
     /// Comparison: true if SimChannels have the same channel ID
     bool operator== (const SimChannel& other)     const;
-    
+
     /**
      * @brief Merges the deposits from another channel into this one
      * @param channel the sim::SimChannel holding information to be merged
      * @param offset track ID offset for the merge
      * @return range of the IDs of the added tracks
-     * 
+     *
      * The information from the specified simulated channel is added to the
      * current one.
      * This is achieved by appending the energy deposit information (`sim::IDE`)
      * at each TDC tick from the merged channel to the list of existing energy
      * deposits for that TDC tick.
-     * 
+     *
      * In addition, the track IDs of the merged channel are added an offset,
      * so that they can be distinguished from the existing ones.
      * This is useful when simulating tracks with multiple Geant4 runs. Geant4
@@ -285,13 +285,13 @@ namespace sim {
      * The return value is a pair including the lowest and the largest track IDs
      * added to this channel, equivalent to the lowest and the highest track IDs
      * present in the merged channel, both augmented by the applied offset.
-     * 
+     *
      * The channel number of the merged channel is ignored.
      */
     std::pair<TrackID_t,TrackID_t> MergeSimChannel
       (const SimChannel& channel, int offset);
-    
-    
+
+
     /**
      * @brief Dumps the full content of the SimChannel into a stream
      * @tparam Stream an ostream-like stream object
@@ -301,20 +301,20 @@ namespace sim {
      */
     template <typename Stream>
     void Dump(Stream&& out, std::string indent, std::string first_indent) const;
-    
+
     /// Documentation at `Dump(Stream&&, std::string, std::string) const`.
     template <typename Stream>
     void Dump(Stream&& out, std::string indent = "") const
       { Dump(std::forward<Stream>(out), indent, indent); }
-    
-    
+
+
   private:
     /// Comparison functor, sorts by increasing TDCtick value
     struct CompareByTDC;
-    
+
     /// Return the iterator to the first TDCIDE not earlier than tdc
     TDCIDEs_t::iterator findClosestTDCIDE(StoredTDC_t tdc);
-    
+
     /// Return the (constant) iterator to the first TDCIDE not earlier than tdc
     TDCIDEs_t::const_iterator findClosestTDCIDE
       (StoredTDC_t tdc) const;

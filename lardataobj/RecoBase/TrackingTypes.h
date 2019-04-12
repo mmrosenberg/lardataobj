@@ -21,16 +21,16 @@ namespace recob {
      * algorithms, but it's safer to perform calculations in double precision.
      */
     using Coord_t = Double32_t;
-    
+
     /// Type for representation of position in physical 3D space. See recob::tracking::Coord_t for more details on the actual type used.
     using Point_t = ROOT::Math::PositionVector3D<ROOT::Math::Cartesian3D<Coord_t>, ROOT::Math::GlobalCoordinateSystemTag>;
-    
+
     /// Type for representation of momenta in 3D space. See recob::tracking::Coord_t for more details on the actual type used.
     using Vector_t = ROOT::Math::DisplacementVector3D <ROOT::Math::Cartesian3D<Coord_t>, ROOT::Math::GlobalCoordinateSystemTag>;
-    
+
     /// Type of trajectory point list.
     using Positions_t = std::vector<Point_t>;
-    
+
     /// Type of momentum list.
     using Momenta_t = std::vector<Vector_t>;
 
@@ -93,9 +93,9 @@ namespace recob {
     using SVector3     = ROOT::Math::SVector<Double32_t,3>;
     using SVector2     = ROOT::Math::SVector<Double32_t,2>;
     /// @}
-    
+
   }
-  
+
 }
 
 #endif

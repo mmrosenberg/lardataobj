@@ -100,7 +100,7 @@ namespace util {
   // GNU C++'s stl_map.h).  In general, if you see variables that begin
   // with underscores ("_"), it means I copied the code directly from
   // GNU C++, either from stl_map.h or stl_vector.h.
-  template < typename _Key, typename _Tp, typename _Compare = std::less<_Key> > 
+  template < typename _Key, typename _Tp, typename _Compare = std::less<_Key> >
   class VectorMap {
   public:
     // Define lots of handy types.
@@ -147,22 +147,22 @@ namespace util {
 	: comp(__c) { }
       _Compare GetCompare() const {  return comp; }
       _Compare comp;
-    
+
     public:
 
       // From an idea suggested by item 23 in "Effective STL" by Scott
       // Meyers:
-      bool operator()(const value_type& __x, 
+      bool operator()(const value_type& __x,
 		      const value_type& __y) const
       { return keyLess(__x.first, __y.first); }
-      bool operator()(const value_type& __x, 
+      bool operator()(const value_type& __x,
 		      const key_type& __y) const
       { return keyLess(__x.first, __y); }
-      bool operator()(const key_type& __x, 
+      bool operator()(const key_type& __x,
 		      const value_type& __y) const
       { return keyLess(__x, __y.first); }
     private:
-      bool keyLess(const key_type& __x, 
+      bool keyLess(const key_type& __x,
 		   const key_type& __y) const
       { return comp(__x, __y); }
     };
@@ -173,7 +173,7 @@ namespace util {
 
     // The actual key-comparison object.
     value_compare valueCompare; //! Don't write this to the ROOT file.
-  
+
   public:
     // After copying a lot of stuff from GNU C++, here's where I start
     // implementing some methods on my own.  I'm trying to be complete,
@@ -184,7 +184,7 @@ namespace util {
     {
       return sortedVectorMap.get_allocator();
     }
- 
+
     iterator begin()
     {
       return sortedVectorMap.begin();
@@ -316,7 +316,7 @@ namespace util {
     // Actually, this hint is useless (since lower_bound doesn't take a
     // hint <heh, heh>).  So just do a regular insert instead.
     iterator insert(iterator, const value_type& entry)
-    { 
+    {
       std::pair<iterator,bool> result = insert(entry);
       return result.first;
     }
@@ -324,20 +324,20 @@ namespace util {
     // Mass insertion.
     template <typename _InputIterator>
     void insert(_InputIterator __first, _InputIterator __last)
-    { 
+    {
       for ( ; __first != __last; ++__first)
 	insert(*__first);
     }
 
     void erase(iterator __position)
-    { 
+    {
       sortedVectorMap.erase(__position);
     }
 
     // Erases all the entries with the key, and returns the number of
     // erasures.
     size_type erase(const key_type& key)
-    { 
+    {
       iterator i = find(key);
       if ( i == end() ) return 0;
       erase(i);
@@ -346,8 +346,8 @@ namespace util {
 
     // Erase a range.
     void erase(iterator __first, iterator __last)
-    { 
-      sortedVectorMap.erase(__first, __last); 
+    {
+      sortedVectorMap.erase(__first, __last);
     }
 
     // Swap two maps. For VectorMap, this is pretty simple: use
@@ -355,7 +355,7 @@ namespace util {
     // the maps, then swap the value_compare objects (if any) by the
     // usual "temp" method.
     void swap(VectorMap& other)
-    { 
+    {
       sortedVectorMap.swap(other.sortedVectorMap);
       value_compare temp(valueCompare);
       valueCompare = other.valueCompare;
@@ -363,26 +363,26 @@ namespace util {
     }
 
     void clear()
-    { 
-      sortedVectorMap.clear(); 
+    {
+      sortedVectorMap.clear();
     }
 
     // Returns the key-comparison object used for this VectorMap.
     key_compare key_comp() const
-    { 
-      return valueCompare.GetCompare(); 
+    {
+      return valueCompare.GetCompare();
     }
 
     // Returns the value-comparison object, which just compares the
     // entry.first of the two pairs.
     value_compare value_comp() const
-    { 
-      return valueCompare; 
+    {
+      return valueCompare;
     }
 
     iterator find(const key_type& key)
-    { 
-      iterator i = lower_bound(key); 
+    {
+      iterator i = lower_bound(key);
       if (i == end() || key_comp()(key, (*i).first))
 	return end();
 
@@ -390,8 +390,8 @@ namespace util {
     }
 
     const_iterator find(const key_type& key) const
-    { 
-      const_iterator i = lower_bound(key); 
+    {
+      const_iterator i = lower_bound(key);
       if (i == end() || key_comp()(key, (*i).first))
 	return end();
 
@@ -401,33 +401,33 @@ namespace util {
     // Count the number of entries with a given key (which will be 0 or
     // 1 for a map).
     size_type count(const key_type& __x) const
-    { 
-      return find(__x) == end() ? 0 : 1; 
+    {
+      return find(__x) == end() ? 0 : 1;
     }
 
     iterator lower_bound(const key_type& __x)
-    { 
-      return std::lower_bound(begin(),end(),__x,valueCompare); 
+    {
+      return std::lower_bound(begin(),end(),__x,valueCompare);
     }
 
     const_iterator lower_bound(const key_type& __x) const
-    { 
-      return std::lower_bound(begin(),end(),__x,valueCompare); 
+    {
+      return std::lower_bound(begin(),end(),__x,valueCompare);
     }
 
     iterator upper_bound(const key_type& __x)
-    { 
-      return std::upper_bound(begin(),end(),__x,valueCompare); 
+    {
+      return std::upper_bound(begin(),end(),__x,valueCompare);
     }
 
     const_iterator upper_bound(const key_type& __x) const
-    { 
-      return std::upper_bound(begin(),end(),__x,valueCompare); 
+    {
+      return std::upper_bound(begin(),end(),__x,valueCompare);
     }
 
     std::pair<iterator, iterator> equal_range(const key_type& key)
-    { 
-      return std::equal_range(begin(),end(),key,valueCompare); 
+    {
+      return std::equal_range(begin(),end(),key,valueCompare);
     }
 
     // The following code does not compile when processed by ROOT's
@@ -437,8 +437,8 @@ namespace util {
     // problem.
     /*
       std::pair<const_iterator, const_iterator> equal_range(const key_type& key) const
-      { 
-      return std::equal_range(begin(),end(),key,valueCompare); 
+      {
+      return std::equal_range(begin(),end(),key,valueCompare);
       }
     */
 
@@ -471,7 +471,7 @@ namespace util {
       return sortedVectorMap.capacity();
     }
 
-  
+
     // Friend definitions for comparison operators.
     template <typename _K1, typename _T1, typename _C1>
     friend bool operator== (const VectorMap<_K1, _T1, _C1>&,
@@ -493,14 +493,14 @@ namespace util {
   template <typename _Key, typename _Tp, typename _Compare>
   inline bool operator==(const VectorMap<_Key, _Tp, _Compare>& __x,
 			 const VectorMap<_Key, _Tp, _Compare>& __y)
-  { 
-    return __x.sortedVectorMap == __y.sortedVectorMap; 
+  {
+    return __x.sortedVectorMap == __y.sortedVectorMap;
   }
 
   template <typename _Key, typename _Tp, typename _Compare>
   inline bool operator<(const VectorMap<_Key, _Tp, _Compare>& __x,
 			const VectorMap<_Key, _Tp, _Compare>& __y)
-  { 
+  {
     return std::lexicographical_compare(__x.sortedVectorMap.begin(),
 					__x.sortedVectorMap.end(),
 					__y.sortedVectorMap.begin(),
@@ -512,40 +512,40 @@ namespace util {
   template <typename _Key, typename _Tp, typename _Compare>
   inline bool operator!=(const VectorMap<_Key, _Tp, _Compare>& __x,
 			 const VectorMap<_Key, _Tp, _Compare>& __y)
-  { 
-    return !(__x == __y); 
+  {
+    return !(__x == __y);
   }
 
   /// Based on operator<
   template <typename _Key, typename _Tp, typename _Compare>
   inline bool operator>(const VectorMap<_Key, _Tp, _Compare>& __x,
 			const VectorMap<_Key, _Tp, _Compare>& __y)
-  { 
-    return __y < __x; 
+  {
+    return __y < __x;
   }
 
   /// Based on operator<
   template <typename _Key, typename _Tp, typename _Compare>
   inline bool operator<=(const VectorMap<_Key, _Tp, _Compare>& __x,
 			 const VectorMap<_Key, _Tp, _Compare>& __y)
-  { 
-    return !(__y < __x); 
+  {
+    return !(__y < __x);
   }
 
   /// Based on operator<
   template <typename _Key, typename _Tp, typename _Compare>
   inline bool operator>=(const VectorMap<_Key, _Tp, _Compare>& __x,
 			 const VectorMap<_Key, _Tp, _Compare>& __y)
-  { 
-    return !(__x < __y); 
+  {
+    return !(__x < __y);
   }
 
   /// See VectorMap::swap().
   template <typename _Key, typename _Tp, typename _Compare>
   inline void swap(VectorMap<_Key, _Tp, _Compare>& __x,
 		   VectorMap<_Key, _Tp, _Compare>& __y)
-  { 
-    __x.swap(__y); 
+  {
+    __x.swap(__y);
   }
 
 } // namespace util

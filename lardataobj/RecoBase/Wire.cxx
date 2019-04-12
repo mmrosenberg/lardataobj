@@ -3,7 +3,7 @@
  * @brief Definition of basic channel signal object.
  * @author brebel@fnal.gov
  * @see  Wire.h
- * 
+ *
  * ****************************************************************************/
 
 #include "lardataobj/RecoBase/Wire.h"

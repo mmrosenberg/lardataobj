@@ -34,7 +34,7 @@ void CheckCharge(
   bool hasCharge,
   recob::PointCharge::Charge_t charge
 ) {
-  
+
   // verify that the values are as expected
   if (hasCharge) {
     BOOST_CHECK(obj.hasCharge());
@@ -44,28 +44,28 @@ void CheckCharge(
     BOOST_CHECK(!obj.hasCharge());
     // charge() return value is undefined
   }
-  
+
 } // CheckCharge()
 
 
 void ChargeTestDefaultConstructor() {
-  
+
   //
   // Part I: initialization of inputs
   //
   // these are the values expected for a default-constructed wire
   bool const hasCharge = false;
   recob::PointCharge::Charge_t const charge = recob::PointCharge::InvalidCharge;
-  
+
   //
   // Part II: default constructor
   //
   // step II.1: create a charge with the default constructor
   recob::PointCharge chargeInfo;
-  
+
   // step II.2: verify that the values are as expected
   CheckCharge(chargeInfo, hasCharge, charge);
-  
+
 } // ChargeTestDefaultConstructor()
 
 
@@ -76,16 +76,16 @@ void ChargeTestValueConstructors() {
   // these are the values expected for a value-constructed wire
   bool const hasCharge = true;
   recob::PointCharge::Charge_t const charge = 10.0;
-  
+
   //
   // Part II: default constructor
   //
   // step II.1: create a charge with the value constructor
   recob::PointCharge chargeInfo(charge);
-  
+
   // step II.2: verify that the values are as expected
   CheckCharge(chargeInfo, hasCharge, charge);
-  
+
 } // ChargeTestValueConstructors()
 
 

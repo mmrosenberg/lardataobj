@@ -14,7 +14,7 @@
 #include "lardataobj/RecoBase/TrackingTypes.h"
 
 namespace recob {
-  
+
   class Slice  {
 
   public:
@@ -45,10 +45,10 @@ namespace recob {
     void                 SetCharge(const float charge) {fCharge = charge;}
 
   private:
-    
+
     int       fID;           ///< id for this slice
     Point_t   fCenter;       ///< Center of the slice for flash matching
-    Vector_t  fDirection;    ///< direction from a linear fit 
+    Vector_t  fDirection;    ///< direction from a linear fit
     Point_t   fEnd0Pos;      ///< Position of a SpacePoint at one end of the slice
     Point_t   fEnd1Pos;      ///< Position of the other end
     float     fAspectRatio;  ///< absolute value of the linear correlation coefficient (0 = round blob, 1 = line)

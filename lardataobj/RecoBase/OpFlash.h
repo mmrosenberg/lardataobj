@@ -20,11 +20,11 @@ namespace recob {
       OpFlash(); // Default constructor
 
 private:
- 
+
       double                fTime;         // Time relative to trigger
       double                fTimeWidth;    // Width of the flash in time
       double                fAbsTime;      // Time by PMT readout clock
-      unsigned int          fFrame;        // Frame number 
+      unsigned int          fFrame;        // Frame number
       std::vector< double > fPEperOpDet;   // Number of PE on each PMT
       std::vector< double > fWireCenters;  // Geometric center in each view
       std::vector< double > fWireWidths;   // Geometric width in each view
@@ -35,7 +35,7 @@ private:
       double                fFastToTotal;  // Fast to total light ratio
       bool                  fInBeamFrame;  // Is this in the beam frame?
       int                   fOnBeamTime;   // Is this in time with beam?
-      
+
 
 
 
@@ -54,21 +54,21 @@ private:
       double                AbsTime()           const;
       unsigned int          Frame()             const;
       double                PE(unsigned int i)  const;
-      
+
       /// Returns a vector with a number of photoelectrons per channel.
       std::vector<double> const& PEs()          const;
-      
+
       double                YCenter()           const;
       double                YWidth()            const;
       double                ZCenter()           const;
-      double                ZWidth()            const; 
-      
+      double                ZWidth()            const;
+
       bool                  InBeamFrame()       const;
       int                   OnBeamTime()        const;
 
       std::vector<double>   WireCenters()       const;
       std::vector<double>   WireWidths()        const;
-     
+
       friend bool           operator <  (const OpFlash & a, const OpFlash & b);
 
       double                TotalPE()           const;
