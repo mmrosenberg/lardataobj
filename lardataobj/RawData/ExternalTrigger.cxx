@@ -7,7 +7,6 @@
 ////////////////////////////////////////////////////////////////////////
 
 #include "lardataobj/RawData/ExternalTrigger.h"
-#include <string>
 
 namespace raw{
 

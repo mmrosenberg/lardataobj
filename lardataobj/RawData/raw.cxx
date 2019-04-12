@@ -6,7 +6,6 @@
 #include "lardataobj/RawData/raw.h"
 
 #include <iostream>
-#include <string>
 #include <bitset>
 #include <numeric> // std::adjacent_difference()
 #include <iterator> // std::back_inserter()

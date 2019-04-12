@@ -14,7 +14,6 @@
 // C/C++ standard libraries
 #include <ostream>
 #include <utility> // std::move()
-#include <string> // std::to_string()
 #include <stdexcept> // std::runtime_error
 
 //------------------------------------------------------------------------------

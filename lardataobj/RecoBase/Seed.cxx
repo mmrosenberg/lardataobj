@@ -11,7 +11,6 @@
 #include "lardataobj/RecoBase/SpacePoint.h"
 #include "TMath.h"
 #include "TVector3.h"
-#include <string>
 #include <iostream>
 #include <stdlib.h>
 #include <algorithm>

@@ -16,7 +16,6 @@
 
 // C/C++ standard library
 #include <array>
-#include <string> // std::to_string()
 #include <iostream>
 #include <algorithm> // std::is_sorted(), std::lower_bound()
 #include <stdexcept> // std::runtime_error
