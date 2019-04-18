@@ -24,6 +24,3 @@
 #include "lardataobj/Simulation/SupernovaTruth.h"
 #include "lardataobj/Simulation/GeneratedParticleInfo.h"
 #include "lardataobj/Simulation/SimDriftedElectronCluster.h"
-// Template the wrapper for the vector (typedef okay)
-template class art::Wrapper< sim::SimEnergyDepositCollection >;
-template class art::Wrapper< sim::AuxDetHitCollection >;
