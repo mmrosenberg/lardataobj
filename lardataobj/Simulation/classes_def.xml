@@ -8,48 +8,48 @@
 
 
 <lcgdict>
- <class name="sim::OnePhoton"                ClassVersion="13">
+ <class name="sim::OnePhoton" ClassVersion="13">
   <version ClassVersion="13" checksum="3677597673"/>
   <version ClassVersion="12" checksum="124883757"/>
   <version ClassVersion="11" checksum="1948463887"/>
  </class>
-<class name="sim::AuxDetHit"         ClassVersion="10">
+<class name="sim::AuxDetHit" ClassVersion="10">
  <version ClassVersion="10" checksum="949448658"/>
  </class>
- <class name="sim::SimEnergyDeposit"         ClassVersion="17">
+ <class name="sim::SimEnergyDeposit" ClassVersion="17">
   <version ClassVersion="17" checksum="51950964"/>
   <version ClassVersion="16" checksum="2652853768"/>
   <version ClassVersion="15" checksum="2953985021"/>
   <version ClassVersion="14" checksum="933111578"/>
   <version ClassVersion="13" checksum="671029830"/>
  </class>
- <class name="std::vector< sim::SimEnergyDeposit >"/>
- <class name="art::Wrapper< std::vector< sim::SimEnergyDeposit> >"/>
- <class name="std::vector< sim::AuxDetHit >"/>
- <class name="art::Wrapper< std::vector< sim::AuxDetHit> >"/>
- <class name="sim::SimPhotonsLite"           ClassVersion="10">
+ <class name="std::vector< sim::SimEnergyDeposit>"/>
+ <class name="art::Wrapper< std::vector< sim::SimEnergyDeposit>>"/>
+ <class name="std::vector< sim::AuxDetHit>"/>
+ <class name="art::Wrapper< std::vector< sim::AuxDetHit>>"/>
+ <class name="sim::SimPhotonsLite" ClassVersion="10">
   <version ClassVersion="10" checksum="4093907155"/>
  </class>
- <class name="sim::SimPhotons"               ClassVersion="12">
+ <class name="sim::SimPhotons" ClassVersion="12">
   <version ClassVersion="12" checksum="3876354274"/>
  </class>
- <class name="sim::SimChannel"               ClassVersion="15">
+ <class name="sim::SimChannel" ClassVersion="15">
   <version ClassVersion="15" checksum="2427478114"/>
   <version ClassVersion="14" checksum="2917495953"/>
  </class>
- <class name="sim::AuxDetSimChannel"         ClassVersion="12">
+ <class name="sim::AuxDetSimChannel" ClassVersion="12">
   <version ClassVersion="12" checksum="3670394285"/>
   <version ClassVersion="11" checksum="4004990893"/>
   <version ClassVersion="10" checksum="999879376"/>
  </class>
- <class name="sim::AuxDetIDE"                ClassVersion="10">
+ <class name="sim::AuxDetIDE" ClassVersion="10">
   <version ClassVersion="10" checksum="3594257473"/>
  </class>
- <class name="sim::IDE"                      ClassVersion="11">
+ <class name="sim::IDE" ClassVersion="11">
   <version ClassVersion="11" checksum="1123102836"/>
   <version ClassVersion="10" checksum="3981386861"/>
  </class>
- <class name="sim::BeamGateInfo"             ClassVersion="12">
+ <class name="sim::BeamGateInfo" ClassVersion="12">
   <version ClassVersion="12" checksum="2778107387"/>
   <version ClassVersion="11" checksum="1122283400"/>
   <version ClassVersion="10" checksum="2225942541"/>
@@ -58,7 +58,7 @@
   <version ClassVersion="11" checksum="1336777815"/>
   <version ClassVersion="10" checksum="2389124613"/>
  </class>
- <enum name="sim::SupernovaSamplingMode_t"                         />
+ <enum name="sim::SupernovaSamplingMode_t"/>
  <class name="sim::SupernovaTruth" ClassVersion="11">
   <version ClassVersion="11" checksum="1831734181"/>
   <version ClassVersion="10" checksum="1873453733"/>
@@ -69,45 +69,45 @@
   <version ClassVersion="11" checksum="394157494"/>
   <version ClassVersion="10" checksum="155859597"/>
  </class>
- <enum name="sim::BeamType_t"                                      />
- <class name="art::Ptr<sim::SupernovaTruth>"                       />
- <class name="std::pair< art::Ptr<sim::SupernovaTruth>, art::Ptr<simb::MCTruth> >" />
- <class name="std::pair< art::Ptr<simb::MCTruth>, art::Ptr<sim::SupernovaTruth> >" />
- <class name="art::Assns<sim::SupernovaTruth, simb::MCTruth, void>" />
- <class name="art::Assns<simb::MCTruth, sim::SupernovaTruth, void>" />
- <class name="std::vector<sim::SimEnergyDeposit>"                  />
- <class name="std::vector<sim::AuxDetHit>"                  />
- <class name="std::vector<sim::OnePhoton>"                         />
- <class name="std::vector<sim::SimPhotonsLite>"                    />
- <class name="std::vector<sim::SimPhotons  >" 		     		    	   />
- <class name="std::vector<sim::SimChannel  >"                		   />
- <class name="std::vector<sim::AuxDetSimChannel>"                  />
- <class name="std::vector<sim::AuxDetIDE>"                         />
- <class name="std::vector<sim::IDE>"                               />
- <class name="std::vector<sim::BeamGateInfo>" 	    		    	     />
- <class name="std::vector<sim::OpDetBacktrackerRecord>"                      />
- <class name="std::vector<sim::SupernovaTruth>"                    />
- <class name="std::vector<sim::SimDriftedElectronCluster>"                    />
- <class name="sim::TDCIDE"                                         />
- <class name="std::vector<sim::TDCIDE>"            	               />
- <class name="sim::SDP" />
- <class name="std::vector<sim::SDP>" />
- <class name="std::pair< double, std::vector<sim::SDP> >"/>
- <class name="std::vector< std::pair < double, std::vector<sim::SDP> > >" />
- <class name="art::Wrapper< std::vector<sim::SimPhotons>   >"		   />
- <class name="art::Wrapper< std::vector<sim::SimPhotonsLite>   >"  />
- <class name="art::Wrapper< std::vector<sim::SimChannel>   >"		   />
- <class name="art::Wrapper< std::vector<sim::SimEnergyDeposit>   >"		   />
- <class name="art::Wrapper< std::vector<sim::AuxDetHit>   >"		   />
- <class name="art::Wrapper< std::vector<sim::BeamGateInfo> >"		   />
- <class name="art::Wrapper< std::vector<sim::AuxDetSimChannel>  >" />
- <class name="art::Wrapper< std::vector<sim::OpDetBacktrackerRecord> >"      />
- <class name="art::Wrapper< std::vector<sim::SupernovaTruth> >"      />
- <class name="art::Wrapper< std::vector<sim::SimDriftedElectronCluster> >"      />
- <class name="art::Wrapper< art::Assns<sim::SupernovaTruth, simb::MCTruth, void> >" />
- <class name="art::Wrapper< art::Assns<simb::MCTruth, sim::SupernovaTruth, void> >" />
+ <enum name="sim::BeamType_t"/>
+ <class name="art::Ptr<sim::SupernovaTruth>"/>
+ <class name="std::pair< art::Ptr<sim::SupernovaTruth>, art::Ptr<simb::MCTruth>>"/>
+ <class name="std::pair< art::Ptr<simb::MCTruth>, art::Ptr<sim::SupernovaTruth>>"/>
+ <class name="art::Assns<sim::SupernovaTruth, simb::MCTruth, void>"/>
+ <class name="art::Assns<simb::MCTruth, sim::SupernovaTruth, void>"/>
+ <class name="std::vector<sim::SimEnergyDeposit>"/>
+ <class name="std::vector<sim::AuxDetHit>"/>
+ <class name="std::vector<sim::OnePhoton>"/>
+ <class name="std::vector<sim::SimPhotonsLite>"/>
+ <class name="std::vector<sim::SimPhotons>"/>
+ <class name="std::vector<sim::SimChannel>"/>
+ <class name="std::vector<sim::AuxDetSimChannel>"/>
+ <class name="std::vector<sim::AuxDetIDE>"/>
+ <class name="std::vector<sim::IDE>"/>
+ <class name="std::vector<sim::BeamGateInfo>"/>
+ <class name="std::vector<sim::OpDetBacktrackerRecord>"/>
+ <class name="std::vector<sim::SupernovaTruth>"/>
+ <class name="std::vector<sim::SimDriftedElectronCluster>"/>
+ <class name="sim::TDCIDE"/>
+ <class name="std::vector<sim::TDCIDE>"/>
+ <class name="sim::SDP"/>
+ <class name="std::vector<sim::SDP>"/>
+ <class name="std::pair< double, std::vector<sim::SDP>>"/>
+ <class name="std::vector< std::pair < double, std::vector<sim::SDP>>>"/>
+ <class name="art::Wrapper< std::vector<sim::SimPhotons>>"/>
+ <class name="art::Wrapper< std::vector<sim::SimPhotonsLite>>"/>
+ <class name="art::Wrapper< std::vector<sim::SimChannel>>"/>
+ <class name="art::Wrapper< std::vector<sim::SimEnergyDeposit>>"/>
+ <class name="art::Wrapper< std::vector<sim::AuxDetHit>>"/>
+ <class name="art::Wrapper< std::vector<sim::BeamGateInfo>>"/>
+ <class name="art::Wrapper< std::vector<sim::AuxDetSimChannel>>"/>
+ <class name="art::Wrapper< std::vector<sim::OpDetBacktrackerRecord>>"/>
+ <class name="art::Wrapper< std::vector<sim::SupernovaTruth>>"/>
+ <class name="art::Wrapper< std::vector<sim::SimDriftedElectronCluster>>"/>
+ <class name="art::Wrapper< art::Assns<sim::SupernovaTruth, simb::MCTruth, void>>"/>
+ <class name="art::Wrapper< art::Assns<simb::MCTruth, sim::SupernovaTruth, void>>"/>
 
-<!-- <class name="ROOT::Math::Cartesian3D<float>" /> -->
+<!-- <class name="ROOT::Math::Cartesian3D<float>"/> -->
 <!-- <class name="ROOT::Math::PositionVector3D<ROOT::Math::Cartesian3D<float>,ROOT::Math::DefaultCoordinateSystemTag>"/> -->
 
  <ioread
@@ -123,14 +123,14 @@
   <!-- association: simb::MCParticle to simb::MCTruth, with metadata -->
   <!-- metadata: sim::GeneratedParticleInfo, used in `larg4::LArG4` -->
     <!-- simb::MCParticle -> simb::MCTruth -->
-  <class name="sim::GeneratedParticleInfo" />
-  <class name="std::vector<sim::GeneratedParticleInfo>" />
-  <class name="art::Assns<simb::MCParticle, simb::MCTruth, sim::GeneratedParticleInfo>" />
-  <class name="art::Wrapper<art::Assns<simb::MCParticle, simb::MCTruth, sim::GeneratedParticleInfo>>" />
+  <class name="sim::GeneratedParticleInfo"/>
+  <class name="std::vector<sim::GeneratedParticleInfo>"/>
+  <class name="art::Assns<simb::MCParticle, simb::MCTruth, sim::GeneratedParticleInfo>"/>
+  <class name="art::Wrapper<art::Assns<simb::MCParticle, simb::MCTruth, sim::GeneratedParticleInfo>>"/>
 
     <!-- simb::MCTruth -> simb::MCParticle -->
-  <class name="art::Assns<simb::MCTruth, simb::MCParticle, sim::GeneratedParticleInfo>" />
-  <class name="art::Wrapper<art::Assns<simb::MCTruth, simb::MCParticle, sim::GeneratedParticleInfo>>" />
+  <class name="art::Assns<simb::MCTruth, simb::MCParticle, sim::GeneratedParticleInfo>"/>
+  <class name="art::Wrapper<art::Assns<simb::MCTruth, simb::MCParticle, sim::GeneratedParticleInfo>>"/>
 
   <!-- end association: simb::MCParticle to simb::MCTruth, with metadata -->
 
