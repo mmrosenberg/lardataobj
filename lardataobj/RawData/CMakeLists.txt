@@ -8,5 +8,4 @@ cet_make( LIBRARIES larcoreobj_SummaryData
 art_dictionary( DICTIONARY_LIBRARIES lardataobj_RawData )
 
 install_headers()
-install_fhicl()
 install_source()

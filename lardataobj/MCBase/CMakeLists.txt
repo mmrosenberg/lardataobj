@@ -6,5 +6,4 @@ cet_make(LIBRARIES nusimdata_SimulationBase
 art_dictionary( DICTIONARY_LIBRARIES lardataobj_MCBase )
 
 install_headers()
-install_fhicl()
 install_source()
