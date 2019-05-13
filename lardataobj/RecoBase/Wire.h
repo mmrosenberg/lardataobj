@@ -35,27 +35,35 @@
 namespace recob {
 
   /**
-   * @brief Class holding the deconvoluted signals from a channel
+   * @brief Class holding the regions of interest of signal from a channel.
    * @note Despite the name, this class is associated to a readout channel, not
    *       just a wire
    *
    * The channel content is expected to have been filtered from noise and
-   * corrected for electronics response.
+   * corrected for electronics response, a process often called in jargon
+   * "deconvolution".
+   * 
    * The content is presented as calibrated ADC counts, pedestal removed, as
    * function of time in discrete TDC units. The time is expected to be the same
    * as for the `raw::RawDigit` that originates it, i.e. starting from
    * @ref DetectorClocksTPCelectronicsStartTime "TPC electronics start time"
    * (use `detinfo::DetectorClocks` to discover the exact extent of each tick).
+   * 
    * The content is organized as time intervals where some signal is present
-   * ("regions of interest", RoI), outside which we assume no signal, i.e,
-   * calibrated ADC counts of `0`.
-   * Strictly speaking, the definition of the regions of interest is a negative
-   * one: we first define where we are sure no signal is present; the rest will
-   * constitute regions of interest.
+   * ("regions of interest", RoI), outside which we assume no signal.
+   * By principle, the definition of the regions of interest is a negative one:
+   * we determine time intervals where we are confident no signal is present;
+   * the rest will constitute regions of interest where there _might_ be signal.
    * The identification of such regions is responsibility of the algorithm
-   * creating the Wire object. In the simple approach, the whole readout window
-   * is stored in a single region of interest, meaning that we don't claim any
-   * of the channel signal to be definitely signal free.
+   * creating the `Wire` object. In the simplest approach, the whole readout
+   * window is stored in a single region of interest, meaning that we don't
+   * claim any of the channel signal to be definitely signal free.
+   * More generally, the first tick of the waveform is #0, and if the first
+   * region of interest starts after that tick, it implies that the region
+   * between tick #0 and the start of that first region lacks signal.
+   * Likewise, any samples in the end of the covered time window (defined above)
+   * which lack signal are indicated by the overall size of the content, while
+   * the last region of interest ends earlier.
    *
    * Algorithms using the regions of interest can access the channel signal
    * information either ignoring the regions of interest, and being potentially
