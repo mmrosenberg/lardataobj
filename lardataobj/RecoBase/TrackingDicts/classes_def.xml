@@ -5,6 +5,7 @@
 <!--  Include art::Wrapper lines for objects that we would like to put into the event -->
 <!--  Include the non-wrapper lines for all objects on the art::Wrapper lines and     -->
 <!--  for all objects that are data members of those objects.                         -->
+<!--   recob::SpacePoint                                                              -->
 <!--   recob::Trajectory                                                              -->
 <!--   recob::TrackTrajectory                                                         -->
 <!--   recob::Track                                                                   -->
@@ -13,6 +14,25 @@
 
 
 <lcgdict>
+  <class name="vector<ROOT::Math::PositionVector3D<ROOT::Math::Cartesian3D<Double32_t>,ROOT::Math::GlobalCoordinateSystemTag>>"/>
+  <class name="vector<ROOT::Math::DisplacementVector3D<ROOT::Math::Cartesian3D<Double32_t>,ROOT::Math::GlobalCoordinateSystemTag>>"/>
+  <class name="std::vector<TMatrixT<double>>"/>
+  <class name="std::vector<TVector3>"/>
+
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+  <!-- recob::SpacePoint -->
+  <class name="recob::SpacePoint" ClassVersion="13">
+    <version ClassVersion="13" checksum="905613236"/>
+    <version ClassVersion="12" checksum="4256037352"/>
+  </class>
+  <class name="art::Ptr<recob::SpacePoint>"/>
+  <class name="art::PtrVector<recob::SpacePoint>"/>
+  <class name="std::vector< art::PtrVector<recob::SpacePoint>>"/>
+  <class name="std::vector<recob::SpacePoint>"/>
+  <class name="art::Wrapper< std::vector< recob::SpacePoint>>"/>
+  <class name="art::Wrapper< std::vector< art::PtrVector<recob::SpacePoint>>>"/>
+
+
   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
   <!-- recob::Trajectory -->
 
@@ -420,195 +440,6 @@
     target="fChisq">
     <![CDATA[
          fChisq = Double32_t(onfile.fChisq);
-    ]]>
-  </ioread>
-
-  <!-- recob::Vertex: schema evolution rules -->
-      <!-- version 15 -->
-  <ioread
-    version="[14]"
-    sourceClass="recob::Vertex"
-    source="ROOT::Math::PositionVector3D<ROOT::Math::Cartesian3D<double>,ROOT::Math::GlobalCoordinateSystemTag> pos_;"
-    targetClass="recob::Vertex"
-    target="pos_"
-    include="lardataobj/RecoBase/Vertex.h"
->
-    <![CDATA[
-         pos_ = recob::tracking::Point_t(onfile.pos_.X(), onfile.pos_.Y(), onfile.pos_.Z());
-    ]]>
-  </ioread>
-  <ioread
-    version="[13-14]"
-    sourceClass="recob::Vertex"
-    source="ROOT::Math::SMatrix<double,3,3,ROOT::Math::MatRepSym<double,3>> cov_;"
-    targetClass="recob::Vertex"
-    target="cov_"
-    include="lardataobj/RecoBase/Vertex.h"
->
-    <![CDATA[
-       for (size_t i=0; i<3; ++i)
-         for (size_t j=0; j<3; ++j)
-           cov_(i,j) = onfile.cov_(i,j);
-    ]]>
-  </ioread>
-
-      <!-- version 14 -->
-        <!-- * position -->
-  <ioread
-    version="[13]"
-    sourceClass="recob::Vertex"
-    source="ROOT::Math::PositionVector3D<ROOT::Math::Cartesian3D<double>,ROOT::Math::DefaultCoordinateSystemTag> pos_;"
-    targetClass="recob::Vertex"
-    target="pos_"
-    include="lardataobj/RecoBase/Vertex.h"
->
-    <![CDATA[
-         pos_ = recob::tracking::Point_t(onfile.pos_.X(), onfile.pos_.Y(), onfile.pos_.Z());
-    ]]>
-  </ioread>
-      <!-- version 13 -->
-        <!-- * position -->
-  <ioread
-    version="[-12]"
-    sourceClass="recob::Vertex"
-    source="double fXYZ[3];"
-    targetClass="recob::Vertex"
-    target="pos_"
-    include="lardataobj/RecoBase/Vertex.h">
-    <![CDATA[
-         pos_ = recob::tracking::Point_t(onfile.fXYZ[0],onfile.fXYZ[1],onfile.fXYZ[2]);
-    ]]>
-  </ioread>
-        <!-- * id -->
-  <ioread
-    version="[-12]"
-    sourceClass="recob::Vertex"
-    source="int fID;"
-    targetClass="recob::Vertex"
-    target="id_"
-    include="lardataobj/RecoBase/Vertex.h">
-    <![CDATA[
-         id_ = onfile.fID;
-    ]]>
-  </ioread>
-
-  <!-- recob::Slice: schema evolution rules -->
-      <!-- version 15 -->
-
-        <!-- * fCenter -->
-  <ioread
-    version="[-14]"
-    sourceClass="recob::Slice"
-    source="ROOT::Math::PositionVector3D<ROOT::Math::Cartesian3D<double>,ROOT::Math::DefaultCoordinateSystemTag> fCenter;"
-    targetClass="recob::Slice"
-    target="fCenter"
-    include="lardataobj/RecoBase/Slice.h"
->
-    <![CDATA[
-         fCenter = recob::tracking::Point_t(onfile.fCenter.X(), onfile.fCenter.Y(), onfile.fCenter.Z());
-    ]]>
-  </ioread>
-
-        <!-- * fEnd0Pos -->
-  <ioread
-    version="[-14]"
-    sourceClass="recob::Slice"
-    source="ROOT::Math::PositionVector3D<ROOT::Math::Cartesian3D<double>,ROOT::Math::DefaultCoordinateSystemTag> fEnd0Pos;"
-    targetClass="recob::Slice"
-    target="fEnd0Pos"
-    include="lardataobj/RecoBase/Slice.h"
->
-    <![CDATA[
-         fEnd0Pos = recob::tracking::Point_t(onfile.fEnd0Pos.X(), onfile.fEnd0Pos.Y(), onfile.fEnd0Pos.Z());
-    ]]>
-  </ioread>
-
-        <!-- * fEnd1Pos -->
-  <ioread
-    version="[-14]"
-    sourceClass="recob::Slice"
-    source="ROOT::Math::PositionVector3D<ROOT::Math::Cartesian3D<double>,ROOT::Math::DefaultCoordinateSystemTag> fEnd1Pos;"
-    targetClass="recob::Slice"
-    target="fEnd1Pos"
-    include="lardataobj/RecoBase/Slice.h"
->
-    <![CDATA[
-         fEnd1Pos = recob::tracking::Point_t(onfile.fEnd1Pos.X(), onfile.fEnd1Pos.Y(), onfile.fEnd1Pos.Z());
-    ]]>
-  </ioread>
-
-        <!-- * fDirection -->
-  <ioread
-    version="[-14]"
-    sourceClass="recob::Slice"
-    source="ROOT::Math::DisplacementVector3D<ROOT::Math::Cartesian3D<double>,ROOT::Math::DefaultCoordinateSystemTag> fDirection;"
-    targetClass="recob::Slice"
-    target="fDirection"
-    include="lardataobj/RecoBase/Slice.h"
->
-    <![CDATA[
-         fDirection = recob::tracking::Vector_t(onfile.fDirection.X(), onfile.fDirection.Y(), onfile.fDirection.Z());
-    ]]>
-  </ioread>
-
-  <!-- recob::TrackFitHitInfo: schema evolution rules -->
-      <!-- version 11 -->
-
-        <!-- * fHitMeas -->
-  <ioread
-    version="[10]"
-    sourceClass="recob::TrackFitHitInfo"
-    source="double fHitMeas;"
-    targetClass="recob::TrackFitHitInfo"
-    target="fHitMeas"
-    include="lardataobj/RecoBase/TrackFitHitInfo.h"
->
-    <![CDATA[
-         fHitMeas = float(onfile.fHitMeas);
-    ]]>
-  </ioread>
-
-        <!-- * fHitMeasErr2 -->
-  <ioread
-    version="[10]"
-    sourceClass="recob::TrackFitHitInfo"
-    source="double fHitMeasErr2;"
-    targetClass="recob::TrackFitHitInfo"
-    target="fHitMeasErr2"
-    include="lardataobj/RecoBase/TrackFitHitInfo.h"
->
-    <![CDATA[
-         fHitMeasErr2 = float(onfile.fHitMeasErr2);
-    ]]>
-  </ioread>
-
-        <!-- * fTrackStatePar -->
-  <ioread
-    version="[10]"
-    sourceClass="recob::TrackFitHitInfo"
-    source="ROOT::Math::SVector<double,5> fTrackStatePar;"
-    targetClass="recob::TrackFitHitInfo"
-    target="fTrackStatePar"
-    include="lardataobj/RecoBase/TrackFitHitInfo.h"
->
-    <![CDATA[
-       for (size_t i=0; i<5; ++i) fTrackStatePar(i) = onfile.fTrackStatePar(i);
-    ]]>
-  </ioread>
-
-        <!-- * fTrackStateCov -->
-  <ioread
-    version="[10]"
-    sourceClass="recob::TrackFitHitInfo"
-    source="ROOT::Math::SMatrix<double,5,5,ROOT::Math::MatRepSym<double,5>> fTrackStateCov;"
-    targetClass="recob::TrackFitHitInfo"
-    target="fTrackStateCov"
-    include="lardataobj/RecoBase/TrackFitHitInfo.h"
->
-    <![CDATA[
-       for (size_t i=0; i<5; ++i)
-         for (size_t j=0; j<5; ++j)
-           fTrackStateCov(i,j) = onfile.fTrackStateCov(i,j);
     ]]>
   </ioread>
 
