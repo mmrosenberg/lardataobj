@@ -15,7 +15,7 @@
 #include <iosfwd>
 
 #include "larcoreobj/SimpleTypesAndConstants/PhysicalConstants.h"
-#include <Rtypes.h>
+#include <RtypesCore.h>
 
 namespace recob {
 

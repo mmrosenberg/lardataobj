@@ -17,12 +17,9 @@
 // C/C++ standard libraries
 #include <array>
 #include <string>
-#include <stdexcept> // std::out_of_range
 #include <limits> // std::numeric_limits<>
 #include <utility> // std::forward(), std::declval()
 #include <iosfwd> // std::ostream
-#include <cstddef> // std::size_t
-
 
 namespace recob {
 

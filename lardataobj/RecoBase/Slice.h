@@ -9,8 +9,6 @@
 #ifndef RB_SLICE_H
 #define RB_SLICE_H
 
-
-#include <iosfwd>
 #include "lardataobj/RecoBase/TrackingTypes.h"
 
 namespace recob {

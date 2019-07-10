@@ -7,6 +7,8 @@
 
 #include "lardataobj/AnalysisBase/T0.h"
 
+#include <ostream>
+
 namespace anab{
 
   //----------------------------------------------------------------------

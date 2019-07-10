@@ -28,10 +28,10 @@
 #ifndef SimPhotons_h
 #define SimPhotons_h
 
-#include "TLorentzVector.h"
+#include "TVector3.h"
 
+#include <vector>
 #include <map>
-
 
 namespace sim
 {

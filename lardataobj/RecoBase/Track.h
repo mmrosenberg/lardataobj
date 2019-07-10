@@ -9,15 +9,12 @@
 #ifndef LARDATAOBJ_RECOBASE_TRACK_H
 #define LARDATAOBJ_RECOBASE_TRACK_H
 
-#include <vector>
-
-#include "TMatrixD.h"
-#include "TVector3.h"
 #include "lardataobj/RecoBase/TrackTrajectory.h"
-
-#include "larcoreobj/SimpleTypesAndConstants/geo_types.h"
+#include "lardataobj/RecoBase/TrackingTypes.h"
 #include "larcoreobj/SimpleTypesAndConstants/PhysicalConstants.h"
+
 #include <iosfwd>
+#include <stddef.h>
 
 namespace recob {
 

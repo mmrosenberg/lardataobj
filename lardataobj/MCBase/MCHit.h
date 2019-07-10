@@ -1,12 +1,8 @@
-
 #ifndef MCHIT_H
 #define MCHIT_H
 
 // C++ includes
-#include <iostream>
-#include <sstream>
-#include <algorithm>
-#include "lardataobj/MCBase/MCBaseException.h"
+#include <functional>
 #include "lardataobj/MCBase/MCLimits.h"
 
 namespace sim {

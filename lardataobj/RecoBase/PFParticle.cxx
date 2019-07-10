@@ -10,6 +10,7 @@
 
 #include <utility>
 #include <iomanip>
+#include <ostream>
 
 namespace recob{
 
@@ -53,4 +54,3 @@ namespace recob{
 
 
 }// namespace
-

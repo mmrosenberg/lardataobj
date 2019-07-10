@@ -8,19 +8,16 @@
  * This class uses only LArSoft libraries that are header only.
  */
 
-
 #ifndef LARDATAOBJ_SIMULATION_SIMCHANNEL_H
 #define LARDATAOBJ_SIMULATION_SIMCHANNEL_H
 
 // LArSoftObj libraries
-#include "larcoreobj/SimpleTypesAndConstants/geo_types.h"
 #include "larcoreobj/SimpleTypesAndConstants/RawTypes.h" // raw::ChannelID_t
 
 // C/C++ standard libraries
 #include <string>
 #include <vector>
 #include <utility> // std::pair
-
 
 namespace sim {
 

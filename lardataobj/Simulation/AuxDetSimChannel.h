@@ -12,11 +12,8 @@
 
 // C/C++ standard libraries
 #include <stdint.h> // C header (need to be compatible with Reflex)
+#include <utility>
 #include <vector>
-
-// LArSoft libraries
-#include "larcoreobj/SimpleTypesAndConstants/geo_types.h"
-
 
 namespace sim {
 

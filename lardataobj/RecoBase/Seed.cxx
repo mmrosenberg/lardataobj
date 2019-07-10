@@ -9,12 +9,10 @@
 ////////////////////////////////////////////////////////////////////////////
 #include "lardataobj/RecoBase/Seed.h"
 #include "lardataobj/RecoBase/SpacePoint.h"
-#include "TMath.h"
 #include "TVector3.h"
+
 #include <iostream>
 #include <stdlib.h>
-#include <algorithm>
-#include <cstdlib>
 
 namespace recob{
 

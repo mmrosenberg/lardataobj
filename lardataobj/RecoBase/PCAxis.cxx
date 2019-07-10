@@ -12,7 +12,7 @@
 #include "lardataobj/RecoBase/PCAxis.h"
 
 #include <iomanip>
-#include <iostream>
+#include <ostream>
 
 namespace recob
 {
@@ -79,4 +79,3 @@ bool operator < (const PCAxis& a, const PCAxis& b)
 }
 
 } // End of namespace
-

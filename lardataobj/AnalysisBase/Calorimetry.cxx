@@ -8,6 +8,9 @@
 #include "lardataobj/AnalysisBase/Calorimetry.h"
 #include "cetlib_except/exception.h"
 
+#include <iostream>
+#include <iomanip>
+
 namespace anab{
 
   //----------------------------------------------------------------------

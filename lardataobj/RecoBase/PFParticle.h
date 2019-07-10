@@ -9,8 +9,8 @@
 #ifndef Recob_PFParticle_H
 #define Recob_PFParticle_H
 
+#include <iosfwd>
 #include <vector>
-#include <ostream>
 #include <limits>
 
 namespace recob {

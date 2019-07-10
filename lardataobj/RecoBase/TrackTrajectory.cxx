@@ -9,8 +9,6 @@
 
 #include "lardataobj/RecoBase/TrackTrajectory.h"
 
-// LArSoft libraries
-
 // C/C++ standard libraries
 #include <ostream>
 #include <utility> // std::move()

@@ -7,6 +7,9 @@
 
 #include "lardataobj/AnalysisBase/CosmicTag.h"
 
+#include <iostream>
+#include <iomanip>
+
 namespace anab{
 
   //----------------------------------------------------------------------

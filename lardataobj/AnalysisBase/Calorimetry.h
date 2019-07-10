@@ -11,8 +11,6 @@
 
 #include <vector>
 #include <iosfwd>
-#include <iostream>
-#include <iomanip>
 
 #include "larcoreobj/SimpleTypesAndConstants/geo_types.h"
 #include "lardataobj/RecoBase/TrackingTypes.h"

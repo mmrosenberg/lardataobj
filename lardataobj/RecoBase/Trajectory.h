@@ -15,18 +15,12 @@
 #ifndef LARDATAOBJ_RECOBASE_TRAJECTORY_H
 #define LARDATAOBJ_RECOBASE_TRAJECTORY_H
 
-#include "TMatrixDfwd.h" // forward declarations for legacy interface
-
 #include "lardataobj/RecoBase/TrackingTypes.h"
 
 // C/C++ standard libraries
 #include <vector>
 #include <utility> // std::pair<>
 #include <iosfwd> // std::ostream
-
-
-// ROOT forward declarations (for legacy interface)
-class TVector3;
 
 namespace recob {
 

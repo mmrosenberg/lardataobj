@@ -9,7 +9,6 @@
 
 #include "lardataobj/RecoBase/Track.h"
 #include "lardataobj/RecoBase/TrackingPlane.h"
-#include "cetlib_except/exception.h"
 
 #include <iomanip>
 #include <iostream>

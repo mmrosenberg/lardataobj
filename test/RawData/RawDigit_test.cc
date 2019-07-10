@@ -34,7 +34,6 @@
 
 // LArSoft libraries
 #include "larcoreobj/SimpleTypesAndConstants/RawTypes.h" // raw::ChannelID_t
-#include "larcoreobj/SimpleTypesAndConstants/geo_types.h" // geo::View_t
 #include "lardataobj/RawData/raw.h"
 #include "lardataobj/RawData/RawDigit.h"
 

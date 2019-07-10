@@ -11,7 +11,6 @@
 #define RAWDATA_OPDETPULSE_H
 
 #include <vector>
-#include <iosfwd>
 
 ///Raw data description
 namespace raw {

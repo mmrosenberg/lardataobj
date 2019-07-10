@@ -23,8 +23,7 @@
 
 
 // C/C++ standard librraies
-#include <vector>
-# include <iosfwd>
+#include <iosfwd>
 
 // LArSoft libraries
 #include "larcoreobj/SimpleTypesAndConstants/geo_types.h" // geo::View_t, geo::SignalType, geo::WireID

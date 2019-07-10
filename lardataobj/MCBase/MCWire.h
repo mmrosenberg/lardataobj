@@ -1,10 +1,8 @@
-
 #ifndef MCWIRE_H
 #define MCWIRE_H
 
 // C++ includes
 #include <vector>
-#include <algorithm>
 #include <functional> // std::less
 #include "lardataobj/MCBase/MCLimits.h"
 

@@ -9,10 +9,7 @@
 #ifndef ANAB_FLASHMATCH_H
 #define ANAB_FLASHMATCH_H
 
-#include <vector>
 #include <iosfwd>
-#include <iostream>
-#include <iomanip>
 
 namespace anab {
 

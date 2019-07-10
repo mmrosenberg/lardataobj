@@ -8,11 +8,6 @@
 #ifndef EXTERNALTRIGGER_H
 #define EXTERNALTRIGGER_H
 
-#include <vector>
-#include <iosfwd>
-#include <time.h>
-#include <stdint.h>
-
 namespace raw {
 
   typedef long long TriggerTimeStamp_t; ///< type of trigger time stamp

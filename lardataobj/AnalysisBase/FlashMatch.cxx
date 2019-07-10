@@ -7,6 +7,8 @@
 
 #include "lardataobj/AnalysisBase/FlashMatch.h"
 
+#include <ostream>
+
 namespace anab{
 
   //----------------------------------------------------------------------

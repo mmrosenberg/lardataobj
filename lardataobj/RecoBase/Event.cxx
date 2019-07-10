@@ -8,14 +8,10 @@
 #include "lardataobj/RecoBase/Event.h"
 
 #include "larcoreobj/SimpleTypesAndConstants/PhysicalConstants.h"
-#include "lardataobj/RecoBase/Vertex.h"
-
 #include "messagefacility/MessageLogger/MessageLogger.h"
 
-#include "TMath.h"
-
 #include <iomanip>
-#include <iostream>
+#include <ostream>
 
 namespace recob{
 

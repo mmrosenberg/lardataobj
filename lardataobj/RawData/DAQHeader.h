@@ -12,8 +12,6 @@
 #ifndef DAQHEADER_H
 #define DAQHEADER_H
 
-#include <vector>
-#include <iosfwd>
 #include <time.h>
 #include <stdint.h>
 

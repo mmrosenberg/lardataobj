@@ -12,8 +12,6 @@
 // C/C++ standard library
 #include <iomanip>
 #include <ostream>
-#include <utility> // std::move()
-
 
 namespace recob {
 

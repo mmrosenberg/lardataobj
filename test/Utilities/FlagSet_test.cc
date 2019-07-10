@@ -25,18 +25,10 @@
 #include "lardataobj/Utilities/FlagSet.h"
 
 // C/C++ standard library
-#include <stdexcept> // std::exception
 #include <set>
 #include <array>
-#include <iterator> // std::inserter()
 #include <algorithm> // std::copy()
 #include <iostream> // std::cout
-
-template <typename T>
-struct PrintTypeAsError;
-
-template <unsigned int N>
-class PrintIntAsError;
 
 //------------------------------------------------------------------------------
 

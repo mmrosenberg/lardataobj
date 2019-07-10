@@ -9,10 +9,7 @@
 #ifndef ANAB_T0_H
 #define ANAB_T0_H
 
-#include <vector>
 #include <iosfwd>
-#include <iostream>
-#include <iomanip>
 
 namespace anab {
 

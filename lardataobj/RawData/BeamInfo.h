@@ -5,7 +5,7 @@
 #ifndef RAWDATA_BEAMINFO_H
 #define RAWDATA_BEAMINFO_H
 
-#include <iostream>
+#include <iosfwd>
 #include <map>
 #include <string>
 #include <vector>

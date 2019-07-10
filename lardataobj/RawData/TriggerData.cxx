@@ -1,5 +1,7 @@
 #include "TriggerData.h"
 
+#include <stdexcept>
+
 namespace raw {
 
   //****************************************************
@@ -9,7 +11,6 @@ namespace raw {
 
     if(bit>32) {
       throw std::invalid_argument("\n\nCannot access bit higher than 32!\n");
-      std::exit(1);
     }
 
     return ( (fTriggerBits >> bit) & 0x1);

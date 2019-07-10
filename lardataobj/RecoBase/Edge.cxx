@@ -11,8 +11,8 @@
 
 // C/C++ standard libraries
 #include <iomanip>
-#include <iostream>
 #include <cmath> // std::sqrt()
+#include <ostream>
 
 namespace {
 
@@ -66,4 +66,3 @@ std::ostream& operator<< (std::ostream & o, const Edge & a)
 }
 
 } // End of namespace
-

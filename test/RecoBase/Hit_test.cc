@@ -15,7 +15,6 @@
  */
 
 // C/C++ standard library
-#include <algorithm> // std::equal(), std::accumulate()
 #include <numeric> // std::accumulate
 
 // Boost libraries

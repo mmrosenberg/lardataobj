@@ -7,6 +7,8 @@
 
 #include "lardataobj/AnalysisBase/ParticleID.h"
 
+#include <ostream>
+
 namespace anab{
 
   //----------------------------------------------------------------------

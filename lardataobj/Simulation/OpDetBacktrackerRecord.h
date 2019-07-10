@@ -8,12 +8,8 @@
  * This class uses only LArSoft libraries that are header only.
  */
 
-
 #ifndef LARSIMOBJ_SIMULATION_OPDETBACKTRACKERRECORD_H
 #define LARSIMOBJ_SIMULATION_OPDETBACKTRACKERRECORD_H
-
-// LArSoftObj libraries
-#include "larcoreobj/SimpleTypesAndConstants/geo_types.h"
 
 // C/C++ standard libraries
 #include <string>

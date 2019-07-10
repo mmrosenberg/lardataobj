@@ -3,13 +3,10 @@
 // \author  kinga.partyka@yale.edu
 ////////////////////////////////////////////////////////////////////
 
-#include <iostream>
-#include <fstream>
 #include "lardataobj/RawData/BeamInfo.h"
-#include <string.h>
-#include <time.h>
-#include <cmath>
-#include <iomanip>
+
+#include <ostream>
+#include <string>
 
 namespace raw{
 
@@ -138,10 +135,3 @@ namespace raw{
     return os;
   }
 }// namespace
-
-
-
-
-
-
-

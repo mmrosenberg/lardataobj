@@ -3,10 +3,9 @@
 #define TRIGGERDATA_H
 
 // C++ includes
-#include <vector>
+#include <stdint.h>
 #include <limits>
-#include <stdexcept>
-#include <iostream>
+
 namespace raw {
 
   class Trigger {

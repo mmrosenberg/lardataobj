@@ -12,10 +12,10 @@
 #define LARDATAOBJ_UTILITIES_LAZYVECTOR_H
 
 // C/C++ standard libraries
+#include <algorithm>
 #include <vector>
 #include <string> // std::to_string()
 #include <stdexcept> // std::out_of_range
-#include <type_traits> // std::enable_if_t, std::is_arithmetic_v
 #include <cassert>
 
 

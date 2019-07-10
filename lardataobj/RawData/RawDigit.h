@@ -23,10 +23,8 @@
 #define RAWDATA_RAWDIGIT_H
 
 // C/C++ standard libraries
-#include <stdint.h> // uint32_t
 #include <cstdlib> // size_t
 #include <vector>
-// #include <bitset>
 
 // LArSoft libraries
 #include "larcoreobj/SimpleTypesAndConstants/RawTypes.h" // raw::Compress_t, raw::Channel_t

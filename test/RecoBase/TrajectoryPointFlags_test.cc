@@ -31,7 +31,6 @@
 #include "lardataobj/RecoBase/TrajectoryPointFlags.h"
 
 // C/C++ standard library
-#include <stdexcept> // std::out_of_range
 #include <set>
 #include <iostream> // std::cout
 
@@ -457,4 +456,3 @@ BOOST_AUTO_TEST_CASE(TrajectoryPointFlagsDocumentationTestCase) {
   TrajectoryPointFlagsDocumentationTest();
 
 } // BOOST_AUTO_TEST_CASE(TrajectoryPointFlagsDocumentationTestCase)
-

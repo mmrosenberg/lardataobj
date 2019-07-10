@@ -11,10 +11,9 @@
 
 #include "cetlib_except/exception.h"
 #include <iosfwd>
-#include <iostream>
-#include <iomanip>
 
 #include <array>
+#include <string>
 #include <vector>
 
 namespace anab {
@@ -170,4 +169,3 @@ using FVecDescription = MVADescription<N>;
 } // namespace anab
 
 #endif //ANAB_FEATUREVECTORS
-

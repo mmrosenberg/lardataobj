@@ -16,7 +16,6 @@
 #include <boost/test/test_tools.hpp> // BOOST_CHECK()
 
 // C/C++ standard libraries
-#include <iostream>
 #include <stdexcept> // std::out_of_range
 
 
@@ -513,5 +512,3 @@ BOOST_AUTO_TEST_CASE(LazyVectorTestCase) {
   TestLazyVector_documentation_constructor_size();
 
 } // BOOST_AUTO_TEST_CASE(LazyVectorTestCase)
-
-
