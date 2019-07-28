@@ -88,7 +88,8 @@ namespace sim{
     // the lower bound is different from the given TimePDclock, in which case
     // we need to add something for that TimePDclock
     if(itr        == timePDclockSDPs.end() ||
-       itr->first != iTimePDclock){
+      (abs(itr->first - iTimePDclock) > .50 )){
+       //itr->first != iTimePDclock){
       std::vector<sim::SDP> sdplist;
       sdplist.emplace_back(trackID,
                            numberPhotons,
@@ -97,7 +98,7 @@ namespace sim{
                            xyz[1],
                            xyz[2]
                            );
-      timePDclockSDPs.emplace(itr, iTimePDclock, std::move(sdplist) );
+      timePDclockSDPs.emplace(itr, std::round(iTimePDclock), std::move(sdplist) );
     }
     else { // we have that iTimePDclock already; itr points to it
 
