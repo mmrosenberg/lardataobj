@@ -1,11 +1,12 @@
-cet_make( LIBRARIES larcoreobj_SummaryData
-		    canvas
-		    MF_MessageLogger
-                   cetlib_except
-                   ${ROOT_CORE}
-                    NO_DICTIONARY )
+cet_make(NO_DICTIONARY
+         LIBRARIES
+           larcoreobj_SummaryData
+           canvas
+           MF_MessageLogger
+           cetlib_except
+           ${ROOT_CORE})
 
-art_dictionary( DICTIONARY_LIBRARIES lardataobj_RawData )
+art_dictionary(DICTIONARY_LIBRARIES lardataobj_RawData)
 
 install_headers()
 install_source()
