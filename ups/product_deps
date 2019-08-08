@@ -13,11 +13,15 @@ nusimdata	v1_17_02
 cetbuildtools	v7_12_01	-	only_for_build
 end_product_list
 
-qualifier       larcoreobj  larcorealg    nusimdata	notes
-e17:debug       e17:debug   e17:debug     e17:debug
-e17:prof        e17:prof    e17:prof      e17:prof
-c2:debug        c2:debug    c2:debug      c2:debug
-c2:prof         c2:prof     c2:prof       c2:prof
+qualifier       larcoreobj    larcorealg    nusimdata
+e17:py3:debug   e17:py3:debug e17:py3:debug e17:py3:debug
+e17:py3:prof    e17:py3:prof  e17:py3:prof  e17:py3:prof
+c2:py3:debug    c2:py3:debug  c2:py3:debug  c2:py3:debug
+c2:py3:prof     c2:py3:prof   c2:py3:prof   c2:py3:prof
+e17:debug       e17:debug     e17:debug     e17:debug
+e17:prof        e17:prof      e17:prof      e17:prof
+c2:debug        c2:debug      c2:debug      c2:debug
+c2:prof         c2:prof       c2:prof       c2:prof
 end_qualifier_list
 
 # Preserve tabs and formatting in emacs and vi / vim:
