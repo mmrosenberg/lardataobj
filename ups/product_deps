@@ -1,23 +1,27 @@
 # The parent line must be the first non-comment line in the file
 # This line defines the product name and version
-parent	lardataobj	v08_04_07
+parent	lardataobj	v08_04_08
 defaultqual	e17
 #
 fcldir product_dir job
 #
 product         version
-larcoreobj	v08_05_01
-larcorealg	v08_14_00
-nusimdata	v1_17_01
+larcoreobj	v08_05_02
+larcorealg	v08_14_01
+nusimdata	v1_17_02
 
 cetbuildtools	v7_12_01	-	only_for_build
 end_product_list
 
-qualifier       larcoreobj  larcorealg    nusimdata	notes
-e17:debug       e17:debug   e17:debug     e17:debug
-e17:prof        e17:prof    e17:prof      e17:prof
-c2:debug        c2:debug    c2:debug      c2:debug
-c2:prof         c2:prof     c2:prof       c2:prof
+qualifier       larcoreobj    larcorealg    nusimdata
+e17:py3:debug   e17:py3:debug e17:py3:debug e17:py3:debug
+e17:py3:prof    e17:py3:prof  e17:py3:prof  e17:py3:prof
+c2:py3:debug    c2:py3:debug  c2:py3:debug  c2:py3:debug
+c2:py3:prof     c2:py3:prof   c2:py3:prof   c2:py3:prof
+e17:debug       e17:debug     e17:debug     e17:debug
+e17:prof        e17:prof      e17:prof      e17:prof
+c2:debug        c2:debug      c2:debug      c2:debug
+c2:prof         c2:prof       c2:prof       c2:prof
 end_qualifier_list
 
 # Preserve tabs and formatting in emacs and vi / vim:
