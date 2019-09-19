@@ -43,71 +43,6 @@
    <version ClassVersion="10" checksum="3286658271"/>
   </class>
 
-    <!-- schema evolution rules -->
-      <!-- version 12 -->
-        <!-- * positions -->
-  <ioread
-    version="[11]"
-    sourceClass="recob::Trajectory"
-    source="std::vector<ROOT::Math::PositionVector3D<ROOT::Math::Cartesian3D<double>, ROOT::Math::GlobalCoordinateSystemTag>> fPositions;"
-    targetClass="recob::Trajectory"
-    target="fPositions"
-    include="Math/GenVector/CoordinateSystemTags.h;Math/GenVector/Cartesian3D.h;Math/GenVector/PositionVector3D.h">
-    <![CDATA[
-      fPositions.clear();
-      fPositions.reserve(onfile.fPositions.size());
-      for (auto const& point: onfile.fPositions)
-        fPositions.emplace_back(point.X(), point.Y(), point.Z());
-    ]]>
-  </ioread>
-        <!-- * momenta -->
-  <ioread
-    version="[11]"
-    sourceClass="recob::Trajectory"
-    source="std::vector<ROOT::Math::DisplacementVector3D<ROOT::Math::Cartesian3D<double>, ROOT::Math::GlobalCoordinateSystemTag>> fMomenta;"
-    targetClass="recob::Trajectory"
-    target="fMomenta"
-    include="Math/GenVector/CoordinateSystemTags.h;Math/GenVector/Cartesian3D.h;Math/GenVector/DisplacementVector3D.h">
-    <![CDATA[
-      fMomenta.clear();
-      fMomenta.reserve(onfile.fMomenta.size());
-      for (auto const& mom: onfile.fMomenta)
-        fMomenta.emplace_back(mom.X(), mom.Y(), mom.Z());
-    ]]>
-  </ioread>
-
-      <!-- version 11 -->
-        <!-- * positions -->
-  <ioread
-    version="[-10]"
-    sourceClass="recob::Trajectory"
-    source="std::vector<ROOT::Math::PositionVector3D<ROOT::Math::Cartesian3D<double>, ROOT::Math::DefaultCoordinateSystemTag>> fPositions;"
-    targetClass="recob::Trajectory"
-    target="fPositions"
-    include="Math/GenVector/CoordinateSystemTags.h;Math/GenVector/Cartesian3D.h;Math/GenVector/PositionVector3D.h">
-    <![CDATA[
-      fPositions.clear();
-      fPositions.reserve(onfile.fPositions.size());
-      for (auto const& point: onfile.fPositions)
-        fPositions.emplace_back(point.X(), point.Y(), point.Z());
-    ]]>
-  </ioread>
-        <!-- * momenta -->
-  <ioread
-    version="[-10]"
-    sourceClass="recob::Trajectory"
-    source="std::vector<ROOT::Math::DisplacementVector3D<ROOT::Math::Cartesian3D<double>, ROOT::Math::DefaultCoordinateSystemTag>> fMomenta;"
-    targetClass="recob::Trajectory"
-    target="fMomenta"
-    include="Math/GenVector/CoordinateSystemTags.h;Math/GenVector/Cartesian3D.h;Math/GenVector/DisplacementVector3D.h">
-    <![CDATA[
-      fMomenta.clear();
-      fMomenta.reserve(onfile.fMomenta.size());
-      for (auto const& mom: onfile.fMomenta)
-        fMomenta.emplace_back(mom.X(), mom.Y(), mom.Z());
-    ]]>
-  </ioread>
-
     <!-- art pointers and wrappers -->
   <class name="art::Ptr<recob::Trajectory>"/>
   <class name="std::vector<recob::Trajectory>"/>
@@ -266,36 +201,6 @@
   </class>
 
     <!-- schema evolution rules -->
-      <!-- version 16 -->
-        <!-- * covariance at start -->
-  <ioread
-    version="[15]"
-    sourceClass="recob::Track"
-    source="ROOT::Math::SMatrix<double,5,5,ROOT::Math::MatRepSym<double,5>> fCovVertex;"
-    targetClass="recob::Track"
-    target="fCovVertex"
-    include="lardataobj/RecoBase/Track.h">
-    <![CDATA[
-       for (size_t i=0; i<5; ++i)
-         for (size_t j=0; j<5; ++j)
-           fCovVertex(i,j) = onfile.fCovVertex(i,j);
-    ]]>
-  </ioread>
-        <!-- * covariance at end -->
-  <ioread
-    version="[15]"
-    sourceClass="recob::Track"
-    source="ROOT::Math::SMatrix<double,5,5,ROOT::Math::MatRepSym<double,5>> fCovEnd;"
-    targetClass="recob::Track"
-    target="fCovEnd"
-    include="lardataobj/RecoBase/Track.h">
-    <![CDATA[
-       for (size_t i=0; i<5; ++i)
-         for (size_t j=0; j<5; ++j)
-           fCovEnd(i,j) = onfile.fCovEnd(i,j);
-    ]]>
-  </ioread>
-
       <!-- version 15 -->
         <!-- * trajectory -->
   <ioread
@@ -366,80 +271,6 @@
         recob::TrackTrajectory::Flags_t(size),
         hasMom
         );
-    ]]>
-  </ioread>
-        <!-- * covariance at start -->
-  <ioread
-    version="[-14]"
-    sourceClass="recob::Track"
-    source="std::vector<TMatrixD> fCov"
-    targetClass="recob::Track"
-    target="fCovVertex"
-    include="lardataobj/RecoBase/Track.h;TMatrixD.h">
-    <![CDATA[
-      if (onfile.fCov.size() == 2) {
-        // we copy the upper triangle only
-        for (unsigned int i = 0; i < 5; ++i) {
-          for (unsigned int j = i; j < 5; ++j) {
-            fCovVertex(i,j) = onfile.fCov[0](i,j);
-          } // for j
-        } // for i
-      } // if
-    ]]>
-  </ioread>
-        <!-- * covariance at end -->
-  <ioread
-    version="[-14]"
-    sourceClass="recob::Track"
-    source="std::vector<TMatrixD> fCov"
-    targetClass="recob::Track"
-    target="fCovEnd"
-    include="lardataobj/RecoBase/Track.h;TMatrixD.h">
-    <![CDATA[
-      if (onfile.fCov.size() == 2) {
-        // we copy the upper triangle only
-        for (unsigned int i = 0; i < 5; ++i) {
-          for (unsigned int j = i; j < 5; ++j) {
-            fCovEnd(i,j)    = onfile.fCov[1](i,j);
-          } // for j
-        } // for i
-      } // if
-    ]]>
-  </ioread>
-
-  <!-- recob::SpacePoint: schema evolution rules -->
-      <!-- version 13 -->
-        <!-- * fXYZ -->
-  <ioread
-    version="[12]"
-    sourceClass="recob::SpacePoint"
-    source="double fXYZ[3];"
-    targetClass="recob::SpacePoint"
-    target="fXYZ">
-    <![CDATA[
-         for (size_t i=0;i<3;++i) fXYZ[i] = Double32_t(onfile.fXYZ[i]);
-    ]]>
-  </ioread>
-        <!-- * fErrXYZ -->
-  <ioread
-    version="[12]"
-    sourceClass="recob::SpacePoint"
-    source="double fErrXYZ[6];"
-    targetClass="recob::SpacePoint"
-    target="fErrXYZ">
-    <![CDATA[
-         for (size_t i=0;i<6;++i) fErrXYZ[i] = Double32_t(onfile.fErrXYZ[i]);
-    ]]>
-  </ioread>
-        <!-- * fChisq -->
-  <ioread
-    version="[12]"
-    sourceClass="recob::SpacePoint"
-    source="double fChisq;"
-    targetClass="recob::SpacePoint"
-    target="fChisq">
-    <![CDATA[
-         fChisq = Double32_t(onfile.fChisq);
     ]]>
   </ioread>
 
