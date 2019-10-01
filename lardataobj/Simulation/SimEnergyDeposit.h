@@ -65,7 +65,10 @@ namespace sim
     //                             pdgCode);
 
     SimEnergyDeposit(int np = 0,
+             int nfp = 0,
+             int nsp = 0,
 		     int ne = 0,
+		     double sy = 0,
 		     double e = 0.,
 		     geo::Point_t start = {0.,0.,0.},
 		     geo::Point_t end = {0.,0.,0.},
@@ -74,7 +77,10 @@ namespace sim
 		     int id = 0,
 		     int pdg = 0)
       : numPhotons(np)
+      , numFPhotons(nfp)
+      , numSPhotons(nsp)
       , numElectrons(ne)
+      , sintillationYield(sy)
       , edep(e)
       , startPos(start)
       , endPos(end)
@@ -82,7 +88,8 @@ namespace sim
       , endTime(t1)
       , trackID(id)
       , pdgCode(pdg)
-    {}
+    {
+    }
 
 
     // Note that even if we store a value as float, we return
@@ -90,7 +97,10 @@ namespace sim
     // precision issues.
 
     int NumPhotons() const { return numPhotons; }
+    int NumFPhotons() const { return numFPhotons; }
+    int NumSPhotons() const { return numSPhotons; }
     int NumElectrons() const { return numElectrons; }
+    double ScintillationYield() const { return sintillationYield;}
     double Energy() const { return edep; }
     geo::Point_t Start() const { return { startPos.X(), startPos.Y(), startPos.Z() }; }
     geo::Point_t End() const { return { endPos.X(), endPos.Y(), endPos.Z() }; }
@@ -177,7 +187,10 @@ namespace sim
     // won't suffer due to lack of precision.
 
     int           numPhotons;   //< of scintillation photons
+    int           numFPhotons;   //< of fast scintillation photons
+    int           numSPhotons;   //< of slow scintillation photons
     int           numElectrons; //< of ionization electrons
+    float         sintillationYield; // scintillation yield of LAr
     float         edep;         //< energy deposition (MeV)
     geo::Point_t       startPos;     //< positions in (cm)
     geo::Point_t       endPos;
