@@ -16,7 +16,8 @@
 <class name="sim::AuxDetHit" ClassVersion="10">
  <version ClassVersion="10" checksum="949448658"/>
  </class>
- <class name="sim::SimEnergyDeposit" ClassVersion="18">
+ <class name="sim::SimEnergyDeposit" ClassVersion="19">
+  <version ClassVersion="19" checksum="4242847517"/>
   <version ClassVersion="18" checksum="1568424822"/>
   <version ClassVersion="17" checksum="51950964"/>
   <version ClassVersion="16" checksum="2652853768"/>
