@@ -41,6 +41,8 @@
 // C++ includes
 #include <iostream>
 #include <vector>
+#include <stdio.h>
+
 namespace sim
 {
   class SimEnergyDeposit
@@ -65,8 +67,8 @@ namespace sim
     //                             pdgCode);
 
     SimEnergyDeposit(int np = 0,
-             int nfp = 0,
-             int nsp = 0,
+//             int nfp = 0,
+//             int nsp = 0,
 		     int ne = 0,
 		     double sy = 0,
 		     double e = 0.,
@@ -77,10 +79,10 @@ namespace sim
 		     int id = 0,
 		     int pdg = 0)
       : numPhotons(np)
-      , numFPhotons(nfp)
-      , numSPhotons(nsp)
+//      , numFPhotons(nfp)
+//      , numSPhotons(nsp)
       , numElectrons(ne)
-      , sintillationYield(sy)
+      , scintYieldRatio(sy)
       , edep(e)
       , startPos(start)
       , endPos(end)
@@ -97,10 +99,10 @@ namespace sim
     // precision issues.
 
     int NumPhotons() const { return numPhotons; }
-    int NumFPhotons() const { return numFPhotons; }
-    int NumSPhotons() const { return numSPhotons; }
+    int NumFPhotons() const { return round(numPhotons * scintYieldRatio); }
+    int NumSPhotons() const { return round(numPhotons * (1.0 - scintYieldRatio)); }
     int NumElectrons() const { return numElectrons; }
-    double ScintillationYield() const { return sintillationYield;}
+    double ScintYieldRatio() const { return scintYieldRatio;}
     double Energy() const { return edep; }
     geo::Point_t Start() const { return { startPos.X(), startPos.Y(), startPos.Z() }; }
     geo::Point_t End() const { return { endPos.X(), endPos.Y(), endPos.Z() }; }
@@ -186,12 +188,12 @@ namespace sim
     // will take care of that, but let's make sure that any overlay studies
     // won't suffer due to lack of precision.
 
-    int           numPhotons;   //< of scintillation photons
-    int           numFPhotons;   //< of fast scintillation photons
-    int           numSPhotons;   //< of slow scintillation photons
-    int           numElectrons; //< of ionization electrons
-    float         sintillationYield; // scintillation yield of LAr
-    float         edep;         //< energy deposition (MeV)
+    int           numPhotons;      //< of scintillation photons
+//    int           numFPhotons;     //< of fast scintillation photons
+//    int           numSPhotons;     //< of slow scintillation photons
+    int           numElectrons;    //< of ionization electrons
+    float         scintYieldRatio; //< scintillation yield of LAr
+    float         edep;            //< energy deposition (MeV)
     geo::Point_t       startPos;     //< positions in (cm)
     geo::Point_t       endPos;
     double        startTime;    //< (ns)
