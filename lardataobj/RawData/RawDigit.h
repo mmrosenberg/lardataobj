@@ -29,6 +29,9 @@
 // LArSoft libraries
 #include "larcoreobj/SimpleTypesAndConstants/RawTypes.h" // raw::Compress_t, raw::Channel_t
 
+// ROOT includes
+#include "RtypesCore.h"
+
 
 /// Raw data description and utilities
 namespace raw {
@@ -100,7 +103,7 @@ namespace raw {
      * Pedestal is set to 0 by default.
      */
     RawDigit(ChannelID_t        channel,
-             unsigned short     samples,
+             ULong64_t          samples,
              ADCvector_t const& adclist,
              raw::Compress_t    compression = raw::kNone /*,
              const Flags_t&     flags = DefaultFlags */
@@ -117,7 +120,7 @@ namespace raw {
      * Pedestal is set to 0 by default.
      */
     RawDigit(ChannelID_t        channel,
-             unsigned short     samples,
+             ULong64_t          samples,
              ADCvector_t&&      adclist,
              raw::Compress_t    compression = raw::kNone /*,
              const Flags_t&     flags = DefaultFlags */
@@ -142,7 +145,7 @@ namespace raw {
     ChannelID_t     Channel()     const;
 
     /// Number of samples in the uncompressed ADC data
-    unsigned short  Samples()     const;
+    ULong64_t       Samples()     const;
 
     /// Pedestal level (ADC counts)
     /// @deprecated Might be removed soon
@@ -180,7 +183,7 @@ namespace raw {
     std::vector<short> fADC;      ///< ADC readout per tick, before pedestal subtraction
 
     ChannelID_t     fChannel;     ///< channel number in the readout
-    unsigned short  fSamples;     ///< number of ticks of the clock
+    ULong64_t       fSamples;     ///< number of ticks of the clock
 
     float           fPedestal;    ///< pedestal for this channel
     float           fSigma;       ///< sigma of the pedestal counts for this channel
@@ -207,7 +210,7 @@ inline const raw::RawDigit::ADCvector_t&
                        raw::RawDigit::ADCs()        const { return fADC;         }
 inline raw::ChannelID_t
                        raw::RawDigit::Channel()     const { return fChannel;     }
-inline unsigned short  raw::RawDigit::Samples()     const { return fSamples;     }
+inline ULong64_t       raw::RawDigit::Samples()     const { return fSamples;     }
 inline float           raw::RawDigit::GetPedestal() const { return fPedestal;    }
 inline float           raw::RawDigit::GetSigma()    const { return fSigma;       }
 inline raw::Compress_t raw::RawDigit::Compression() const { return fCompression; }
