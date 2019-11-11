@@ -19,10 +19,11 @@
   <version ClassVersion="13" checksum="786471469"/>
   <version ClassVersion="12" checksum="4132299299"/>
  </class>
- <class name="raw::RawDigit   	  " ClassVersion="14">
+ <class name="raw::RawDigit   	  " ClassVersion="15">
   <version ClassVersion="12" checksum="160151695"/>
   <version ClassVersion="13" checksum="412021819"/>
   <version ClassVersion="14" checksum="3868251406"/>
+  <version ClassVersion="15" checksum="2269849077"/>
  </class>
  <class name="raw::AuxDetDigit	  " ClassVersion="13">
   <version ClassVersion="13" checksum="3822054512"/>
@@ -92,6 +93,16 @@
     target="fChannel" 
     include="lardataobj/RawData/RawDigit.h">
     <![CDATA[fChannel = onfile.fChannel;]]>
+</ioread> 
+
+ <ioread 
+    version="[-14]" 
+    sourceClass="raw::RawDigit" 
+    source="unsigned short fSamples" 
+    targetClass="raw::RawDigit" 
+    target="fSamples" 
+    include="lardataobj/RawData/RawDigit.h">
+    <![CDATA[fSamples = onfile.fSamples;]]>
 </ioread> 
 
  <ioread 

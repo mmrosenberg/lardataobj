@@ -31,7 +31,7 @@ namespace raw{
   //----------------------------------------------------------------------
   RawDigit::RawDigit(
     ChannelID_t                  channel,
-    unsigned short               samples,
+    ULong64_t                    samples,
     ADCvector_t const&           adclist,
     Compress_t                   compression /* = kNone */ /*,
     const Flags_t&               flags / * = DefaultFlags * / */
@@ -49,7 +49,7 @@ namespace raw{
   //----------------------------------------------------------------------
   RawDigit::RawDigit(
     ChannelID_t             channel,
-    unsigned short          samples,
+    ULong64_t               samples,
     ADCvector_t&&           adclist,
     Compress_t              compression /* = kNone */ /*,
     const Flags_t&          flags / * = DefaultFlags * / */
