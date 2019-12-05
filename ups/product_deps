@@ -8,18 +8,26 @@ fcldir product_dir job
 product         version
 larcoreobj	v08_07_00
 larcorealg	v08_17_01
-nusimdata	v1_20_00
+nusimdata	v1_20_01
 
 cetbuildtools	v7_14_00	-	only_for_build
 end_product_list
 
 qualifier       larcoreobj    larcorealg    nusimdata
+e19:py3:debug   e19:py3:debug e19:py3:debug e19:py3:debug
+e19:py3:prof    e19:py3:prof  e19:py3:prof  e19:py3:prof
+e19:debug       e19:debug     e19:debug     e19:debug
+e19:prof        e19:prof      e19:prof      e19:prof
 e17:py3:debug   e17:py3:debug e17:py3:debug e17:py3:debug
 e17:py3:prof    e17:py3:prof  e17:py3:prof  e17:py3:prof
-c2:py3:debug    c2:py3:debug  c2:py3:debug  c2:py3:debug
-c2:py3:prof     c2:py3:prof   c2:py3:prof   c2:py3:prof
 e17:debug       e17:debug     e17:debug     e17:debug
 e17:prof        e17:prof      e17:prof      e17:prof
+c7:py3:debug    c7:py3:debug  c7:py3:debug  c7:py3:debug
+c7:py3:prof     c7:py3:prof   c7:py3:prof   c7:py3:prof
+c7:debug        c7:debug      c7:debug      c7:debug
+c7:prof         c7:prof       c7:prof       c7:prof
+c2:py3:debug    c2:py3:debug  c2:py3:debug  c2:py3:debug
+c2:py3:prof     c2:py3:prof   c2:py3:prof   c2:py3:prof
 c2:debug        c2:debug      c2:debug      c2:debug
 c2:prof         c2:prof       c2:prof       c2:prof
 end_qualifier_list
