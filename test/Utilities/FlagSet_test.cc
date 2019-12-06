@@ -354,7 +354,7 @@ void BitMaskDocTest_ConstructorFromValues1() {
 
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   using MyMask_t = util::flags::BitMask<unsigned int>;
-  constexpr MyMask_t DefaultMask(MyMask_t::fromValues, 0x0300U);
+  constexpr MyMask_t DefaultMask [[maybe_unused]] (MyMask_t::fromValues, 0x0300U);
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 } // BitMaskDocTest_ConstructorFromValues1()
@@ -364,7 +364,7 @@ void BitMaskDocTest_ConstructorFromValues2() {
 
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   using MyMask_t = util::flags::BitMask<unsigned int>;
-  constexpr MyMask_t DefaultMask(MyMask_t::fromValues, 0x0300U, 0x0200U);
+  constexpr MyMask_t DefaultMask [[maybe_unused]] (MyMask_t::fromValues, 0x0300U, 0x0200U);
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 } // BitMaskDocTest_ConstructorFromValues2()
