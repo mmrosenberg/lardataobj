@@ -420,7 +420,7 @@ namespace actions {
             << v[position] << " is within range " << range_str
             << std::endl;
         }
-        catch (std::out_of_range) {
+        catch (std::out_of_range const&) {
           std::cout << "   no range at position " << position << std::endl;
         }
       }
