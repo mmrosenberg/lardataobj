@@ -6,12 +6,30 @@
 <!--  Include the non-wrapper lines for all objects on the art::Wrapper lines and     -->
 <!--  for all objects that are data members of those objects.                         -->
 
+<!--  Special for the associations: each association must include its wrapper          -->
+<!--  and its pair, and all three of them (association, wrapper and pair of Ptr) need  -->
+<!--  to be specified for both directions. The full list is then:                      -->
+<!--                                                                                   -->
+<!--  std::pair<art::Ptr<A>, art::Ptr<B>>                                              -->
+<!--  std::pair<art::Ptr<B>, art::Ptr<A>>                                              -->
+<!--  art::Assns<A, B, void>                                                           -->
+<!--  art::Assns<B, A, void>                                                           -->
+<!--  art::Wrapper<art::Assns<A, B, void>>                                             -->
+<!--  art::Wrapper<art::Assns<B, A, void>>                                             -->
+<!--                                                                                   -->
+<!--  where `void` is the metadata of the association.                                 -->
+<!--                                                                                   -->
+<!--  Please keep the object grouped in lexicographic order to facilitate maintenance. -->
+
 
 <lcgdict>
 
   <!-- pairs and tuples for associations -->
+  <class name="std::pair< art::Ptr<raw::RawDigit>,     art::Ptr<recob::Hit>>"/>
+  <class name="std::pair< art::Ptr<raw::RawDigit>,     art::Ptr<recob::Wire>>"/>
   <class name="std::pair< art::Ptr<recob::Cluster>,    art::Ptr<recob::EndPoint2D>>"/>
   <class name="std::pair< art::Ptr<recob::Cluster>,    art::Ptr<recob::Hit>>"/>
+  <class name="std::pair< art::Ptr<recob::Cluster>,    art::Ptr<recob::OpFlash>>"/>
   <class name="std::pair< art::Ptr<recob::Cluster>,    art::Ptr<recob::PFParticle>>"/>
   <class name="std::pair< art::Ptr<recob::Cluster>,    art::Ptr<recob::Shower>>"/>
   <class name="std::pair< art::Ptr<recob::Cluster>,    art::Ptr<recob::Slice>>"/>
@@ -23,6 +41,7 @@
   <class name="std::pair< art::Ptr<recob::EndPoint2D>, art::Ptr<recob::Cluster>>"/>
   <class name="std::pair< art::Ptr<recob::Event>,      art::Ptr<recob::Hit>>"/>
   <class name="std::pair< art::Ptr<recob::Event>,      art::Ptr<recob::Vertex>>"/>
+  <class name="std::pair< art::Ptr<recob::Hit>,        art::Ptr<raw::RawDigit>>"/>
   <class name="std::pair< art::Ptr<recob::Hit>,        art::Ptr<recob::Cluster>>"/>
   <class name="std::pair< art::Ptr<recob::Hit>,        art::Ptr<recob::EndPoint2D>>"/>
   <class name="std::pair< art::Ptr<recob::Hit>,        art::Ptr<recob::Event>>"/>
@@ -31,7 +50,11 @@
   <class name="std::pair< art::Ptr<recob::Hit>,        art::Ptr<recob::Slice>>"/>
   <class name="std::pair< art::Ptr<recob::Hit>,        art::Ptr<recob::SpacePoint>>"/>
   <class name="std::pair< art::Ptr<recob::Hit>,        art::Ptr<recob::Vertex>>"/>
+  <class name="std::pair< art::Ptr<recob::Hit>,        art::Ptr<recob::Wire>>"/>
+  <class name="std::pair< art::Ptr<recob::OpFlash>,    art::Ptr<recob::Cluster>>" />
   <class name="std::pair< art::Ptr<recob::OpFlash>,    art::Ptr<recob::OpHit>>" />
+  <class name="std::pair< art::Ptr<recob::OpFlash>,    art::Ptr<recob::Track>>" />
+  <class name="std::pair< art::Ptr<recob::OpFlash>,    art::Ptr<recob::Trajectory>>" />
   <class name="std::pair< art::Ptr<recob::OpHit>,      art::Ptr<recob::OpFlash>>" />
   <class name="std::pair< art::Ptr<recob::PCAxis>,     art::Ptr<recob::PFParticle>>"/>
   <class name="std::pair< art::Ptr<recob::PCAxis>,     art::Ptr<recob::Shower>>"/>
@@ -64,14 +87,19 @@
   <class name="std::pair< art::Ptr<recob::SpacePoint>, art::Ptr<recob::PFParticle>>"/>
   <class name="std::pair< art::Ptr<recob::SpacePoint>, art::Ptr<recob::Shower>>"/>
   <class name="std::pair< art::Ptr<recob::SpacePoint>, art::Ptr<recob::Slice>>"/>
+  <class name="std::pair< art::Ptr<recob::Track> ,     art::Ptr<recob::OpFlash>>"/>
+  <class name="std::pair< art::Ptr<recob::Trajectory>, art::Ptr<recob::OpFlash>>"/>
   <class name="std::pair< art::Ptr<recob::Vertex>,     art::Ptr<recob::Cluster>>"/>
   <class name="std::pair< art::Ptr<recob::Vertex>,     art::Ptr<recob::Event>>"/>
   <class name="std::pair< art::Ptr<recob::Vertex>,     art::Ptr<recob::Hit>>"/>
   <class name="std::pair< art::Ptr<recob::Vertex>,     art::Ptr<recob::PFParticle>>"/>
   <class name="std::pair< art::Ptr<recob::Vertex>,     art::Ptr<recob::Shower>>"/>
+  <class name="std::pair< art::Ptr<recob::Wire>,       art::Ptr<raw::RawDigit>>"/>
+  <class name="std::pair< art::Ptr<recob::Wire>,       art::Ptr<recob::Hit>>"/>
   <class name="std::pair< art::Ptr<larpandoraobj::PFParticleMetadata>, art::Ptr<recob::PFParticle>>"/>
 
   <!-- associations -->
+  <!-- plain recob::Track/recob::Vertex association is in TrackingDicts -->
   <class name="art::Assns<raw::RawDigit,     recob::Hit,        void>"/>
   <class name="art::Assns<raw::RawDigit,     recob::Wire,       void>"/>
   <class name="art::Assns<recob::Cluster,    recob::EndPoint2D, void>"/>
