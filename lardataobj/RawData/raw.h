@@ -1,7 +1,7 @@
 /// \file    raw.h
 /// \brief   Collect all the RawData header files together
 /// \author  brebel@fnal.gov
-/// \modified by jti3@fnal.gov
+/// modified by jti3@fnal.gov
 
 #ifndef RAWDATA_RAW_H
 #define RAWDATA_RAW_H

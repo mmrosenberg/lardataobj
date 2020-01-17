@@ -1,9 +1,9 @@
 /**
- * @file   BitMask.h
+ * @file   lardataobj/Utilities/BitMask.h
  * @brief  Class holding flags.
  * @author Gianluca Petrillo (petrillo@fnal.gov)
  * @date   January 25, 2017
- * @see    FlagSet.h
+ * @see    lardataobj/Utilities/FlagSet.h
  *
  * This pure header defines the template class `util::flags::BitMask`, which is
  * used in `util::flags::FlagSet`, and a few auxiliary classes and types

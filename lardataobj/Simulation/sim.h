@@ -5,7 +5,7 @@
 /// \author brebel@fnal.gov
 ///
 ///
-/// Coding note: Never put '#include "sim.h"' in your code. It would
+/// Coding note: Never put `#include "sim.h"` in your code. It would
 /// force a dependency in your class on every other class in the
 /// Simulation directory; e.g., if I changed the MCTruth code, your
 /// code that generates Electrons would re-compile.  This class exists

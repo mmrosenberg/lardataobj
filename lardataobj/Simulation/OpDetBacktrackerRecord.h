@@ -295,7 +295,6 @@ namespace sim {
     /// Return the (constant) iterator to the first timePDclockSDP not earlier than timePDclock
     timePDclockSDPs_t::const_iterator findClosestTimePDclockSDP
       (storedTimePDclock_t timePDclock) const;
-    /// @}
 
 
   };

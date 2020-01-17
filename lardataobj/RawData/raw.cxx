@@ -1,7 +1,7 @@
 /// \file    raw.cxx
 /// \brief   raw data utilities
 /// \author  brebel@fnal.gov
-/// \modified by jti3@fnal.gov
+/// modified by jti3@fnal.gov
 
 #include "lardataobj/RawData/raw.h"
 

@@ -1,9 +1,9 @@
 /**
- * @file   BitMask.tcc
+ * @file   lardataobj/Utilities/BitMask.tcc
  * @brief  Class holding flags: template implementation file.
  * @author Gianluca Petrillo (petrillo@fnal.gov)
  * @date   January 25, 2017
- * @see    BitMask.h
+ * @see    lardataobj/Utilities/BitMask.h
  * 
  */
 

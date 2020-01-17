@@ -15,7 +15,7 @@
  *
  * 2/19/2008 Mitch Soderberg
  * -modified RawDigit class slightly to be compatible with binary output of DAQ software,
- *  and to include #samples/channel explicity, instead of via sizeof() methods.
+ *  and to include \# samples/channel explicity, instead of via sizeof() methods.
  *
  * ****************************************************************************/
 
