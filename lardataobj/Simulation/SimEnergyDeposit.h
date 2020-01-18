@@ -1,30 +1,9 @@
 ////////////////////////////////////////////////////////////////////////
-/// \file  SimEnergyDeposit.h
+/// \file  lardataobj/Simulation/SimEnergyDeposit.h
 /// \brief contains information for a single step in the detector simulation
 ///
-/// \author  Hans Wenzel and William Seligman
+/// \authors Hans Wenzel and William Seligman
 ////////////////////////////////////////////////////////////////////////
-//
-// The detector simulation (presently LArG4, which invokes Geant4)
-// propagates particles through the detector in intervals of "steps".
-// In Geant4, a step is normally defined by the smallest of the distance
-// from the current position of the particle to the point where it
-// enters a new volume boundary, the particle undergoes some "interesting"
-// physics event, or the range of the particle due to its energy falls
-// below a given limit.
-//
-// In LArG4, an additional limit is applied: We force the steps to be
-// small (typically 1/10th the wire spacing in the planes of the TPC)
-// so we can process the energy deposited by each step into
-// electron clusters.
-//
-// The SimEnergyDeposit class defines what Geant4 truth information for
-// each step is passed to the ionization->sim::SimChannel conversion,
-// and for the optical-photon->sim::SimPhoton conversion.
-//
-// William Seligman, Nevis Labs, 10/12/2017
-//
-
 #ifndef SimEnergyDeposit_h
 #define SimEnergyDeposit_h
 
@@ -45,6 +24,28 @@
 
 namespace sim
 {
+  /**
+   * @brief Energy deposition in the active material.
+   * 
+   * The detector simulation (presently LArG4, which invokes Geant4)
+   * propagates particles through the detector in intervals of "steps".
+   * In Geant4, a step is normally defined by the smallest of the distance
+   * from the current position of the particle to the point where it
+   * enters a new volume boundary, the particle undergoes some "interesting"
+   * physics event, or the range of the particle due to its energy falls
+   * below a given limit.
+   *
+   * In `LArG4`, an additional limit is applied: We force the steps to be
+   * small (typically 1/10th the wire spacing in the planes of the TPC)
+   * so we can process the energy deposited by each step into
+   * electron clusters.
+   *
+   * The SimEnergyDeposit class defines what Geant4 truth information for
+   * each step is passed to the ionization -> `sim::SimChannel` conversion,
+   * and for the optical-photon -> `sim::SimPhoton` conversion.
+   *
+   * _William Seligman, Nevis Labs, 10/12/2017_
+   */
   class SimEnergyDeposit
   {
   public:
@@ -188,18 +189,18 @@ namespace sim
     // will take care of that, but let's make sure that any overlay studies
     // won't suffer due to lack of precision.
 
-    int           numPhotons;      //< of scintillation photons
-//    int           numFPhotons;     //< of fast scintillation photons
-//    int           numSPhotons;     //< of slow scintillation photons
-    int           numElectrons;    //< of ionization electrons
-    float         scintYieldRatio; //< scintillation yield of LAr
-    float         edep;            //< energy deposition (MeV)
-    geo::Point_t       startPos;     //< positions in (cm)
+    int           numPhotons;      ///< of scintillation photons
+//    int           numFPhotons;     ///< of fast scintillation photons
+//    int           numSPhotons;     ///< of slow scintillation photons
+    int           numElectrons;    ///< of ionization electrons
+    float         scintYieldRatio; ///< scintillation yield of LAr
+    float         edep;            ///< energy deposition (MeV)
+    geo::Point_t       startPos;     ///< positions in (cm)
     geo::Point_t       endPos;
-    double        startTime;    //< (ns)
-    double        endTime;      //< (ns)
-    int           trackID;      //< simulation track id
-    int           pdgCode;      //< pdg code of particle to avoid lookup by particle type later
+    double        startTime;    ///< (ns)
+    double        endTime;      ///< (ns)
+    int           trackID;      ///< simulation track id
+    int           pdgCode;      ///< pdg code of particle to avoid lookup by particle type later
   };
   /*
   // Class utility functions.
