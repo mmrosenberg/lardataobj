@@ -4,23 +4,16 @@
 ///
 /// \authors Hans Wenzel and William Seligman
 ////////////////////////////////////////////////////////////////////////
-#ifndef SimEnergyDeposit_h
-#define SimEnergyDeposit_h
+#ifndef LARDATAOBJ_SIMULATION_SIMENERGYDEPOSIT_H
+#define LARDATAOBJ_SIMULATION_SIMENERGYDEPOSIT_H
 
 // LArSoft includes
 // Define the LArSoft standard geometry types and methods.
 #include "larcoreobj/SimpleTypesAndConstants/geo_vectors.h"
 
-// ROOT includes
-#include "Math/GenVector/Cartesian3D.h"
-#include "Math/GenVector/PositionVector3D.h"
-#include "Math/GenVector/PxPyPzE4D.h"
-#include "Math/GenVector/LorentzVector.h"
-
 // C++ includes
-#include <iostream>
 #include <vector>
-#include <stdio.h>
+
 
 namespace sim
 {
@@ -52,7 +45,6 @@ namespace sim
 
     // Define the types for the private members below.
     using Length_t = float;
-    //using Point_t = ROOT::Math::PositionVector3D< ROOT::Math::Cartesian3D<Length_t> >;
     using Point_t = geo::Point_t;
 
     // Since we're using LArSoft geometry types, the typical way to
@@ -237,4 +229,4 @@ namespace sim
   */
   typedef std::vector<SimEnergyDeposit> SimEnergyDepositCollection;
 } // namespace sim
-#endif // SimEnergyDeposit_n
+#endif // LARDATAOBJ_SIMULATION_SIMENERGYDEPOSIT_H
