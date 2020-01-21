@@ -7,6 +7,7 @@
 #define RAWDATA_RAW_H
 
 #include <vector>
+#include <map>
 #include <boost/circular_buffer.hpp>
 #include "larcoreobj/SimpleTypesAndConstants/RawTypes.h"
 
@@ -87,8 +88,15 @@ namespace raw{
 
   void CompressHuffman(std::vector<short> &adc);
 
+  void CompressFibonacci(std::vector<short>   &adc,
+                         std::map<int, short>  table=std::map<int, short>(),
+                         bool standard_fibonacci = true);
+
   void UncompressHuffman(const std::vector<short>& adc,
                          std::vector<short>      &uncompressed);
+  void UncompressFibonacci(const std::vector<short> &adc,
+                           std::vector<short>       &uncompressed,
+                           std::map<int, short>      table=std::map<int, short>());
 
   void ZeroSuppression(std::vector<short> &adc,
                        unsigned int       &zerothreshold,
@@ -116,7 +124,8 @@ namespace raw{
                        int                &nearestneighbor,
 		       bool fADCStickyCodeFeature=false);
 
-
+  inline std::map<int,short> GetFibonacciTable();
+  
   void ZeroUnsuppression(const std::vector<short>& adc,
                          std::vector<short>      &uncompressed);
 

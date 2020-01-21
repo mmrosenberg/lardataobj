@@ -29,6 +29,9 @@ namespace raw {
       unsigned int zerothreshold = 5;
       ZeroSuppression(adc,zerothreshold);
     }
+    else if (compress == raw::kFibonacci) {
+      CompressFibonacci(adc);
+    }
 
 
     return;
@@ -48,6 +51,9 @@ namespace raw {
       unsigned int zerothreshold = 5;
       ZeroSuppression(adc,zerothreshold, nearestneighbor);
     }
+    else if (compress == raw::kFibonacci) {
+      CompressFibonacci(adc);
+    }
 
 
     return;
@@ -65,6 +71,9 @@ namespace raw {
       ZeroSuppression(adc,zerothreshold);
       CompressHuffman(adc);
     }
+    else if (compress == raw::kFibonacci) {
+      CompressFibonacci(adc);
+    }
 
     return;
   }
@@ -81,6 +90,9 @@ namespace raw {
     else if(compress == raw::kZeroHuffman){
       ZeroSuppression(adc,zerothreshold, nearestneighbor);
       CompressHuffman(adc);
+    }
+    else if (compress == raw::kFibonacci) {
+      CompressFibonacci(adc);
     }
 
     return;
@@ -100,6 +112,9 @@ namespace raw {
     else if(compress == raw::kZeroHuffman){
       ZeroSuppression(adcvec_neighbors,adc,zerothreshold, nearestneighbor);
       CompressHuffman(adc);
+    }
+    else if (compress == raw::kFibonacci) {
+      CompressFibonacci(adc);
     }
 
     return;
@@ -121,6 +136,9 @@ namespace raw {
       ZeroSuppression(adc,zerothreshold, pedestal, nearestneighbor, fADCStickyCodeFeature);
       CompressHuffman(adc);
     }
+    else if (compress == raw::kFibonacci) {
+      CompressFibonacci(adc);
+    }
 
     return;
   }
@@ -141,6 +159,9 @@ namespace raw {
     else if(compress == raw::kZeroHuffman){
       ZeroSuppression(adcvec_neighbors,adc,zerothreshold, pedestal, nearestneighbor, fADCStickyCodeFeature);
       CompressHuffman(adc);
+    }
+    else if (compress == raw::kFibonacci) {
+      CompressFibonacci(adc);
     }
 
     return;
@@ -768,6 +789,9 @@ namespace raw {
     else if(compress == raw::kNone){
       for(unsigned int i = 0; i < adc.size(); ++i) uncompressed[i] = adc[i];
     }
+    else if (compress == raw::kFibonacci) {
+      UncompressFibonacci(adc, uncompressed);
+    }
     else {
       throw cet::exception("raw")
         << "raw::Uncompress() does not support compression #"
@@ -794,6 +818,9 @@ namespace raw {
     }
     else if(compress == raw::kNone){
       for(unsigned int i = 0; i < adc.size(); ++i) uncompressed[i] = adc[i];
+    }
+    else if (compress == raw::kFibonacci) {
+      UncompressFibonacci(adc, uncompressed);
     }
     else {
       throw cet::exception("raw")
@@ -1171,6 +1198,209 @@ namespace raw {
 	adc_return_value = 0; //set current adc value to zero if its LSBs are at sticky values and if it is within one MSB cell (64 ADC counts) of the pedestal value
       }
       return adc_return_value;
+  }
+
+  std::map<int,short> GetFibonacciTable() {
+    std::map<int, short> table;
+    table[ 0] = 1;
+    table[ 1] = 1;
+    for (int i=2; i<20; ++i) {
+      table[i] = table[i-2] + table[i-1];
+    }
+    table.erase(0);
+    return table;
+  }
+
+  inline void add_to_sequence_terminate(std::vector<bool> array, std::vector<bool> sqce, std::vector<bool>& cmp) {
+    if (sqce.size()) {
+      std::copy(array.begin(), array.end(), sqce.begin());
+      cmp.insert(cmp.end(), sqce.begin(), sqce.end());
+    } else {
+      cmp.insert(cmp.end(), array.begin(), array.end());
+    }
+    cmp.push_back(1);
+  }
+
+  void CompressFibonacci(std::vector<short>   &wf,
+                         std::map<int, short>  FibNumbers,
+                         bool standard_fibonacci/* = true*/) {
+
+    if (!FibNumbers.size()) FibNumbers = GetFibonacciTable();
+    std::vector<short> comp_short;
+    // First number is not encoded (baseline)
+    if (wf.size() > std::numeric_limits<short>::max()) {
+      std::cout << "WOW! You are trying to compress a " << wf.size() << " long waveform";
+      std::cout << " in a vector of shorts.\nUnfortunately, the encoded waveform needs to store the size";
+      std::cout << " of the wavefom (in its first number) and " << wf.size() << " is bigger than the maximum\n";
+      std::cout << " of the shorts (" << std::numeric_limits<short>::max() << ").\nBailing out disgracefully to avoid massive trouble.\n";
+      throw;
+    }
+    comp_short.push_back(wf.size());
+    comp_short.push_back(*wf.begin());
+
+    // The format we are working with
+    //std::vector<bool> comp;
+    std::vector<bool> cmp;
+
+    // The input is changed to be the difference between ticks
+    std::vector<short> diff;
+    diff.reserve(wf.size());
+    std::adjacent_difference(wf.begin(), wf.end(), std::back_inserter(diff));
+
+    // Start from 1 to avoid the first number
+    for (size_t iSample=1; iSample<diff.size(); ++iSample) {
+      // std::cout << "iSample : " << iSample << "\n";
+
+      //for (size_t iSample=0; iSample<31; ++iSample) {
+      short d = diff[iSample];
+
+      // Fibonacci number are positive, so need a way to get negative number
+      // We use the ZigZag approach (even numbers are positive, odd are negative)
+      if (d > 0) d =  2 * d;
+      else       d = -2 * d + 1;
+
+
+      // This vector stores the indices of Fibonacci number used
+      //std::vector<int> fib_sequence;
+      std::vector<bool> sqce;
+    
+      while (true) {
+        size_t iFib=1;
+
+        if (d==0) {
+          cmp.insert(cmp.end(), sqce.begin(), sqce.end());
+          cmp.push_back(1);
+          break;
+        }
+        // If someone wants to implement something else other than Fibonacci, the GetFibonacciTable function can be changed to be whatever is suited
+        // Then, standard fibonacci can be set to false
+        if (standard_fibonacci) {
+          if      (d==1 ) {add_to_sequence_terminate({1            }, sqce, cmp); break;}
+          else if (d==2 ) {add_to_sequence_terminate({0,1          }, sqce, cmp); break;}
+          else if (d==3 ) {add_to_sequence_terminate({0,0,1        }, sqce, cmp); break;}
+          else if (d==4 ) {add_to_sequence_terminate({1,0,1        }, sqce, cmp); break;}
+          else if (d==5 ) {add_to_sequence_terminate({0,0,0,1      }, sqce, cmp); break;}
+          else if (d==6 ) {add_to_sequence_terminate({1,0,0,1      }, sqce, cmp); break;}
+          else if (d==7 ) {add_to_sequence_terminate({0,1,0,1      }, sqce, cmp); break;}
+          else if (d==8 ) {add_to_sequence_terminate({0,0,0,0,1    }, sqce, cmp); break;}
+          else if (d==9 ) {add_to_sequence_terminate({1,0,0,0,1    }, sqce, cmp); break;}
+          else if (d==10) {add_to_sequence_terminate({0,1,0,0,1    }, sqce, cmp); break;}
+          else if (d==11) {add_to_sequence_terminate({0,0,1,0,1    }, sqce, cmp); break;}
+          else if (d==12) {add_to_sequence_terminate({1,0,1,0,1    }, sqce, cmp); break;}
+          else if (d==13) {add_to_sequence_terminate({0,0,0,0,0,1  }, sqce, cmp); break;}
+          else if (d==14) {add_to_sequence_terminate({1,0,0,0,0,1  }, sqce, cmp); break;}
+          else if (d==15) {add_to_sequence_terminate({0,1,0,0,0,1  }, sqce, cmp); break;}
+          else if (d==16) {add_to_sequence_terminate({0,0,1,0,0,1  }, sqce, cmp); break;}
+          else if (d==17) {add_to_sequence_terminate({1,0,1,0,0,1  }, sqce, cmp); break;}
+          else if (d==18) {add_to_sequence_terminate({0,0,0,1,0,1  }, sqce, cmp); break;}
+          else if (d==19) {add_to_sequence_terminate({1,0,0,1,0,1  }, sqce, cmp); break;}
+          else if (d==20) {add_to_sequence_terminate({0,1,0,1,0,1  }, sqce, cmp); break;}
+          else if (d==21) {add_to_sequence_terminate({0,0,0,0,0,0,1}, sqce, cmp); break;}
+          else if (d==22) {add_to_sequence_terminate({1,0,0,0,0,0,1}, sqce, cmp); break;}
+          else if (d==23) {add_to_sequence_terminate({0,1,0,0,0,0,1}, sqce, cmp); break;}
+          else if (d==24) {add_to_sequence_terminate({0,0,1,0,0,0,1}, sqce, cmp); break;}
+          else if (d==25) {add_to_sequence_terminate({1,0,1,0,0,0,1}, sqce, cmp); break;}
+          else if (d==26) {add_to_sequence_terminate({0,0,0,1,0,0,1}, sqce, cmp); break;}
+          else if (d==27) {add_to_sequence_terminate({1,0,0,1,0,0,1}, sqce, cmp); break;}
+          else if (d==28) {add_to_sequence_terminate({0,1,0,1,0,0,1}, sqce, cmp); break;}
+          else if (d==29) {add_to_sequence_terminate({0,0,0,0,1,0,1}, sqce, cmp); break;}
+          else if (d==30) {add_to_sequence_terminate({1,0,0,0,1,0,1}, sqce, cmp); break;}
+          else if (d==31) {add_to_sequence_terminate({0,1,0,0,1,0,1}, sqce, cmp); break;}
+        }
+      
+        // Find the first Fibonacci number that exceed the number
+        for (; iFib<FibNumbers.size(); ++iFib) {
+          if (d < FibNumbers.at(iFib)) {
+            break;
+          }
+        }
+
+        // And subtract the previous one from the initial number
+        d = d - FibNumbers.at(iFib-1);
+        // Store the previous Fibonacci number
+        if (!sqce.size()) {
+          sqce = std::vector<bool>(iFib-1,0);
+          sqce.at(iFib-2) = 1;
+        } else {
+          sqce.at(iFib-2) = 1;
+        }
+      }
+    }
+  
+    // Now convert all this to a vector of short and it's just another day in paradise for larsoft
+    size_t n_vector = cmp.size();
+    while (n_vector>sizeof(short)*8) {
+      // Create a bitset of the size of the short to simplify things
+      std::bitset<8*sizeof(short)> this_encoded;
+      // Set the bitset to match the stream
+      for (size_t it=0; it<8*sizeof(short); ++it) {
+        if (cmp[it]) this_encoded.set(it);
+      }
+      // Get rid of stuff we've dealt with 
+      cmp.erase(cmp.begin(), cmp.begin()+8*sizeof(short));
+      // Cast the bitset to short
+      short comp_s = (short)this_encoded.to_ulong();
+    
+      // Store the short in the output waveform
+      comp_short.push_back(comp_s);
+      n_vector = cmp.size();
+    }
+  
+    // Deal with the last part
+    std::bitset<8*sizeof(short)> this_encoded;
+    for (size_t it=0; it<cmp.size(); ++it) {
+      if(cmp[it]) this_encoded.set(it);
+    }
+    short comp_s = (short)this_encoded.to_ulong();
+    comp_short.push_back(comp_s);
+    wf = comp_short;
+    return;
+  }
+
+  void UncompressFibonacci(const std::vector<short> &adc,
+                           std::vector<short>       &uncompressed,
+                           std::map<int, short>      FibNumbers) {
+
+    if (!FibNumbers.size()) FibNumbers = GetFibonacciTable();
+    // First compressed sample is the size
+    size_t n_samples = adc[0];
+
+    // The seecond compressed sample is the first uncompressed sample
+    uncompressed.push_back(adc[1]);
+
+    // The thing that we want to decode (rather than jumbled short vector)
+    std::vector<bool> comp;
+    for (size_t i=2; i<adc.size(); ++i) {
+
+      std::bitset<8*sizeof(short)> this_encoded(adc[i]);
+      for (size_t i2=0; i2<this_encoded.size(); ++i2) {
+        comp.push_back(this_encoded[i2]);
+      }
+    }
+
+    // The bit which has to be decoded ("chunk")
+    std::vector<bool> current_number;
+    for (size_t it=0; it<comp.size(); ++it) {
+      current_number.push_back(comp[it]);
+      // If we have at least 2 numbers in the current chunk
+      // and if the last 2 number are one
+      // and if we are not at the end
+      if ((current_number.size()>=2 && it >= 1 && comp[it-1] == 1 && comp[it] == 1) || it == comp.size()-1) {
+        short zigzag_number = 0;
+        for (size_t it2=0; it2<current_number.size()-1; ++it2) {
+          if (current_number[it2])
+            zigzag_number += current_number[it2] * FibNumbers[it2+1];
+        }
+        short decoded = 0;
+        if (zigzag_number%2 == 0) decoded = zigzag_number / 2;
+        else                      decoded = -(zigzag_number - 1) / 2;
+        short baseline = uncompressed.back();
+        uncompressed.push_back(baseline + decoded);
+        current_number.clear();
+        if (uncompressed.size() == n_samples) break;
+      }
+    }
+  
   }
 
 }
