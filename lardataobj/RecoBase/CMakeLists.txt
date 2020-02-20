@@ -2,8 +2,8 @@ cet_make(LIBRARIES lardataobj_RawData
                    canvas
                    MF_MessageLogger
                    cetlib_except
-                   ${ROOT_PHYSICS}
-                   ${ROOT_MATRIX}
+                   ROOT::Physics
+                   ROOT::Matrix
                    NO_DICTIONARY)
 
 art_dictionary(DICTIONARY_LIBRARIES lardataobj_RecoBase)

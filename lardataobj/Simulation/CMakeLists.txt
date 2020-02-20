@@ -3,8 +3,8 @@ cet_make(NO_DICTIONARY
            nusimdata_SimulationBase
            canvas
            MF_MessageLogger
-           ${ROOT_CORE}
-           ${ROOT_PHYSICS}
+           ROOT::Core
+           ROOT::Physics
          )
 
 art_dictionary(DICTIONARY_LIBRARIES lardataobj_Simulation)
