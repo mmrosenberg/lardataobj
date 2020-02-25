@@ -25,17 +25,17 @@ cet_test(TrajectoryPointFlags_test USE_BOOST_UNIT
 cet_test(Trajectory_test USE_BOOST_UNIT
   LIBRARIES
     lardataobj_RecoBase
-    ${ROOT_GENVECTOR}
-    ${ROOT_PHYSICS}
-    ${ROOT_MATRIX}
+    ROOT::GenVector
+    ROOT::Physics
+    ROOT::Matrix
   )
 
 cet_test(TrackTrajectory_test USE_BOOST_UNIT
   LIBRARIES
     lardataobj_RecoBase
-    ${ROOT_GENVECTOR}
-    ${ROOT_PHYSICS}
-    ${ROOT_MATRIX}
+    ROOT::GenVector
+    ROOT::Physics
+    ROOT::Matrix
   )
 
 install_headers()

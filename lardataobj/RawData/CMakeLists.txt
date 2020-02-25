@@ -4,7 +4,7 @@ cet_make(NO_DICTIONARY
            canvas
            MF_MessageLogger
            cetlib_except
-           ${ROOT_CORE})
+           ROOT::Core)
 
 art_dictionary(DICTIONARY_LIBRARIES lardataobj_RawData)
 
