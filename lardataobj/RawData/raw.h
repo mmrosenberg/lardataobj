@@ -8,6 +8,7 @@
 
 #include <vector>
 #include <map>
+#include <functional>
 #include <boost/circular_buffer.hpp>
 #include "larcoreobj/SimpleTypesAndConstants/RawTypes.h"
 
@@ -88,15 +89,19 @@ namespace raw{
 
   void CompressHuffman(std::vector<short> &adc);
 
-  void CompressFibonacci(std::vector<short>   &adc,
-                         std::map<int, short>  table=std::map<int, short>(),
-                         bool standard_fibonacci = true);
-
   void UncompressHuffman(const std::vector<short>& adc,
                          std::vector<short>      &uncompressed);
+
+  short fibonacci_decode(std::vector<bool>& chunk);
+  void fibonacci_encode_table(int end, std::vector<std::vector<bool>>& table);
+
+  void CompressFibonacci(std::vector<short>   &wf,
+                         std::function<void(int, std::vector<std::vector<bool>>&)> add_to_table=fibonacci_encode_table);
+
   void UncompressFibonacci(const std::vector<short> &adc,
                            std::vector<short>       &uncompressed,
-                           std::map<int, short>      table=std::map<int, short>());
+                           std::function<int(std::vector<bool>&)> decode_table_chunk=fibonacci_decode);
+  
 
   void ZeroSuppression(std::vector<short> &adc,
                        unsigned int       &zerothreshold,
@@ -124,8 +129,6 @@ namespace raw{
                        int                &nearestneighbor,
 		       bool fADCStickyCodeFeature=false);
 
-  inline std::map<int,short> GetFibonacciTable();
-  
   void ZeroUnsuppression(const std::vector<short>& adc,
                          std::vector<short>      &uncompressed);
 

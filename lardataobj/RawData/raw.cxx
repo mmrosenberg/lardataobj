@@ -1199,35 +1199,19 @@ namespace raw {
       }
       return adc_return_value;
   }
-
-  std::map<int,short> GetFibonacciTable() {
-    std::map<int, short> table;
-    table[ 0] = 1;
-    table[ 1] = 1;
-    for (int i=2; i<20; ++i) {
-      table[i] = table[i-2] + table[i-1];
-    }
-    table.erase(0);
-    return table;
-  }
-
-  inline void add_to_sequence_terminate(std::vector<bool> array, std::vector<bool> sqce, std::vector<bool>& cmp) {
-    if (sqce.size()) {
-      std::copy(array.begin(), array.end(), sqce.begin());
-      cmp.insert(cmp.end(), sqce.begin(), sqce.end());
-    } else {
-      cmp.insert(cmp.end(), array.begin(), array.end());
-    }
+  
+  inline void add_to_sequence_terminate(std::vector<bool> array, std::vector<bool>& cmp) {
+    cmp.insert(cmp.end(), array.begin(), array.end());
     cmp.push_back(1);
   }
 
   void CompressFibonacci(std::vector<short>   &wf,
-                         std::map<int, short>  FibNumbers,
-                         bool standard_fibonacci/* = true*/) {
+                         std::function<void(int, std::vector<std::vector<bool>>&)> add_to_table) {
 
-    if (!FibNumbers.size()) FibNumbers = GetFibonacciTable();
+    static std::vector<std::vector<bool>> table;
+
     std::vector<short> comp_short;
-    // First number is not encoded (baseline)
+    // First numbers are not encoded (size and baseline)
     if (wf.size() > std::numeric_limits<short>::max()) {
       std::cout << "WOW! You are trying to compress a " << wf.size() << " long waveform";
       std::cout << " in a vector of shorts.\nUnfortunately, the encoded waveform needs to store the size";
@@ -1235,95 +1219,38 @@ namespace raw {
       std::cout << " of the shorts (" << std::numeric_limits<short>::max() << ").\nBailing out disgracefully to avoid massive trouble.\n";
       throw;
     }
+    
     comp_short.push_back(wf.size());
     comp_short.push_back(*wf.begin());
 
     // The format we are working with
-    //std::vector<bool> comp;
     std::vector<bool> cmp;
 
     // The input is changed to be the difference between ticks
     std::vector<short> diff;
     diff.reserve(wf.size());
-    std::adjacent_difference(wf.begin(), wf.end(), std::back_inserter(diff));
+    // Fibonacci number are positive, so need a way to get negative number
+    // We use the ZigZag approach (even numbers are positive, odd are negative)
+    std::adjacent_difference(wf.begin(), wf.end(),std::back_inserter(diff), [](const short& it1, const short& it2){
+                                                                              short d = it1-it2;
+                                                                              if (d > 0) d =  2 * d;
+                                                                              else       d = -2 * d + 1;
+                                                                              return d;
+                                                                            });
 
     // Start from 1 to avoid the first number
     for (size_t iSample=1; iSample<diff.size(); ++iSample) {
-      // std::cout << "iSample : " << iSample << "\n";
 
-      //for (size_t iSample=0; iSample<31; ++iSample) {
       short d = diff[iSample];
 
-      // Fibonacci number are positive, so need a way to get negative number
-      // We use the ZigZag approach (even numbers are positive, odd are negative)
-      if (d > 0) d =  2 * d;
-      else       d = -2 * d + 1;
-
-
-      // This vector stores the indices of Fibonacci number used
-      //std::vector<int> fib_sequence;
-      std::vector<bool> sqce;
-    
-      while (true) {
-        size_t iFib=1;
-
-        if (d==0) {
-          cmp.insert(cmp.end(), sqce.begin(), sqce.end());
-          cmp.push_back(1);
-          break;
-        }
-        // If someone wants to implement something else other than Fibonacci, the GetFibonacciTable function can be changed to be whatever is suited
-        // Then, standard fibonacci can be set to false
-        if (standard_fibonacci) {
-          if      (d==1 ) {add_to_sequence_terminate({1            }, sqce, cmp); break;}
-          else if (d==2 ) {add_to_sequence_terminate({0,1          }, sqce, cmp); break;}
-          else if (d==3 ) {add_to_sequence_terminate({0,0,1        }, sqce, cmp); break;}
-          else if (d==4 ) {add_to_sequence_terminate({1,0,1        }, sqce, cmp); break;}
-          else if (d==5 ) {add_to_sequence_terminate({0,0,0,1      }, sqce, cmp); break;}
-          else if (d==6 ) {add_to_sequence_terminate({1,0,0,1      }, sqce, cmp); break;}
-          else if (d==7 ) {add_to_sequence_terminate({0,1,0,1      }, sqce, cmp); break;}
-          else if (d==8 ) {add_to_sequence_terminate({0,0,0,0,1    }, sqce, cmp); break;}
-          else if (d==9 ) {add_to_sequence_terminate({1,0,0,0,1    }, sqce, cmp); break;}
-          else if (d==10) {add_to_sequence_terminate({0,1,0,0,1    }, sqce, cmp); break;}
-          else if (d==11) {add_to_sequence_terminate({0,0,1,0,1    }, sqce, cmp); break;}
-          else if (d==12) {add_to_sequence_terminate({1,0,1,0,1    }, sqce, cmp); break;}
-          else if (d==13) {add_to_sequence_terminate({0,0,0,0,0,1  }, sqce, cmp); break;}
-          else if (d==14) {add_to_sequence_terminate({1,0,0,0,0,1  }, sqce, cmp); break;}
-          else if (d==15) {add_to_sequence_terminate({0,1,0,0,0,1  }, sqce, cmp); break;}
-          else if (d==16) {add_to_sequence_terminate({0,0,1,0,0,1  }, sqce, cmp); break;}
-          else if (d==17) {add_to_sequence_terminate({1,0,1,0,0,1  }, sqce, cmp); break;}
-          else if (d==18) {add_to_sequence_terminate({0,0,0,1,0,1  }, sqce, cmp); break;}
-          else if (d==19) {add_to_sequence_terminate({1,0,0,1,0,1  }, sqce, cmp); break;}
-          else if (d==20) {add_to_sequence_terminate({0,1,0,1,0,1  }, sqce, cmp); break;}
-          else if (d==21) {add_to_sequence_terminate({0,0,0,0,0,0,1}, sqce, cmp); break;}
-          else if (d==22) {add_to_sequence_terminate({1,0,0,0,0,0,1}, sqce, cmp); break;}
-          else if (d==23) {add_to_sequence_terminate({0,1,0,0,0,0,1}, sqce, cmp); break;}
-          else if (d==24) {add_to_sequence_terminate({0,0,1,0,0,0,1}, sqce, cmp); break;}
-          else if (d==25) {add_to_sequence_terminate({1,0,1,0,0,0,1}, sqce, cmp); break;}
-          else if (d==26) {add_to_sequence_terminate({0,0,0,1,0,0,1}, sqce, cmp); break;}
-          else if (d==27) {add_to_sequence_terminate({1,0,0,1,0,0,1}, sqce, cmp); break;}
-          else if (d==28) {add_to_sequence_terminate({0,1,0,1,0,0,1}, sqce, cmp); break;}
-          else if (d==29) {add_to_sequence_terminate({0,0,0,0,1,0,1}, sqce, cmp); break;}
-          else if (d==30) {add_to_sequence_terminate({1,0,0,0,1,0,1}, sqce, cmp); break;}
-          else if (d==31) {add_to_sequence_terminate({0,1,0,0,1,0,1}, sqce, cmp); break;}
-        }
-      
-        // Find the first Fibonacci number that exceed the number
-        for (; iFib<FibNumbers.size(); ++iFib) {
-          if (d < FibNumbers.at(iFib)) {
-            break;
-          }
-        }
-
-        // And subtract the previous one from the initial number
-        d = d - FibNumbers.at(iFib-1);
-        // Store the previous Fibonacci number
-        if (!sqce.size()) {
-          sqce = std::vector<bool>(iFib-1,0);
-          sqce.at(iFib-2) = 1;
-        } else {
-          sqce.at(iFib-2) = 1;
-        }
+      try {
+        add_to_sequence_terminate(table.at(d), cmp);
+      } catch(std::out_of_range& e) { // catch if the table is too small...
+        int end = d+1;
+        // use the user provided function to fill the table
+        add_to_table(end, table);
+        // and add again to the sequence
+        add_to_sequence_terminate(table.at(d), cmp);
       }
     }
   
@@ -1336,6 +1263,7 @@ namespace raw {
       for (size_t it=0; it<8*sizeof(short); ++it) {
         if (cmp[it]) this_encoded.set(it);
       }
+
       // Get rid of stuff we've dealt with 
       cmp.erase(cmp.begin(), cmp.begin()+8*sizeof(short));
       // Cast the bitset to short
@@ -1353,23 +1281,24 @@ namespace raw {
     }
     short comp_s = (short)this_encoded.to_ulong();
     comp_short.push_back(comp_s);
+
     wf = comp_short;
     return;
   }
-
+  
   void UncompressFibonacci(const std::vector<short> &adc,
                            std::vector<short>       &uncompressed,
-                           std::map<int, short>      FibNumbers) {
+                           std::function<int(std::vector<bool>&)> decode_table_chunk) {
 
-    if (!FibNumbers.size()) FibNumbers = GetFibonacciTable();
     // First compressed sample is the size
     size_t n_samples = adc[0];
 
-    // The seecond compressed sample is the first uncompressed sample
+    // The second compressed sample is the first uncompressed sample
     uncompressed.push_back(adc[1]);
-
+  
     // The thing that we want to decode (rather than jumbled short vector)
     std::vector<bool> comp;
+  
     for (size_t i=2; i<adc.size(); ++i) {
 
       std::bitset<8*sizeof(short)> this_encoded(adc[i]);
@@ -1377,7 +1306,7 @@ namespace raw {
         comp.push_back(this_encoded[i2]);
       }
     }
-
+  
     // The bit which has to be decoded ("chunk")
     std::vector<bool> current_number;
     for (size_t it=0; it<comp.size(); ++it) {
@@ -1386,21 +1315,84 @@ namespace raw {
       // and if the last 2 number are one
       // and if we are not at the end
       if ((current_number.size()>=2 && it >= 1 && comp[it-1] == 1 && comp[it] == 1) || it == comp.size()-1) {
-        short zigzag_number = 0;
-        for (size_t it2=0; it2<current_number.size()-1; ++it2) {
-          if (current_number[it2])
-            zigzag_number += current_number[it2] * FibNumbers[it2+1];
-        }
+        current_number.pop_back();
+        short zigzag_number = decode_table_chunk(current_number);
+      
         short decoded = 0;
         if (zigzag_number%2 == 0) decoded = zigzag_number / 2;
         else                      decoded = -(zigzag_number - 1) / 2;
         short baseline = uncompressed.back();
+      
         uncompressed.push_back(baseline + decoded);
+      
         current_number.clear();
         if (uncompressed.size() == n_samples) break;
       }
     }
-  
+    return;
   }
 
+  void fibonacci_encode_table(int end, std::vector<std::vector<bool>>& table) {
+    if ((int)table.size() > end)
+      return;
+
+    std::map<int, int> fibn; // no need for this to be static
+    fibn[0] = 0;
+    fibn[1] = 1;
+    fibn[2] = 1;
+                   
+    // if the table was empty, fill it
+    if (table.size()==0) {
+      table.push_back(std::vector<bool>()); // we need this one so that the index of the vector is the same as the number we want to encode
+      table.push_back({true      });
+      table.push_back({false,true});
+    }
+
+    if ((int)table.size() > end)
+      return;
+
+    // start at the third fibonacci number
+    for (int i=2; fibn.rbegin()->second<end; ++i) {
+      fibn[i] = fibn[i-1] + fibn[i-2];
+    }
+                   
+
+    for (int i=table.size(); i<=end; ++i) {
+      int current_number = i;
+      std::vector<bool> seq; // the final sequence of numbers
+      while (current_number>0) {
+        // find the biggest fibonacci number that is smaller than the current number
+        for (auto fib = fibn.rbegin(); fib != fibn.rend(); ++fib) {
+          if (fib->second<=current_number) {
+            // if this is the first number, create the vector
+            if (!seq.size())
+              seq=std::vector<bool>(fib->first-1, false);
+            // fill the sequence
+            seq[fib->first-2] = true;
+            // subtract the current number
+            current_number-=fib->second;
+            break;
+          }
+        }
+      }
+                     
+      table.push_back(seq);
+    }
+  }
+                 
+  short fibonacci_decode(std::vector<bool>& chunk) {
+    static std::vector<int> FibNumbers={1,2};
+
+    if (chunk.size() > FibNumbers.size()) {
+      for (int i=FibNumbers.size(); i<=(int)chunk.size(); ++i){
+        FibNumbers.push_back(FibNumbers.at(i-1)+FibNumbers.at(i-2));
+      }
+    }
+    short decoded = 0;
+    for (size_t it=0; it<chunk.size(); ++it) {
+      if (chunk[it])
+        decoded += FibNumbers[it];
+    }
+    return decoded;
+  }
 }
