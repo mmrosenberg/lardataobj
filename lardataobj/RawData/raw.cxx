@@ -1199,7 +1199,7 @@ namespace raw {
       }
       return adc_return_value;
   }
-  
+
   inline void add_to_sequence_terminate(std::vector<bool> array, std::vector<bool>& cmp) {
     cmp.insert(cmp.end(), array.begin(), array.end());
     cmp.push_back(1);
@@ -1219,7 +1219,7 @@ namespace raw {
       std::cout << " of the shorts (" << std::numeric_limits<short>::max() << ").\nBailing out disgracefully to avoid massive trouble.\n";
       throw;
     }
-    
+
     comp_short.push_back(wf.size());
     comp_short.push_back(*wf.begin());
 
@@ -1253,7 +1253,7 @@ namespace raw {
         add_to_sequence_terminate(table.at(d), cmp);
       }
     }
-  
+
     // Now convert all this to a vector of short and it's just another day in paradise for larsoft
     size_t n_vector = cmp.size();
     while (n_vector>sizeof(short)*8) {
@@ -1264,16 +1264,16 @@ namespace raw {
         if (cmp[it]) this_encoded.set(it);
       }
 
-      // Get rid of stuff we've dealt with 
+      // Get rid of stuff we've dealt with
       cmp.erase(cmp.begin(), cmp.begin()+8*sizeof(short));
       // Cast the bitset to short
       short comp_s = (short)this_encoded.to_ulong();
-    
+
       // Store the short in the output waveform
       comp_short.push_back(comp_s);
       n_vector = cmp.size();
     }
-  
+
     // Deal with the last part
     std::bitset<8*sizeof(short)> this_encoded;
     for (size_t it=0; it<cmp.size(); ++it) {
@@ -1285,7 +1285,7 @@ namespace raw {
     wf = comp_short;
     return;
   }
-  
+
   void UncompressFibonacci(const std::vector<short> &adc,
                            std::vector<short>       &uncompressed,
                            std::function<int(std::vector<bool>&)> decode_table_chunk) {
@@ -1295,10 +1295,10 @@ namespace raw {
 
     // The second compressed sample is the first uncompressed sample
     uncompressed.push_back(adc[1]);
-  
+
     // The thing that we want to decode (rather than jumbled short vector)
     std::vector<bool> comp;
-  
+
     for (size_t i=2; i<adc.size(); ++i) {
 
       std::bitset<8*sizeof(short)> this_encoded(adc[i]);
@@ -1306,7 +1306,7 @@ namespace raw {
         comp.push_back(this_encoded[i2]);
       }
     }
-  
+
     // The bit which has to be decoded ("chunk")
     std::vector<bool> current_number;
     for (size_t it=0; it<comp.size(); ++it) {
@@ -1317,14 +1317,14 @@ namespace raw {
       if ((current_number.size()>=2 && it >= 1 && comp[it-1] == 1 && comp[it] == 1) || it == comp.size()-1) {
         current_number.pop_back();
         short zigzag_number = decode_table_chunk(current_number);
-      
+
         short decoded = 0;
         if (zigzag_number%2 == 0) decoded = zigzag_number / 2;
         else                      decoded = -(zigzag_number - 1) / 2;
         short baseline = uncompressed.back();
-      
+
         uncompressed.push_back(baseline + decoded);
-      
+
         current_number.clear();
         if (uncompressed.size() == n_samples) break;
       }
@@ -1340,7 +1340,7 @@ namespace raw {
     fibn[0] = 0;
     fibn[1] = 1;
     fibn[2] = 1;
-                   
+
     // if the table was empty, fill it
     if (table.size()==0) {
       table.push_back(std::vector<bool>()); // we need this one so that the index of the vector is the same as the number we want to encode
@@ -1355,7 +1355,7 @@ namespace raw {
     for (int i=2; fibn.rbegin()->second<end; ++i) {
       fibn[i] = fibn[i-1] + fibn[i-2];
     }
-                   
+
 
     for (int i=table.size(); i<=end; ++i) {
       int current_number = i;
@@ -1375,11 +1375,11 @@ namespace raw {
           }
         }
       }
-                     
+
       table.push_back(seq);
     }
   }
-                 
+
   short fibonacci_decode(std::vector<bool>& chunk) {
     static std::vector<int> FibNumbers={1,2};
 

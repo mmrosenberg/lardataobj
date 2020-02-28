@@ -101,7 +101,7 @@ namespace raw{
   void UncompressFibonacci(const std::vector<short> &adc,
                            std::vector<short>       &uncompressed,
                            std::function<int(std::vector<bool>&)> decode_table_chunk=fibonacci_decode);
-  
+
 
   void ZeroSuppression(std::vector<short> &adc,
                        unsigned int       &zerothreshold,
