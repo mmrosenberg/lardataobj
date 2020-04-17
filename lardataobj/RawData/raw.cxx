@@ -1218,8 +1218,8 @@ namespace raw {
     unsigned int size_short = sizeof(wf[0])*8-1; // assuming we don't encode over the sign bits
     unsigned int max_2_short = (1 << (size_short*2)); //this number is then: 1,073,741,824 (i.e. almost 9min of data at 2MHz)
     size_t wf_size = wf.size();
-    
-             
+
+
     if (wf_size > max_2_short) {
       throw cet::exception("raw") << "WOW! You are trying to compress a " << wf_size << " long waveform"
                                   << " in a vector of shorts.\nUnfortunately, the encoded waveform needs to store the size"
@@ -1227,17 +1227,17 @@ namespace raw {
                                   << " number you can encode with 2 shorts (" << max_2_short << ").\n"
                                   << " Bailing out disgracefully to avoid massive trouble.\n";
     }
-    
+
     short high = (wf_size >> (sizeof(wf[0])*8-1));
     short low  = wf_size % ((std::numeric_limits<short>::max()+1));
     comp_short.push_back(high);
     comp_short.push_back(low);
     comp_short.push_back(*wf.begin());
-    
+
     // The format we are working with
     std::vector<bool> cmp;
     cmp.reserve(wf.size()*sizeof(wf[0])*8);
-    
+
     // The input is changed to be the difference between ticks
     std::vector<short> diff;
     diff.reserve(wf.size());
@@ -1249,12 +1249,12 @@ namespace raw {
                                                                               else       d = -2 * d + 1;
                                                                               return d;
                                                                             });
-    
+
     // Start from 1 to avoid the first number
     for (size_t iSample=1; iSample<diff.size(); ++iSample) {
-      
+
       short d = diff[iSample];
-      
+
       if ((unsigned)d < table.size()) {
         add_to_sequence_terminate(table[d], cmp);
       } else { // catch if the table is too small...
@@ -1265,10 +1265,10 @@ namespace raw {
         add_to_sequence_terminate(table[d], cmp);
       }
     }
-    
+
     // Now convert all this to a vector of short and it's just another day in paradise for larsoft
     size_t n_vector = cmp.size();
-    
+
     // Create a bitset of the size of the short to simplify things
     std::bitset<8*sizeof(short)> this_encoded;
     // Set the bitset to match the stream
@@ -1276,7 +1276,7 @@ namespace raw {
 
     for (size_t it=0; it<n_vector; ++it) {
 
-      if (bit_counter>=8*sizeof(short)) { 
+      if (bit_counter>=8*sizeof(short)) {
         short comp_s = (short)this_encoded.to_ulong();
         comp_short.push_back(comp_s);
         bit_counter=0;
@@ -1305,7 +1305,7 @@ namespace raw {
 
     // First compressed sample is the size
     size_t n_samples = (adc[0]<<(sizeof(adc[0])*8-1))+adc[1];
-    
+
     // The second compressed sample is the first uncompressed sample
     uncompressed.push_back(adc[2]);
 
