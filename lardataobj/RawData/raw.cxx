@@ -1208,24 +1208,36 @@ namespace raw {
   void CompressFibonacci(std::vector<short>   &wf,
                          std::function<void(int, std::vector<std::vector<bool>>&)> add_to_table) {
 
-    static std::vector<std::vector<bool>> table;
+    std::vector<std::vector<bool>> table;
+    fibonacci_encode_table(100, table);
 
     std::vector<short> comp_short;
     // First numbers are not encoded (size and baseline)
-    if (wf.size() > std::numeric_limits<short>::max()) {
-      std::cout << "WOW! You are trying to compress a " << wf.size() << " long waveform";
-      std::cout << " in a vector of shorts.\nUnfortunately, the encoded waveform needs to store the size";
-      std::cout << " of the wavefom (in its first number) and " << wf.size() << " is bigger than the maximum\n";
-      std::cout << " of the shorts (" << std::numeric_limits<short>::max() << ").\nBailing out disgracefully to avoid massive trouble.\n";
-      throw;
+    assert(not empty(wf));
+
+    unsigned int size_short = sizeof(wf[0])*8-1; // assuming we don't encode over the sign bits
+    unsigned int max_2_short = (1 << (size_short*2)); //this number is then: 1,073,741,824 (i.e. almost 9min of data at 2MHz)
+    size_t wf_size = wf.size();
+    
+             
+    if (wf_size > max_2_short) {
+      throw cet::exception("raw") << "WOW! You are trying to compress a " << wf_size << " long waveform"
+                                  << " in a vector of shorts.\nUnfortunately, the encoded waveform needs to store the size"
+                                  << " of the wavefom (in its first number) and " << wf_size << " is bigger than the maximum\n"
+                                  << " number you can encode with 2 shorts (" << max_2_short << ").\n"
+                                  << " Bailing out disgracefully to avoid massive trouble.\n";
     }
-
-    comp_short.push_back(wf.size());
+    
+    short high = (wf_size >> (sizeof(wf[0])*8-1));
+    short low  = wf_size % ((std::numeric_limits<short>::max()+1));
+    comp_short.push_back(high);
+    comp_short.push_back(low);
     comp_short.push_back(*wf.begin());
-
+    
     // The format we are working with
     std::vector<bool> cmp;
-
+    cmp.reserve(wf.size()*sizeof(wf[0])*8);
+    
     // The input is changed to be the difference between ticks
     std::vector<short> diff;
     diff.reserve(wf.size());
@@ -1237,52 +1249,53 @@ namespace raw {
                                                                               else       d = -2 * d + 1;
                                                                               return d;
                                                                             });
-
+    
     // Start from 1 to avoid the first number
     for (size_t iSample=1; iSample<diff.size(); ++iSample) {
-
+      
       short d = diff[iSample];
-
-      try {
-        add_to_sequence_terminate(table.at(d), cmp);
-      } catch(std::out_of_range& e) { // catch if the table is too small...
+      
+      if ((unsigned)d < table.size()) {
+        add_to_sequence_terminate(table[d], cmp);
+      } else { // catch if the table is too small...
         int end = d+1;
         // use the user provided function to fill the table
         add_to_table(end, table);
         // and add again to the sequence
-        add_to_sequence_terminate(table.at(d), cmp);
+        add_to_sequence_terminate(table[d], cmp);
       }
     }
-
+    
     // Now convert all this to a vector of short and it's just another day in paradise for larsoft
     size_t n_vector = cmp.size();
-    while (n_vector>sizeof(short)*8) {
-      // Create a bitset of the size of the short to simplify things
-      std::bitset<8*sizeof(short)> this_encoded;
-      // Set the bitset to match the stream
-      for (size_t it=0; it<8*sizeof(short); ++it) {
-        if (cmp[it]) this_encoded.set(it);
+    
+    // Create a bitset of the size of the short to simplify things
+    std::bitset<8*sizeof(short)> this_encoded;
+    // Set the bitset to match the stream
+    size_t bit_counter=0;
+
+    for (size_t it=0; it<n_vector; ++it) {
+
+      if (bit_counter>=8*sizeof(short)) { 
+        short comp_s = (short)this_encoded.to_ulong();
+        comp_short.push_back(comp_s);
+        bit_counter=0;
+        this_encoded.reset();
       }
 
-      // Get rid of stuff we've dealt with
-      cmp.erase(cmp.begin(), cmp.begin()+8*sizeof(short));
-      // Cast the bitset to short
-      short comp_s = (short)this_encoded.to_ulong();
+      if (cmp[it])
+        this_encoded.set(bit_counter);
 
-      // Store the short in the output waveform
-      comp_short.push_back(comp_s);
-      n_vector = cmp.size();
+      bit_counter++;
+
     }
 
     // Deal with the last part
-    std::bitset<8*sizeof(short)> this_encoded;
-    for (size_t it=0; it<cmp.size(); ++it) {
-      if(cmp[it]) this_encoded.set(it);
-    }
     short comp_s = (short)this_encoded.to_ulong();
     comp_short.push_back(comp_s);
 
     wf = comp_short;
+
     return;
   }
 
@@ -1291,15 +1304,15 @@ namespace raw {
                            std::function<int(std::vector<bool>&)> decode_table_chunk) {
 
     // First compressed sample is the size
-    size_t n_samples = adc[0];
-
+    size_t n_samples = (adc[0]<<(sizeof(adc[0])*8-1))+adc[1];
+    
     // The second compressed sample is the first uncompressed sample
-    uncompressed.push_back(adc[1]);
+    uncompressed.push_back(adc[2]);
 
     // The thing that we want to decode (rather than jumbled short vector)
     std::vector<bool> comp;
 
-    for (size_t i=2; i<adc.size(); ++i) {
+    for (size_t i=3; i<adc.size(); ++i) {
 
       std::bitset<8*sizeof(short)> this_encoded(adc[i]);
       for (size_t i2=0; i2<this_encoded.size(); ++i2) {
@@ -1342,7 +1355,7 @@ namespace raw {
     fibn[2] = 1;
 
     // if the table was empty, fill it
-    if (table.size()==0) {
+    if (empty(table)) {
       table.push_back(std::vector<bool>()); // we need this one so that the index of the vector is the same as the number we want to encode
       table.push_back({true      });
       table.push_back({false,true});
@@ -1381,7 +1394,7 @@ namespace raw {
   }
 
   short fibonacci_decode(std::vector<bool>& chunk) {
-    static std::vector<int> FibNumbers={1,2};
+    std::vector<int> FibNumbers={1,2,3,5,8,13,21,34,55,89,144,233,377,466};
 
     if (chunk.size() > FibNumbers.size()) {
       for (int i=FibNumbers.size(); i<=(int)chunk.size(); ++i){
