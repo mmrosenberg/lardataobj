@@ -8,7 +8,11 @@
 
 
 <lcgdict>
- <class name="sim::OnePhoton" ClassVersion="13">
+
+ <class name="std::vector<ROOT::Math::PositionVector3D<ROOT::Math::Cartesian3D<double>,ROOT::Math::GlobalCoordinateSystemTag>>"/>
+
+ <class name="sim::OnePhoton" ClassVersion="14">
+  <version ClassVersion="14" checksum="3412094485"/>
   <version ClassVersion="13" checksum="3677597673"/>
   <version ClassVersion="12" checksum="124883757"/>
   <version ClassVersion="11" checksum="1948463887"/>
@@ -122,6 +126,39 @@
     <![CDATA[fChannel = onfile.fChannel;]]>
 </ioread>
 
+  <!-- I/O rule for sim::SimPhotons v13 to v14 after moving from TVector3 to geo::Point_t -->
+  <ioread
+    version="[-13]"
+    sourceClass="sim::OnePhoton"
+    source="TVector3 InitialPosition"
+    targetClass="sim::OnePhoton"
+    target="InitialPosition"
+    include="larcoreobj/SimpleTypesAndConstants/geo_vectors.h;TVector3.h">
+    <![CDATA[
+      InitialPosition = {
+        onfile.InitialPosition.X(),
+        onfile.InitialPosition.Y(),
+        onfile.InitialPosition.Z()
+        };
+    ]]>
+  </ioread>
+  <ioread
+    version="[-13]"
+    sourceClass="sim::OnePhoton"
+    source="TVector3 FinalLocalPosition"
+    targetClass="sim::OnePhoton"
+    target="FinalLocalPosition"
+    include="larcoreobj/SimpleTypesAndConstants/geo_vectors.h;TVector3.h">
+    <![CDATA[
+      FinalLocalPosition = {
+        onfile.FinalLocalPosition.X(),
+        onfile.FinalLocalPosition.Y(),
+        onfile.FinalLocalPosition.Z()
+        };
+    ]]>
+  </ioread>
+  
+  
   <!-- association: simb::MCParticle to simb::MCTruth, with metadata -->
   <!-- metadata: sim::GeneratedParticleInfo, used in `larg4::LArG4` -->
     <!-- simb::MCParticle -> simb::MCTruth -->

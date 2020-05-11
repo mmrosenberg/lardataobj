@@ -31,13 +31,14 @@
 #define LARDATAOBJ_SIMULATION_SIMPHOTONS_H
 
 
-// ROOT libraries
-#include "TVector3.h"
+// LArSoft libraries
+#include "larcoreobj/SimpleTypesAndConstants/geo_vectors.h"
 
 // C/C++ standard libraries
 #include <map>
 #include <vector>
 #include <string>
+#include <limits> // std::numeric_limits<>
 
 
 // -----------------------------------------------------------------------------
@@ -57,24 +58,24 @@ namespace sim {
  */
 struct sim::OnePhoton {
 
-  /// Whether the photon reaches the sensitive detector.
-  bool           SetInSD;
-  
   /// Scintillation position in world coordinates [cm]
-  TVector3       InitialPosition;
+  geo::Point_t InitialPosition;
   
   /// Where the photon enters the optical detector in world coordinates [cm]
-  TVector3       FinalLocalPosition;
+  geo::Point_t FinalLocalPosition;
   
   /// Scintillation (emission) time in
   /// @ref DetectorClocksGeant4Time "simulation time scale" [ns]
-  float          Time;
+  float Time { std::numeric_limits<float>::min() };
   
   /// Scintillation photon energy [GeV]
-  float          Energy;
+  float Energy { 0.0 };
   
   /// ID of the GEANT4 track causing the scintillation.
-  int            MotherTrackID;
+  int MotherTrackID { std::numeric_limits<int>::min() };
+  
+  /// Whether the photon reaches the sensitive detector.
+  bool SetInSD { true };
   
 }; // sim::OnePhoton
 
