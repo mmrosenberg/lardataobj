@@ -30,186 +30,221 @@
 #ifndef LARDATAOBJ_SIMULATION_SIMPHOTONS_H
 #define LARDATAOBJ_SIMULATION_SIMPHOTONS_H
 
+
+// ROOT libraries
 #include "TVector3.h"
 
-#include <vector>
+// C/C++ standard libraries
 #include <map>
+#include <vector>
+#include <string>
 
 
 // -----------------------------------------------------------------------------
+// forward declarations
 namespace sim {
+  class OnePhoton;
+  class SimPhotons;
+  class SimPhotonsLite;
+  class SimPhotonsCollection;
+} // namespace sim
+  
 
-  /**
-   * @brief All information of a photon entering the sensitive optical detector
-   *        volume.
-   */
-  class OnePhoton
-  {
+// -----------------------------------------------------------------------------
+/**
+ * @brief All information of a photon entering the sensitive optical detector
+ *        volume.
+ */
+struct sim::OnePhoton {
+
+  /// Whether the photon reaches the sensitive detector.
+  bool           SetInSD;
+  
+  /// Scintillation position in world coordinates [cm]
+  TVector3       InitialPosition;
+  
+  /// Where the photon enters the optical detector in world coordinates [cm]
+  TVector3       FinalLocalPosition;
+  
+  /// Scintillation (emission) time in
+  /// @ref DetectorClocksGeant4Time "simulation time scale" [ns]
+  float          Time;
+  
+  /// Scintillation photon energy [GeV]
+  float          Energy;
+  
+  /// ID of the GEANT4 track causing the scintillation.
+  int            MotherTrackID;
+  
+}; // sim::OnePhoton
+
+
+// -----------------------------------------------------------------------------
+/**
+ * @brief Compact representation of photons on a channel.
+ * @see   `sim::SimPhotons`
+ * 
+ * Compared to `sim::SimPhotons`, this object contains only the _total count_
+ * of photon arriving at a certain time on the channel. The time is
+ * discretized in ticks.
+ * 
+ */
+class sim::SimPhotonsLite {
   public:
-    OnePhoton();
+  
+  /// Default constructor (do not use! it's for ROOT only).
+  SimPhotonsLite() = default;
+  
+  /// Constructor: associated to optical detector channel `chan`, and empty.
+  SimPhotonsLite(int chan)
+    : OpChannel(chan)
+    {}
 
-    bool           SetInSD;
-    TVector3       InitialPosition;
-    TVector3       FinalLocalPosition; // in cm
-    float          Time;
-    float          Energy;
-    int            MotherTrackID;
-  };
+  int OpChannel; ///< Optical detector channel associated to this data.
+  
+  /// Number of photons detected at each given time: time tick -> photons.
+  std::map<int, int> DetectedPhotons;
+
+  /// Add all photons from `rhs` to this ones, at their original time.
+  SimPhotonsLite& operator+=(const SimPhotonsLite &rhs);
+  
+  /// Creates a new `sim::SimPhotonsLite` with all photons from `rhs` and
+  /// this object.
+  SimPhotonsLite operator+(const SimPhotonsLite &rhs) const;
+
+  /// Returns whether `other` is on the same channel (`OpChannel`) as this.
+  bool operator== (const SimPhotonsLite &other) const;
+  
+}; // sim::SimPhotonsLite
+
+
+// -----------------------------------------------------------------------------
+/**
+ * @brief Collection of photons which recorded on one channel.
+ */
+class sim::SimPhotons: public std::vector<sim::OnePhoton> {
+
+public:
+  
+  int fOpChannel; ///< Optical detector channel associated to this data.
+
+
+  // --- BEGIN -- Vector types -------------------------------------------------
+  /// @name Vector types
+  /// @{
+  
+  typedef std::vector<OnePhoton>             list_type;
+  typedef list_type::value_type              value_type;
+  typedef list_type::iterator                iterator;
+  typedef list_type::const_iterator          const_iterator;
+  typedef list_type::reverse_iterator        reverse_iterator;
+  typedef list_type::const_reverse_iterator  const_reverse_iterator;
+  typedef list_type::size_type               size_type;
+  typedef list_type::difference_type         difference_type;
+
+  /// @}
+  // --- END -- Vector types ---------------------------------------------------
+  
+  /// Default constructor (do not use! it's for ROOT only).
+  SimPhotons() = default;
+  
+  /// Constructor: associated to optical detector channel `chan`, and empty.
+  SimPhotons(int chan): fOpChannel(chan) {}
+  
+  
+  /// Returns the optical channel number this object is associated to.
+  int       OpChannel() const;
+  
+  /// Sets the optical detector channel number this object is associated to.
+  void      SetChannel(int ch);
 
   
-  /**
-   * @brief Compact representation of photons on a channel.
-   * @see   `sim::SimPhotons`
-   * 
-   * Compared to `sim::SimPhotons`, this object contains only the _total count_
-   * of photon arriving at a certain time on the channel. The time is
-   * discretized in ticks.
-   * 
-   */
-  class SimPhotonsLite
-  {
-    public:
-      
-      /// Default constructor (do not use! it's for ROOT only).
-      SimPhotonsLite();
-      
-      /// Constructor: associated to optical detector channel `chan`, and empty.
-      SimPhotonsLite(int chan)
-        : OpChannel(chan)
-        {}
+  /// Add all photons from `rhs` to this ones; no sorting is applied.
+  SimPhotons& operator+=(const SimPhotons &rhs);
 
-      int OpChannel; ///< Optical detector channel associated to this data.
-      
-      /// Number of photons detected at each given time: time tick -> photons.
-      std::map<int, int> DetectedPhotons;
+  /// Creates a new `sim::SimPhotons` with all photons from `rhs` and
+  /// this object.
+  SimPhotons operator+(const SimPhotons &rhs) const;
 
-      /// Add all photons from `rhs` to this ones, at their original time.
-      SimPhotonsLite& operator+=(const SimPhotonsLite &rhs);
-      
-      /// Creates a new `sim::SimPhotonsLite` with all photons from `rhs` and
-      /// this object.
-      const SimPhotonsLite operator+(const SimPhotonsLite &rhs) const;
+  /// Returns whether `other` is on the same channel (`OpChannel`) as this.
+  bool operator== (const SimPhotons &other) const;
 
-      /// Returns whether `other` is on the same channel (`OpChannel`) as this.
-      bool operator==(const SimPhotonsLite &other) const;
-      
-  }; // SimPhotonsLite
-
-
-  /**
-   * @brief Collection of photons which recorded on one channel.
-   */
-  class SimPhotons : public std::vector<OnePhoton>
-    {
-    public:
-      
-      /// Default constructor (do not use! it's for ROOT only).
-      SimPhotons();
-      
-      /// Constructor: associated to optical detector channel `chan`, and empty.
-      SimPhotons(int chan): fOpChannel(chan) {}
-
-      int fOpChannel; ///< Optical detector channel associated to this data.
-
-    public:
-
-      // --- BEGIN -- Vector types ---------------------------------------------
-      /// @name Vector types
-      /// @{
-      
-      typedef std::vector<OnePhoton>             list_type;
-      typedef list_type::value_type              value_type;
-      typedef list_type::iterator                iterator;
-      typedef list_type::const_iterator          const_iterator;
-      typedef list_type::reverse_iterator        reverse_iterator;
-      typedef list_type::const_reverse_iterator  const_reverse_iterator;
-      typedef list_type::size_type               size_type;
-      typedef list_type::difference_type         difference_type;
-
-      /// @}
-      // --- END -- Vector types -----------------------------------------------
-      
-      /// Add all photons from `rhs` to this ones; no sorting is applied.
-      SimPhotons& operator+=(const SimPhotons &rhs);
-
-      /// Creates a new `sim::SimPhotons` with all photons from `rhs` and
-      /// this object.
-      const SimPhotons operator+(const SimPhotons &rhs) const;
-
-      /// Returns whether `other` is on the same channel (`OpChannel`) as this.
-      bool operator== (const SimPhotons &other) const;
-
-      /// Returns the optical channel number this object is associated to.
-      int       OpChannel() const;
-      
-      /// Sets the optical detector channel number this object is associated to.
-      void      SetChannel(int ch);
-
-    }; // SimPhotons
-
-
-
-  /**
-   * @brief Collection of `sim::SimPhotons`, indexed by channel number.
-   * 
-   * The collection owns the photon data.
-   */
-  class SimPhotonsCollection : public std::map<int, SimPhotons>{
-  public:
-
-    /// Constructor: an empty collection and no sensitive detector name.
-    SimPhotonsCollection();
-
-  private:
-    std::string fTheSDName; ///< Sensitive detector name.
-
-  public:
-    // --- BEGIN -- Vector types -----------------------------------------------
-    /// @name Vector types
-    /// @{
-    typedef std::map<int,SimPhotons>           list_type;
-    typedef list_type::key_type                key_type;
-    typedef list_type::mapped_type             mapped_type;
-    typedef list_type::value_type              value_type;
-    typedef list_type::iterator                iterator;
-    typedef list_type::const_iterator          const_iterator;
-    typedef list_type::reverse_iterator        reverse_iterator;
-    typedef list_type::const_reverse_iterator  const_reverse_iterator;
-    typedef list_type::size_type               size_type;
-    typedef list_type::difference_type         difference_type;
-    typedef list_type::key_compare             key_compare;
-    typedef list_type::allocator_type          allocator_type;
-
-    /// @}
-    // --- END -- Vector types -------------------------------------------------
-
-    //SimPhotons&  GetHit(int);
-    //SimPhotons  GetHit(int);
-
-    // define addition operators for combining hit collections
-    //   (add each hit in the collection)
-    //SimPhotonsCollection& operator+=(const SimPhotonsCollection &rhs);
-    //const SimPhotonsCollection operator+(const SimPhotonsCollection &rhs) const;
-
-  public:
-    void SetSDName(std::string TheSDName);
-    std::string GetSDName();
-
-  }; // SimPhotonsCollection
-
-} // namespace sim
+}; // sim::SimPhotons
 
 
 // -----------------------------------------------------------------------------
-// ---  Inline implementations
-// -----------------------------------------------------------------------------
-inline int         sim::SimPhotons::OpChannel()       const                     { return fOpChannel;      }
-inline void        sim::SimPhotons::SetChannel(int ch)                          { fOpChannel = ch;        }
-inline std::string sim::SimPhotonsCollection::GetSDName()                       { return fTheSDName;      }
-inline void        sim::SimPhotonsCollection::SetSDName(std::string TheSDName)  { fTheSDName = TheSDName; }
+/**
+ * @brief Collection of `sim::SimPhotons`, indexed by channel number.
+ * 
+ * The collection owns the photon data.
+ */
+class sim::SimPhotonsCollection : public std::map<int, sim::SimPhotons> {
 
-inline bool sim::SimPhotons::operator==(const sim::SimPhotons& other) const          { return fOpChannel == other.OpChannel(); }
-inline bool sim::SimPhotonsLite::operator==(const sim::SimPhotonsLite& other) const  { return OpChannel == other.OpChannel; }
+  std::string fTheSDName; ///< Sensitive detector name.
+
+public:
+
+  // --- BEGIN -- Vector types -------------------------------------------------
+  /// @name Vector types
+  /// @{
+  typedef std::map<int,SimPhotons>           list_type;
+  typedef list_type::key_type                key_type;
+  typedef list_type::mapped_type             mapped_type;
+  typedef list_type::value_type              value_type;
+  typedef list_type::iterator                iterator;
+  typedef list_type::const_iterator          const_iterator;
+  typedef list_type::reverse_iterator        reverse_iterator;
+  typedef list_type::const_reverse_iterator  const_reverse_iterator;
+  typedef list_type::size_type               size_type;
+  typedef list_type::difference_type         difference_type;
+  typedef list_type::key_compare             key_compare;
+  typedef list_type::allocator_type          allocator_type;
+
+  /// @}
+  // --- END -- Vector types ---------------------------------------------------
+
+  /// Constructor: an empty collection and no sensitive detector name.
+  SimPhotonsCollection() = default;
+
+  /// Returns the name of the sensitive detector for this collection.
+  std::string const& GetSDName() const;
+  
+  /// Sets the name of the sensitive detector for this collection.
+  void SetSDName(std::string const& TheSDName);
+
+}; // sim::SimPhotonsCollection
+
+
+// =============================================================================
+// ===  Inline implementations
+// =============================================================================
+// -----------------------------------------------------------------------------
+// ---  sim::SimPhotonsLite
+// -----------------------------------------------------------------------------
+inline bool sim::SimPhotonsLite::operator==
+  (const sim::SimPhotonsLite& other) const
+  { return OpChannel == other.OpChannel; }
+
+// -----------------------------------------------------------------------------
+// ---  sim::SimPhotons
+// -----------------------------------------------------------------------------
+
+inline int sim::SimPhotons::OpChannel() const { return fOpChannel; }
+
+inline void sim::SimPhotons::SetChannel(int ch) { fOpChannel = ch; }
+
+inline bool sim::SimPhotons::operator== (const sim::SimPhotons& other) const
+  { return OpChannel() == other.OpChannel(); }
+
+// -----------------------------------------------------------------------------
+// ---  sim::SimPhotonsCollection
+// -----------------------------------------------------------------------------
+
+inline std::string const& sim::SimPhotonsCollection::GetSDName() const
+  { return fTheSDName; }
+
+inline void sim::SimPhotonsCollection::SetSDName(std::string const& TheSDName)
+  { fTheSDName = TheSDName; }
 
 // -----------------------------------------------------------------------------
 
