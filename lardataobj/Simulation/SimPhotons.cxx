@@ -1,13 +1,10 @@
-// SimPhotons, OnePhoton and SimPhotonsCollection implementation.
-//
-// These objects are primarily storage containers, so not much
-// function code is actually required.
-//
-// See comments at head of SimPhotons.h for more details.
-//
-// Ben Jones, MIT, 06/04/2010
-//
-
+/**
+ * @file   lardataobj/Simulation/SimPhotons.cxx
+ * @brief  Simulation objects for optical detectors (implementation file).
+ * @author Ben Jones
+ * @date   06/04/2010
+ * @see    `lardataobj/Simulation/SimPhotons.h`
+ */
 
 #include "lardataobj/Simulation/SimPhotons.h"
 
