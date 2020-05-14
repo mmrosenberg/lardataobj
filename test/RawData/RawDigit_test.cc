@@ -153,6 +153,34 @@ void RawDigitTestCustomConstructors() {
 } // RawDigitTestCustomConstructors()
 
 
+void FibonacciCompressionTestCustomConstructor() {
+
+  //
+  // Part I: initialization of wire inputs
+  //
+  const raw::ChannelID_t channel = 12;
+  const unsigned short samples = 1000;
+  raw::RawDigit::ADCvector_t adclist(samples);
+  for (size_t i = 0; i < samples; ++i)
+    adclist[i] = (i % 3)? 0: i;
+  const raw::Compress_t compression = raw::kHuffman;
+
+// working a copy of the original data:
+  std::vector<short> buffer(adclist);
+  raw::Compress(buffer, compression); // compression happens in place
+
+  //
+  // Part II: constructor with signal copy
+  //
+  // step II.1: create a wire with the signal-copying constructor
+  raw::RawDigit digits1(channel, samples, buffer, compression /*, flags */);
+
+  // step II.2: verify that the values are as expected
+  CheckRawDigit(digits1, channel, samples, adclist, compression);
+
+} // FibonacciCompressionTestCustomConstructors()
+
+
 //------------------------------------------------------------------------------
 //--- registration of tests
 //
@@ -168,4 +196,8 @@ BOOST_AUTO_TEST_CASE(RawDigitDefaultConstructor) {
 
 BOOST_AUTO_TEST_CASE(RawDigitCustomConstructors) {
   RawDigitTestCustomConstructors();
+}
+
+BOOST_AUTO_TEST_CASE(FibonacciCompressionConstructor) {
+  FibonacciCompressionTestCustomConstructor();
 }
