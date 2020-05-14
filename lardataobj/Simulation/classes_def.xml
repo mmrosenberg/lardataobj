@@ -157,8 +157,8 @@
         };
     ]]>
   </ioread>
-  
-  
+
+
   <!-- association: simb::MCParticle to simb::MCTruth, with metadata -->
   <!-- metadata: sim::GeneratedParticleInfo, used in `larg4::LArG4` -->
     <!-- simb::MCParticle -> simb::MCTruth -->

@@ -14,10 +14,10 @@
 // ---  sim::SimPhotons
 // -----------------------------------------------------------------------------
 sim::SimPhotons& sim::SimPhotons::operator+= (const SimPhotons &rhs) {
-  
+
   this->insert(this->begin(), rhs.cbegin(), rhs.cend());
   return *this;
-  
+
 } // sim::SimPhotons::operator+=()
 
 

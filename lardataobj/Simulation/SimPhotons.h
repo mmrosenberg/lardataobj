@@ -4,24 +4,24 @@
  * @author Ben Jones
  * @date   06/04/2010
  * @see    `lardataobj/Simulation/SimPhotons.cxx`
- * 
+ *
  * This file contains the definitions of the classes which are stored in the
  * event representing scintillation photons detected by the optical detectors.
- * 
+ *
  * A scintillation photon collection (`sim::SimPhotons`) stores data for each
  * photon which steps inside the optical detector volume.
  * Currently the quantities stored are position, time, 4-momentum
  * and the ID of the GEANT4 track emitting it.
  * A `sim::SimPhotonsCollection` is a set of `sim::SimPhotonss`, one per
  * optical detector in the collection.
- * 
+ *
  * The `sim::SimPhotons` is filled in by the `larg4::OpFastScintillation` class
  * in `LegacyLArG4` module and will be used to generate the optical detector
  * response later in the simulation chain.
- * 
+ *
  * `sim::OnePhoton`, `sim::SimPhotons` and `sim::SimPhotonsCollection` are all
  * persistent under ROOT I/O.
- * 
+ *
  * The current implementation resembles that of an C++ STL container in
  * some respects but needs more work before it is polished product.
  */
@@ -49,7 +49,7 @@ namespace sim {
   class SimPhotonsLite;
   class SimPhotonsCollection;
 } // namespace sim
-  
+
 
 // -----------------------------------------------------------------------------
 /**
@@ -60,23 +60,23 @@ struct sim::OnePhoton {
 
   /// Scintillation position in world coordinates [cm]
   geo::Point_t InitialPosition;
-  
+
   /// Where the photon enters the optical detector in world coordinates [cm]
   geo::Point_t FinalLocalPosition;
-  
+
   /// Scintillation (emission) time in
   /// @ref DetectorClocksGeant4Time "simulation time scale" [ns]
   float Time { std::numeric_limits<float>::min() };
-  
+
   /// Scintillation photon energy [GeV]
   float Energy { 0.0 };
-  
+
   /// ID of the GEANT4 track causing the scintillation.
   int MotherTrackID { std::numeric_limits<int>::min() };
-  
+
   /// Whether the photon reaches the sensitive detector.
   bool SetInSD { true };
-  
+
 }; // sim::OnePhoton
 
 
@@ -84,38 +84,38 @@ struct sim::OnePhoton {
 /**
  * @brief Compact representation of photons on a channel.
  * @see   `sim::SimPhotons`
- * 
+ *
  * Compared to `sim::SimPhotons`, this object contains only the _total count_
  * of photon arriving at a certain time on the channel. The time is
  * discretized in ticks.
- * 
+ *
  */
 class sim::SimPhotonsLite {
   public:
-  
+
   /// Default constructor (do not use! it's for ROOT only).
   SimPhotonsLite() = default;
-  
+
   /// Constructor: associated to optical detector channel `chan`, and empty.
   SimPhotonsLite(int chan)
     : OpChannel(chan)
     {}
 
   int OpChannel; ///< Optical detector channel associated to this data.
-  
+
   /// Number of photons detected at each given time: time tick -> photons.
   std::map<int, int> DetectedPhotons;
 
   /// Add all photons from `rhs` to this ones, at their original time.
   SimPhotonsLite& operator+=(const SimPhotonsLite &rhs);
-  
+
   /// Creates a new `sim::SimPhotonsLite` with all photons from `rhs` and
   /// this object.
   SimPhotonsLite operator+(const SimPhotonsLite &rhs) const;
 
   /// Returns whether `other` is on the same channel (`OpChannel`) as this.
   bool operator== (const SimPhotonsLite &other) const;
-  
+
 }; // sim::SimPhotonsLite
 
 
@@ -126,14 +126,14 @@ class sim::SimPhotonsLite {
 class sim::SimPhotons: public std::vector<sim::OnePhoton> {
 
 public:
-  
+
   int fOpChannel; ///< Optical detector channel associated to this data.
 
 
   // --- BEGIN -- Vector types -------------------------------------------------
   /// @name Vector types
   /// @{
-  
+
   typedef std::vector<OnePhoton>             list_type;
   typedef list_type::value_type              value_type;
   typedef list_type::iterator                iterator;
@@ -145,21 +145,21 @@ public:
 
   /// @}
   // --- END -- Vector types ---------------------------------------------------
-  
+
   /// Default constructor (do not use! it's for ROOT only).
   SimPhotons() = default;
-  
+
   /// Constructor: associated to optical detector channel `chan`, and empty.
   SimPhotons(int chan): fOpChannel(chan) {}
-  
-  
+
+
   /// Returns the optical channel number this object is associated to.
   int       OpChannel() const;
-  
+
   /// Sets the optical detector channel number this object is associated to.
   void      SetChannel(int ch);
 
-  
+
   /// Add all photons from `rhs` to this ones; no sorting is applied.
   SimPhotons& operator+=(const SimPhotons &rhs);
 
@@ -176,7 +176,7 @@ public:
 // -----------------------------------------------------------------------------
 /**
  * @brief Collection of `sim::SimPhotons`, indexed by channel number.
- * 
+ *
  * The collection owns the photon data.
  */
 class sim::SimPhotonsCollection : public std::map<int, sim::SimPhotons> {
@@ -209,7 +209,7 @@ public:
 
   /// Returns the name of the sensitive detector for this collection.
   std::string const& GetSDName() const;
-  
+
   /// Sets the name of the sensitive detector for this collection.
   void SetSDName(std::string const& TheSDName);
 
