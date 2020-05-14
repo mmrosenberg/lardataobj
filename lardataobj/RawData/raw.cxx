@@ -1209,7 +1209,7 @@ namespace raw {
                          std::function<void(int, std::vector<std::vector<bool>>&)> add_to_table) {
 
     std::vector<std::vector<bool>> table;
-    fibonacci_encode_table(100, table);
+    add_to_table(100, table);
 
     std::vector<short> comp_short;
     // First numbers are not encoded (size and baseline)
@@ -1228,7 +1228,7 @@ namespace raw {
                                   << " Bailing out disgracefully to avoid massive trouble.\n";
     }
 
-    short high = (wf_size >> (sizeof(wf[0])*8-1));
+    short high = (wf_size >> (sizeof(short)*8-1));
     short low  = wf_size % ((std::numeric_limits<short>::max()+1));
     comp_short.push_back(high);
     comp_short.push_back(low);
@@ -1254,7 +1254,6 @@ namespace raw {
     for (size_t iSample=1; iSample<diff.size(); ++iSample) {
 
       short d = diff[iSample];
-
       if ((unsigned)d < table.size()) {
         add_to_sequence_terminate(table[d], cmp);
       } else { // catch if the table is too small...
@@ -1304,8 +1303,7 @@ namespace raw {
                            std::function<int(std::vector<bool>&)> decode_table_chunk) {
 
     // First compressed sample is the size
-    size_t n_samples = (adc[0]<<(sizeof(adc[0])*8-1))+adc[1];
-
+    size_t n_samples = (adc[0]<<(sizeof(short)*8-1))+adc[1];
     // The second compressed sample is the first uncompressed sample
     uncompressed.push_back(adc[2]);
 
@@ -1394,7 +1392,7 @@ namespace raw {
   }
 
   short fibonacci_decode(std::vector<bool>& chunk) {
-    std::vector<int> FibNumbers={1,2,3,5,8,13,21,34,55,89,144,233,377,466};
+    std::vector<int> FibNumbers={1,2,3,5,8,13,21,34,55,89,144,233,377,610,987};
 
     if (chunk.size() > FibNumbers.size()) {
       for (int i=FibNumbers.size(); i<=(int)chunk.size(); ++i){
