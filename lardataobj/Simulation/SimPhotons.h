@@ -68,7 +68,7 @@ struct sim::OnePhoton {
    * The coordinates are in the local reference of the sensitive optical
    * detector, in centimeters.
    */
-  geo::OpticalPoint3D_t FinalLocalPosition;
+  geo::OpticalPoint_t FinalLocalPosition;
 
   /// Arrival time to the detector in
   /// @ref DetectorClocksGeant4Time "simulation time scale" [ns]
