@@ -9,10 +9,12 @@
 
 <lcgdict>
 
+ <class name="ROOT::Math::PositionVector3D<ROOT::Math::Cartesian3D<double>,geo::OpticalLocalCoordinateSystemTag>"/>
  <class name="std::vector<ROOT::Math::PositionVector3D<ROOT::Math::Cartesian3D<double>,ROOT::Math::GlobalCoordinateSystemTag>>"/>
+ <class name="std::vector<ROOT::Math::PositionVector3D<ROOT::Math::Cartesian3D<double>,geo::OpticalLocalCoordinateSystemTag>>"/>
 
  <class name="sim::OnePhoton" ClassVersion="14">
-  <version ClassVersion="14" checksum="3412094485"/>
+  <version ClassVersion="14" checksum="2912362530"/>
   <version ClassVersion="13" checksum="3677597673"/>
   <version ClassVersion="12" checksum="124883757"/>
   <version ClassVersion="11" checksum="1948463887"/>
@@ -148,7 +150,7 @@
     source="TVector3 FinalLocalPosition"
     targetClass="sim::OnePhoton"
     target="FinalLocalPosition"
-    include="larcoreobj/SimpleTypesAndConstants/geo_vectors.h;TVector3.h">
+    include="larcoreobj/SimpleTypesAndConstants/geo_optical_vectors.h;TVector3.h">
     <![CDATA[
       FinalLocalPosition = {
         onfile.FinalLocalPosition.X(),

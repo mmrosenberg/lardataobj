@@ -32,6 +32,7 @@
 
 
 // LArSoft libraries
+#include "larcoreobj/SimpleTypesAndConstants/geo_optical_vectors.h"
 #include "larcoreobj/SimpleTypesAndConstants/geo_vectors.h"
 
 // C/C++ standard libraries
@@ -61,10 +62,15 @@ struct sim::OnePhoton {
   /// Scintillation position in world coordinates [cm]
   geo::Point_t InitialPosition;
 
-  /// Where the photon enters the optical detector in world coordinates [cm]
-  geo::Point_t FinalLocalPosition;
+  /**
+   * @brief Where photon enters the optical detector in local coordinates [cm]
+   * 
+   * The coordinates are in the local reference of the sensitive optical
+   * detector, in centimeters.
+   */
+  geo::OpticalPoint3D_t FinalLocalPosition;
 
-  /// Scintillation (emission) time in
+  /// Arrival time to the detector in
   /// @ref DetectorClocksGeant4Time "simulation time scale" [ns]
   float Time { std::numeric_limits<float>::min() };
 
