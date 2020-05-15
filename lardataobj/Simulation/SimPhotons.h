@@ -49,6 +49,10 @@ namespace sim {
   class SimPhotons;
   class SimPhotonsLite;
   class SimPhotonsCollection;
+
+  /// `a` is smaller than `b` if has earlier `Time`, or lower `MotherTrackID`.
+  bool operator< (OnePhoton const&, OnePhoton const&);
+
 } // namespace sim
 
 
@@ -225,6 +229,17 @@ public:
 // =============================================================================
 // ===  Inline implementations
 // =============================================================================
+// -----------------------------------------------------------------------------
+// ---  sim::OnePhoton
+// -----------------------------------------------------------------------------
+inline bool sim::operator< (OnePhoton const& a, OnePhoton const& b) {
+  if (a.Time < b.Time) return true;
+  if (a.Time > b.Time) return false;
+
+  return (a.MotherTrackID < b.MotherTrackID);
+} // sim::operator< (OnePhoton const&, OnePhoton const&)
+
+
 // -----------------------------------------------------------------------------
 // ---  sim::SimPhotonsLite
 // -----------------------------------------------------------------------------
