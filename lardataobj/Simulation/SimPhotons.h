@@ -45,7 +45,7 @@
 // -----------------------------------------------------------------------------
 // forward declarations
 namespace sim {
-  class OnePhoton;
+  struct OnePhoton;
   class SimPhotons;
   class SimPhotonsLite;
   class SimPhotonsCollection;
