@@ -3,6 +3,7 @@ cet_make(NO_DICTIONARY
            nusimdata_SimulationBase
            canvas
            MF_MessageLogger
+           ROOT::GenVector
            ROOT::Core
            ROOT::Physics
          )
