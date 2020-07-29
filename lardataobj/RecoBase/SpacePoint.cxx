@@ -9,16 +9,17 @@
 #include "lardataobj/RecoBase/SpacePoint.h"
 
 #include <iomanip>
+#include <algorithm> // std::swap()
 
 namespace recob{
 
   //----------------------------------------------------------------------
   SpacePoint::SpacePoint() :
     fID(-1),
+    fXYZ { 0.0 },
+    fErrXYZ { 0.0 },
     fChisq(0.)
   {
-    for(int i=0; i<6; ++i)
-      fErrXYZ[i] = 0.;
   }
 
   //----------------------------------------------------------------------
@@ -32,6 +33,24 @@ namespace recob{
     for(int i = 0; i < 3; ++i) fXYZ[i]    = xyz[i];
     for(int i = 0; i < 6; ++i) fErrXYZ[i] = err[i];
   }
+
+  //----------------------------------------------------------------------
+  double SpacePoint::covariance(unsigned int i, unsigned int j) const {
+
+    return fErrXYZ[covIndex(i, j)];
+
+  } // SpacePoint::covariance()
+
+
+  //----------------------------------------------------------------------
+  constexpr std::size_t SpacePoint::covIndex(unsigned int i, unsigned int j) {
+
+    constexpr std::size_t offsets[3U] = { 0U, 1U, 3U };
+
+    if (i < j) std::swap(i, j);
+    return offsets[i] + j;
+
+  } // SpacePoint::covIndex()
 
   //----------------------------------------------------------------------
   // ostream operator.
