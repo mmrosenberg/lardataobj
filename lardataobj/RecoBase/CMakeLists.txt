@@ -4,6 +4,7 @@ cet_make(LIBRARIES lardataobj_RawData
                    cetlib_except
                    ROOT::Physics
                    ROOT::Matrix
+                   ROOT::GenVector
                    NO_DICTIONARY)
 
 art_dictionary(DICTIONARY_LIBRARIES lardataobj_RecoBase)
