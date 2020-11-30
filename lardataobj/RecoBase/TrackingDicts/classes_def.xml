@@ -43,6 +43,39 @@
    <version ClassVersion="10" checksum="3286658271"/>
   </class>
 
+    <!-- schema evolution rules -->
+      <!-- version 11 -->
+        <!-- * positions -->
+  <ioread 
+    version="[-10]" 
+    sourceClass="recob::Trajectory"
+    source="std::vector<ROOT::Math::PositionVector3D<ROOT::Math::Cartesian3D<double>, ROOT::Math::GlobalCoordinateSystemTag>> fPositions;"
+    targetClass="recob::Trajectory"
+    target="fPositions"
+    include="Math/GenVector/CoordinateSystemTags.h;Math/GenVector/Cartesian3D.h;Math/GenVector/PositionVector3D.h">
+    <![CDATA[
+      fPositions.clear();
+      fPositions.reserve(onfile.fPositions.size());
+      for (auto const& point: onfile.fPositions)
+        fPositions.emplace_back(point.X(), point.Y(), point.Z());
+    ]]>
+  </ioread> 
+        <!-- * momenta -->
+  <ioread 
+    version="[-10]" 
+    sourceClass="recob::Trajectory"
+    source="std::vector<ROOT::Math::DisplacementVector3D<ROOT::Math::Cartesian3D<double>, ROOT::Math::GlobalCoordinateSystemTag>> fMomenta;"
+    targetClass="recob::Trajectory"
+    target="fMomenta"
+    include="Math/GenVector/CoordinateSystemTags.h;Math/GenVector/Cartesian3D.h;Math/GenVector/DisplacementVector3D.h">
+    <![CDATA[
+      fMomenta.clear();
+      fMomenta.reserve(onfile.fMomenta.size());
+      for (auto const& mom: onfile.fMomenta)
+        fMomenta.emplace_back(mom.X(), mom.Y(), mom.Z());
+    ]]>
+  </ioread> 
+
     <!-- art pointers and wrappers -->
   <class name="art::Ptr<recob::Trajectory>"/>
   <class name="std::vector<recob::Trajectory>"/>
