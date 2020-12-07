@@ -1416,8 +1416,6 @@ class lar::sparse_vector<T>::reference: public const_reference {
   value_type& operator=(value_type v)
     { return const_cast<value_type&>(*const_reference::ptr) = v; }
 
-  operator const_reference() const
-    { return const_reference(const_reference::ptr); }
   explicit operator value_type&()
     { return const_cast<value_type&>(*const_reference::ptr); }
 
