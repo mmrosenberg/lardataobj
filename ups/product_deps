@@ -1,25 +1,23 @@
 # The parent line must be the first non-comment line in the file
 # This line defines the product name and version
-parent	lardataobj	v09_00_03
+parent	lardataobj	v09_11_00_rc0
 defaultqual	e19
 #
 fcldir product_dir job
 #
 product         version
-larcoreobj	v09_00_00
-larcorealg	v09_00_01
-nusimdata	v1_21_03
+larcoreobj	v09_11_00_rc0
+larcorealg	v09_11_00_rc0
+nusimdata	v1_22_00
 
-cetbuildtools	v7_15_01	-	only_for_build
+cetbuildtools	v7_17_01	-	only_for_build
 end_product_list
 
 qualifier       larcoreobj    larcorealg    nusimdata
-e19:py2:debug   e19:py2:debug e19:py2:debug e19:py2:debug
-e19:py2:prof    e19:py2:prof  e19:py2:prof  e19:py2:prof
+e20:debug       e20:debug     e20:debug     e20:debug
+e20:prof        e20:prof      e20:prof      e20:prof
 e19:debug       e19:debug     e19:debug     e19:debug
 e19:prof        e19:prof      e19:prof      e19:prof
-c7:py2:debug    c7:py2:debug  c7:py2:debug  c7:py2:debug
-c7:py2:prof     c7:py2:prof   c7:py2:prof   c7:py2:prof
 c7:debug        c7:debug      c7:debug      c7:debug
 c7:prof         c7:prof       c7:prof       c7:prof
 end_qualifier_list
